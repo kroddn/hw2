@@ -21,31 +21,34 @@
 
     Former copyrights see below.
  **************************************************************************/
+ 
+/***************************************************
+* Copyright (c) 2004-2006 by Holy-Wars 2
+*
+* written by Markus Sinner <kroddn@psitronic.de>
+*
+* This File must not be used without permission	!
+***************************************************/
+include_once("includes/util.inc.php");
 
+function print_news($limit) {
+  $limit = intval($limit);
+  if($limit < 8) 
+    $limit = 8;
+    
+  echo '<table align="center" border="0" width="90%"><tr><td>';
+  $res = do_mysql_query ("SELECT id,text,topic,from_unixtime(time) as time FROM news ORDER BY id DESC LIMIT ".$limit);
+  if (mysql_num_rows($res)<1) {
+    echo "Keine News!";
+  }
+  else {
+    echo "<ul style=\"padding-left: 5px;\">\n";
+    while ($news = mysql_fetch_assoc($res)) {
+      echo "<li><b>".$news['topic']."</b> (".$news['time'].")<br>".$news['text'];      
+    } // while
+    echo "</ul>\n";
+  } // else
 
-start_page(); 
-start_body();
+  echo "</td></tr></table>\n";
+} // function
 ?>
-
-<h1>Besuchen Sie unseren Sponsor:</h1>
-<table border="0" cellpadding="0" cellspacing="0">
-<tr><td style="border: solid black 2px;">
-<?php
-include_once("include/banner.inc.php");
-
-if (isset($bannerpage)) 
-     printBanner($bannerpage);    
-else if (isset($id))
-     printBanner($id);
-else
-     printBanner();
-?>
-</td><td width="99%"></td></tr>
-<tr height="10"><td colspan="2"></td></tr>
-<tr><td colspan="2">
-<a href="all.php">Zurück zur Übersicht der Werbepartner</a>
-</td></tr>
-</table>
-
-</body>
-</html>

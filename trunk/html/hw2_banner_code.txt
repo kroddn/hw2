@@ -1,0 +1,7 @@
+<a href="http://www.holy-wars2.de/" 
+   title="Hier klicken und kostenlos bei Holy-Wars 2 anmelden"
+   target="_blank">
+<img border="0" alt="Holy-Wars 2 Banner" 
+   src="http://www.holy-wars2.de/hw2_banner.php/1.gif" 
+   width="468" height="60">
+</a>

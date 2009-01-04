@@ -70,26 +70,59 @@ function checkLeaderRights() {
 	}
 }
 
+/**
+ * Teste, ob der Clan des Spielers auch Besitzer des Forums ist
+ * 
+ */
+function checkClanOwner($forum_id) {
+  // franzl hat "cat_order" als Clan-ID missbraucht. Das muss geprüft werden.
+  if($_SESSION['player']->clan > 0) {
+    
+    $sql = "SELECT * FROM clanf_forums LEFT JOIN clanf_categories USING(cat_id)".
+                          " WHERE cat_order = ".$_SESSION['player']->clan.
+                          "  AND clanf_forums.forum_id = ".mysql_escape_string($forum_id);
+    
+    $res = do_mysql_query($sql);
+    if(mysql_num_rows($res) == 0) {
+      // Nicht erlaubt
+      header("Location: cf_index.php?error=notallowed");
+      exit;
+    }
+    else {
+      return true;
+    }
+  }
+  else {
+    header("Location: cf_index.php?error=noclan");
+    exit;
+  }
+}
+
+
 if($_GET['lockforum']) {
 	checkLeaderRights();
+	checkClanOwner($_GET['lockforum']);
 	mysql_query("UPDATE clanf_forums SET forum_status = '1' WHERE forum_id = '".mysql_escape_string($_GET['lockforum'])."'");
 	header("Location: cf_index.php?setup=1");
 	exit;
 }
 if($_GET['unlockforum']) {
 	checkLeaderRights();
+	checkClanOwner($_GET['unlockforum']);
 	mysql_query("UPDATE clanf_forums SET forum_status = '0' WHERE forum_id = '".mysql_escape_string($_GET['unlockforum'])."'");
 	header("Location: cf_index.php?setup=1");
     exit;
 }
 if($_GET['privforum']) {
 	checkLeaderRights();
+	checkClanOwner($_GET['privforum']);
 	mysql_query("UPDATE clanf_forums SET forum_status = '2' WHERE forum_id = '".mysql_escape_string($_GET['privforum'])."'");
 	header("Location: cf_index.php?setup=1");
     exit;
 }
 if($_GET['unprivforum']) {
 	checkLeaderRights();
+	checkClanOwner($_GET['unprivforum']);
 	mysql_query("UPDATE clanf_forums SET forum_status = '0' WHERE forum_id = '".mysql_escape_string($_GET['unprivforum'])."'");
 	header("Location: cf_index.php?setup=1");
     exit;
@@ -339,7 +372,8 @@ a { color:#000000; }
 </head>
 <body bgcolor="#E5E5E5" text="#000000" link="#006699" vlink="#5493B4">
 <?php
-}
+
+} // if ...
 
 if($_GET['setup']) {
 	checkLeaderRights();

@@ -22,30 +22,20 @@
     Former copyrights see below.
  **************************************************************************/
 
-
-start_page(); 
-start_body();
+include_once("includes/db.inc.php");
+include_once("includes/util.inc.php");
+include_once("includes/session.inc.php");
+include_once("includes/monument.inc.php");
 ?>
-
-<h1>Besuchen Sie unseren Sponsor:</h1>
-<table border="0" cellpadding="0" cellspacing="0">
-<tr><td style="border: solid black 2px;">
+<html>
+<head>
+<title><? echo $pagetitle; ?></title>
+</head>
+<? include("includes/update.inc.php"); ?>
+<link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
+<body background="<? echo $imagepath; ?>/monu_test_bg.jpg">
 <?php
-include_once("include/banner.inc.php");
-
-if (isset($bannerpage)) 
-     printBanner($bannerpage);    
-else if (isset($id))
-     printBanner($id);
-else
-     printBanner();
+print_monuments();
 ?>
-</td><td width="99%"></td></tr>
-<tr height="10"><td colspan="2"></td></tr>
-<tr><td colspan="2">
-<a href="all.php">Zurück zur Übersicht der Werbepartner</a>
-</td></tr>
-</table>
-
 </body>
 </html>

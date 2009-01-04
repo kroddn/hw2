@@ -21,31 +21,43 @@
 
     Former copyrights see below.
  **************************************************************************/
+ 
+/**************************************************
+ * Copyright (c) 2006-2007
+ *
+ *
+ * Markus Sinner
+ *
+ * This File must not be used without permission!
+ ****************************************************/
+include ("includes/db.inc.php");
+include ("includes/config.inc.php");
+include ("includes/util.inc.php");
 
+$imagepath = "images/ingame";
+$csspath = "images/ingame/css";
 
-start_page(); 
-start_body();
 ?>
-
-<h1>Besuchen Sie unseren Sponsor:</h1>
-<table border="0" cellpadding="0" cellspacing="0">
-<tr><td style="border: solid black 2px;">
-<?php
-include_once("include/banner.inc.php");
-
-if (isset($bannerpage)) 
-     printBanner($bannerpage);    
-else if (isset($id))
-     printBanner($id);
-else
-     printBanner();
-?>
-</td><td width="99%"></td></tr>
-<tr height="10"><td colspan="2"></td></tr>
-<tr><td colspan="2">
-<a href="all.php">Zurück zur Übersicht der Werbepartner</a>
-</td></tr>
-</table>
-
+<html>
+<head>
+<title><? echo $pagetitle; ?></title>
+</head>
+<link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
+<body marginwidth="0" marginheight="0" topmargin="30" leftmargin="0" background="<? echo $imagepath; ?>/bg.gif">
+<div align="center">
+<table width="480" cellspacing="1" cellpadding="0" border="0">
+	<tr>
+		<td align="center"><b>Aktivierung</b><br><br></td>
+	</tr>
+	<tr>
+		<td align="center">Ihr Account wurde erfolgreich aktiviert<br><br></td>
+	</tr>
+	<tr>
+		<td align="center"><a href="index.php"><b>Zum Portal</b></a><br><br></td>
+	</tr>
+<br>
+<br>
+<br>
+</div>
 </body>
 </html>

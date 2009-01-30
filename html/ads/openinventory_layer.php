@@ -1,0 +1,1 @@
+<script language="javascript1.1" src="http://adserver.adtech.de/addyn|3.0|905|1846357|0|16|ADTECH;loc=100;misc=[TIMESTAMP];rdclick="></script>

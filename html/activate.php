@@ -42,7 +42,7 @@ if($activate) {
     $db_login = mysql_fetch_assoc($sql_login);
     if ($db_login['status']==1) {
       if ($activationcode == $db_login['activationkey']) {
-        do_mysql_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']) or die(mysql_error());
+        do_mysql_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']);
         echo "<tr><td colspan='3' valign='top' align='center'><div class='error'><h1>Ihr Account wurde erfolgreich aktiviert!</h2></div><br>\n";
         echo "<a href='login.php?name=".urlencode($loginname)."'>Zum Login</a>";
         die("</td></tr></table> <!-- Start-Header-Table -->");
@@ -104,7 +104,7 @@ unter Angabe Ihres Logins und der Email-Adresse, unter der Sie sich angemeldet h
 
 <p>
 <div align="center">
-<? include("ads/easyad_728.php"); ?>
+<? include("ads/openinventory_728x90.php"); ?>
 </div>
 
 </body>

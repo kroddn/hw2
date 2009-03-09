@@ -1,0 +1,3 @@
+<!-- BEGIN PARTNER PROGRAM - DO NOT CHANGE THE PARAMETERS OF THE HYPERLINK -->
+<script type="text/javascript">document.write('<scr'+'ipt src="http://banners.webmasterplan.com/view.asp?site=1382&ref=249139&type=text&tnb=32&showJS=1&template=1673&textcolor=303030&titlecolor=000000&bordercolor=F0F0AA&bgcolor=FFFFC8&CategoryID=14616&refurl='+escape(document.location.href)+'"></scr'+'ipt>'); </script>
+<!-- END PARTNER PROGRAM -->

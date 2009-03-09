@@ -6,7 +6,7 @@ if [ ! -f $q ]; then
 fi
 
 while [ $# -gt 0 ]; do
-    scp $1 mysql:/home/hw2_game2/html/admintools/$1
+    scp $1 mysql:/home/hw2_game2/html/maps/$1
     shift
 done
 

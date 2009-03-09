@@ -23,7 +23,7 @@
  **************************************************************************/
 
 // Diese Seite nicht zu den Clicks zählen
-$nocklickcount = 1;
+$GLOBALS['noclickcount'] = 1;
 
 include("includes/db.inc.php");
 require("includes/cities.class.php");

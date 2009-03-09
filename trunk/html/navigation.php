@@ -31,7 +31,8 @@
  *
  ***************************************************/
 // Navigation nicht zu den Klicks hinzuzählen
-$nocklickcount = 1;
+$GLOBALS['noclickcount'] = 1;
+
 include_once("includes/db.inc.php");
 include_once("includes/session.inc.php");
 include_once("includes/player.class.php");

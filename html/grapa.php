@@ -31,6 +31,7 @@ start_body();
 $timemod = time() % 3600;
 if($timemod < 1200){
   include("includes/ebay.flash.html");
+  echo "</div>";
 }
 else {
     include("ads/sponsorads-leaderboard.php");
@@ -41,7 +42,5 @@ else {
 </td></tr>
 
 </table>
-</div>
 
-</body>
-</html>
+<?php echo "</body></html>\n"; ?>

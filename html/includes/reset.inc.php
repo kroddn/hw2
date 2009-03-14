@@ -160,8 +160,10 @@ function reset_config()
 {
   do_mysql_query("DELETE FROM config WHERE name IN ('settleradius')");
 
+  // Set settleradius
+  $reset_radius = 3;
   do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
-                 " VALUES ('settleradius', '4', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
+                 " VALUES ('settleradius', '$reset_radius', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
 
 
   // FIXME: starttime nur löschen, wenns kleiner wie aktuell ist

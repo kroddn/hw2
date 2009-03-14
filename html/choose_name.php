@@ -200,7 +200,7 @@ Für Details auf die Karte klicken!
 </tr>
 <tr class="tblbody">
 <td>
-   <div align="right"><a href="settlemap.php" target="_blank"><img border="0" src="<? echo $imagepath.'/'.REGISTER_MAP; ?>"></a></div>
+   <div align="right"><a href="settlemap.php" target="_blank"><img border="0" src="<? echo 'maps/'.REGISTER_MAP; ?>"></a></div>
 </td>
 <td valign="middle" align="left">
 <?php

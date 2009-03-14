@@ -66,8 +66,9 @@ $GLOBALS['smsprefixes']
 = array("0150",
         "0151",
         "0152",
-        "0156", // Neue TD1-Vorwahl
         "01520",
+        "0156", // Neue TD1-Vorwahl
+        "01577"
         "0160",
         "0162",
         "0163",

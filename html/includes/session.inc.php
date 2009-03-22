@@ -37,7 +37,7 @@ require_once("includes/premium.inc.php");
 include_once("includes/cities.class.php");
 include_once("includes/research.class.php");
 include_once("includes/player.class.php");
-require_once("includes/map.class.php");
+// require_once("includes/map.class.php");
 require_once("includes/db.class.php");
 require_once("includes/banner.inc.php");
 include_once("includes/page.func.php");

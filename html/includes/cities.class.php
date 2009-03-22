@@ -460,7 +460,8 @@ class Cities {
   }
   
   function getBuildings() {
-    $fy = $GLOBALS['map']->sizey;
+    getMapSize($fx, $fy);
+    
     
     $res5 = do_mysql_query("SELECT gold,wood,stone FROM player WHERE id=".$this->player);
 

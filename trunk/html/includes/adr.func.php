@@ -187,8 +187,9 @@ function print_address_book() {
                         " FROM addressbook a ".
                         "  LEFT JOIN player p ON p.id = a.player ".
                         " WHERE owner = $me ORDER BY nicename");
-  
-  echo '<table id="adr" width="500" cellspacing="0" cellpadding="0"  >';
+?>
+    <table id="adr" width="500" cellspacing="0" cellpadding="0" >
+<?php   
   if (mysql_num_rows($res) == 0) {
     echo "\n<tr><td colstan=\"4\" align=\"center\"><b>Ihr Adressbuch enthält keine Einträge</b></td></tr>\n";
   }
@@ -239,10 +240,10 @@ function print_address_book() {
   ?>
    <tr><td height="40" colspan="4" align="center" valign="middle">
       <? print_add_entry_buttons(); ?>
-      </td></tr>
+   </td></tr>
    <tr><td colspan="4">
-   Ein Eintrag im Adressbuch kann an mehreren Stellen im Spiel verwendet werden.<p>
-   <ul>
+    Ein Eintrag im Adressbuch kann an mehreren Stellen im Spiel verwendet werden.<p>
+    <ul>
       <li>
       Das Adressbuch kann für SMS-Nummern oder für Spielernamen verwendet werden.
       <li>
@@ -263,8 +264,9 @@ function print_address_book() {
       Eintrag im Adressbuch auf der SMS-Versandseite angezeigt. Ebenso werden Spieler angezeigt,
       die selbst eine SMS-Nummer hinterlegt haben und in Ihrem Adressbuch vorhanden sind. 
       In solchen Fällen erschein <b>hat Nummer hinterlegt</b> anstelle der SMS-Nummer.
-      </td></tr>                                   
-   </table>
+    </ul>
+   </td></tr>                                   
+ </table>
 
 <?
 }

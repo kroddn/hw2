@@ -1,4 +1,27 @@
 <?php
+/*************************************************************************
+    This file is part of "Holy-Wars 2" 
+    http://holy-wars2.de / https://sourceforge.net/projects/hw2/
+
+    Copyright (C) 2003-2009 
+    by Markus Sinner, Gordon Meiser, Laurenz Gamper, Stefan Neubert
+
+    "Holy-Wars 2" is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+    Former copyrights see below.
+ **************************************************************************/
+
 /***************************************************
  * Copyright (c) 2005-2007
  *
@@ -20,11 +43,18 @@ define("MAGIC_SCRIPT", "index.php");
 define("MAGIC_SUBID", "hw2");
 define("MAGIC_DEFAULT_IMG", "images/ingame_v3/noads.jpg");
 
-define("DB_TYPE", "mysql");
-define("BANNER_TABLE", "global.banner");
 
-include_once("includes/db.class.php");
-include_once("/home/wwwroot/strength-and-honor-game.de/htdocs/include/banner2.inc.php");
+$banner2 = "/home/wwwroot/strength-and-honor-game.de/htdocs/include/banner2.inc.php";
+if(file_exists($banner2)) {
+  define("DB_TYPE", "mysql");
+  define("BANNER_TABLE", "global.banner");
+
+  include_once("includes/db.class.php");
+  include_once($banner2);
+}
+else {
+  include_once("includes/banner2.inc.php");
+}
 
 
 /**

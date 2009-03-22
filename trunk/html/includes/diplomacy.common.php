@@ -27,12 +27,14 @@ function delDBrel($table, $id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
   do_mysql_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
+  return mysql_affected_rows();
 }
 
 function delDBreq_rel($table, $id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
   do_mysql_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id2=".$id1." AND id1=".$id2.")");
+  return mysql_affected_rows();
 }
 
 function setDBrel($table, $id1, $id2, $type) {
@@ -42,6 +44,7 @@ function setDBrel($table, $id1, $id2, $type) {
   
   delDBrel($table, $id1, $id2);
   do_mysql_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
+  return mysql_affected_rows();
 }
 
 function setDBreq_rel($table, $id1, $id2, $type) {
@@ -51,6 +54,7 @@ function setDBreq_rel($table, $id1, $id2, $type) {
   
   delDBreq_rel($table, $id1, $id2);
   do_mysql_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
+  return mysql_affected_rows();
 }
 
 

@@ -208,22 +208,31 @@ class diplomacy {
     
     $res1 = do_mysql_query("SELECT id,name,religion FROM player WHERE id=".$pid);
     if (($data1 = mysql_fetch_assoc($res1)) && ($this->religion == $data1['religion'])) {
-      if ($msg = $this->canNotBND($this->player,$pid))
-      $this->message($this->player, "Bündnisangebot an ".$data1['name']." fehlgeschlagen", "Ihr wollt dem Spieler ".$data1['name']." ein Bündnisangebot unterbreiten, folgende Angriffe stehen dem noch entgegen:\n\n".$msg);
+      if ($msg = $this->canNotBND($this->player,$pid)) {
+        $this->message($this->player, "Bündnisangebot an ".$data1['name']." fehlgeschlagen", "Ihr wollt dem Spieler ".$data1['name']." ein Bündnisangebot unterbreiten, folgende Angriffe stehen dem noch entgegen:\n\n".$msg);
+        return "Fehlgeschlagen. Prüft Eure <a href=\"messages.php\">Nachrichten</a>!";
+      }
       else {
         setDBreq_rel("req_relation", $this->player, $pid, 2);
         $this->message($pid, "Bündnisangebot von ".$this->name, "Der Spieler ".$this->name." hat euch ein Bündnisangebot gemacht.");
         $this->message($this->player, "Bündnisangebot an ".$data1['name'], "Ihr habt dem Spieler ".$data1['name']." ein Bündnisangebot gemacht.");
+        return null;
       }
-    } else
-    $this->message($this->player, "Bündnisangebot an Ungläubigen", "Wehe, du willst einen Bündnis mit einem Ungläugigen, mögen dir die Gläubigen jedes Haar einzeln ausrupfen!");
+    }
+    else {
+      $m = "Wehe, du willst einen Bündnis mit einem Ungläugigen, mögen dir die Gläubigen jedes Haar einzeln ausrupfen!";
+      $this->message($this->player, "Bündnisangebot an Ungläubigen", $m);
+      return $m;
+    }
   }
 
   function friendly ($pid) {
     $pid = intval($pid);
+
+    if($this->player == $pid) return "Es mag ja lustig sein, Verträge mit sich selbst abzuschließen, ist aber diesem Spiel nicht dienlich.";
     
     $res1 = do_mysql_query("SELECT id,name,religion FROM player WHERE id=".$pid);
-    if (($this->player != $pid) && ($data1 = mysql_fetch_assoc($res1))) {
+    if( $data1 = mysql_fetch_assoc($res1) ) {
       $res2 = do_mysql_query("SELECT type FROM relation WHERE (id1=".$pid." AND id2=".$this->player.") OR (id1=".$this->player." AND id2=".$pid.")");
       if ($data2 = mysql_fetch_assoc($res2)) {
         if ($data2['type'] <2) {
@@ -231,19 +240,29 @@ class diplomacy {
             setDBreq_rel("req_relation", $this->player, $pid, 1);
             $this->message($pid, "Friedensangebot von ".$this->name, "Der Spieler ".$this->name." hat euch ein Friedensangebot gemacht.");
             $this->message($this->player, "Friedensangebot an ".$data1['name'], "Ihr habt dem Spieler ".$data1['name']." ein Friedensangebot gemacht.");
-          } else
-          $this->offerBND($pid);
+            return null;
+          }
+          else {
+            return $this->offerBND($pid);
+          }
         }
-      } else
-      $this->offerBND($pid);
+      }
+      else{
+        return $this->offerBND($pid);
+      }
+    }
+    else {
+      return "Dieser Spieler existiert nicht.";
     }
   }
 
   function accReqRelation($pid) {
     $pid = intval($pid);
     
+    if($this->player == $pid) return "Es mag ja lustig sein, Verträge mit sich selbst abzuschließen, ist aber diesem Spiel nicht dienlich.";
+    
     $res1 = do_mysql_query("SELECT id,name FROM player WHERE id=".$pid);
-    if (($this->player != $pid) && ($data1 = mysql_fetch_assoc($res1))) {
+    if( $data1 = mysql_fetch_assoc($res1) ) {
       $res2 = do_mysql_query("SELECT type FROM req_relation WHERE (id1=".$pid.") AND (id2=".$this->player.")");
       $res3 = do_mysql_query("SELECT type FROM relation WHERE (id1=".$pid." AND id2=".$this->player.") OR (id1=".$this->player." AND id2=".$pid.")");
       if ($data2 = mysql_fetch_assoc($res2)) {
@@ -266,15 +285,24 @@ class diplomacy {
             $this->message($this->player, "Bündnisangebot von ".$data1['name']." angenommen", "Ihr habt das Bündnisangebot von ".$data1['name']." angenommen.");
             $this->clanDiplo($this->player, $pid, 2);
           }
-        } else if ($data2['type'] == 2) {
+        } 
+        else if ($data2['type'] == 2) {
           setDBrel("relation", $this->player, $pid, $data2['type']);
           delDBreq_rel("req_relation", $pid, $this->player);
           $this->message($pid, "Bündnis von ".$this->name." angenommen", "Der Spieler ".$this->name." hat euer Bündnisangebot angenommen.");
           $this->message($this->player, "Bündnisangebot von ".$data1['name']." angenommen", "Ihr habt das Bündnisangebot von ".$data1['name']." angenommen.");
           $this->clanDiplo($this->player, $pid, 2);
         }
+      } // $res2
+      else {
+        return "Ihr habt keine Relation zu diesem Spieler.";
       }
     }
+    else {
+      return "Dieser Spieler existiert nicht.";
+    }
+    
+    return null;
   }
 
   function delReqRelation($pid, $type) {
@@ -282,7 +310,9 @@ class diplomacy {
     $res1 = do_mysql_query("SELECT id,name FROM player WHERE id=".$pid);
     if ($data1 = mysql_fetch_assoc($res1)) {
       //abuse of delDBrel, not a bug
-      delDBrel("req_relation", $pid, $this->player);
+      $result = delDBrel("req_relation", $pid, $this->player);
+      if($result == 0) return "Es besteht kein Angebot an diesen Spieler.";
+      
       if ($type== 1) {
         $this->message($pid, "Friedensangebot von ".$this->name." abgelehnt", "Der Spieler ".$this->name." hat euer Angebot um Frieden ausgeschlagen.");
         $this->message($this->player, "Friedensangebot von ".$data1['name']." abgelehnt", "Ihr habt das Friedensangebot des Spielers ".$data1['name']." ausgeschlagen.");
@@ -297,6 +327,11 @@ class diplomacy {
         $this->message($this->player, "Bündnisangebot an ".$data1['name']." zurückgezogen", "Ihr habt das Bündnisangebot an den Spieler ".$data1['name']." zurückgezogen.");
       }
     }
+    else {
+      return "Dieser Spieler existiert nicht.";
+    }
+    
+    return null;
   }
 
   
@@ -317,15 +352,18 @@ class diplomacy {
           return "Der Spieler befindet sich noch im Neulingsschutz, daher könnt Ihr den Spieler nicht angreifen!";
         }
         else {
-          $this->hostile($data['id']);
+          return $this->hostile($data['id']);
         }
       }
       else if($type == 2) {
-        $this->friendly($data['id']);
+        return $this->friendly($data['id']);
       }
       else if($type == 1) {
-        $this->neutral($data['id']);
+        return $this->neutral($data['id']);
       }
+    }
+    else {
+      return "Dieser Spieler existiert nicht.";
     }
 
     return null;

@@ -53,7 +53,7 @@ include_once("includes/cities.class.php");
 include_once("includes/session.inc.php");
 include_once("include/db.class.php");
 include_once("includes/banner.inc.php"); 
-include_once("includes/browser.inc.php");
+//include_once("includes/browser.inc.php");
 include_once("includes/premium.inc.php");
 include_once("includes/sms.func.php");
 

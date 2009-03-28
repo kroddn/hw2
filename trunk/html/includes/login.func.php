@@ -26,7 +26,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   $GLOBALS['loginprocess'] = true;
   
   include_once("includes/util.inc.php");
-  include_once("includes/library.class.php");
+  //  include_once("includes/library.class.php");
   include_once("includes/market.class.php");
   include_once("includes/diplomacy.common.php");
   include_once("includes/clan.class.php");
@@ -36,8 +36,8 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   include_once("includes/map.class.php");
   include_once("includes/cities.class.php");
   include_once("includes/session.inc.php");
-  include_once("include/db.class.php");
-  include_once("includes/banner.inc.php");
+  include_once("includes/db.class.php");
+  //  include_once("includes/banner.inc.php");
   include_once("includes/browser.inc.php");
   include_once("includes/premium.inc.php");
   include_once("includes/sms.func.php");
@@ -149,6 +149,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
 
                 do_log("User logged in...");
                 logBrowser();
+
                 if($_SESSION['player']->isAdmin()) {
                   header("Location: index.php");
                 }

@@ -1452,15 +1452,15 @@ function get_info_link($name, $type, $avatar=0) {
       $name_text = strlen($name) < 25 ? $name : substr($name, 0, 25)."<br>".substr($name, 25);
       
       if($avatar != 1) {
-        $string = "<a href=\"info.php?show=".$type."&name=".urlencode($name)."\">".$name_text.' <img src="'.$imagepath."/avatar_exists.gif\" border=\"0\"></a>";
+        $string = "<a href=\"info.php?show=player&exactmatch=1&name=".urlencode($name)."\">".$name_text.' <img src="'.$imagepath."/avatar_exists.gif\" border=\"0\"></a>";
       }
       else {
-        $string = "<a href=\"info.php?show=".$type."&name=".urlencode($name)."\">".$name_text."</a>";
+        $string = "<a href=\"info.php?show=player&exactmatch=1&name=".urlencode($name)."\">".$name_text."</a>";
 
         $res1 = do_mysql_query("SELECT id,avatar FROM player WHERE name='".$name."'");
         $data1 = mysql_fetch_assoc($res1);
         if($data1['avatar']==2) {
-          $string = "<a href=\"info.php?show=player&name=".urlencode($name)."\"  onMouseOver=\"showWMTT('".$data1['id']."')\" onMouseOut=\"hideWMTT()\">".$name_text.' <img src="'.$imagepath."/avatar_exists.gif\" border=\"0\"></a>\n";
+          $string = "<a href=\"info.php?show=player&exactmatch=1&name=".urlencode($name)."\"  onMouseOver=\"showWMTT('".$data1['id']."')\" onMouseOut=\"hideWMTT()\">".$name_text.' <img src="'.$imagepath."/avatar_exists.gif\" border=\"0\"></a>\n";
           $string .= " <div class=\"tooltip\" id=\"".$data1['id']."\"><img src=\"avatar.php?id=".$data1['id']."\" /></div>";
         }
       }

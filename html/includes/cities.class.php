@@ -1190,12 +1190,14 @@ class Cities {
                            " WHERE x=".$x." AND y=".$y);
     
     if (!($data1 = mysql_fetch_assoc($res1)) || !$data1['owner'] ) {
-      return "Ausgangsstadt ungültig";
+      return "Zielstadt ungültig";
+    }
+    
+    if ($data1['owner'] < 10) {
+       return "Admin-Städte können nicht angegriffen werden.";
     }
     
     
-    
-    //$noob = do_mysql_query_fetch_array("SELECT nooblevel FROM player WHERE id = ".$data1['owner']);
     // Keine Truppenverlegungen zu Noobs erlauben
     if ($data1['owner'] != $this->player) {
       if ($data1['nooblevel'] > 0) {

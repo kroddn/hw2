@@ -39,9 +39,7 @@ $res1=do_mysql_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coale
 if ($cc=mysql_fetch_assoc($res1)) {
   if ($cc['cc_towns']==1) {
     $_SESSION['cities']->updateCities();
-    echo "<script type='text/javascript'>\n<!--\n";
-    echo "if(parent != self) parent.borderbottom.location.href='borderbottom.php';\n";
-    echo "//-->\n</script>\n";
+    reloadBottom();
     $cc['cc_towns']=0;
   }
   if ($cc['cc_messages']==1) {
@@ -49,40 +47,39 @@ if ($cc=mysql_fetch_assoc($res1)) {
     include_once("includes/player.class.php");
     $_SESSION['research']->update();
     $_SESSION['player']->updateNewMessages();
-    echo "<script type='text/javascript'>\n<!--\n";
-    echo "if(parent != null && parent != self) parent.borderbottom.location.href='borderbottom.php';\n";
-    echo "//-->\n</script>\n";
+    reloadBottom();
     $cc['cc_messages']=0;
 
   }
   if ($cc['cc_resources']==1) {
     include_once("includes/player.class.php");
     $_SESSION['player']->updateResources();
-    echo "<script type='text/javascript'>\n<!--\n";
-    echo "if(parent != null && parent != self) parent.res.location.href='top.php';\n";
-    echo "//-->\n</script>\n";
-    echo "<script type='text/javascript'>\n<!--\n";
-    echo "if(parent != null && parent != self) parent.borderbottom.location.href='borderbottom.php';\n";
-    echo "//-->\n</script>\n";
+    reloadTop();
+    reloadBottom();
     $cc['cc_resources']=0;
   }
+
+  // Urlaubsmodus - rauswerfen
   if ($cc['holiday'] && $cc['holidaymode']) {
     session_destroy();
     $GLOBALS['error'] = "holiday";
     goto_login();
   }
+  // Gesperrt - rauswerfen
   if( $cc['status'] == 2 ) {
     session_destroy();
     $GLOBALS['error'] = "locked";
     goto_login();
   }
   
-  do_mysql_query("UPDATE player SET cc_resources=".$cc['cc_resources'].", cc_messages=".$cc['cc_messages'].", cc_towns=".$cc['cc_towns']." WHERE id=".$_SESSION['player']->getID());
+  do_mysql_query("UPDATE player SET cc_resources=".$cc['cc_resources'].", cc_messages=".$cc['cc_messages'].", cc_towns=".$cc['cc_towns'].
+                 " WHERE id=".$_SESSION['player']->getID());
 }
 
 
 // Bei nem Angriff die Topleiste aktualisieren
 // FIMXE: das wird JEDESMAL gemacht... muss das sein?
+// FIXME: wann wird die Variable zurückgesetzt?
 $cit = $_SESSION['cities']->getCities();
 if ($cit) {
   foreach ($cit as $key=>$city) {
@@ -91,13 +88,31 @@ if ($cit) {
       if (!isset($session_underattack) || !$session_underattack ) {
         $session_underattack = true;
         session_register("session_underattack");
-        echo "<script type='text/javascript'>\n<!--\n";
-        echo "if(parent != null && parent != self) parent.res.location.href='top.php';\n";
-        echo "//-->\n</script>\n";     
       }
+      reloadTop();
       
-      continue;
+      break;
     }
   }
+}
+
+
+/**
+ * Bottom-Leiste mit Städten und Timer neu laden
+ */
+function reloadBottom() {
+  echo "<script type='text/javascript'>\n<!--\n";
+  echo "if(parent != null && parent != self) parent.borderbottom.location.href='borderbottom.php';\n";
+  echo "//-->\n</script>\n";
+}
+
+
+/**
+ * Top-Leiste mit Resourcen und Statussymbolen
+ */
+function reloadTop() {
+  echo "<script type='text/javascript'>\n<!--\n";
+  echo "if(parent != null && parent != self) parent.res.location.href='top.php';\n";
+  echo "//-->\n</script>\n";     
 }
 ?>

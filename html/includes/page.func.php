@@ -22,7 +22,12 @@
     Former copyrights see below.
  **************************************************************************/
 
-
+/**
+ * Neue HW2-Seite beginnen.
+ * FIXME: nach diesem Aufruf sollte 
+ *  include_once("includes/update.inc.php");
+ * eingebunden werden, damit Top und Bottom-Leite aktualisiert werden
+ */
 function start_page() {
 ?>
 <html>

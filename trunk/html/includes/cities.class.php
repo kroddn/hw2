@@ -1435,6 +1435,9 @@ class Cities {
     $res1 = do_mysql_query("SELECT id, name, capital FROM city WHERE owner=".$this->player." ORDER BY capital DESC, id ASC");
     if (mysql_num_rows($res1) == 0) {      
       restart_player($this->player);
+
+      // FIXME: hier vielleicht ein return, damit keine Race-Conditions
+      // mit anderen Skripten auftreten?
     }
       
     while ($db_city = mysql_fetch_assoc($res1)) {
@@ -1451,12 +1454,17 @@ class Cities {
   }
 
   function updateCityName($cityname) {
+    $cityname = trim($cityname);
+
+    // Bei gleichem Namen nichts tun
     if(strcmp($this->activecityname, $cityname) == 0) return null;
 
-    if (!checkBez($cityname) ) 
+    // Dafür sorgen, dass kein Unfug eingegeben wird
+    if (!checkBez($cityname) ) {
       return "Der gewählte Stadtname ist zu kurz, zu lang, verstößt gegen die Namenskonventionen oder enthält doppelte Leerzeichen.";
+    }
 
-    $res1 = do_mysql_query("SELECT id FROM city WHERE name LIKE '".trim($cityname)."'");
+    $res1 = do_mysql_query("SELECT id FROM city WHERE name LIKE '".$cityname."'");
     if(mysql_num_rows($res1) == 0 ) {
       do_mysql_query("UPDATE city SET name='".$cityname."' WHERE id=".$this->activecity);
       do_mysql_query("UPDATE player SET cc_towns=1 WHERE id=".$this->player);

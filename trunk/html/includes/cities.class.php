@@ -1457,7 +1457,7 @@ class Cities {
     $cityname = trim($cityname);
 
     // Bei gleichem Namen nichts tun
-    if(strcmp($this->activecityname, $cityname) == 0) return null;
+    if(strcasecmp($this->activecityname, $cityname) == 0) return null;
 
     // Dafür sorgen, dass kein Unfug eingegeben wird
     if (!checkBez($cityname) ) {

@@ -33,7 +33,7 @@
 require_once("includes/config.inc.php");
 require_once("includes/db.config.php");
 require_once("includes/log.inc.php");
-require_once("conf/db.conf.php"); // Zugangsdaten fuer Datenbank
+require_once("conf/db.conf.php"); // Zugangsdaten zur Datenbank
 
 // Set default images
 if (!isset($imagepath)) {
@@ -49,8 +49,8 @@ if (!isset($csspath )) {
     $csspath = $imagepath."/css";
 }
 
-$con = mysql_pconnect( DBHOST, DBUSER, DBPASSWD);
-mysql_select_db( DBSELECT, $con);
+$GLOBALS['con'] = mysql_pconnect( DBHOST, DBUSER, DBPASSWD);
+mysql_select_db( DBSELECT, $GLOBALS['con']);
 
 if(!function_exists("do_mysql_query_fetch_array")) {
   function do_mysql_query_fetch_array($sql) {

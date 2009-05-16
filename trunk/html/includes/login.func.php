@@ -22,8 +22,19 @@
     Former copyrights see below.
  **************************************************************************/
 
+/**
+ * Einen Spieler einloggen
+ * 
+ * @param $loginname     Account login
+ * @param $loginpassword Account Passwort im Klartext
+ * @param $sec_code      Security Code. Muss mit $_SESSION['sec_key'] übereinstimmen, falls dieser gesetzt ist.
+ * @param $nopw          Falls true, wird ohne Passwortvergleich eingeloggt
+ * 
+ * @return null bei Erfolg, einen String mit einer Fehlermeldung andernfalls
+ */
 function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   $GLOBALS['loginprocess'] = true;
+   
   
   include_once("includes/util.inc.php");
   //  include_once("includes/library.class.php");
@@ -59,7 +70,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
       $secure = defined('NO_SECURITY') && NO_SECURITY || isset($_SESSION['sec_key']) && !strcmp($sec_code, $_SESSION['sec_key']) || $GLOBALS['premium_flags'] & PREMIUM_PRO;
       if ($secure) {
         session_unregister("sec_key");
-        // loginpassword == null ist ein override
+        
         if ( $nopw || md5($loginpassword) == $db_login['password']) {
           if ($db_login['status'] == NULL || $db_login['status'] == 3) {
             if ($db_login['holiday'] < time()) 

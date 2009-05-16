@@ -105,8 +105,17 @@ class Cities {
     }
   }
 
+  /**
+   * Ausbildung abbrechen.
+   * 
+   * 
+   * @param $uid
+   * @return unknown_type
+   */
   function abortUnit($uid) {
     $uid = intval($uid);
+    // Die query ist so gestaltet, dass der Besitzer nur seine eigenen Truppen abbrechen kann.
+    // Eine zusätzliche Abfrage nach "owner" ist also nicht nötig.
     $res1 = do_mysql_query("SELECT gold,shortrange,longrange,armor,horse,count,name,city ".
                            " FROM cityunit_ordered co LEFT JOIN unit u ON co.unit=u.id ".
                            "WHERE city=".$this->activecity." AND uid=".$uid);
@@ -117,15 +126,23 @@ class Cities {
       $lr = $data1['longrange'] * $data1['count'];
       $a = $data1['armor'] * $data1['count'];
       $h = $data1['horse'] * $data1['count'];
+      
+      //FIXME: Race-Condition anfällig. Besser: if affected rows == 1 
       do_mysql_query("DELETE FROM cityunit_ordered WHERE uid=".$uid);
       do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) ".
                      " VALUES ('SERVER',".$this->player.",UNIX_TIMESTAMP(),'Abbruch: ".$data1['name']." (".$data1['count'].")','Die Ausbildung in ".$this->activecityname." wurde auf Euer Geheiß hin abgebrochen.\n\n<b>".$data1['name']."</b>\nAnzahl: ".$data1['count']."\n\nAbzüglich der Unkosten erhaltet Ihr ".$gold." Gold, ".$sr." Nahkampfwaffen, ".$lr." Fernkampfwaffen, ".$a." Rüstungen und ".$h." Pferde zurück.',4)");
       do_mysql_query("UPDATE city SET population=population+".$data1['count'].", shortrange=shortrange+".$sr.", longrange=longrange+".$lr.", armor=armor+".$a.", horse=horse+".$h." WHERE id=".$data1['city']);
       do_mysql_query("UPDATE player SET gold=gold+".$gold.",cc_messages=1,cc_resources=1 WHERE id=".$this->player);
-      //do_log("Unitabort ordered: abortUnit(".$uid.")");
+      
+      return null;
     }
+    else {
+      return "Dieser Ausbildungstrupp existiert nicht.";
+    }
+   
   }
 
+  
   function build($building, $count) {
     $count = intval($count);
     $building = intval($building);
@@ -687,6 +704,7 @@ class Cities {
 
   /**
    * Einheiten in der Stadt zurückliefern.
+   * Sorgt dafür, dass nur die Einheiten des Spielers zurückgeliefert werden.
    *
    * @return Einen Array Array
    *         $units[x][0] -> ID
@@ -1700,12 +1718,21 @@ class Cities {
   } // convert
 
 
-  
+  /**
+   * Eine fremde stationierte Einheite zurücksenden.
+   * 
+   * @param $unit
+   * @param $owner
+   * @return null bei erfolg, sonst einen String mit einer Fehlermeldung
+   */
   function sendBack($unit, $owner) {
     if (getSiegeTime($this->activecity) >= 0) {
-      echo "<h2 class='error'>Die Stadt steht unter Belagerung. Die Herzöge weigern sich, die Stadt schutzlos zu lassen.</h2>";
-      exit;      
+      return "Die Stadt steht unter Belagerung. Die Herzöge weigern sich, die Stadt schutzlos zu lassen.";
     }
+    
+    $owner = intval($owner);
+    $unit  = intval($unit);
+    
     $sql = sprintf("SELECT cityunit.*, speed, name ".
 				   " FROM cityunit LEFT JOIN unit ON unit.id = cityunit.unit".
 				   " WHERE city = %d AND unit = %d AND owner = %d",
@@ -1751,20 +1778,32 @@ class Cities {
       //printf("%s<br>", $sql);                     
       do_mysql_query($sql);
       do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$owner);
+      
+      // OK
+      return null;
     }
     else {
-      echo "<h2 class='error'>Diese Einheit könnt Ihr nicht befehligen.</h2>";
+      return "Diese Einheit könnt Ihr nicht befehligen.";
     }
   }
   
+  
+  /**
+   * Truppen entlassen. 
+   * 
+   * @param $from  ID der Stadt. Kann auch die ID einer verbündeten Stadt enthalten.
+   * @param $u     Array der zu entlassenden Truppen
+   * @return null bei Erfolg, ansonsten einen String mit einer Fehlermeldung
+   */
   function disarmCityUnits($from, $u) {
     $from = intval($from);
 
     if (getSiegeTime($from) >= 0) {
-      echo "<h2 class='error'>Die Stadt steht unter Belagerung. Die Herzöge weigern sich, die Stadt schutzlos zu lassen.</h2>";
-      exit;      
+      return "Die Stadt steht unter Belagerung. Die Herzöge weigern sich, die Stadt schutzlos zu lassen.";     
     }
 
+    // Die stationieren Einheiten der Stadt holen
+    // Hier werden nur die Einheiten des aktuellen Spielers zurückgeliefert
     $cu = $this->getCityUnits($from);
 
     //var_dump($u);
@@ -1782,14 +1821,18 @@ class Cities {
         
         // Logging
         $sql = sprintf("INSERT INTO log_disarm (time,player,city,unit,count) VALUES (UNIX_TIMESTAMP(), %d, %d, %d, %d)",
-                       $_SESSION['player']->getID(), $from, $key, $value);
+                       $this->player, $from, $key, $value);
         do_mysql_query($sql);
       }
       $k ++;
     }
   }
   
-  # Unerforschte Gebäude anzeigen
+  /**
+   * Unerforschte Gebäude anzeigen
+   * 
+   * @return unknown_type
+   */
   function getuninventedBuildings() {
     # Erforschte Gebäude ermitteln
     $invented = do_mysql_query("SELECT id, name FROM building, playerresearch WHERE (building.req_research = playerresearch.research) AND playerresearch.player=".$this->player." ORDER BY id");

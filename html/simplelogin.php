@@ -42,7 +42,13 @@ if(isset($login_submit)) {
 
 
 ?>
-<html><body>
+<html>
+<head>
+<title>Holy-Wars 2 Simple Login</title>
+ <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+ <meta http-equiv="imagetoolbar" content="no">
+</head>
+<body>
 <h1>Simple Login</h1>
 <?php if($loginerror != null) echo '<h2 style="color: DD0000;">Fehler: '.$loginerror."</h2>"; ?>
 

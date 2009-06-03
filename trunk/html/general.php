@@ -673,8 +673,9 @@ if ($from == $cities->getActiveCity()) {
     und Geschwindigkeit der langsamsten Einheit in der Armee.<br>
     Je nach Größe der Armee dauert es zwischen <?php echo round(ARMY_TIME_TO_PREPARE/3600, 2); ?> Stunden
     und <?php echo round(ARMY_MAX_TIME/86400, 2); ?> Tagen (Realzeit), 
-    bis die Armee überhaupt losmarschiert  (die sogenannte Vorbereitungszeit). 
-    Dabei benötigt eine Armee mindestens <?php echo (ARMY_TIME_TO_PREPARE/60); ?> Minuten, je 1.000 Mann erhöht sich die Laufzeit um <?php (ARMY_TIME_PER_1000/60); ?> Minuten.
+    bis die Armee überhaupt losmarschiert (die sogenannte Vorbereitungszeit). 
+    Je 1.000 Mann erhöht sich die Laufzeit um <?php echo round(ARMY_TIME_PER_1000/60, 2); ?> Minuten, 
+    eine Armee benötigt aber mindestens <?php echo (ARMY_TIME_TO_PREPARE/60); ?> Minuten Vorbereitungszeit.
     
     <?php 
     	// Ausgabe für Testrunden.

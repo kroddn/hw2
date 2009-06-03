@@ -36,6 +36,7 @@ include_once("includes/player.class.php");
 include_once("includes/util.inc.php");
 include_once("includes/session.inc.php");
 include_once("includes/banner.inc.php");
+include_once("includes/barracks.func.php");
 
 // Der Tick wird für die schöne Anzeige der Zeit gebraucht
 define("TICK", getConfig("tick", 1800));
@@ -56,14 +57,14 @@ if ($stop) {
   $show = 2;
 }
 
-if (!$from) {
-  $from=$_SESSION['cities']->getActiveCity();
+if (isset($_REQUEST['from'])) {
+  $from=intval($_REQUEST['from']);
 }
 else {
-  $from=intval($from);
+  $from=$_SESSION['cities']->getActiveCity();
 }
 
-if (isset($disarm)) {  
+if (isset($_REQUEST['disarm'])) {  
   $error = $_SESSION['cities']->disarmCityUnits($from, $unit);
   $show = 4;
 }
@@ -205,7 +206,7 @@ for($i=0;$i<sizeof($units);++$i) {
 
   echo "<form action=".$PHP_SELF." method='POST'>";
   printf('<tr class="tblbody"><td width="40"><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"></a></td>',
-  $href, $GLOBALS['imagepath'], $img, $units[$i]['name'], $units[$i]['name']);
+         $href, $GLOBALS['imagepath'], $img, $units[$i]['name'], $units[$i]['name']);
   
   echo "\n <td align='center' width='15'><b>L".$units[$i]['level']."</b></td>";
   
@@ -287,57 +288,73 @@ if(!is_premium_noads()) {
 
 <!-- Textlink -->
 <script type="text/javascript" src="http://www.sponsorads.de/script.php?s=6869"></script>
-
 </td></tr>
-<? } // if(!is_premium_noads()) 
+<? 
+} // if(!is_premium_noads()) 
+?>
+</table>
 
-$res1 = do_mysql_query("SELECT unit.id AS uid,unit.name AS uname,city.name AS cname, unit.cost as cost,count,type,unit.level AS level,unit.religion AS religion FROM cityunit,unit,city WHERE unit.id=cityunit.unit AND city.id=cityunit.city AND cityunit.city='".$_SESSION['cities']->getActiveCity()."' AND cityunit.owner='".$_SESSION['player']->getID()."' ORDER BY cityunit.unit");
+<div id="tbl4" style="width: 660px; display: none; margin-top: 10px;">
+<?php barracks_disarm_table( $_SESSION['cities']->getActiveCity() ); ?>
+</div>
 
-if (mysql_num_rows($res1)>0) {
-  //mysql_data_seek($res1, 0);
-  echo "<form action=".$PHP_SELF.' method="GET" name="disarmform">';
-  echo '<table id="tbl4" cellspacing="1" cellpadding="0" border="0" width="550" style="margin-top:10px; display:none;">';
-  echo "<tr class=\"tblhead\"><td colspan=\"4\"><strong>Einheiten entlassen</strong></td></tr>";
-  echo '<input type="hidden" name="from" value="'.$from.'">';
-  echo '<tr class="tblhead">';
-  echo '<td width="150">Typ</td>';
-  echo '<td width="70" style="text-align:center;">Kosten / Tick</td>';
-  echo '<td width="40">&nbsp;</td>';
-  echo '<td width="40">Stationiert</td>';
-  echo '</tr>';
-  $sumcount = 0;
-  $sumcost = 0;
-  $num = 1;
-  while ($data1 = mysql_fetch_assoc($res1)) {
-    $img = getUnitImage($data1);
-    $href= getUnitLibLink($data1);
-    
-    //echo '<form action="'.$PHP_SELF.'" method="POST">';
-    printf('<tr class="tblbody"><td><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"> %s</a></td>', 
-	       $href, $GLOBALS['imagepath'], $img, $data1['uname'], $data1['uname'], $data1['uname']);
-    
-    //echo "<td><a href=\"library.php?s1=2&s2=0&s3=".($data1['uid']-1)."\">".$data1['uname']."</a></td>"
-	echo "\n<td style=\"text-align:right; padding-right:15px;\">".number_format(($data1['cost']*$data1['count']),2,",",".")."</td>\n";
-    echo "<td><input type='text'  tabindex='".$num."' name='unit[".$data1['uid']."]' size='8'></td><td style=\"text-align:right; padding-right:15px;\">".$data1['count']."</td>\n";
-    echo "</tr>\n";
-    //echo "</form>";
-    
-	$sumcount += $data1['count'];
-	$sumcost += ($data1['cost']*$data1['count']);
-    $num++;
+<?php
+if($old_code) {
+  // Code deaktiviert
+  $res1 = do_mysql_query("SELECT unit.id AS uid,unit.name AS uname,city.name AS cname, unit.cost as cost,count,type,unit.level AS level,unit.religion AS religion ".
+                       " FROM cityunit,unit,city ".
+                       " WHERE unit.id=cityunit.unit AND city.id=cityunit.city AND cityunit.city=".$_SESSION['cities']->getActiveCity()." AND cityunit.owner=".$_SESSION['player']->getID().
+                       " ORDER BY cityunit.unit");
+
+  if (mysql_num_rows($res1)>0) {
+    //mysql_data_seek($res1, 0);
+    echo "<form action=".$PHP_SELF.' method="GET" name="disarmform">';
+    echo '<table id="tbl4" cellspacing="1" cellpadding="0" border="0" width="550" style="margin-top:10px; display:none;">';
+    echo "<tr class=\"tblhead\"><td colspan=\"4\"><strong>Einheiten entlassen</strong></td></tr>";
+    echo '<input type="hidden" name="from" value="'.$from.'">';
+    echo '<tr class="tblhead">';
+    echo '<td width="150">Typ</td>';
+    echo '<td width="70" style="text-align:center;">Kosten / Tick</td>';
+    echo '<td width="40">&nbsp;</td>';
+    echo '<td width="40">Stationiert</td>';
+    echo '</tr>';
+    $sumcount = 0;
+    $sumcost = 0;
+    $num = 1;
+    while ($data1 = mysql_fetch_assoc($res1)) {
+      $img = getUnitImage($data1);
+      $href= getUnitLibLink($data1);
+
+      //echo '<form action="'.$PHP_SELF.'" method="POST">';
+      printf('<tr class="tblbody"><td><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"> %s</a></td>',
+      $href, $GLOBALS['imagepath'], $img, $data1['uname'], $data1['uname'], $data1['uname']);
+
+      //echo "<td><a href=\"library.php?s1=2&s2=0&s3=".($data1['uid']-1)."\">".$data1['uname']."</a></td>"
+      echo "\n<td style=\"text-align:right; padding-right:15px;\">".number_format(($data1['cost']*$data1['count']),2,",",".")."</td>\n";
+      echo "<td><input type='text'  tabindex='".$num."' name='unit[".$data1['uid']."]' size='8'></td><td style=\"text-align:right; padding-right:15px;\">".$data1['count']."</td>\n";
+      echo "</tr>\n";
+      //echo "</form>";
+
+      $sumcount += $data1['count'];
+      $sumcost += ($data1['cost']*$data1['count']);
+      $num++;
+    }
+    echo "<tr class='tblhead'><td></td><td style=\"font-weight:bold; text-align:right; padding-right:15px;\">".number_format($sumcost,2,",",".")."</td><td></td><td style=\"font-weight:bold; text-align:right; padding-right:15px;\">".$sumcount."</td></tr>";
+    echo '<tr class="tblbody"><td colspan="4" style="text-align:center;"><input style="margin-bottom:5px; margin-top:5px;" type="submit" name="disarm" value="Truppen entlassen">';
+    echo "</td></tr>";
+    echo "</table>";
+    echo "</form>";
   }
-  echo "<tr class='tblhead'><td></td><td style=\"font-weight:bold; text-align:right; padding-right:15px;\">".number_format($sumcost,2,",",".")."</td><td></td><td style=\"font-weight:bold; text-align:right; padding-right:15px;\">".$sumcount."</td></tr>";
-  echo '<tr class="tblbody"><td colspan="4" style="text-align:center;"><input style="margin-bottom:5px; margin-top:5px;" type="submit" name="disarm" value="Truppen entlassen">';
-  echo "</td></tr>";
-  echo "</table>";
-  echo "</form>";
-} 
-else {
-  echo '<table id="tbl4" cellspacing="1" cellpadding="0" border="0" width="400" style="margin-top:10px; display:none;">';
-  echo "<tr class=\"tblhead\"><td colspan=\"4\"><strong>Truppen entlassen</strong></td></tr>";
-  echo "<tr class=\"tblbody\"><td colspan=\"4\" style=\"text-align:center;\"><br /><strong style=\"color:red\">In dieser Stadt sind keine Truppen stationiert!</strong><br /><br /></td></tr>";
-  echo "</table>\n";
+  else {
+    echo '<table id="tbl4" cellspacing="1" cellpadding="0" border="0" width="400" style="margin-top:10px; display:none;">';
+    echo "<tr class=\"tblhead\"><td colspan=\"4\"><strong>Truppen entlassen</strong></td></tr>";
+    echo "<tr class=\"tblbody\"><td colspan=\"4\" style=\"text-align:center;\"><br /><strong style=\"color:red\">In dieser Stadt sind keine Truppen stationiert!</strong><br /><br /></td></tr>";
+    echo "</table>\n";
+  }
 }
+
+
+
 if(!isset($show)) {
   $show = 1;
 }

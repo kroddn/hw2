@@ -792,7 +792,7 @@ function searchStartPosNew($pid) {
           return null;
         }
         else {
-          printf("<html><body>%s<br>\nStartPositions: %d<br>\n</body></html>\n", $where, $num );
+          // printf("<html><body>%s<br>\nStartPositions: %d<br>\n</body></html>\n", $where, $num );
 
           $res = do_mysql_query("SELECT * FROM startpositions WHERE ".$where." ORDER BY rand() LIMIT 1");
 

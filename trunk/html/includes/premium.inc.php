@@ -207,6 +207,7 @@ function get_premium_session_time() {
   global $premium_flags, $premium_expire;
   
   $default = defined("OLD_GAME") && OLD_GAME ? 1200 // Old-Runde
+     : defined("HISPEED") && HISPEED ? 300 // Speedrunde
      : defined("SPEED") && SPEED ? 1800 // Speedrunde
      : 3600; // Normale Session-Länge
   
@@ -227,14 +228,6 @@ function get_premium_session_time() {
 
   
   return $default;
-  
-  // Speedrunden nur 30 Minuten Login
-  if (defined("OLD_GAME") && OLD_GAME)
-    return 1200;
-  else if (defined("SPEED") && SPEED)
-    return 1800;
-  else
-    return 1*3600;
 }
 
 

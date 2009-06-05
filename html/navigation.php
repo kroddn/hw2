@@ -76,7 +76,11 @@ if ($_SESSION['settings']['library_own'])
 <a target="main" href="barracks.php"><img alt="Kaserne" border="0" src="<? echo $imagepath; ?>/menu_barracks.gif"></a><br>
 <a target="main" href="general.php"><img alt="Generalstab" border="0" src="<? echo $imagepath; ?>/menu_general.gif"></a><br>
 <a target="main" href="townhall.php"><img alt="Rathaus" border="0" src="<? echo $imagepath; ?>/menu_townhall.gif"></a><br>
-<a target="main" href="tournament.php"><img alt="Abenteuer" border="0" src="<? echo $imagepath; ?>/menu_adventure.gif"></a><br>
+<?php 
+if(!defined("HISPEED") || !HISPEED) {  
+  echo '<a target="main" href="tournament.php"><img alt="Abenteuer" border="0" src="${imagepath}/menu_adventure.gif"></a><br>';
+}
+?>
 <img src="<? echo $imagepath; ?>/menu_balken2.gif"><br>
 </body>
 </html>

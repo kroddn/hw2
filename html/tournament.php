@@ -58,6 +58,12 @@ function toggleVisibility() {
 <?
 start_body();
 
+if(defined("HISPEED") && HISPEED) {
+  echo "<h1>Turniere in der HiSpeed deaktiviert.";
+  end_page();
+  die();
+}
+
 $inform = $error = null;
 $pid = $_SESSION['player']->getID();
 
@@ -440,6 +446,9 @@ if($error != null) {
 }
 
 end_page();
+
+
+
 
 function printTableHeader($nr) {
 ?>

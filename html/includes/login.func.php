@@ -101,8 +101,10 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 $_SESSION['player']= $player;
                 
                 // Multi-Falle
-                include_once("includes/multi.inc.php");
-                multi_trap($player);
+                if(!defined("HISPEED") || !HISPEED) {                
+                  include_once("includes/multi.inc.php");
+                  multi_trap($player);
+                }
                 
                 // Abhängig von Spielereinstellung Map instanziieren
                 $map = MapFactory($player);

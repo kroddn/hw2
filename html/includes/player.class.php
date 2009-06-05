@@ -34,11 +34,12 @@
 ***************************************************/
        
 // Array zum matchen von Settings zu Binär-Masken
-$arr_settings = array(0 => 'map_own',
-                      1 => 'forum_own',
-                      2 => 'library_own',
-                      3 => 'hide_banner'
-                      );
+$GLOBALS['arr_settings']
+     = array(0 => 'map_own',
+             1 => 'forum_own',
+             2 => 'library_own',
+             3 => 'hide_banner'
+            );
 
 class Player {	
   var $msgsignature;

@@ -124,8 +124,16 @@ if(!function_exists("createKey")) {
  */
 function check_round_startet() {
   $start_time = getConfig("starttime");
-  return time() > $start_time;
-  
+  return time() > $start_time;  
+}
+
+/**
+ * Ist die Runde schon beendet?
+ * @return boolean TRUE, falls ja. FALSE wenn nicht.
+ */
+function check_round_ended() {
+  $end_time = getConfig("endtime", 0);
+  return $end_time > 0 && time() > $end_time;  
 }
 
 if(!function_exists("formatTime")) {
@@ -1811,6 +1819,13 @@ function isInSettleArea($x, $y)
 function getRoundStartTime()
 {
   $starttime = do_mysql_query_fetch_assoc("SELECT value FROM config WHERE name='starttime'");
+  return intval( ($starttime && $starttime['value']) ? $starttime['value'] : 0 );
+}
+
+
+function getRoundEndTime()
+{
+  $starttime = do_mysql_query_fetch_assoc("SELECT value FROM config WHERE name='endtime'");
   return intval( ($starttime && $starttime['value']) ? $starttime['value'] : 0 );
 }
 ?>

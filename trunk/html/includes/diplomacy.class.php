@@ -203,8 +203,10 @@ class diplomacy {
     return NULL;
   }
 
+  
   function offerBND($pid) {
     $pid = intval($pid);
+    if(defined("HISPEED") && HISPEED) return "In der HiSpeed deaktiviert (code 20).";
     
     $res1 = do_mysql_query("SELECT id,name,religion FROM player WHERE id=".$pid);
     if (($data1 = mysql_fetch_assoc($res1)) && ($this->religion == $data1['religion'])) {
@@ -274,11 +276,13 @@ class diplomacy {
               $this->message($pid, "Frieden mit ".$this->name, "Der Spieler ".$this->name." hat euer Friedensangebot angenommen, mögen eure Völker fortan in Frieden und Eintracht leben.");
               $this->message($this->player, "Frieden mit ".$data1['name'], "Ihr habt das Friedensangebot von ".$data1['name']." angenommen, mögen eure Völker fortan in Frieden und Eintracht leben.");
             } else {
+              if(defined("HISPEED") && HISPEED) return "In der HiSpeed deaktiviert (code 22).";
               $this->message($pid, "Bündnis von ".$this->name." angenommen", "Der Spieler ".$this->name." hat euer Bündnisangebot angenommen.");
               $this->message($this->player, "Bündnisangebot von ".$data1['name']." angenommen", "Ihr habt das Bündnisangebot von ".$data1['name']." angenommen.");
               $this->clanDiplo($this->player, $pid, 2);
             }
           } else if ($data2['type'] == 2) {
+            if(defined("HISPEED") && HISPEED) return "In der HiSpeed deaktiviert (code 23).";
             setDBrel("relation", $this->player, $pid, $data2['type']);
             delDBreq_rel("req_relation", $pid, $this->player);
             $this->message($pid, "Bündnis von ".$this->name." angenommen", "Der Spieler ".$this->name." hat euer Bündnisangebot angenommen.");
@@ -287,6 +291,7 @@ class diplomacy {
           }
         } 
         else if ($data2['type'] == 2) {
+          if(defined("HISPEED") && HISPEED) return "In der HiSpeed deaktiviert (code 24).";
           setDBrel("relation", $this->player, $pid, $data2['type']);
           delDBreq_rel("req_relation", $pid, $this->player);
           $this->message($pid, "Bündnis von ".$this->name." angenommen", "Der Spieler ".$this->name." hat euer Bündnisangebot angenommen.");

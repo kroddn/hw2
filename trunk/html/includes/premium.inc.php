@@ -207,13 +207,14 @@ function get_premium_session_time() {
   global $premium_flags, $premium_expire;
   
   $default = defined("OLD_GAME") && OLD_GAME ? 1200 // Old-Runde
-     : defined("HISPEED") && HISPEED ? 300 // Speedrunde
+     : defined("HISPEED") && HISPEED ? 300 // HiSpeedrunde
      : defined("SPEED") && SPEED ? 1800 // Speedrunde
      : 3600; // Normale Session-Länge
   
   // Den Ablauf des PA einberechnen.
   $max = max($premium_expire-time(), $default);
   
+  // Falls Premium-Account in Besitz, entsprechende Sessionzeiten returnieren
   if ($premium_flags & PREMIUM_ULTRA)  return min($max, 480*3600);
   if ($premium_flags & PREMIUM_PRO)    return min($max, 480*3600);
   if ($premium_flags & PREMIUM_MEDIUM) return min($max,  24*3600);

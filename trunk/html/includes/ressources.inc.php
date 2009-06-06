@@ -34,7 +34,8 @@ function get_eff($citycount, $level) {
   $effcost[3]=array(7,0.2);
   $effcost[4]=array(9,0.15);
   $effcost[5]=array(11,0.1);
-
+  $effcost[6]=array(15,0.1);
+  
   return max(0.1,(1-max(0,($citycount-$effcost[$level][0])*$effcost[$level][1])));
 }
 

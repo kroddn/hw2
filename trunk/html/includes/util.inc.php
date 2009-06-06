@@ -32,7 +32,7 @@
 include_once("includes/log.inc.php");
 include_once("includes/db.config.php");
 
-$speedmatrix = array(1=>3.5, 2=>2.5, 3=>2, 4=>1.5, 5=>1);
+$GLOBALS['speedmatrix'] = array(1=>3.5, 2=>2.5, 3=>2, 4=>1.5, 5=>1);
 
 
 function getUnitImage($data3)

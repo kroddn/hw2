@@ -162,7 +162,7 @@ function reset_config()
 
   // Set settleradius
   if(HISPEED)      $reset_radius = 5;
-  else if(HISPEED) $reset_radius = 2;
+  else if(SPEED)   $reset_radius = 2;
   else             $reset_radius = 3;
   
   
@@ -170,13 +170,29 @@ function reset_config()
                  " VALUES ('settleradius', '".$reset_radius."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
 
 
-  // FIXME: starttime nur löschen, wenns kleiner wie aktuell ist
-  do_mysql_query("DELETE FROM config WHERE name = 'starttime' AND value < UNIX_TIMESTAMP()");
-  if(mysql_affected_rows() > 0) {
+  // starttime nur löschen, wenns kleiner wie aktuell ist
+  $start_time = getConfig("starttime");
+  if($start_time < time()) {
+    do_mysql_query("DELETE FROM config WHERE name = 'starttime'");
     do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
-                   " VALUES ('starttime', UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
+                   " VALUES ('starttime', (UNIX_TIMESTAMP()+120), UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
+  }
+  
+  // Nochmal starttime aus der DB lesen
+  $start_time = getConfig("starttime");
+
+  // Endzeitpunkt löschen, falls einer gesetzt war
+  do_mysql_query("DELETE FROM config WHERE name = 'endtime'");
+  
+  // Bei der HiSpeed automatisch das Ende der Runde auf start + 18 Std. setzen
+  if( defined("HISPEED") && HISPEED) {
+    $end_time =  $start_time + 18*3600;
+    do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
+                   " VALUES ('starttime', '".$end_time."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
   }
 }
+
+
 
 function reset_map() {
   set_time_limit(60);

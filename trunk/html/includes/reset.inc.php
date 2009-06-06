@@ -182,13 +182,15 @@ function reset_config()
   $start_time = getConfig("starttime");
 
   // Endzeitpunkt löschen, falls einer gesetzt war
-  do_mysql_query("DELETE FROM config WHERE name = 'endtime'");
-  
-  // Bei der HiSpeed automatisch das Ende der Runde auf start + 18 Std. setzen
-  if( defined("HISPEED") && HISPEED) {
-    $end_time =  $start_time + 18*3600;
-    do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
+  if(0) {
+    do_mysql_query("DELETE FROM config WHERE name = 'endtime'");
+
+    // Bei der HiSpeed automatisch das Ende der Runde auf start + 18 Std. setzen
+    if( defined("HISPEED") && HISPEED) {
+      $end_time =  $start_time + 18*3600;
+      do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
                    " VALUES ('starttime', '".$end_time."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
+    }
   }
 }
 

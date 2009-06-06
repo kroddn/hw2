@@ -74,16 +74,16 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
           if ($db_login['status'] == NULL || $db_login['status'] == 3) {
             if ($db_login['holiday'] < time()) 
             {
+              if(check_round_ended() && $db_login['hwstatus'] != 63)
+                return "Die Runde ist beendet!";
+                
               if(!check_round_startet() && $db_login['hwstatus'] != 63)
                 return "Die Runde hat noch nicht begonnen!";
-              
-              
+                
               if (!($db_login['password']==NULL)) {
                 do_mysql_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
               }
               
-              
-  
               // Prüfen, ob der Account schon 'name' gesetzt hat.
               // falls nicht, dann den Auswahlbildschirm hierfür anzeigen
               if($db_login['name'] == null) {

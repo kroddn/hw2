@@ -187,7 +187,16 @@ else if ( isPlayerSet() ) {
     log_logout();
     session_destroy();
     //do_log("User logged out, session destroyed...");
-    $GLOBALS['error'] = "round_not_yet_startet";
+    $GLOBALS['error'] = "round_not_yet_started";
+    goto_login();
+  }
+  
+  // Wenn die Runde beendet...
+  if(check_round_ended()  ) { // && !$player->isAdmin()
+    log_logout();
+    session_destroy();
+    //do_log("User logged out, session destroyed...");
+    $GLOBALS['error'] = "round_ended";
     goto_login();
   }
   

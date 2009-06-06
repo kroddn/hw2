@@ -45,7 +45,6 @@ include_once("includes/page.func.php");
 session_set_cookie_params (0); // Cookie nach Beenden des Browsers löschen
 session_start();
 
-
 // Bannerzähler hochsetzen
 if (isset($bannerplus)) {
   $ad->banner_id+=$bannerplus;
@@ -183,6 +182,14 @@ else if ( isPlayerSet() ) {
   $_SESSION['csspath']       = (defined("GFX_PATH_LOCAL") ? GFX_PATH_LOCAL : $imagepath ) ."/css";
   $_SESSION['layoutcsspath'] = (strncasecmp($_SESSION['imagepath'], "http://", 7) == 0) ? $_SESSION['imagepath']."/css" : $_SESSION['csspath'];
  
+  // Wenn die Runde noch nicht freigegeben wurde...
+  if(!check_round_startet() && !$player->isAdmin() ) {
+    log_logout();
+    session_destroy();
+    //do_log("User logged out, session destroyed...");
+    $GLOBALS['error'] = "round_not_yet_startet";
+    goto_login();
+  }
   
   // Alle 3 Minuten einen Lastclick eintragen
   if ($player->getlastclick() < (time() - 180)){

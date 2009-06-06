@@ -47,13 +47,27 @@ function print_kakadu() {
 
   echo "\n\n<!-- Tutorial start. Level ".$_SESSION['player']->tutorialLevel()." ! SELF: ".$request_string." -->\n";
 
-  $target_page = $db->query_fetch_array("SELECT page,level FROM global.tutorial_topics ".
-                                        " WHERE level > ".($_SESSION['player']->tutorialLevel())." ORDER BY level,sublevel LIMIT 1" );
-  if ($target_page[0]) {
-    if (ereg($target_page[0], $request_string)) {
-      echo "\n<!-- Tutorial increase -->\n";      
-      $_SESSION['player']->tutorialInc($target_page[1]);
+  $target_page_res = $db->query("SELECT page,level FROM global.tutorial_topics ".
+                                " WHERE level > ".($_SESSION['player']->tutorialLevel())." ORDER BY level,sublevel LIMIT 1" );
+  
+  if($target_page_res) {
+    $target_page = $db->fetch_assoc($target_page_res);
+    
+    if($target_page['page']) {
+      echo "\n<!-- Tutorial target: ".$target_page['page']." -->\n";
+      if (ereg($target_page['page'], $request_string)) {
+        echo "\n<!-- Tutorial increase -->\n";
+        $_SESSION['player']->tutorialInc($target_page['level']);
+      }
     }
+    else {
+      echo "<!-- problem: \n";
+      var_dump($target_page);
+      echo "\n-->\n";
+    }
+  }
+  else {
+    echo "<!-- problem: ".mysql_error()." -->\n";
   }
 
   if (isset($popup)) return;

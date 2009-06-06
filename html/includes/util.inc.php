@@ -118,6 +118,15 @@ if(!function_exists("createKey")) {
   }
 }
 
+/**
+ * Ist die Runde schon gestartet?
+ * @return boolean TRUE, falls ja. FALSE wenn nicht.
+ */
+function check_round_startet() {
+  $start_time = getConfig("starttime");
+  return time() > $start_time;
+  
+}
 
 if(!function_exists("formatTime")) {
   function formatTime($stamp) {

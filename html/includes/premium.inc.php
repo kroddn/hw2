@@ -38,6 +38,8 @@
 
 // Tabelledefinition und erklärung siehe sql/premium.sql
 
+// für defines benötigt
+include_once("includes/db.config.php");  
 
 // --- Konstanten für Werbefreie Accs ---
 // Normalerweise sind für ein FLAG auch alle darunterliegenden Flags
@@ -206,10 +208,10 @@ function get_message_archive_size () {
 function get_premium_session_time() {
   global $premium_flags, $premium_expire;
   
-  $default = defined("OLD_GAME") && OLD_GAME ? 1200 // Old-Runde
-     : defined("HISPEED") && HISPEED ? 300 // HiSpeedrunde
-     : defined("SPEED") && SPEED ? 1800 // Speedrunde
-     : 3600; // Normale Session-Länge
+  if(defined("OLD_GAME") && OLD_GAME)     $default = 1200; // OLD
+  else if( defined("HISPEED") && HISPEED) $default = 600;  // HiSpeedrunde
+  else if( defined("SPEED") && SPEED)     $default = 1800; // Speedrunde
+  else                                    $default = 3600; // Normale Session-Länge
   
   // Den Ablauf des PA einberechnen.
   $max = max($premium_expire-time(), $default);

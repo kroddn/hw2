@@ -22,7 +22,7 @@
     Former copyrights see below.
  **************************************************************************/
 
-include("includes/db.inc.php"); 
+include("includes/db.inc.php");
 include("includes/player.class.php");
 session_start();
 ?>

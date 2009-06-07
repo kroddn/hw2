@@ -90,6 +90,19 @@ function get_premium_flags($pid) {
 /**
  * Ablaufdatum des Accounts als TIMESTAMP zurückliefern
  */
+function get_premium_payd($pid) {
+  $flag = get_premium_row($pid);
+  
+  if ($flag) {
+    return $flag['payd']; 
+  }
+  else
+    return null;
+}
+
+/**
+ * Ablaufdatum des Accounts als TIMESTAMP zurückliefern
+ */
 function get_premium_expire($pid) {
   $flag = get_premium_row($pid);
   
@@ -126,6 +139,10 @@ function is_premium () {
   return $GLOBALS['premium_flags'] > 0;
 }
 
+// Ist der Account Premium??
+function is_premium_payd () {
+  return $GLOBALS['premium_flags'] > 0 && $GLOBALS['premium_payd'] > 0;
+}
 
 // Ist der Account werbefrei?
 function is_premium_noads () {

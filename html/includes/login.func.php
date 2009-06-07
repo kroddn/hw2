@@ -65,6 +65,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
 
       $GLOBALS['premium_flags']  = get_premium_flags ($db_login['id']);
       $GLOBALS['premium_expire'] = get_premium_expire($db_login['id']);
+      $GLOBALS['premium_payd']   = get_premium_payd($db_login['id']);
       
       $secure = defined('NO_SECURITY') && NO_SECURITY || isset($_SESSION['sec_key']) && !strcmp($sec_code, $_SESSION['sec_key']) || $GLOBALS['premium_flags'] & PREMIUM_PRO;
       if ($secure) {

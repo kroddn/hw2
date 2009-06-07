@@ -62,10 +62,10 @@ class Research {
     $hits=0;
     while ($req=mysql_fetch_assoc($res1)) {
       if ($this->isResearched($req['req_research'])) {
-	$hits++;
+        $hits++;
       }
     }
-    if (($rows==0) || ($rows==$hits)) $status=true;
+    if ($rows==0 || $rows==$hits) $status=true;
     else $status=false;
 
     return $status;
@@ -126,11 +126,17 @@ class Research {
     else return FALSE;
   }
 	
+  
   function startResearch($rid) {
     $rid = intval($rid);
     if ($this->checkRID($rid) == TRUE) {
+      if(!$this->checkRequirements($rid)) {
+        log_fatal_error("Spieler ".$_SESSION['player']->id." wollte schummeln: Forschungsvoraussetzungen nicht erfüllt.");
+        return "Forschungsvoraussetzungen nicht erfüllt.";
+      }
+      
       $res1 = do_mysql_query("SELECT rp FROM player WHERE id = '".$this->player."'");
-      $res2 = do_mysql_query("SELECT rp, time FROM research WHERE id = '".$rid."'");
+      $res2 = do_mysql_query("SELECT rp,time,management FROM research WHERE id = '".$rid."'");
       $data = mysql_fetch_assoc($res1);
       $rdata = mysql_fetch_assoc($res2);
 
@@ -150,14 +156,24 @@ class Research {
       $resA = do_mysql_query("SELECT rid FROM researching WHERE player = '".$this->player."'");
       if (mysql_num_rows($resA) < $schools['cnt']+1) {
         if ($data['rp'] >= $rdata['rp']) {
+          if($rdata['management'] == 6 && !is_premium_payd ) {
+            return "Diese Forschung ist Spielern mit bezahltem Premium-Account vorbehalten.";
+          }
           //do_log("Researching ordered. Started researching on rid ".$rid);
           do_mysql_query("UPDATE player SET rp = (rp - '".$rdata['rp']."'), cc_messages=1, cc_resources=1 WHERE id = '".$this->player."'");
           do_mysql_query("INSERT INTO researching (player,rid,starttime,endtime) VALUES ('".$this->player."', '".$rid."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + ".( max(MIN_RESEARCH_TIME, round($rdata['time'] / RESEARCHSPEED)) )." )");
+          return null; // OK
+        }
+        else {
+          return "Nicht genügend Forschungspunkte (RP)";
         }
       }
-
+      else {
+        return "Die maximale Anzahl gleichzeitiger Forschungen ist bereits erreicht.";
+      }
     }
-    else return FALSE;
+    else 
+        return "Ungültige Anweisung";
   }
 	
   function abortResearching() {

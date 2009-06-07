@@ -35,6 +35,15 @@ include_once("includes/session.inc.php");
 include_once("includes/banner.inc.php");
 include_once("includes/sms.func.php");
 
+
+if(defined("HISPEED") && HISPEED) {
+  start_page();
+  start_body();
+  echo "<h1>SMS-Versand ist in der HiSpeed deaktiviert.</h1>";
+  end_page();
+  die();
+}
+
 check_sms_settings();
 $sms_sent = false;
 

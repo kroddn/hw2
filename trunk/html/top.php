@@ -139,9 +139,10 @@ if($player->isMultihunter())
 if($player->isNamehunter())
      echo '<td nowrap title="Namehunter"><a target="main" href="namehunter.php"><img alt="NH" border="0" src="'.$imagepath.'/nh.gif"></a></td>';
 
+if(!defined("HISPEED") || !HISPEED) {
+  echo '<td nowrap title="SMS Senden"><a target="main" href="sms.php"><img border="0" alt="SMS Versand" src="'.GFX_PATH_LOCAL.'/sms_mini.gif"></a></td>';
+} 
 ?>
-<td nowrap title="SMS Senden"><a target="main" href="sms.php"><img border="0" alt="SMS Versand" src="<? echo GFX_PATH_LOCAL; ?>/sms_mini.gif"></a></td>
-
 <td nowrap title="Punktestand_Bezeichnung" class="statusline"><b>Punkte:&nbsp</b></td>
 <td nowrap title="Punktestand" class="statusline"><? echo $player->getPoints();?></td>
 <td nowrap title="Forum" class="statusline"> - <? echo getNewClanfTopics($_SESSION['player']->name); ?></td>

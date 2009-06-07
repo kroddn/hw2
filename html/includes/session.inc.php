@@ -192,7 +192,7 @@ else if ( isPlayerSet() ) {
   }
   
   // Wenn die Runde beendet...
-  if(check_round_ended()  ) { // && !$player->isAdmin()
+  if(check_round_ended() && !$player->isAdmin() ) { // && !$player->isAdmin()
     log_logout();
     session_destroy();
     //do_log("User logged out, session destroyed...");

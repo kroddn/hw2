@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE FWObjectDatabase SYSTEM "fwbuilder.dtd">
+<FWObjectDatabase xmlns="http://www.fwbuilder.org/1.0/" version="2.1.19" lastModified="1244658724" id="root">
+  <Library color="#d2ffd0" id="id4A2FFF9C12933" name="User">
+    <ObjectGroup id="id4A2FFF9D12933" name="Objects">
+      <ObjectGroup id="id4A2FFF9E12933" name="Addresses">
+        <IPv4 address="85.10.202.10" comment="" id="id4A2FFFDC12933" name="mysql.holy-wars2.de" netmask="255.255.255.255"/>
+      </ObjectGroup>
+      <ObjectGroup id="id4A2FFF9F12933" name="DNS Names"/>
+      <ObjectGroup id="id4A2FFFA012933" name="Address Tables"/>
+      <ObjectGroup id="id4A2FFFA112933" name="Groups"/>
+      <ObjectGroup id="id4A2FFFA212933" name="Hosts"/>
+      <ObjectGroup id="id4A2FFFA312933" name="Networks"/>
+      <ObjectGroup id="id4A2FFFA412933" name="Address Ranges"/>
+    </ObjectGroup>
+    <ServiceGroup id="id4A2FFFA512933" name="Services">
+      <ServiceGroup id="id4A2FFFA612933" name="Groups"/>
+      <ServiceGroup id="id4A2FFFA712933" name="ICMP"/>
+      <ServiceGroup id="id4A2FFFA812933" name="IP"/>
+      <ServiceGroup id="id4A2FFFA912933" name="TCP">
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="6669" dst_range_start="6666" established="False" fin_flag="False" fin_flag_mask="False" id="id4A2FFFEE12933" name="IRC own" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+      </ServiceGroup>
+      <ServiceGroup id="id4A2FFFAA12933" name="UDP"/>
+      <ServiceGroup id="id4A2FFFAB12933" name="Custom"/>
+      <ServiceGroup id="id4A2FFFAC12933" name="TagServices"/>
+    </ServiceGroup>
+    <ObjectGroup id="id4A2FFFAD12933" name="Firewalls">
+      <Firewall comment="" host_OS="linux24" id="id4A2FFFAF12933" inactive="False" lastCompiled="1244658724" lastInstalled="0" lastModified="1244658632" name="www4.holy-wars2.de" platform="iptables" ro="False" version="1.3.0">
+        <NAT id="id4A2FFFB312933"/>
+        <Policy id="id4A2FFFB212933">
+          <PolicyRule action="Accept" direction="Inbound" disabled="False" id="id4A2FFFBB12933" log="False" position="0">
+            <Src neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="id4A2FFFAF12933"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="tcp-HTTP"/>
+              <ServiceRef ref="id3B4FED69"/>
+              <ServiceRef ref="id3B4FF13C"/>
+              <ServiceRef ref="tcp-SSH"/>
+              <ServiceRef ref="tcp-SMTP"/>
+              <ServiceRef ref="id3B4FF04C"/>
+              <ServiceRef ref="id4A2FFFEE12933"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">False</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+          <PolicyRule action="Deny" comment="DROP microsoft stuff" direction="Inbound" disabled="False" id="id4A2FFFCC12933" log="False" position="1">
+            <Src neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="id4A2FFFAF12933"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="id3DC8C8BB"/>
+              <ServiceRef ref="id3E755609"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">True</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+          <PolicyRule action="Accept" comment="Allow connect from old server" direction="Both" disabled="False" id="id4A2FFFDD12933" log="False" position="2">
+            <Src neg="False">
+              <ObjectRef ref="id4A2FFFDC12933"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="id4A2FFFAF12933"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="sysid1"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">False</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+        </Policy>
+        <Routing id="id4A2FFFB412933"/>
+        <Interface bridgeport="False" dyn="False" id="id4A2FFFB512933" label="" name="eth0" security_level="50" unnum="False" unprotected="False">
+          <IPv4 address="188.40.39.138" id="id4A2FFFB612933" name="www4.holy-wars2.de:eth0:ip" netmask="255.255.255.192&#10;"/>
+        </Interface>
+        <Interface bridgeport="False" dyn="False" id="id4A2FFFB712933" label="" name="eth0:1" security_level="50" unnum="False" unprotected="False">
+          <IPv4 address="188.40.39.183" id="id4A2FFFB812933" name="www4.holy-wars2.de:eth0:1:ip" netmask="255.255.255.192&#10;"/>
+        </Interface>
+        <Management address="0.0.0.0">
+          <SNMPManagement enabled="False" snmp_read_community="" snmp_write_community=""/>
+          <FWBDManagement enabled="False" identity="" port="-1"/>
+          <PolicyInstallScript arguments="" command="" enabled="False"/>
+        </Management>
+        <FirewallOptions>
+          <Option name="accept_established">true</Option>
+          <Option name="accept_new_tcp_with_no_syn">true</Option>
+          <Option name="add_check_state_rule">true</Option>
+          <Option name="check_shading">true</Option>
+          <Option name="configure_interfaces">true</Option>
+          <Option name="eliminate_duplicates">true</Option>
+          <Option name="firewall_dir">/etc</Option>
+          <Option name="firewall_is_part_of_any_and_networks">true</Option>
+          <Option name="freebsd_ip_forward">1</Option>
+          <Option name="in_out_code">true</Option>
+          <Option name="iosacl_add_clear_statements">true</Option>
+          <Option name="iosacl_assume_fw_part_of_any">true</Option>
+          <Option name="iosacl_include_comments">true</Option>
+          <Option name="limit_value">0</Option>
+          <Option name="linux24_ip_forward">1</Option>
+          <Option name="load_modules">true</Option>
+          <Option name="local_nat">false</Option>
+          <Option name="log_level">info</Option>
+          <Option name="log_prefix">RULE %N -- %A </Option>
+          <Option name="loopback_interface">lo0</Option>
+          <Option name="macosx_ip_forward">1</Option>
+          <Option name="manage_virtual_addr">true</Option>
+          <Option name="openbsd_ip_forward">1</Option>
+          <Option name="pass_all_out">false</Option>
+          <Option name="pf_limit_frags">5000</Option>
+          <Option name="pf_limit_states">10000</Option>
+          <Option name="pf_scrub_maxmss">1460</Option>
+          <Option name="pf_timeout_frag">30</Option>
+          <Option name="pf_timeout_interval">10</Option>
+          <Option name="pix_add_clear_statements">true</Option>
+          <Option name="pix_assume_fw_part_of_any">true</Option>
+          <Option name="pix_default_logint">300</Option>
+          <Option name="pix_emblem_log_format">false</Option>
+          <Option name="pix_emulate_out_acl">true</Option>
+          <Option name="pix_floodguard">true</Option>
+          <Option name="pix_include_comments">true</Option>
+          <Option name="pix_route_dnat_supported">true</Option>
+          <Option name="pix_rule_syslog_settings">false</Option>
+          <Option name="pix_security_fragguard_supported">true</Option>
+          <Option name="pix_syslog_device_id_supported">false</Option>
+          <Option name="pix_use_acl_remarks">true</Option>
+          <Option name="prompt1">$ </Option>
+          <Option name="prompt2"> # </Option>
+          <Option name="solaris_ip_forward">1</Option>
+          <Option name="ulog_nlgroup">1</Option>
+          <Option name="verify_interfaces">true</Option>
+        </FirewallOptions>
+      </Firewall>
+    </ObjectGroup>
+    <IntervalGroup id="id4A2FFFAE12933" name="Time"/>
+  </Library>
+  <Library id="sysid99" name="Deleted Objects" ro="False">
+    <ObjectRef ref="sysid0"/>
+  </Library>
+  <Library color="#d4f8ff" comment="Standard objects" id="syslib000" name="Standard" ro="True">
+    <AnyNetwork comment="Any Network" id="sysid0" name="Any" address="0.0.0.0" netmask="0.0.0.0"/>
+    <ServiceGroup id="stdid05" name="Services">
+      <ServiceGroup id="stdid09" name="TCP">
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="80" dst_range_start="80" fin_flag="False" fin_flag_mask="False" id="tcp-HTTP" name="http" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="443" dst_range_start="443" fin_flag="False" fin_flag_mask="False" id="id3B4FED69" name="https" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="6667" dst_range_start="6667" fin_flag="False" fin_flag_mask="False" id="id3B4FF13C" name="irc" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="22" dst_range_start="22" fin_flag="False" fin_flag_mask="False" id="tcp-SSH" name="ssh" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="25" dst_range_start="25" fin_flag="False" fin_flag_mask="False" id="tcp-SMTP" name="smtp" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="465" dst_range_start="465" fin_flag="False" fin_flag_mask="False" id="id3B4FF04C" name="smtps" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="135" dst_range_start="135" fin_flag="False" fin_flag_mask="False" id="id3DC8C8BB" name="microsoft-rpc" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="139" dst_range_start="139" fin_flag="False" fin_flag_mask="False" id="id3E755609" name="netbios-ssn" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+      </ServiceGroup>
+    </ServiceGroup>
+    <AnyInterval comment="Any Interval" from_day="-1" from_hour="-1" from_minute="-1" from_month="-1" from_weekday="-1" from_year="-1" id="sysid2" name="Any" to_day="-1" to_hour="-1" to_minute="-1" to_month="-1" to_weekday="-1" to_year="-1"/>
+    <AnyIPService comment="Any IP Service" id="sysid1" name="Any" protocol_num="0"/>
+  </Library>
+</FWObjectDatabase>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE FWObjectDatabase SYSTEM "fwbuilder.dtd">
-<FWObjectDatabase xmlns="http://www.fwbuilder.org/1.0/" version="2.1.19" lastModified="1244658724" id="root">
+<FWObjectDatabase xmlns="http://www.fwbuilder.org/1.0/" version="2.1.19" lastModified="1244671802" id="root">
   <Library color="#d2ffd0" id="id4A2FFF9C12933" name="User">
     <ObjectGroup id="id4A2FFF9D12933" name="Objects">
       <ObjectGroup id="id4A2FFF9E12933" name="Addresses">
@@ -25,10 +25,30 @@
       <ServiceGroup id="id4A2FFFAC12933" name="TagServices"/>
     </ServiceGroup>
     <ObjectGroup id="id4A2FFFAD12933" name="Firewalls">
-      <Firewall comment="" host_OS="linux24" id="id4A2FFFAF12933" inactive="False" lastCompiled="1244658724" lastInstalled="0" lastModified="1244658632" name="www4.holy-wars2.de" platform="iptables" ro="False" version="1.3.0">
+      <Firewall comment="" host_OS="linux24" id="id4A2FFFAF12933" inactive="False" lastCompiled="1244671802" lastInstalled="0" lastModified="1244671783" name="www4.holy-wars2.de" platform="iptables" ro="False" version="1.3.0">
         <NAT id="id4A2FFFB312933"/>
         <Policy id="id4A2FFFB212933">
-          <PolicyRule action="Accept" direction="Inbound" disabled="False" id="id4A2FFFBB12933" log="False" position="0">
+          <PolicyRule action="Accept" direction="Both" disabled="False" id="id4A303E9025943" log="False" position="0">
+            <Src neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="sysid1"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="id4A303E8F25943"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">False</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+          <PolicyRule action="Accept" direction="Both" disabled="False" id="id4A2FFFBB12933" log="False" position="1">
             <Src neg="False">
               <ObjectRef ref="sysid0"/>
             </Src>
@@ -43,6 +63,9 @@
               <ServiceRef ref="tcp-SMTP"/>
               <ServiceRef ref="id3B4FF04C"/>
               <ServiceRef ref="id4A2FFFEE12933"/>
+              <ServiceRef ref="sg-Useful_ICMP"/>
+              <ServiceRef ref="icmp-ping_request"/>
+              <ServiceRef ref="id3F530CC8"/>
             </Srv>
             <Itf neg="False">
               <ObjectRef ref="sysid0"/>
@@ -54,7 +77,7 @@
               <Option name="stateless">False</Option>
             </PolicyRuleOptions>
           </PolicyRule>
-          <PolicyRule action="Deny" comment="DROP microsoft stuff" direction="Inbound" disabled="False" id="id4A2FFFCC12933" log="False" position="1">
+          <PolicyRule action="Reject" direction="Inbound" disabled="False" id="id4A304B2A25943" log="False" position="2">
             <Src neg="False">
               <ObjectRef ref="sysid0"/>
             </Src>
@@ -62,8 +85,7 @@
               <ObjectRef ref="id4A2FFFAF12933"/>
             </Dst>
             <Srv neg="False">
-              <ServiceRef ref="id3DC8C8BB"/>
-              <ServiceRef ref="id3E755609"/>
+              <ServiceRef ref="tcp-Auth"/>
             </Srv>
             <Itf neg="False">
               <ObjectRef ref="sysid0"/>
@@ -75,12 +97,37 @@
               <Option name="stateless">True</Option>
             </PolicyRuleOptions>
           </PolicyRule>
-          <PolicyRule action="Accept" comment="Allow connect from old server" direction="Both" disabled="False" id="id4A2FFFDD12933" log="False" position="2">
+          <PolicyRule action="Deny" comment="DROP microsoft stuff" direction="Inbound" disabled="False" id="id4A2FFFCC12933" log="False" position="3">
+            <Src neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="id4A2FFFAF12933"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="id3DC8C8BB"/>
+              <ServiceRef ref="id3E755609"/>
+              <ServiceRef ref="id3F865B0D"/>
+              <ServiceRef ref="udp-netbios-dgm"/>
+              <ServiceRef ref="udp-netbios-ns"/>
+              <ServiceRef ref="udp-netbios-ssn"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">True</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+          <PolicyRule action="Accept" comment="Allow connect from old server" direction="Both" disabled="False" id="id4A2FFFDD12933" log="False" position="4">
             <Src neg="False">
               <ObjectRef ref="id4A2FFFDC12933"/>
             </Src>
             <Dst neg="False">
-              <ObjectRef ref="id4A2FFFAF12933"/>
+              <ObjectRef ref="sysid0"/>
             </Dst>
             <Srv neg="False">
               <ServiceRef ref="sysid1"/>
@@ -95,6 +142,46 @@
               <Option name="stateless">False</Option>
             </PolicyRuleOptions>
           </PolicyRule>
+          <PolicyRule action="Accept" comment="Outgoing connections allowed" direction="Both" disabled="False" id="id4A30372C27937" log="False" position="5">
+            <Src neg="False">
+              <ObjectRef ref="id4A2FFFAF12933"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="sysid1"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">False</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
+          <PolicyRule action="Deny" comment="Log everything else" direction="Inbound" disabled="False" id="id4A304B3D25943" log="True" position="6">
+            <Src neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Src>
+            <Dst neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Dst>
+            <Srv neg="False">
+              <ServiceRef ref="sysid1"/>
+            </Srv>
+            <Itf neg="False">
+              <ObjectRef ref="sysid0"/>
+            </Itf>
+            <When neg="False">
+              <IntervalRef ref="sysid2"/>
+            </When>
+            <PolicyRuleOptions>
+              <Option name="stateless">True</Option>
+            </PolicyRuleOptions>
+          </PolicyRule>
         </Policy>
         <Routing id="id4A2FFFB412933"/>
         <Interface bridgeport="False" dyn="False" id="id4A2FFFB512933" label="" name="eth0" security_level="50" unnum="False" unprotected="False">
@@ -102,6 +189,9 @@
         </Interface>
         <Interface bridgeport="False" dyn="False" id="id4A2FFFB712933" label="" name="eth0:1" security_level="50" unnum="False" unprotected="False">
           <IPv4 address="188.40.39.183" id="id4A2FFFB812933" name="www4.holy-wars2.de:eth0:1:ip" netmask="255.255.255.192&#10;"/>
+        </Interface>
+        <Interface bridgeport="False" comment="" dyn="False" id="id4A303E8F25943" label="loopback" mgmt="False" name="lo" security_level="100" unnum="False" unprotected="False">
+          <IPv4 address="127.0.0.1" comment="" id="id4A3040BE25943" name="www4.holy-wars2.de:lo:ip" netmask="255.0.0.0"/>
         </Interface>
         <Management address="0.0.0.0">
           <SNMPManagement enabled="False" snmp_read_community="" snmp_write_community=""/>
@@ -165,6 +255,8 @@
   </Library>
   <Library color="#d4f8ff" comment="Standard objects" id="syslib000" name="Standard" ro="True">
     <AnyNetwork comment="Any Network" id="sysid0" name="Any" address="0.0.0.0" netmask="0.0.0.0"/>
+    <AnyIPService comment="Any IP Service" id="sysid1" name="Any" protocol_num="0"/>
+    <AnyInterval comment="Any Interval" from_day="-1" from_hour="-1" from_minute="-1" from_month="-1" from_weekday="-1" from_year="-1" id="sysid2" name="Any" to_day="-1" to_hour="-1" to_minute="-1" to_month="-1" to_weekday="-1" to_year="-1"/>
     <ServiceGroup id="stdid05" name="Services">
       <ServiceGroup id="stdid09" name="TCP">
         <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="80" dst_range_start="80" fin_flag="False" fin_flag_mask="False" id="tcp-HTTP" name="http" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
@@ -173,11 +265,37 @@
         <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="22" dst_range_start="22" fin_flag="False" fin_flag_mask="False" id="tcp-SSH" name="ssh" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
         <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="25" dst_range_start="25" fin_flag="False" fin_flag_mask="False" id="tcp-SMTP" name="smtp" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
         <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="465" dst_range_start="465" fin_flag="False" fin_flag_mask="False" id="id3B4FF04C" name="smtps" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="113" dst_range_start="113" fin_flag="False" fin_flag_mask="False" id="tcp-Auth" name="auth" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
         <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="135" dst_range_start="135" fin_flag="False" fin_flag_mask="False" id="id3DC8C8BB" name="microsoft-rpc" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
         <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="139" dst_range_start="139" fin_flag="False" fin_flag_mask="False" id="id3E755609" name="netbios-ssn" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+        <TCPService ack_flag="False" ack_flag_mask="False" comment="" dst_range_end="53" dst_range_start="53" fin_flag="False" fin_flag_mask="False" id="tcp-DNS" name="domain" psh_flag="False" psh_flag_mask="False" rst_flag="False" rst_flag_mask="False" src_range_end="0" src_range_start="0" syn_flag="False" syn_flag_mask="False" urg_flag="False" urg_flag_mask="False"/>
+      </ServiceGroup>
+      <ServiceGroup id="stdid10" name="Groups">
+        <ServiceGroup comment="" id="sg-Useful_ICMP" name="Useful_ICMP">
+          <ServiceRef ref="icmp-Time_exceeded"/>
+          <ServiceRef ref="icmp-Time_exceeded_in_transit"/>
+          <ServiceRef ref="icmp-ping_reply"/>
+          <ServiceRef ref="icmp-Unreachables"/>
+        </ServiceGroup>
+        <ServiceGroup id="id3F530CC8" name="DNS">
+          <ServiceRef ref="udp-DNS"/>
+          <ServiceRef ref="tcp-DNS"/>
+        </ServiceGroup>
+      </ServiceGroup>
+      <ServiceGroup id="stdid07" name="ICMP">
+        <ICMPService code="0" comment="" id="icmp-ping_request" name="ping request" type="8"/>
+        <ICMPService code="0" comment="ICMP messages of this type are needed for traceroute" id="icmp-Time_exceeded" name="time exceeded" type="11"/>
+        <ICMPService code="1" comment="" id="icmp-Time_exceeded_in_transit" name="time exceeded in transit" type="11"/>
+        <ICMPService code="0" comment="" id="icmp-ping_reply" name="ping reply" type="0"/>
+        <ICMPService code="-1" comment="" id="icmp-Unreachables" name="all ICMP unreachables" type="3"/>
+      </ServiceGroup>
+      <ServiceGroup id="stdid08" name="UDP">
+        <UDPService comment="" dst_range_end="135" dst_range_start="135" id="id3F865B0D" name="microsoft-rpc" src_range_end="0" src_range_start="0"/>
+        <UDPService comment="" dst_range_end="138" dst_range_start="138" id="udp-netbios-dgm" name="netbios-dgm" src_range_end="0" src_range_start="0"/>
+        <UDPService comment="" dst_range_end="137" dst_range_start="137" id="udp-netbios-ns" name="netbios-ns" src_range_end="0" src_range_start="0"/>
+        <UDPService comment="" dst_range_end="139" dst_range_start="139" id="udp-netbios-ssn" name="netbios-ssn" src_range_end="0" src_range_start="0"/>
+        <UDPService comment="" dst_range_end="53" dst_range_start="53" id="udp-DNS" name="domain" src_range_end="0" src_range_start="0"/>
       </ServiceGroup>
     </ServiceGroup>
-    <AnyInterval comment="Any Interval" from_day="-1" from_hour="-1" from_minute="-1" from_month="-1" from_weekday="-1" from_year="-1" id="sysid2" name="Any" to_day="-1" to_hour="-1" to_minute="-1" to_month="-1" to_weekday="-1" to_year="-1"/>
-    <AnyIPService comment="Any IP Service" id="sysid1" name="Any" protocol_num="0"/>
   </Library>
 </FWObjectDatabase>

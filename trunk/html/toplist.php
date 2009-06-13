@@ -66,13 +66,15 @@ start_body();
 
 <table cellpadding="0" cellspacing="1" border="0" width="500">
 <tr class="tblhead" height="20">
-	<td><a <? printActive("player"); ?> href="<? echo $PHP_SELF; ?>?show=player">Spieler</td>
-	<td><a <? printActive("player_avg"); ?> href="<? echo $PHP_SELF; ?>?show=player_avg">Durchschnitt</td>
-	<td><a <? printActive("town"); ?> href="<? echo $PHP_SELF; ?>?show=town">St&auml;dte</td>
-	<td><a <? printActive("population"); ?> href="<? echo $PHP_SELF; ?>?show=population">Einwohner</td>
-	<td><a <? printActive("clan"); ?> href="<? echo $PHP_SELF; ?>?show=clan">Orden</td>
-	<td><a <? printActive("honor"); ?> href="<? echo $PHP_SELF; ?>?show=honor">Bonuspunkte</td>
-	<td><a <? printActive("div"); ?> href="<? echo $PHP_SELF; ?>?show=div">Diverses</td>
+	<td><a <? printActive("player"); ?> href="<? echo $PHP_SELF; ?>?show=player">Spieler</a></td>
+	<td><a <? printActive("player_avg"); ?> href="<? echo $PHP_SELF; ?>?show=player_avg">Durchschnitt</a></td>
+	<td><a <? printActive("town"); ?> href="<? echo $PHP_SELF; ?>?show=town">St&auml;dte</a></td>
+	<td><a <? printActive("population"); ?> href="<? echo $PHP_SELF; ?>?show=population">Einwohner</a></td>
+  <?php if(!defined("HISPEED") ) { ?>
+	<td><a <? printActive("clan"); ?> href="<? echo $PHP_SELF; ?>?show=clan">Orden</a></td>
+  <?php } ?>
+	<td><a <? printActive("honor"); ?> href="<? echo $PHP_SELF; ?>?show=honor">Bonuspunkte</a>/td>
+	<td><a <? printActive("div"); ?> href="<? echo $PHP_SELF; ?>?show=div">Diverses</a></td>
 </tr>
 <tr>
 <td colspan="7" align="center" style="padding: 8px;">
@@ -128,13 +130,13 @@ if (!is_premium_noads()) {
     include("includes/firstaffair_140x600.html");
   }
   else if ( $timemod < 1600) {
-    include("includes/sponsorads-skyscraper.html");
+    include("ads/sponsorads-skyscraper.php");
   }   
   else if ($timemod < 2200) {
-    include("includes/qualigo.160x600.html");    
+    include("ads/qualigo_leaderboard.php");    
   }
   else if ($timemod < 2800) {
-    include("includes/ebay.160x600.html");    
+    include("ads/ebay_160x600.php");    
   }
   else if ($timemod < 3100) {
     include("includes/mobile-skyscraper.html");
@@ -154,7 +156,7 @@ if (!is_premium_noads()) {
 <?
 if (!is_premium_noads()) {
   if ( $timemod < 1000) {
-    include("includes/ebay.160x600.html");
+    include("ads/ebay_160x600.php");
   }  
   else if ($timemod < 1500) {
     include("includes/qualigo.160x600.html");    
@@ -163,7 +165,7 @@ if (!is_premium_noads()) {
     include("ads/buch24-skyscraper.html");
   }
   else if ( $timemod < 3000) {
-    include("includes/sponsorads-skyscraper.html");
+    include("ads/sponsorads-skyscraper.php");
   }
   else if ($timemod < 3500) {
     include("includes/affilimatch-skyscraper.html");
@@ -220,7 +222,10 @@ function top_player() {
   echo "<td>Name</td>";
   echo "<td>Punkte</td>";
   //echo "<td>Religion</td>";
-  echo "<td>Orden</td></tr>";
+  if(!defined("HISPEED") ) {
+    echo "<td>Orden</td>";
+  }
+  echo "</tr>";
 
   $res3 = do_mysql_query("SELECT player.id as id, player.avatar as avatar, player.status as locked, player.name AS name, (player.points) AS points, player.religion AS religion, clan.name AS clan, clan.id AS clanid FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
   
@@ -236,7 +241,10 @@ function top_player() {
     print_multi($data3);
 
     echo "</td><td>".number_format($data3['points'],0,",",".")."</td>";
-    echo '<td><a href="info.php?show=clan&id='.$data3['clanid'].'">'.$data3['clan']."</a></td></tr>\n";    
+    if(!defined("HISPEED") ) {
+      echo '<td><a href="info.php?show=clan&id='.$data3['clanid'].'">'.$data3['clan']."</a></td>";
+    }
+    echo"</tr>\n";    
   }
 } //  top_player()
 
@@ -503,6 +511,7 @@ function top_div () {
   
   echo "<p>";
 
+  if($christcities['cnt'] > 0 && $islamcities['cnt']) {
   echo "Die <b>Christen bewohnen ".
     prettyNumber($christcities['cnt'])." Städte</b> mit ".prettyNumber($christcities['pop']).
     " Einwohnern, <b>".prettyNumber($islamcities['cnt'])." islamische Städte</b> werden von ".
@@ -510,9 +519,15 @@ function top_div () {
     prettyNumber($christcities['pop']/$christcities['cnt']).
     " Einwohner pro christlicher und ".prettyNumber($islamcities['pop']/$islamcities['cnt']).
     " Einwohner pro islamischer Stadt.<br>";
+  }
+  else {
+    echo "Es existieren keine ".($christcities['cnt'] == 0 ? "christlichen" : "islamischen")." Siedlungen.<br>";
+  }
+    
   echo "<b>".prettyNumber($settle['cnt'])." Trupps</b> sind mit <b>".
     prettyNumber($settle['settlers'])." Siedlern</b> auf dem Weg zur Gründung neuer Welten und neuer Zivilisationen.\n<p>";
 
+    
   echo "<h2>Krieg</h2>\n";
 
   $war = do_mysql_query_fetch_assoc("SELECT id1, name, count(*) as cnt ".

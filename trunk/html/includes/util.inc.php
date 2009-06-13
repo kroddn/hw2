@@ -1520,7 +1520,9 @@ function getSiegeTime ($id) {
 
 // Produktionsfaktor unter Belagerung
 function getSiegeFactor ($time) {
-  if(defined("SPEED") && SPEED )
+  if(defined("MAX_SIEGE_TIME"))
+    $max_siege_time =  SIEGE_TIME_STARVE;
+  else if(defined("SPEED") && SPEED )
     $max_siege_time =  6*3600;
   else
     $max_siege_time = 24*3600;

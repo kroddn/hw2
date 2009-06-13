@@ -812,8 +812,8 @@ class Player {
     }
     
     function setNoobLevel($level) {
-      $this->nooblevel = 0;
-      do_mysql_query("UPDATE player SET nooblevel = 0 WHERE id = ".$this->id);
+      $this->nooblevel = $level;
+      do_mysql_query("UPDATE player SET nooblevel = $level WHERE id = ".$this->id);
     }
     
     function getNumberOfAttacks() {      

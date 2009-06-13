@@ -205,8 +205,8 @@ for($i=0;$i<sizeof($units);++$i) {
   $href= getUnitLibLink($units[$i]);
 
   echo "<form action=".$PHP_SELF." method='POST'>";
-  printf('<tr class="tblbody"><td width="40"><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"></a></td>',
-         $href, $GLOBALS['imagepath'], $img, $units[$i]['name'], $units[$i]['name']);
+  printf('<tr class="tblbody"><td nowrap width="100"><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"> %s</a></td>',
+         $href, $GLOBALS['imagepath'], $img, $units[$i]['name'], $units[$i]['name'], $units[$i]['name']);
   
   echo "\n <td align='center' width='15'><b>L".$units[$i]['level']."</b></td>";
   

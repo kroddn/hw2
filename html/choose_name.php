@@ -68,9 +68,14 @@ if(isset($selectname)) {
     else {
       $religion = ceil($pos / 3);
       
-      $sql = sprintf("UPDATE player SET pos = %d, religion = %d, name = '%s', activationtime=UNIX_TIMESTAMP(),lastres=0 WHERE id = %d" , $pos, $religion, mysql_escape_string($playername), $_SESSION['db_login']['id']);
+      $sql = sprintf("UPDATE player SET pos = %d, religion = %d, name = '%s', activationtime=UNIX_TIMESTAMP(), lastres=0 WHERE id = %d" , 
+                     $pos, $religion, mysql_escape_string($playername), $_SESSION['db_login']['id']);
       do_mysql_query($sql);
      
+      // Noobschutz bei 
+      if(defined("HISPEED")) {
+        do_mysql_query("UPDATE player SET nooblevel = 0 WHERE id = ".$_SESSION['db_login']['id']);
+      }
       
       $_SESSION['sec_key'] = "magic1234";
       include("includes/login.func.php");

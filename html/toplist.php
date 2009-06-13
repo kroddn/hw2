@@ -96,7 +96,7 @@ start_body();
   <?php if(!defined("HISPEED") ) { ?>
 	<td><a <? printActive("clan"); ?> href="<? echo $PHP_SELF; ?>?show=clan">Orden</a></td>
   <?php } ?>
-	<td><a <? printActive("honor"); ?> href="<? echo $PHP_SELF; ?>?show=honor">Bonuspunkte</a>/td>
+	<td><a <? printActive("honor"); ?> href="<? echo $PHP_SELF; ?>?show=honor">Bonuspunkte</a></td>
 	<td><a <? printActive("div"); ?> href="<? echo $PHP_SELF; ?>?show=div">Diverses</a></td>
 </tr>
 <tr>

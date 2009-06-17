@@ -382,15 +382,14 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     </DIV>      
 
     <DIV id="shortnews">
-      <font color="#80EF24">
-      <u>Neue Runde seit 14. November!</u></font><br>
-      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?t=10636">hier im Forum</a>.
-      </p>
+      <font color="#F08F14">
+      <u>Neu:</u> die <b>HW2 HiSpeed</b> an Wochenenden</font><br>
+      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?t=10817">hier im Forum</a>.      
     </DIV>
 
 
     <DIV id="tooltip">
-    <? echo $default_tooltip; ?>
+    <? echo $GLOBALS['default_tooltip']; ?>
     </DIV>
 
 
@@ -403,6 +402,11 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
 
   </DIV><!-- main -->
 </DIV>
+
+<script type="text/javascript">
+tooltip(0);
+</script>
+
     <? include("includes/sponsorads-magiccorner.html"); ?>
 </BODY>
 </HTML>

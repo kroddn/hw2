@@ -132,7 +132,6 @@ foreach($rounds AS $id => $database) {
   printf("tooltips[%d] = '%s';\n", $id, $text);
 }
 
-$default_tooltip = "F&uuml;hrt Euer Zeigeger&auml;t (Maus) &uuml;ber ein Symbol auf dem Schild oder &uuml;ber eine andere Schaltfl&auml;che.";
-
-echo "var default_tooltip = '".$default_tooltip."';\n";
+$GLOBALS['default_tooltip'] = "F&uuml;hrt Euer Zeigeger&auml;t (Maus) &uuml;ber ein Symbol auf dem Schild oder &uuml;ber eine andere Schaltfl&auml;che.";
+echo "var default_tooltip = '".$GLOBALS['default_tooltip']."';\n";
 ?>

@@ -61,7 +61,7 @@ if ($_SESSION['settings']['library_own'])
 <a target="main" href="main.php"><img alt="Home" border="0" src="<? echo $imagepath; ?>/menu_home.gif"></a><br>
 <a target="main" href="premium.php"><img alt="Premium-Account" border="0" src="<? echo $imagepath; ?>/menu_premium.gif"></a><br>
 <a target="main" href="toplist.php"><img alt="Toplist" border="0" src="<? echo $imagepath; ?>/menu_toplist.gif"></a><br>
-<a <? echo $forumtarget; ?> href="http://forum.holy-wars2.de"><img alt="Forum" border="0" src="<? echo $imagepath; ?>/menu_forum_klein.gif"></a><img src="<? echo $imagepath; ?>/menu_slash.gif""><a <? echo $chattarget; ?> href="chat.php"><img alt="Chat" border="0" src="<? echo $imagepath; ?>/menu_chat.gif"></a><br>
+<a <? echo $forumtarget; ?> href="http://forum.holy-wars2.de/index.php#skip_header"><img alt="Forum" border="0" src="<? echo $imagepath; ?>/menu_forum_klein.gif"></a><img src="<? echo $imagepath; ?>/menu_slash.gif""><a <? echo $chattarget; ?> href="chat.php"><img alt="Chat" border="0" src="<? echo $imagepath; ?>/menu_chat.gif"></a><br>
 <a target="main" href="settings.php"><img title="Diverse Einstellungen zu Account, Spieler, Grafik und Menü" alt="My Holy-Wars 2" border="0" src="<? echo $imagepath; ?>/menu_settings.gif"></a><br>
 <img src="<? echo $imagepath; ?>/menu_balken1.gif"><br>
 <a target="main" href="kingdom.php"><img alt="Finanzhof" border="0" src="<? echo $imagepath; ?>/menu_kingdom.gif"></a><br>

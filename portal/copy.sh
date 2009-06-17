@@ -5,7 +5,7 @@ if [ ! -f $q ]; then
 fi
 
 while [ $# -gt 0 ]; do
-    scp $1 www4@mysql:/home/portal_hw2/html/$1
+    scp $1 kroddn@www4:/home/portal_hw2/html/$1
     shift
 done
 

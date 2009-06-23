@@ -126,8 +126,10 @@ switch($show) {
   case "clan":
   case "div":
   case "honor":
-  $function = "top_".$show;
-  $function();
+    // Funktion zusammenbauen und aufrufen
+    $function = "top_".$show;
+    $function();
+    break;
 }
 ?>
 </tr>
@@ -484,6 +486,10 @@ function top_honor() {
 function top_div () {
   echo "<td>";
 
+  echo "<h2>Allgemein</h2>\n";
+  printRoundTimes();
+  
+  
   $sql = "SELECT avg(points), sum(rp) AS rp, count(*) AS cnt ".
     " FROM player ".
     " WHERE religion IS NOT NULL AND (STATUS IS NULL OR STATUS = 3) GROUP BY religion ORDER BY religion";
@@ -506,7 +512,7 @@ function top_div () {
 		    
   $settle = do_mysql_query_fetch_assoc("SELECT count(*) AS cnt,sum(missiondata) as settlers FROM army ".
                                        " WHERE mission = 'settle' ");
-
+  echo "<p>";
   echo "<h2>Herrscher</h2>\n";
 
   echo "Auf der bekannten Welt sind <b>".prettyNumber($christ['cnt']).

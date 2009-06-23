@@ -1830,4 +1830,35 @@ function getRoundEndTime()
   $starttime = do_mysql_query_fetch_assoc("SELECT value FROM config WHERE name='endtime'");
   return intval( ($starttime && $starttime['value']) ? $starttime['value'] : 0 );
 }
+
+/**
+ * Rundenzeiten ausgeben.
+ * 
+ * @return unknown_type
+ */
+function printRoundTimes() 
+{
+  $starttime = getRoundStartTime();
+  $endtime   = getRoundEndTime();   
+  
+  if($endtime > 0 && $endtime < time()) {
+    echo "Diese Runde wurde am ".date('d.m.y, H:i:00', $endtime)." beendet. ";
+    if($starttime > 0) {
+      echo 'Rundenstart war am '.date('d.m.y, H:i:00', $starttime)."."; 
+    }    
+  }
+  else {
+    if($starttime > time() ) {
+      echo 'Diese Runde <b>startet</b> am '.date('d.m.y \u\m H:i:00', $starttime).". "; 
+    }
+    else if($starttime > 0) {
+      echo 'Diese Runde läuft seit '.date('d.m.y, H:i:00', $starttime).". "; 
+    }
+    
+    if($endtime > 0) {
+      echo "Rundenende ist ".date('d.m.y, H:i:00', $endtime).".";
+    }
+  }
+}
+
 ?>

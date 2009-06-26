@@ -135,7 +135,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
       $noobtime = defined("SPEED") && SPEED ? (7*24*60*60) : (3*7*24*60*60);
 
       echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Beim Erforschen einer höheren Stufe der Reichsverwaltung verliert Ihr Euren Neulingsschutz!<br>Der Neulingsschutz wirkt bis ".
-        (date("d.m.Y H:i:s", ($starttime > $player->getRegTime() ? $starttime : $player->getRegTime()) + $noobtime) ).", danach verfällt er automatisch.</font></td></tr>\n";
+        (date("d.m.Y H:i:s", ($starttime > $player->getActivationTime() ? $starttime : $player->getActivationTime()) + $noobtime) ).", danach verfällt er automatisch.</font></td></tr>\n";
     }
 
     //$player->getNoobLevel() > 0 &&

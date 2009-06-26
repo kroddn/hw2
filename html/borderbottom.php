@@ -30,9 +30,15 @@ require("includes/cities.class.php");
 require("includes/player.class.php");
 include("includes/session.inc.php");
 
+/**
+ * Timer nur anzeigen, wenn Benutzer das nicht deaktiviert hat.
+ * @return unknown_type
+ */
 function session_timer() {
-  $remaining =  $_SESSION['session_duration'] + $_SESSION['login_time'] - time();
-  echo "<span class='statusline' id='session_remaining'><script type=\"text/javascript\">addTimer(".$remaining.",'session_remaining');</script></span>";
+  if(!$_SESSION['settings']['disable_login_counter']) {
+    $remaining =  $_SESSION['session_duration'] + $_SESSION['login_time'] - time();
+    echo "<span class='statusline' id='session_remaining'><script type=\"text/javascript\">addTimer(".$remaining.",'session_remaining');</script></span>";
+  }
 }
 
 

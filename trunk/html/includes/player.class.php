@@ -45,6 +45,7 @@ $GLOBALS['arr_settings']
 class Player {	
   var $msgsignature;
   var $regtime;
+  var $activationtime;
   var $ip;
   var $id;
   var $name;
@@ -79,13 +80,14 @@ class Player {
   var $mapversion;
   var $tutorialLvl;
   
+  
   // Steuert den Neulingsschutz
   // Level 5: Angriffsschutz
   var $nooblevel;
   
   // Konstruktor
   function Player($id, $sid) {
-    $res1=do_mysql_query("SELECT name, login, settings, signature, description, email, sms, religion, gold, wood, iron, stone, rp, bonuspoints, lastclickbonuspoints, round(pointsavg/pointsupd) as avgpoints, points, clan, clanstatus, clanapplication, mapsize, mapversion, gfx_path, hwstatus, regtime, nooblevel, recruiter, tutorial FROM player WHERE id=".intval($id) );        
+    $res1=do_mysql_query("SELECT name, login, settings, signature, description, email, sms, religion, gold, wood, iron, stone, rp, bonuspoints, lastclickbonuspoints, round(pointsavg/pointsupd) as avgpoints, points, clan, clanstatus, clanapplication, mapsize, mapversion, gfx_path, hwstatus, regtime, activationtime, nooblevel, recruiter, tutorial FROM player WHERE id=".intval($id) );        
     $res2=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".intval($id)." AND !(status & ".(MSG_RECIPIENT_READ|MSG_RECIPIENT_DELETED).")");
     $res3=do_mysql_query("SELECT lastclick FROM player_online WHERE uid=".intval($id) );
     $data3=mysql_fetch_assoc($res3);
@@ -101,6 +103,7 @@ class Player {
     $this->newmessages = $num2[0];
     $this->msgsignature=$db_player['signature'];
     $this->regtime=$db_player['regtime'];
+    $this->activationtime=$db_player['activationtime'];
     $this->ip=getenv('REMOTE_ADDR');
     $this->id=$id;
     $this->name=$db_player['name'];
@@ -286,7 +289,13 @@ class Player {
   function getRegTime() {
     return $this->regtime;
   }
-	// gibt den Punktestand zurück
+
+  // gibt den Namen zurück
+  function getActivationTime() {
+    return $this->activationtime;
+  }
+  
+  // gibt den Punktestand zurück
 	function getPoints() {
 		$sql=mysql_query("SELECT points FROM player WHERE id = ".$this->id);
 		$data=mysql_fetch_assoc($sql);

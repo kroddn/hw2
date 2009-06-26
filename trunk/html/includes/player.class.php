@@ -38,7 +38,8 @@ $GLOBALS['arr_settings']
      = array(0 => 'map_own',
              1 => 'forum_own',
              2 => 'library_own',
-             3 => 'hide_banner'
+             3 => 'hide_banner',
+             4 => 'disable_login_counter'
             );
 
 class Player {	

@@ -1,0 +1,5 @@
+AuthType Basic
+Options FollowSymlinks +Indexes
+AuthName "Kein Zugriff."
+AuthUserFile /home/htpasswd.admin
+require valid-user

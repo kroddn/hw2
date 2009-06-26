@@ -6,7 +6,7 @@ if [ ! -f $q ]; then
 fi
 
 while [ $# -gt 0 ]; do
-    scp $1 mysql:/home/hw2dev/html/admintools/$1
+    scp $1 www4:/home/hw2_dev/html/admintools/$1
     shift
 done
 

@@ -3,16 +3,18 @@ timerb = new Array();
 countdown();
 
 function setDivText(c1, text) {
-	document.getElementById(c1).innerHTML=text;
+  document.getElementById(c1).innerHTML=text;
 }
 
 function addTimer(seconds, divName) {
-    // 3 Sekunden dazu
-    timera[timera.length] = seconds;
-    timerb[timerb.length] = divName;
+  timera[timera.length] = seconds;
+  timerb[timerb.length] = divName;
 }
 
 function countdown() {
+    timeout = 1000;
+
+    if(timera.length > 0) {
 	for (i=0; i<timera.length;i++) {
 		if (timera[i] > 0) {
 			if (--timera[i] > 0) {
@@ -41,5 +43,19 @@ function countdown() {
 			setDivText(timerb[i], "<span>bereit</span>");
 		}
 	}
-	setTimeout("countdown()", 999);
+        if(timera.length > 20) {
+            timeout = 999;
+        }
+        else {
+            timeout = 1000;
+        }
+    }
+    else {
+        /*  Kein Timer - trotzdem Timeout setzen, weil die Timer
+         *  vielleicht nocht aktiviert werden
+         */
+        timeout = 1000;
+    }
+
+    setTimeout("countdown()", timeout);
 }

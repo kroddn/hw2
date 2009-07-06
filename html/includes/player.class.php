@@ -385,11 +385,11 @@ class Player {
 	}
 
         // Erhöhen der gesendeten Nachrichten
-	function incSentMessages() {
-          if ($this->messages_sent != -1) {
-            $this->messages_sent++;
-          }
-        }
+	function incSentMessages($nr = 1) {
+		if ($this->messages_sent != -1) {
+			$this->messages_sent += $nr;
+		}
+	}
 
 	// Anzahl neuer Nachrichten
 	function getSentMessages() {

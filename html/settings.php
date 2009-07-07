@@ -926,12 +926,13 @@ insertBBForm(2);
   <tr class="tblhead_22"><td colspan="2"><h2><a name="game_tutorial">Tutorial steuern</a></h2></td>
   </tr>
   <tr>
-  <td colspan="2" class="tblbody" align="center" style="padding-bottom: 15px;">
-  Der interaktive Helfer kann hier aktiviert oder abgeschalten werden.
-  <p>
-  <a href="?activatetutorial=1">Tutorial aktivieren</a>&nbsp;&nbsp;&nbsp;<a href="?activatetutorial=0">Tutorial deaktivieren</a>
-  <br>
-  
+   
+   <td colspan="2" class="tblbody" align="center" style="padding-bottom: 15px;">
+    <img src="<?php echo GFX_PATH_LOCAL; ?>/mage_small.gif" align="left" />
+    Der interaktive Helfer kann hier aktiviert oder abgeschalten werden.
+    <p>
+    <a href="?activatetutorial=1">Tutorial aktivieren</a>&nbsp;&nbsp;&nbsp;<a href="?activatetutorial=0">Tutorial deaktivieren</a>
+    <br>  
   </td>
 </tr>
 </form>

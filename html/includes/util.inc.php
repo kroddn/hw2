@@ -1332,7 +1332,7 @@ if(!function_exists("bbCode")) {
     $text = nl2br($text);
 
     if($url) {
-      $text = preg_replace('"(( |^)((ftp|http|https){1}://)[-a-zA-Z0-9@:%_\+.~#?&//=]+)"i',
+      $text = preg_replace('"(( |^|\\n)((ftp|http|https){1}://)[-a-zA-Z0-9@:%_\+.~#?&//=;]+)"i',
 			   '<a href="\1" target="_blank">\\1</a>', $text);
       $text = preg_replace('"( |^)(www.[-a-zA-Z0-9@:%_\+.~#?&//=]+)"i',
 			   '\\1<a href="http://\2" target="_blank">\\2</a>', $text);

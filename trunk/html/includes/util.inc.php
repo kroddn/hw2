@@ -1786,7 +1786,7 @@ function getSettleRadius() {
 /**
  * Ist das Ziel innerhalb des Siedlungsbereiches für den Spieler?
  * 
- * @return null, falls JA
+ * @return null, falls JA.<br/>
  *         Einen Fehlerstring andernfalls
  */
 function isInSettleArea($x, $y)

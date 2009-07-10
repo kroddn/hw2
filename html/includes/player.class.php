@@ -42,6 +42,10 @@ $GLOBALS['arr_settings']
              4 => 'disable_login_counter'
             );
 
+if(!defined("MSG_RECIPIENT_READ")) {
+	die("MSG_RECIPIENT_READ nicht definiert. config.inc.php richtig eingebunden?");
+}            
+            
 class Player {	
   var $msgsignature;
   var $regtime;

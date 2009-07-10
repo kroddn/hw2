@@ -1,15 +1,13 @@
-CREATE TABLE `inform` (
-`infid` INT NOT NULL AUTO_INCREMENT ,
-time   INT NOT NULL,
-`topic` VARCHAR( 100 ) NOT NULL ,
-`text` TEXT NOT NULL ,
-PRIMARY KEY ( `infid` )
-);
+--
+-- Tabellenstruktur für Tabelle `inform`
+--
 
+CREATE TABLE IF NOT EXISTS `inform` (
+  `infid` int(11) NOT NULL auto_increment,
+  `time` int(11) NOT NULL default '0',
+  `expire` int(11) default NULL,
+  `topic` varchar(100) collate latin1_german2_ci NOT NULL default '',
+  `text` text collate latin1_german2_ci NOT NULL,
+  PRIMARY KEY  (`infid`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci ;
 
-CREATE TABLE `inform_player` (
-infid  INT NOT NULL,
-player INT NOT NULL,
-time   INT NOT NULL,
-PRIMARY KEY ( `infid`, player )
-);

@@ -14,4 +14,4 @@ CREATE TABLE IF NOT EXISTS `log_mysqlerr` (
   `get_str` text collate latin1_german2_ci,
   `post_str` text collate latin1_german2_ci,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci ;

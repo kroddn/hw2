@@ -35,9 +35,13 @@
 function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   $GLOBALS['loginprocess'] = true;
    
+  // define("DISABLE_MARKET", 1);
+  
   include_once("includes/util.inc.php");
   //  include_once("includes/library.class.php");
-  include_once("includes/market.class.php");
+  if(!defined("DISABLE_MARKET")) {
+    include_once("includes/market.class.php");
+  }
   include_once("includes/diplomacy.common.php");
   include_once("includes/clan.class.php");
   include_once("includes/diplomacy.class.php");
@@ -125,8 +129,10 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 //                $library = new Library($player->getID());
                 //                session_register("library");
 
-                $market = new Market($player->getID());
-                $_SESSION['market'] = $market;
+                if(!defined("DISABLE_MARKET")) {
+                	$market = new Market($player->getID());
+                	$_SESSION['market'] = $market;
+                }
                 
                 $research = new Research($player->getID(),$player->getReligion());
                 $_SESSION['research'] = $research;

@@ -1161,7 +1161,7 @@ class Cities {
 
   /**
    * Vorbedingungen von Angriff und Truppenverlegung prüfen.
-   * $data1 is Ein- und Ausgabevariable!!!
+   * @param $data1 Ist Ein- und Ausgabevariable!
    */
   function checkAttackMove($x, $y, $from, &$data1) {
     $x = intval($x);
@@ -1170,6 +1170,7 @@ class Cities {
     if ($_SESSION['player']->getGold() <= 0) {
       return "Ihnen fehlen die Mittel, einen Angriff zu starten (kein Gold).";
     }
+
     
     if (getSiegeTime($this->activecity) > 0) {
       return "Die Stadt steht unter Belagerung. Es ist lediglich ein Ausfall möglich.";
@@ -1180,13 +1181,22 @@ class Cities {
       
       
     // $data1 is Ein- und Ausgabevariable!!!
-    $res = do_mysql_query("SELECT city.owner, city.population as pop, ".
+    $res = do_mysql_query("SELECT city.owner, city.population as pop, map.x, map.y, ".
                            "      attackblock-UNIX_TIMESTAMP() AS rest, attackblock > UNIX_TIMESTAMP() AS isblock".
-                           " FROM city LEFT JOIN player ON city.owner=player.id ".
+                           " FROM city LEFT JOIN player ON city.owner=player.id LEFT JOIN map ON map.id = city.id".
                            " WHERE city.id = ".$from);
     
     if (!($check = mysql_fetch_assoc($res)) || !$check['owner']  ) {
       return "Ausgangsstadt ungültig";
+    }
+    
+    // Verbiete Angriffe aus dem Siedlungsradius, falls das konfiguriert ist.
+    if(defined("DISABLE_SETTLEAREA_ATTACK") && DISABLE_SETTLEAREA_ATTACK) {
+        // Ist Ausgangsstadt Siedlungsgebiet?
+        $msg = isInSettleArea($data1['x'], $data1['y']);
+        if($msg != null) {
+            return $msg."<br>Angriffe aus dem Siedlungsring heraus sind nicht erlaubt. Siedelt zuerst nach innen oder wartet auf die Erweiterung des Radius."; 
+        }
     }
     
     

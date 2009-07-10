@@ -127,8 +127,13 @@ if ($loginprocess) {
 // status = 3 bedeutet verdächtige Spieler, die aber nicht gesperrt sind.
 $res = do_mysql_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
 
-$nr[0] = mysql_fetch_array($res);
-$nr[1] = mysql_fetch_array($res);
+if(mysql_num_rows($res) < 2) {
+  $nr[0] = $nr[1] = -1;
+}
+else {
+  $nr[0] = mysql_fetch_array($res);
+  $nr[1] = mysql_fetch_array($res);
+}
 
 if (1 || BOOKING_ALLOWED) {
   $book_res = do_mysql_query("SELECT count(*) FROM booking WHERE status = 0");
@@ -395,7 +400,8 @@ function print_you_know_table() {
 
 function playing_div() {
   global $nr;
-  printf('<div style="margin-top:3px;">Zur Zeit spielen <b>%s</b> registrierte und aktivierte Spieler, davon sind <b>%d christliche</b> und <b>%d islamische</b> Spieler.', $nr[0][0]+$nr[1][0], $nr[0][0], $nr[1][0]);
+  printf('<div style="margin-top:3px;">Zur Zeit spielen <b>%s</b> registrierte und aktivierte Spieler, davon sind <b>%s christliche</b> und <b>%s islamische</b> Spieler.',
+         $nr[0] === -1 ? "?" : $nr[0][0]+$nr[1][0], $nr[0] === -1 ? "?" : $nr[0][0], $nr[1] === -1 ? "?" : $nr[1][0]);
   
   if (BOOKING_ALLOWED) {
     echo "\nFür die neue Runde sind <b>".$book[0]."</b> Spieler vorangemeldet.\n";

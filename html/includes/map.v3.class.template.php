@@ -41,4 +41,17 @@ class MapVersion3 {
     $this->activeplayer = $player;
   }
   
+  
+  // zentriert die Karte auf die Hauptstadt des angegebenen Spielers
+  function centerOnCapital($ply) {
+    $res1=do_mysql_query("SELECT id FROM city WHERE capital=1 AND owner=".$this->activeplayer);
+    if (mysql_num_rows($res1)>0) {
+      $cityid=mysql_fetch_assoc($res1);
+      $res2=do_mysql_query("SELECT x, y FROM map WHERE id=".$cityid['id']);
+      $mapxy=mysql_fetch_assoc($res2);
+      
+      $this->actx=$mapxy['x'];
+      $this->acty=$mapxy['y'];
+    }
+  }
 }

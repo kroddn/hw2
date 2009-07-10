@@ -9,5 +9,5 @@ CREATE TABLE IF NOT EXISTS `log_err` (
   `referer` text collate latin1_german2_ci NOT NULL,
   `fixed` tinyint(4) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
 

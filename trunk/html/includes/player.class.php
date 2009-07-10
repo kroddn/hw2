@@ -33,6 +33,8 @@
 * This File must not be used without permission	!
 ***************************************************/
        
+include_once("includes/config.inc.php");
+
 // Array zum matchen von Settings zu Binär-Masken
 $GLOBALS['arr_settings']
      = array(0 => 'map_own',

@@ -32,6 +32,9 @@ $logo = $imagepath."/logo.jpg";
 if(defined("HW2DEV") && HW2DEV ) {
   $logo = $imagepath."/logo-dev.jpg";
 }
+else if(defined("HISPEED") && HISPEED ) {
+  $logo = $imagepath."/logohispeed.jpg";
+}
 else if(defined("SPEED") && SPEED) {
   $logo = $imagepath."/logospeed.jpg";
 }

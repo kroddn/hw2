@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS `map` (
   `pic` char(8) collate latin1_german2_ci default NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `xy` (`x`,`y`),
+  KEY `x` (`x`),
+  KEY `y` (`y`), 
   KEY `type` (`type`),
   KEY `special` (`special`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;

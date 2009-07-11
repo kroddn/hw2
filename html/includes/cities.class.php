@@ -1190,15 +1190,6 @@ class Cities {
       return "Ausgangsstadt ungültig";
     }
     
-    // Verbiete Angriffe aus dem Siedlungsradius, falls das konfiguriert ist.
-    if(defined("DISABLE_SETTLEAREA_ATTACK") && DISABLE_SETTLEAREA_ATTACK) {
-        // Ist Ausgangsstadt Siedlungsgebiet?
-        $msg = isInSettleArea($data1['x'], $data1['y']);
-        if($msg != null) {
-            return $msg."<br>Angriffe aus dem Siedlungsring heraus sind nicht erlaubt. Siedelt zuerst nach innen oder wartet auf die Erweiterung des Radius."; 
-        }
-    }
-    
     
     // check if blocked
     if ($check['isblock']) {
@@ -1228,6 +1219,16 @@ class Cities {
     
     // Keine Truppenverlegungen zu Noobs erlauben
     if ($data1['owner'] != $this->player) {
+      // Verbiete Angriffe aus dem Siedlungsradius, falls das konfiguriert ist.
+      if(defined("DISABLE_SETTLEAREA_ATTACK") && DISABLE_SETTLEAREA_ATTACK) {
+        // Ist Ausgangsstadt Siedlungsgebiet?
+        $msg = isInSettleArea($data1['x'], $data1['y']);
+        if($msg != null) {
+          return $msg."<br>Angriffe aus dem Siedlungsring heraus sind nicht erlaubt. Siedelt zuerst nach innen oder wartet auf die Erweiterung des Radius.";
+        }
+      }
+
+
       if ($data1['nooblevel'] > 0) {
         return "Der Spieler befindet sich noch im Neulingsschutz. Es sind keine Truppenbewegungen dorthin erlaubt.";
       }

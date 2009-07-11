@@ -244,6 +244,8 @@ function imgToDB($startrow) {
   if (!mysql_query("ALTER TABLE `map` ADD PRIMARY KEY ( id )"))
     echo "Fehler: ".mysql_error()."\n";
   mysql_query("ALTER TABLE `map` ADD UNIQUE xy (x, y)");
+  mysql_query("ALTER TABLE `map` ADD INDEX x (x)");
+  mysql_query("ALTER TABLE `map` ADD INDEX y (y)");
   mysql_query("ALTER TABLE `map` ADD INDEX type (type)");
   mysql_query("ALTER TABLE `map` ADD INDEX special (special)");
 

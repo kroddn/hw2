@@ -605,7 +605,6 @@ function getStartPosWhere($pos, $reli) {
 function checkSettleRadius() {
   $sum = 0;
   $extend = false;
-   
   
   for($reli = 1; $reli <= 2; $reli++) {
     for($p = 0; $p < 3; $p++) {
@@ -631,26 +630,45 @@ function checkSettleRadius() {
   }
 
   if($old < $fx/80) {
-    for($i=0; $i<sizeof($pos) && !$extend; $i++) {
-      //echo "Pos[$i] = ".$pos[$i]."<br>";
-      if($pos[$i] <= $tolerance) {
-        echo "Ein Gebiet hat weniger als ".$tolerance." Plätze. Radius muß erweitert werden!<br>";
+    // Hole Siedlungsradius-Zeiten
+    $ctime = $utime = 0;
+    getConfigTimes('settleradius', $ctime, $utime);
+
+    // Falls schon zu lange nicht erweitert wurde, dann erweitere ihn
+    if(defined("SPEED") && SPEED) {
+      $tolerance_time = 4 * 24 * 3600;
+    }
+    else {
+      $tolerance_time = 7 * 24 * 3600;
+    }
+     
+    // Schauen, ob es Zeit wird, den Radius zu erweitern
+    if($utime + $tolerance_time < time()) {
+      echo "Der Siedlungsradius besteht schon zu lange. Erweitere ihn.";
+      $extend = true;
+    }
+    // Ansonsten hier nach der Menge an Spielern und freine Positionen suchen
+    else {
+      for($i=0; $i<sizeof($pos) && !$extend; $i++) {
+        //echo "Pos[$i] = ".$pos[$i]."<br>";
+        if($pos[$i] <= $tolerance) {
+          echo "Ein Gebiet hat weniger als ".$tolerance." Plätze. Radius muß erweitert werden!<br>";
+          $extend = true;
+        }
+      }
+      //echo "Insgesamt: $sum<br>";
+
+      if(defined("SPEED") && SPEED) {
+        $tolerance = 60;
+      }
+      else {
+        $tolerance = 50;
+      }
+      if($sum <= $tolerance) {
+        echo "Insgesamt zu wenige Plätze (<".$tolerance."). Radius muß erweitert werden!<br>";
         $extend = true;
       }
     }
-    //echo "Insgesamt: $sum<br>";
-    
-    if(defined("SPEED") && SPEED) {
-      $tolerance = 60;
-    }
-    else {
-      $tolerance = 50;
-    }
-    if($sum <= $tolerance) {
-      echo "Insgesamt zu wenige Plätze (<".$tolerance."). Radius muß erweitert werden!<br>";
-      $extend = true;
-    }
-
     if($extend) {
       setConfig("settleradius", $old + 1);
     }

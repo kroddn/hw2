@@ -622,8 +622,14 @@ function checkSettleRadius() {
   
   getMapSize($fx, $fy);
   $old = getSettleRadius();
-  
-  $tolerance = 5;
+
+  if(defined("SPEED") && SPEED) {
+    $tolerance = 8;
+  }
+  else {
+    $tolerance = 5;
+  }
+
   if($old < $fx/80) {
     for($i=0; $i<sizeof($pos) && !$extend; $i++) {
       //echo "Pos[$i] = ".$pos[$i]."<br>";
@@ -633,13 +639,17 @@ function checkSettleRadius() {
       }
     }
     //echo "Insgesamt: $sum<br>";
-
-
-  $tolerance = 60;
-  if($sum <= $tolerance) {
-    echo "Insgesamt zu wenige Plätze (<".$tolerance."). Radius muß erweitert werden!<br>";
-  	$extend = true;
-  }
+    
+    if(defined("SPEED") && SPEED) {
+      $tolerance = 60;
+    }
+    else {
+      $tolerance = 50;
+    }
+    if($sum <= $tolerance) {
+      echo "Insgesamt zu wenige Plätze (<".$tolerance."). Radius muß erweitert werden!<br>";
+      $extend = true;
+    }
 
     if($extend) {
       setConfig("settleradius", $old + 1);

@@ -639,7 +639,7 @@ function checkSettleRadius() {
       $tolerance_time = 4 * 24 * 3600;
     }
     else {
-      $tolerance_time = 7 * 24 * 3600;
+      $tolerance_time = 10 * 24 * 3600;
     }
      
     // Schauen, ob es Zeit wird, den Radius zu erweitern

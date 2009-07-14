@@ -1204,7 +1204,7 @@ class Cities {
     }
     
     // $data1 is Ein- und Ausgabevariable!!!
-    $res1 = do_mysql_query("SELECT player.nooblevel, player.holiday, map.id,city.owner,city.population as pop ".                      
+    $res1 = do_mysql_query("SELECT player.nooblevel, player.holiday, map.id,city.owner,city.population as pop, map.x, map.y ".                      
                            " FROM map LEFT JOIN city USING(id) LEFT JOIN player ON city.owner=player.id ".
                            " WHERE x=".$x." AND y=".$y);
     

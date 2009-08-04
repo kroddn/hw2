@@ -382,9 +382,9 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     </DIV>      
 
     <DIV id="shortnews">
-      <font color="#F08F14">
-      <u>Neu:</u> die <b>HW2 HiSpeed</b> an Wochenenden</font><br>
-      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?t=10817">hier im Forum</a>.      
+      <font color="#00FF8F">
+      <b>Neustart</b> der Hauptrunde am 07. August um 20 Uhr</font><br>
+      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?f=1&t=10866">hier im Forum</a>.      
     </DIV>
 
 

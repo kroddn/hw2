@@ -144,13 +144,12 @@ if(!$noclickcount && $click->count % 89 == 15 && !is_premium_no_click_hint() && 
 }
 
 // Alle 223 Clicks einen Hinweis abbilden
-if(!$noclickcount && $click->count % 223 == 39 && !is_premium_no_click_hint() ) {
+if(!$noclickcount && $click->count % 523 == 199 && !is_premium_no_click_hint() ) {
   include("halt.php");
   exit();
 }
-
-// Alle 287 Clicks einen Hinweis zum Werben neuer Spieler einbinden
-if(!$noclickcount && $click->count % 287 == 80 && !is_premium_no_click_hint() ) {
+else // Alle 287 Clicks einen Hinweis zum Werben neuer Spieler einbinden
+if(!$noclickcount && $click->count % 687 == 180 && !is_premium_no_click_hint() ) {
   include("recruit.php");
   exit();
 }

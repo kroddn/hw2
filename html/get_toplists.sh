@@ -11,7 +11,7 @@ fi
 
 (
     cd toplists
-    for TOP in player player_avg town population div
+    for TOP in player player_avg town population clan div
     do
 	wget \
 	    -O toplist_${NR}_${TOP}.html \
@@ -20,4 +20,5 @@ fi
     done 
 
 )
+
 

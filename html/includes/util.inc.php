@@ -626,7 +626,7 @@ function checkSettleRadius() {
     $tolerance = 8;
   }
   else {
-    $tolerance = 5;
+    $tolerance = 7;
   }
 
   if($old < $fx/80) {
@@ -662,7 +662,7 @@ function checkSettleRadius() {
         $tolerance = 60;
       }
       else {
-        $tolerance = 50;
+        $tolerance = 55;
       }
       if($sum <= $tolerance) {
         echo "Insgesamt zu wenige Plätze (<".$tolerance."). Radius muß erweitert werden!<br>";

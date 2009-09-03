@@ -116,10 +116,10 @@ span.fat_u {
  color: white;
  position: absolute;
  top: 120px;
- left: 660px;
+ left: 646px;
  z-index: 2;
  border: 0;
- width: 126px;
+ width: 142px;
  height: 96px;
 }
 #links a { color: white; }
@@ -370,10 +370,11 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     </DIV>
 
     <DIV id="links">
-      <span style="font-size: 14px;">Partner</span><br><hr>
-      <a href="http://www.mightofmagic.de/" style="color: #1010A0" target="_blank">Might of Magic</a><br>
-      <a href="http://www.psitronic.de/" style="color: #DD4040" target="_blank">psitronic IT-Solutions</a><br>
-      <a href="http://arktosmobile.de/" target="_blank" style="color: #ffb300;">Arktos mobile</a>      
+      <span style="font-size: 13px;">Partner</span><br><hr>
+      <a href="http://www.mightofmagic.de/" style="color: #50FFB0" target="_blank">Might of Magic</a><br>
+      <a href="http://www.kneipengame.com/" style="color: #B050FF" target="_blank">Kneipengame</a><br>
+      <br>
+      <a href="http://www.psitronic.de/" style="color: #DD4040" target="_blank">psitronic IT-Solutions</a><br>           
     </DIV>
     
     

@@ -757,7 +757,7 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
     </form>
     <!-- onSubmit="document.theGFXForm.gfx_path_value.value=document.theFileForm.gfx_path_select.value;"  -->
     <form name="theGFXForm" action="settings.php" method="get">
-    <input type="hidden" name="gfx_path_value">
+    <input type="text" name="gfx_path_value">
     <input type="hidden" name="changegfx">
     <input type="button" onClick="testGfxPath(document.theGFXForm.gfx_path_value.value)" name="testgfx"   value=" Testen ">
     <input type="submit" 

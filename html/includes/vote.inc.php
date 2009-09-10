@@ -24,7 +24,7 @@
 ?>
 <table id="vote" cellpadding="0" cellspacing="1" width="100%" border="0">
 <tr class="tblhead" style="height: 18px;">
-<td align="center" <? if(!defined("VOTE_VERTICAL")) echo 'colspan="5"'; ?>><b>Vote for HW2!</b></td>
+<td align="center" <? if(!defined("VOTE_VERTICAL")) echo 'colspan="5"'; ?>><a target="_blank" href="http://www.holy-wars2.de/vote.php">Vote for HW2!</a></td>
 </tr>
 <tr>
 

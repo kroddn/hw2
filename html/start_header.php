@@ -141,8 +141,7 @@ if (1 || BOOKING_ALLOWED) {
 }
 
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
 <title><? echo $pagetitle; if(isset($title)) echo " - ".$title; ?></title>
@@ -159,72 +158,132 @@ if ($cookieref) echo "<!-- CookieRef true -->\n";
 <body style="margin: 0; background-image: url(<? echo $imagepath; ?>/title/bg1.gif);" alink="#FF0000" vlink="#FF0000">
 <center>
 <p>
-<table width="950" style="background-image: url(<? echo $imagepath; ?>/bg.gif);" border="0" cellspacing="5"><tr><td>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr>
-<td style="background-image: url(<? echo $imagepath; ?>/title/balken.jpg);" colspan="3"><img src="<? echo $imagepath; ?>/title/point.gif" width="2" height="10" border="0" alt=""></td>
-</tr>
+<table width="950" style="background-image: url(<? echo $imagepath; ?>/bg.gif);" border="0" cellspacing="5">
+	<tr>
+		<td>
+		<table width="100%" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<td style="background-image: url(<? echo $imagepath; ?>/title/balken.jpg);" colspan="3"><img
+					src="<? echo $imagepath; ?>/title/point.gif" width="2" height="10"
+					border="0" alt=""></td>
+			</tr>
 
-<tr bgcolor="#000000">
-<td colspan="2"><div align="left"><a href="http://portal.holy-wars2.de"><img src="<? echo $imagepath; ?>/title/title.jpg" width="554" height="80" border="0" alt=""></a></div></td>
-<td><div align="right"><a href="http://portal.holy-wars2.de"><img src="<? echo $imagepath; ?>/title/knighthead.jpg" width="186" height="80" border="0" alt=""></a></div></td>
-</tr>
+			<tr bgcolor="#000000">
+				<td colspan="2">
+				<div align="left"><a href="http://portal.holy-wars2.de"><img
+					src="<? echo $imagepath; ?>/title/title.jpg" width="554"
+					height="80" border="0" alt=""></a></div>
+				</td>
+				<td>
+				<div align="right"><a href="http://portal.holy-wars2.de"><img
+					src="<? echo $imagepath; ?>/title/knighthead.jpg" width="186"
+					height="80" border="0" alt=""></a></div>
+				</td>
+			</tr>
 
-<tr>
-<td style="background-image: url(<? echo $imagepath; ?>/title/balken.jpg);" colspan="3"><img src="<? echo $imagepath; ?>/title/point.gif" width="2" height="10" border="0" alt=""></td>
-</tr>
+			<tr>
+				<td style="background-image: url(<? echo $imagepath; ?>/title/balken.jpg);" colspan="3"><img
+					src="<? echo $imagepath; ?>/title/point.gif" width="2" height="10"
+					border="0" alt=""></td>
+			</tr>
 
-<tr><td colspan="3">
-<table width="100%" style="margin: 0; height:30px;">
- <tr>
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" 
-<? if(strstr($PHP_SELF, 'login.php')) echo 'href="portal.php">Home'; else echo 'href="login.php">Login';?></a></td>
+			<tr>
+				<td colspan="3">
+				<table width="100%" style="margin: 0; height: 30px;">
+					<!-- Reiter -->
+					<tr>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';">
+							<? if(strstr($PHP_SELF, 'login.php')) {
+							 echo '<a style="display: block; width: 100%;" href="portal.php">Home</a>';
+							} 
+							else { 
+							 echo '<a style="display: block; width: 100%;" href="login.php">Login</a>';
+							}							 
+							 ?>					       
+					   </td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="register.php">Registrieren</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;" href="register.php">Registrieren</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="activate.php">Aktivieren</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;" href="activate.php">Aktivieren</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="http://forum.holy-wars2.de">Forum</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;"
+							href="http://forum.holy-wars2.de">Forum</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="portalchat.php">Chat</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;" href="portalchat.php">Chat</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="http://www.holy-wars2.de/wiki/index.php/Zeitung">Zeitung</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;"
+							href="http://www.holy-wars2.de/wiki/index.php/Zeitung">Zeitung</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="screenshots.php">Screenshots</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;" href="screenshots.php">Screenshots</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" target="_parent" href="library.php?standalone=1&amp;start=1">Techtree und<br>Wiki-Hilfe</a></td>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;" target="_parent"
+							href="library.php?standalone=1&amp;start=1">Techtree und<br>
+						Wiki-Hilfe</a></td>
 
-  <td width="10%" valign="middle" align="center" class="tblhead" onmouseout="this.style.backgroundColor='#F0F0AA';" onmouseover="this.style.backgroundColor='#FFFFC8';"><a style="display:block; width:100%;" href="impressum.php">Impressum /<br>Kontakt</a></td>
-</tr>
-</table>
+						<td width="10%" valign="middle" align="center" class="tblhead"
+							onmouseout="this.style.backgroundColor='#F0F0AA';"
+							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
+							style="display: block; width: 100%;" href="impressum.php">Impressum
+						/<br>
+						Kontakt</a></td>
+					</tr>
+				</table>
+				<!-- Reiter --></td>
+			</tr>
+			<tr style="height: 3px;">
+				<td colspan="3"></td>
+			</tr>
+			<tr>
+				<td colspan="3" class="tblhead" align="center"><span
+					style="font-size: 16px; font-weight: bold;">Holy-Wars 2:
+				Multiplayer-Strategie im Browser</span><br>
 
-</td></tr>
-<tr style="height:3px;"><td colspan="3"></td></tr>
-<tr><td colspan="3" class="tblhead" align="center">
+				<!-- <span style="font-size:18px; font-weight:bold;">Willkommen bei <? echo isset($pagetitle) ? $pagetitle : "Holy-Wars 2"; ?></span> -->
 
-<span style="font-size: 16px; font-weight: bold;">Holy-Wars 2: Multiplayer-Strategie im Browser</span><br>
+				</td>
+			</tr>
+			<tr style="height: 5px">
+				<td colspan="3"></td>
+			</tr>
 
-<!-- <span style="font-size:18px; font-weight:bold;">Willkommen bei <? echo isset($pagetitle) ? $pagetitle : "Holy-Wars 2"; ?></span> -->
-
-</td></tr>
-<tr style="height:5px"><td colspan="3"></td></tr>
-
-<?
+			<?
 if(isset($selectPlayerName)) {
 ?>
-<tr>
-  <td width="22%" valign="top"></td>
-  <td width="53%" valign="top" align="center" class="tblbody">
-<h1>Spielernamen und Startposition wählen</h1>
-<form method="post" action="choose_name.php">
-
-</form>
-  </td>
-  <td width="22%" valign="top"></td>
-</tr>
-<?
+			<tr>
+				<td width="22%" valign="top"></td>
+				<td width="53%" valign="top" align="center" class="tblbody">
+				<h1>Spielernamen und Startposition wählen</h1>
+				<form method="post" action="choose_name.php"></form>
+				</td>
+				<td width="22%" valign="top"></td>
+			</tr>
+			<?
   die("</td></tr></table></body></html>");
 }
+
 
 
 function print_news_table() {
@@ -238,11 +297,12 @@ function print_news_table() {
   
   echo "<table width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">\n";
 
+  echo "<tr class=\"tblhead\"><td height=\"25\">\n";
   if(mysql_num_rows($resN)==0) {
-    echo "<tr class=\"tblhead\" height=\"25\"><td><b>Keine Neuigkeiten</b></td></tr>\n";
+    echo "<b>Keine Neuigkeiten</b></td></tr>\n";
   }
   else {
-    echo "<tr class=\"tblhead\" height=\"25\"><td><b>Neuigkeiten</b></td></tr>\n";
+    echo "<b>Neuigkeiten</b></td></tr>\n";
     
     if(mysql_num_rows($resN)>1) {
       echo "<tr class=\"tblbody\"><td valign=\"middle\" height=\"30\">\n";

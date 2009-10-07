@@ -49,9 +49,9 @@ require_once("start_header.php");
 <tr>
 <td colspan="3" align="center">
 
-<table cellspacing="1" cellpadding="0" border="0" width="500" align="center">
+<table cellspacing="1" cellpadding="0" border="0" width="90%" align="center"  style="margin-top: 10px;">
 	<tr>
-		<td colspan="2" align="center"><b>Nutzungsbedingungen von Holy-Wars 2</b><br></td>
+		<td class="tblhead" colspan="2" align="center" style="font-size: 14px;"><b>Allgemeine Nutzungsbedingungen von Holy-Wars 2</b><br></td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 1</b></td>
@@ -60,7 +60,7 @@ require_once("start_header.php");
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 2</b></td>
-		<td class="tblbody" >Die Mitgliedschaft kann jederzeit mit Löschung des Accounts beendet werden.</td>
+		<td class="tblbody" >Die Teilnahme am Spielgeschehen kann jederzeit mit Löschung des Accounts beendet werden.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 3</b></td>
@@ -100,9 +100,13 @@ require_once("start_header.php");
                              sich das Recht vor, ohne Angabe von Gründen Accounts zu sperren oder löschen.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 9</b></td>
+		<td class="tblhead" valign="top" nowrap><b>§ 9.1</b></td>
 		<td class="tblbody" >Jedes Mitglied verpflichtet sich nur <b>einen Account</b> zu erstellen und zu nutzen.</td>
 	</tr>
+    <tr>
+        <td class="tblhead" valign="top" nowrap><b>§ 9.2</b></td>
+        <td class="tblbody" >Die Regeln &quot;<i>Sitting, Pushing, Multiaccounting und Multi-Exceptions</i>&quot; sind verpflichtend (siehe unten).</td>
+    </tr>	
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 10</b></td>
         <td class="tblbody" >Das Mitglied willigt in die Speicherung aller Daten ein, die für die Erkennung und 
@@ -137,9 +141,9 @@ require_once("start_header.php");
 	</tr>
 </table>
 
-<table cellspacing="1" cellpadding="0" border="0" width="500" align="center">
+<table cellspacing="1" cellpadding="0" border="0" width="90%" align="center" style="margin-top: 10px;">
 	<tr>
-		<td colspan="2" align="center"><b>Anmerkungen und Verhaltenskodex</b><br></td>
+		<td class="tblhead" colspan="2" align="center" style="font-size: 14px;"><b>Anmerkungen und Verhaltenskodex</b><br></td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>zu § 3</b></td>
@@ -166,12 +170,12 @@ require_once("start_header.php");
 
 </table>
 
-<table cellspacing="1" cellpadding="0" border="0" width="500" align="center">
+<table cellspacing="1" cellpadding="0" border="0" width="90%" align="center" style="margin-top: 10px;">
 	<tr>
-		<td colspan="2" align="center"><b>Sitting, Pushing, Multiaccounting und Multi-Exceptions</b><br></td>
+		<td class="tblhead" colspan="2" align="center" style="font-size: 14px;"><b>Sitting, Pushing, Multiaccounting und Multi-Exceptions</b><br></td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>zu § 9</b></td>
+		<td class="tblhead" valign="top" nowrap><b>zu § 9.1 und §9.2</b></td>
         <td class="tblbody" >Automatische Testroutinen überprüfen, ob ein Spieler mehrere Accounts betreibt.
                              In Verdachtsfällen werden die betroffenen Accounts gesperrt und nach einiger Zeit 
                              vollständig gelöscht.</td>
@@ -199,17 +203,19 @@ der Resourcen geahndet.
 </table>
 
 <? if (! isset($info)) { ?>
+<p></p>
 <form action="register2.php" method="POST">
 <input type="submit" value=" zustimmen ">
 <input type="button" onClick="window.location.href='index.php';" value=" ablehnen ">
 </form>
 <? } ?>
 
-</div>
-</center>
-
 </td>
-</tr></table>
+</tr>
+</table>
+</table>
+
+</center>
 
 </body>
 </html>

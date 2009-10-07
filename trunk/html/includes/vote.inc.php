@@ -29,23 +29,23 @@
 <tr>
 
 <td align="center">
- <a href="http://www.galaxy-news.de/?page=charts&op=vote&game_id=451" target="_blank" title="Vote@Galaxy-News">
-  <img src="http://www.galaxy-news.de/images/vote.gif" border="0">
+ <a href="http://www.galaxy-news.de/?page=charts&amp;op=vote&amp;game_id=451" target="_blank" title="Vote@Galaxy-News">
+  <img src="http://www.galaxy-news.de/images/vote.gif" border="0" alt="Galaxy-News Vote">
  </a>
 </td>
 
 <? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
 
 <td align="center">
- <a href="http://www.gamingfacts.de/charts.php?was=abstimmen2&spielstimme=349" target="_blank">
-  <img src="http://www.holy-wars2.de/gamingfacts_charts.gif" border="0" alt="[ Gamingfacts.de Vote ]">
+ <a href="http://www.gamingfacts.de/charts.php?was=abstimmen2&amp;spielstimme=349" target="_blank">
+  <img src="http://www.holy-wars2.de/gamingfacts_charts.gif" border="0" alt="Gamingfacts.de Vote">
  </a>
 </td>
 
 <? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
 
 <td align="center">
- <a href="http://www.browsergames24.de/modules.php?name=Web_Links&lid=808&l_op=ratelink" target="_blank">
+ <a href="http://www.browsergames24.de/modules.php?name=Web_Links&amp;lid=808&amp;l_op=ratelink" target="_blank">
   <img border="0" src="http://www.browsergames24.de/votebg.gif" alt="Das Infoportal rund um Browsergames">
  </a>
 </td>
@@ -61,7 +61,9 @@
 <? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
 
 <td align="center">
-<a href="http://www.browserwelten.net/?ac=vote&gameid=334" target="_blank"><img src="http://www.browserwelten.net/img/bw_votebutton.gif" border="0" alt="www.browserwelten.net"></a>
+ <a href="http://www.browserwelten.net/?ac=vote&amp;gameid=334" target="_blank">
+    <img src="http://www.browserwelten.net/img/bw_votebutton.gif" border="0" alt="www.browserwelten.net">
+ </a>
 </td>
 </tr>
 </table>

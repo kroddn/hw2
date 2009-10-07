@@ -28,27 +28,29 @@
  *  include_once("includes/update.inc.php");
  * eingebunden werden, damit Top und Bottom-Leite aktualisiert werden
  */
-function start_page() {
-?>
+function start_page() { 
+  $GLOBALS['page_started'] = TRUE;
+?><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
  <title><? echo $GLOBALS['pagetitle']; ?></title>
  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
  <meta http-equiv="imagetoolbar" content="no">
+
+ <!--[if gt IE 6]>
+  <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/ie6.css" type="text/css">
+ <![endif]-->
+
+ <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw_v06.css" type="text/css">
+ <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout_v01.css" type="text/css">
 </head>
 
-<script language="JavaScript" src="js/timer.js"></script>
-<script language="JavaScript" src="js/infopopup_v01.js"></script>
+<script language="JavaScript" src="js/timer.js" type="text/javascript" ></script>
+<script language="JavaScript" src="js/infopopup_v01.js" type="text/javascript"></script>
 
-<!--[if gt IE 6]>
-<link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/ie6.css" type="text/css">
-<![endif]-->
-
-<link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw_v06.css" type="text/css">
-<link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout_v01.css" type="text/css">
 
 <?
-  if($GLOBALS['session.inc.php']) {
+  if($GLOBALS['session.inc.php'] && isPlayerSet() ) {
     echo "<!-- UPDATE -->\n";
     include_once("includes/update.inc.php");
   }
@@ -90,21 +92,34 @@ function redirect_to($href = null) {
       $href = "login.php?redirect=1&SELF=".$PHP_SELF."&error=".$error;
     }
   }  
+  
+  // Falls bereits eine Seite gestartet wurde, einen JavaScript Redirekt machen
+  if(!isset($GLOBALS['page_started']) || !$GLOBALS['page_started']) {
+    start_page();
   ?>
- <html><body>
-    <script language="JavaScript">
-    <!-- Begin
-    parent.window.location.href='<? echo $href;?>';
- // End -->
- </script>
-Konnte Player nicht initialisieren oder Session-Fehler.<p><a href="javascript:parent.window.location.href='login.php?error=<? echo $error; ?>'">Neues Login</a>
-<p>
-<a href="http://www.holy-wars2.de/portal.php">Hier</a> gehts zum Portal.
-<? 
-  include("portal.php"); 
-  echo '</body></html>'; 
-  exit;
-}
-
+    <script language="JavaScript" type="text/javascript">
+    <!--
+      parent.window.location.href='<? echo $href;?>';
+    // -->
+    </script>
+    Konnte Player nicht initialisieren oder Session-Fehler.<br>
+    Wahrscheinlich ist <b>JavaScript</b> nicht aktiviert.
+    <p>
+    <a href="login.php?error=<? echo $error; ?>">Neues Login</a>
+    <p>
+    <a href="http://www.holy-wars2.de/portal.php">Hier</a> gehts zum Portal.
+           
+  <? 
+  }
+  else {
+    include("portal.php");
+  } 
+  
+  end_page();
+  
+  // Wichtig: verarbeitung abbrechen!
+  exit();
+} //  redirect_to
+ 
 
 ?>

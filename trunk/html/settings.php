@@ -246,9 +246,7 @@ if (isset($acc_delete_process)) {
       if($acc_delete2==1) $del=false;
 
       if($del==true) {
-        removePlayer($_SESSION['player']->getID());
-        session_destroy();
-        header("location: index.php");
+        $_SESSION['player']->Remove_old();
       }
     }
 }

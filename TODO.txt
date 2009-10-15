@@ -1,0 +1,22 @@
+- Löschfunktion
+  * Verzögertes Löschen/Löschmarkierung
+  * Eigentliches Löschen erst nach 24 Stunden
+  * Löschmarkierung durch Login wieder deaktivieren
+  * Städte werden zu "freie Städte"
+  
+  
+- "freie Städte"
+  * player NULL
+  * Bevölkerung verhält sich wie bei normalen Städten
+  * Jeder Spieler hat automatisch Krieg mit diesen Städten
+  
+- Bonuspunkte fürs Voting
+
+- Kaufen von PA für Bonuspunkte
+
+- Multihunter erweitern
+  * "Annotations" von Multihuntern zu Spielern
+  * Logging von Änderungen am Spielerstatus
+  
+  
+  

@@ -1,1 +1,3 @@
-<script language="javascript1.1" src="http://adserver.adtech.de/addyn|3.0|905|1846357|0|16|ADTECH;loc=100;misc=[TIMESTAMP];rdclick="></script>
+<!-- same as p0pup -->
+<script type="text/javascript" src="http://imagesrv.adition.com/js/adition.js"></script>
+<script type="text/javascript" src="http://ad2.adfarm1.adition.com/js?wp_id=99762"></script>

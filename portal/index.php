@@ -380,7 +380,7 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
 
     <DIV id="icons">
       <p>
-      <a href="http://validator.w3.org/check?uri=referer"><img
+      <a href="http://validator.w3.org/check?uri=www.holy-wars2.de"><img
         src="http://www.w3.org/Icons/valid-html401" border="0"
         alt="Valid HTML 4.01 Transitional" height="31" width="88"></a>
       </p>
@@ -408,7 +408,7 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     <DIV id="shortnews">
       <font color="#8FFF4F">
       <b>&quot;HW2 Revial&quot;</b> - neue Hauptrunde am 16. Oktober</font><br>
-      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?f=1&t=10915">hier im Forum</a>.      
+      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?f=1&amp;t=10915">hier im Forum</a>.      
     </DIV>
 
 

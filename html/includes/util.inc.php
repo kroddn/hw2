@@ -273,27 +273,31 @@ if(!function_exists("remove_player_armies")) {
 }
 
 
-if (!function_exists("removeCity")) {
-  function removeCity($id) {
-    $id = intval($id);
-    marketRetractionForCity($id);
-    do_mysql_query("DELETE FROM citybuilding WHERE city = ".$id);
-    do_mysql_query("DELETE FROM citybuilding_ordered WHERE city = ".$id);
-    do_mysql_query("DELETE FROM cityunit WHERE city = ".$id);
-    do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
-    do_mysql_query("DELETE FROM city WHERE id = ".$id);
+/**
+ * Stadt von der Karte entfernen
+ * @param $id  ID der Stadt
+ * @return nothing
+ */
+function removeCity($id) {
+  $id = intval($id);
+  marketRetractionForCity($id);
+  do_mysql_query("DELETE FROM citybuilding WHERE city = ".$id);
+  do_mysql_query("DELETE FROM citybuilding_ordered WHERE city = ".$id);
+  do_mysql_query("DELETE FROM cityunit WHERE city = ".$id);
+  do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
+  do_mysql_query("DELETE FROM city WHERE id = ".$id);
 
 
-    $xy=mysql_fetch_assoc(do_mysql_query("SELECT x, y FROM map WHERE id = ".$id));
-    // Nur einfügen wenn es die Startpos noch nicht gibt
-    if ($xy['x'] != NULL && $xy['y'] != NULL &&
-    mysql_numrows(do_mysql_query("SELECT x, y FROM startpositions ".
+  $xy=mysql_fetch_assoc(do_mysql_query("SELECT x, y FROM map WHERE id = ".$id));
+  // Nur einfügen wenn es die Startpos noch nicht gibt
+  if ($xy['x'] != NULL && $xy['y'] != NULL &&
+  mysql_numrows(do_mysql_query("SELECT x, y FROM startpositions ".
                                      "WHERE x = ".$xy['x']." AND y = ".$xy['y'])) == 0 ) 
-    {
-      do_mysql_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
-    }
+  {
+    do_mysql_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
   }
-}
+} // function removeCity($id)
+
 
 
 

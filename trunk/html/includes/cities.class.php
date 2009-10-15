@@ -1194,7 +1194,7 @@ class Cities {
     // check if blocked
     if ($check['isblock']) {
       $diff = $check['rest'];
-      if ($diff >= 82800) {
+      if ($diff < 82800) {
         $in = "23 Stunden und ".date("i", $diff)." Minuten";
       }
       else {

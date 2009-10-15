@@ -274,31 +274,66 @@ if(!function_exists("remove_player_armies")) {
 
 
 /**
- * Stadt von der Karte entfernen
+ * Stadt von der Karte entfernen.
+ * 
  * @param $id  ID der Stadt
  * @return nothing
  */
 function removeCity($id) {
-  $id = intval($id);
-  marketRetractionForCity($id);
-  do_mysql_query("DELETE FROM citybuilding WHERE city = ".$id);
-  do_mysql_query("DELETE FROM citybuilding_ordered WHERE city = ".$id);
-  do_mysql_query("DELETE FROM cityunit WHERE city = ".$id);
-  do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
-  do_mysql_query("DELETE FROM city WHERE id = ".$id);
-
-
-  $xy=mysql_fetch_assoc(do_mysql_query("SELECT x, y FROM map WHERE id = ".$id));
-  // Nur einfügen wenn es die Startpos noch nicht gibt
-  if ($xy['x'] != NULL && $xy['y'] != NULL &&
-  mysql_numrows(do_mysql_query("SELECT x, y FROM startpositions ".
-                                     "WHERE x = ".$xy['x']." AND y = ".$xy['y'])) == 0 ) 
-  {
-    do_mysql_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
+  if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) {
+    show_log_fatal_error("Aufruf von removeCity bei gesetzem ABANDONE_CITIES nicht erlaubt. Bitte einem Admin / im Forum melden.");
   }
+  else {
+    $id = intval($id);
+    marketRetractionForCity($id);
+    do_mysql_query("DELETE FROM citybuilding WHERE city = ".$id);
+    do_mysql_query("DELETE FROM citybuilding_ordered WHERE city = ".$id);
+    do_mysql_query("DELETE FROM cityunit WHERE city = ".$id);
+    do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
+    do_mysql_query("DELETE FROM city WHERE id = ".$id);
+
+
+    $xy=mysql_fetch_assoc(do_mysql_query("SELECT x, y FROM map WHERE id = ".$id));
+    // Nur einfügen wenn es die Startpos noch nicht gibt
+    if ($xy['x'] != NULL && $xy['y'] != NULL &&
+    mysql_numrows(do_mysql_query("SELECT x, y FROM startpositions ".
+                                     "WHERE x = ".$xy['x']." AND y = ".$xy['y'])) == 0 ) 
+    {
+      do_mysql_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
+    }
+  }
+
 } // function removeCity($id)
 
 
+
+
+/**
+ * Eine Stadt "herrenlos" machen.
+ * 
+ * @param $id
+ * @return unknown_type
+ */
+function abandoneCity($id) {
+  $id = intval($id);
+  marketRetractionForCity($id);
+  
+  
+  $city_res = do_mysql_query("SELECT owner FROM city WHERE id = ".$id);
+  if( $city = mysql_fetch_assoc($city_res) ) {
+    // Alle Truppen löschen, die nicht dem Spieler gehört haben
+    do_mysql_query("DELETE FROM cityunit WHERE owner != ".$city['owner']." AND city = ".$id);
+    do_mysql_query("UPDATE cityunit SET owner = NULL WHERE city = ".$id);
+    do_mysql_query("UPDATE city SET owner = NULL WHERE id = ".$id);
+
+    // In Auftrag gegebene Einheiten löschen.
+    do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
+  }
+  else {
+    // Dies darf eigentlich nicht passieren
+    log_fatal_error("Datensatz für Stadt $id existiert nicht.");
+  }
+}
 
 
 function gen_tournament_sql_code($current_day) {

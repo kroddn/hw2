@@ -244,9 +244,7 @@ if(!function_exists("checkSettle")) {
  *
  * @return null bei Erfolg
  */
-function RemovePlayer_old() {
-  $id = $this->getID();
-
+function RemovePlayer_old($id) {  
   $delplayer_res = do_mysql_query("SELECT * FROM player WHERE id=".$id);
   if ($delplayer = mysql_fetch_assoc($delplayer_res)) {
     //Spieler löschen

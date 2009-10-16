@@ -36,7 +36,7 @@ if (stristr($run_path, "admintools")) {
 }
 
 // Datenbankconnect
-include("includes/db.inc.php");
+include_once("includes/db.inc.php");
 
 $hit = $miss = $corrected = $sum = 0;
 $map = do_mysql_query("SELECT id,type,pic FROM map ORDER BY pic");

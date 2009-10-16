@@ -238,38 +238,174 @@ if(!function_exists("checkSettle")) {
   }
 }
 
+/**
+ * Lösche den Spieler.
+ * Alte Version vor dem 16.10.2009.
+ *
+ * @return null bei Erfolg
+ */
+function RemovePlayer_old() {
+  $id = $this->getID();
 
-if(!function_exists("do_log")) {
-  function do_log($message) {    
-    //in Pension geschickt von co2, bei Gelegenheit ganz entfernen
-    /*
-     global $player;
-     $fp = fopen("./../../hw_log/".$player->name.".".$player->id.".".date("Y-m-d").".log", "a");
-     $writing = fwrite($fp, "[".getenv('REMOTE_ADDR')." - ".date("Y-F-l - H:i:s")."] ".$message."\n");
-     fclose($fp);
-     if($writing)
-     {
-     return 1;
-     }
-     else return 0;
-     */
-  }
+  $delplayer_res = do_mysql_query("SELECT * FROM player WHERE id=".$id);
+  if ($delplayer = mysql_fetch_assoc($delplayer_res)) {
+    //Spieler löschen
+    remove_player_armies($id);
+    do_mysql_query("DELETE FROM market WHERE player = ".$id);
+    //Nachrichten löschen
+    do_mysql_query("DELETE FROM message WHERE recipient  = ".$id);
+    //Forschende Forschungen löschen
+    do_mysql_query("DELETE FROM researching WHERE player = ".$id);
+    // Namensänderungen löschen
+    do_mysql_query("DELETE FROM namechange WHERE id = ".$id);
+    //Forschungen löschen
+    do_mysql_query("DELETE FROM playerresearch WHERE player = ".$id);
+    //Beziehungen löschen
+    do_mysql_query("DELETE FROM relation WHERE id1=".$id." OR id2=".$id);
+    do_mysql_query("DELETE FROM req_relation WHERE id1=".$id." OR id2=".$id);
+    // Turnierteilnahmen löschen
+    do_mysql_query("DELETE FROM tournament_players WHERE player = ".$id.
+             " AND tid IN (SELECT tid FROM tournament WHERE calctime IS NULL)");
+
+    //Städte löschen
+    $cty_res = do_mysql_query("SELECT id FROM city WHERE owner=".$id);
+    while ($cty = mysql_fetch_assoc($cty_res)) {
+      removeCity($cty['id']);
+    }
+
+    if ($delplayer['recruiter']) {
+      $recruiter = $delplayer['recruiter'];
+    }
+    else {
+      $recruiter = "NULL";
+    }
+    // Spieler im internen Forum nicht l&ouml;schen, sondern Eintr&auml;ge auf Spieler "Gel&ouml;schter Spieler" umbiegen
+    $check_deleted_forums_user_res = do_mysql_query("SELECT * FROM `clanf_users` WHERE user_id = -2");
+    if ($check_deleted_forums_user=mysql_fetch_assoc($check_deleted_forums_user_res)) {
+      do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+      do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+      do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+    }
+    else {
+      do_mysql_query("INSERT INTO `clanf_users` (`user_id`, `user_active`, `username`, `user_password`, `user_session_time`, `user_session_page`, `user_lastvisit`, `user_regdate`, `user_level`, `user_posts`, `user_timezone`, `user_style`, `user_lang`, `user_dateformat`, `user_new_privmsg`, `user_unread_privmsg`, `user_last_privmsg`, `user_emailtime`, `user_viewemail`, `user_attachsig`, `user_allowhtml`, `user_allowbbcode`, `user_allowsmile`, `user_allowavatar`, `user_allow_pm`, `user_allow_viewonline`, `user_notify`, `user_notify_pm`, `user_popup_pm`, `user_rank`, `user_avatar`, `user_avatar_type`, `user_email`, `user_icq`, `user_website`, `user_from`, `user_sig`, `user_sig_bbcode_uid`, `user_aim`, `user_yim`, `user_msnm`, `user_occ`, `user_interests`, `user_actkey`, `user_newpasswd`) VALUES ('-2', '1', 'Gelöschter Spieler', MD5('bla'), '0', '0', '0', '0', '0', '0', '1.00', NULL, NULL, 'd M Y H:i', '0', '0', '0', NULL, NULL, NULL, '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
+      do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+      do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+      do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+    }
+
+    // Jetzt den Spieler löschen
+    do_mysql_query("DELETE FROM player WHERE id = ".$id);
+
+    $playername  = $delplayer['name'] ? "'".$delplayer['name']."'" : "NULL";
+    $reli_string = $delplayer['religion'] ? $delplayer['religion'] : "NULL";
+
+    do_mysql_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysql_escape_string($delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$delplayer['clan']."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysql_escape_string($delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
+
+    // Bonuspunkte wieder abziehen
+    if ($delplayer['recruiter']) {
+      $bonus = RECRUIT_BONUSPOINTS;
+      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints - ".$bonus." WHERE id = ".$recruiter);
+    }
+  } // if
+} // Remove_old()
+
+
+
+/**
+ * Spieler löschen und seine Städte herrenlos machen.
+ *
+ * @return unknown_type
+ */
+function RemovePlayerAbandoneCities($id) {
+  $delplayer_res = do_mysql_query("SELECT * FROM player WHERE id=".$id);
+  if ($delplayer = mysql_fetch_assoc($delplayer_res)) {
+    //Spieler löschen
+    remove_player_armies($id);
+
+    do_mysql_query("DELETE FROM market WHERE player = ".$id);
+    //Nachrichten löschen
+    do_mysql_query("DELETE FROM message WHERE recipient  = ".$id);
+    //Forschende Forschungen löschen
+    do_mysql_query("DELETE FROM researching WHERE player = ".$id);
+    // Namensänderungen löschen
+    do_mysql_query("DELETE FROM namechange WHERE id = ".$id);
+    //Forschungen löschen
+    do_mysql_query("DELETE FROM playerresearch WHERE player = ".$id);
+    //Beziehungen löschen
+    do_mysql_query("DELETE FROM relation WHERE id1=".$id." OR id2=".$id);
+    do_mysql_query("DELETE FROM req_relation WHERE id1=".$id." OR id2=".$id);
+    // Turnierteilnahmen löschen
+    do_mysql_query("DELETE FROM tournament_players WHERE player = ".$id.
+             " AND tid IN (SELECT tid FROM tournament WHERE calctime IS NULL)");
+
+    //Städte löschen
+    $cty_res = do_mysql_query("SELECT id FROM city WHERE owner=".$id);
+    while ($cty = mysql_fetch_assoc($cty_res)) {
+      abandoneCity($cty['id']);
+    }
+
+    if ($delplayer['recruiter']) {
+      $recruiter = $delplayer['recruiter'];
+    }
+    else {
+      $recruiter = "NULL";
+    }
+
+    anonymizePlayerClanforumPostings($id);
+
+    // Jetzt den Spieler löschen
+    do_mysql_query("DELETE FROM player WHERE id = ".$id);
+
+    $playername  = $delplayer['name'] ? "'".$delplayer['name']."'" : "NULL";
+    $reli_string = $delplayer['religion'] ? $delplayer['religion'] : "NULL";
+
+    do_mysql_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysql_escape_string($delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$delplayer['clan']."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysql_escape_string($delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
+
+    // Bonuspunkte wieder abziehen
+    if ($delplayer['recruiter']) {
+      $bonus = RECRUIT_BONUSPOINTS;
+      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints - ".$bonus." WHERE id = ".$recruiter);
+    }
+  } // if
 }
 
 
-if(!function_exists("remove_player_armies")) {
-  function remove_player_armies($id) {
-    $res1=do_mysql_query("SELECT aid FROM army WHERE owner = ".intval($id) );
-    if(mysql_num_rows($res1)) {
-      while($data1=mysql_fetch_assoc($res1)) {
-        do_mysql_query("DELETE FROM armyunit WHERE aid=".$data1['aid']);
-        do_mysql_query("DELETE FROM army WHERE aid=".$data1['aid']);
-      }
-    }
 
-    //Stadttruppen löschen
-    do_mysql_query("DELETE FROM cityunit WHERE owner = ".intval($id) );
+/**
+ * Die Beiträge des Spielers im Clanforum anonymisieren. 
+ * 
+ * @param $id  Spieler ID
+ * @return unknown_type
+ */
+function anonymizePlayerClanforumPostings($id) {
+  // Spieler im internen Forum nicht l&ouml;schen, sondern Eintr&auml;ge auf Spieler "Gel&ouml;schter Spieler" umbiegen
+  $check_deleted_forums_user_res = do_mysql_query("SELECT * FROM `clanf_users` WHERE user_id = -2");
+  if ($check_deleted_forums_user=mysql_fetch_assoc($check_deleted_forums_user_res)) {
+    do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+    do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+    do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
   }
+  else {
+    // Falls es den "Gelöschte Postings" User noch nicht gibt, lege ihn an
+    do_mysql_query("INSERT INTO `clanf_users` (`user_id`, `user_active`, `username`, `user_password`, `user_session_time`, `user_session_page`, `user_lastvisit`, `user_regdate`, `user_level`, `user_posts`, `user_timezone`, `user_style`, `user_lang`, `user_dateformat`, `user_new_privmsg`, `user_unread_privmsg`, `user_last_privmsg`, `user_emailtime`, `user_viewemail`, `user_attachsig`, `user_allowhtml`, `user_allowbbcode`, `user_allowsmile`, `user_allowavatar`, `user_allow_pm`, `user_allow_viewonline`, `user_notify`, `user_notify_pm`, `user_popup_pm`, `user_rank`, `user_avatar`, `user_avatar_type`, `user_email`, `user_icq`, `user_website`, `user_from`, `user_sig`, `user_sig_bbcode_uid`, `user_aim`, `user_yim`, `user_msnm`, `user_occ`, `user_interests`, `user_actkey`, `user_newpasswd`) VALUES ('-2', '1', 'Gelöschter Spieler', MD5('bla'), '0', '0', '0', '0', '0', '0', '1.00', NULL, NULL, 'd M Y H:i', '0', '0', '0', NULL, NULL, NULL, '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
+    do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+    do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+    do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+  }
+}
+
+        
+function remove_player_armies($id) {
+  $res1=do_mysql_query("SELECT aid FROM army WHERE owner = ".intval($id) );
+  if(mysql_num_rows($res1)) {
+    while($data1=mysql_fetch_assoc($res1)) {
+      do_mysql_query("DELETE FROM armyunit WHERE aid=".$data1['aid']);
+      do_mysql_query("DELETE FROM army WHERE aid=".$data1['aid']);
+    }
+  }
+
+  //Stadttruppen löschen
+  do_mysql_query("DELETE FROM cityunit WHERE owner = ".intval($id) );
 }
 
 
@@ -280,10 +416,6 @@ if(!function_exists("remove_player_armies")) {
  * @return nothing
  */
 function removeCity($id) {
-  if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) {
-    show_log_fatal_error("Aufruf von removeCity bei gesetzem ABANDONE_CITIES nicht erlaubt. Bitte einem Admin / im Forum melden.");
-  }
-  else {
     $id = intval($id);
     marketRetractionForCity($id);
     do_mysql_query("DELETE FROM citybuilding WHERE city = ".$id);
@@ -301,8 +433,6 @@ function removeCity($id) {
     {
       do_mysql_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
     }
-  }
-
 } // function removeCity($id)
 
 
@@ -323,8 +453,10 @@ function abandoneCity($id) {
   if( $city = mysql_fetch_assoc($city_res) ) {
     // Alle Truppen löschen, die nicht dem Spieler gehört haben
     do_mysql_query("DELETE FROM cityunit WHERE owner != ".$city['owner']." AND city = ".$id);
+    
+    // Alle restlichen Truppen herrenlos machen
     do_mysql_query("UPDATE cityunit SET owner = NULL WHERE city = ".$id);
-    do_mysql_query("UPDATE city SET owner = NULL WHERE id = ".$id);
+    do_mysql_query("UPDATE city SET owner = NULL, capital = 0, populationlimit = NULL  WHERE id = ".$id);
 
     // In Auftrag gegebene Einheiten löschen.
     do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);

@@ -95,6 +95,7 @@ function tipThis(a,b) {
 	document.getElementById("i"+b).innerHTML = a;
 	document.getElementById("j"+b).innerHTML = a;
 }
+
 function hideCity(id) {
 	if(document.getElementById("i"+id).style.display == "none") {
 		document.getElementById("i"+id).style.display = "inline";

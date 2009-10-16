@@ -76,7 +76,8 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
         session_unregister("sec_key");
         
         if ( $nopw || md5($loginpassword) == $db_login['password']) {
-          if ($db_login['status'] == NULL || $db_login['status'] == 3) {
+          // Einloggen für aktivierte, nicht aktivierte und verdächtige Accounts zulassen
+          if ($db_login['status'] == NULL || $db_login['status'] == 3 || $db_login['status'] == 1) {
             if ($db_login['holiday'] < time()) 
             {
               if(check_round_ended() && $db_login['hwstatus'] != 63)
@@ -85,7 +86,10 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
               if(!check_round_startet() && $db_login['hwstatus'] != 63)
                 return "Die Runde hat noch nicht begonnen!";
                 
-              if (!($db_login['password']==NULL)) {
+              // Löschmarkierung zurücksetzen
+              do_mysql_query("UPDATE player SET markdelete=0 where id=".$db_login['id']);
+              
+              if ( $db_login['password'] != NULL && $db_login['status'] != 1) {
                 do_mysql_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
               }
               
@@ -170,9 +174,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 $_SESSION['ad']->magic = md5(rand());
                 
                 check_sms_settings();
-
-
-                do_log("User logged in...");
+                
                 logBrowser();
 
                 if($_SESSION['player']->isAdmin()) {
@@ -192,8 +194,6 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
           elseif ($db_login['status'] == 1) {$loginerror = "Der Account ist noch nicht aktiviert.";}
           // Gesperrt
           elseif ($db_login['status'] == 2) {$loginerror = $db_login['statusdescription'];}
-          // Verdacht
-          elseif ($db_login['status'] == 3) {unset($loginerror);}
           else {$loginerror = "Unbekannter Status";}
         }
         else {$loginerror = "Das eingegebene Passwort ist falsch!";

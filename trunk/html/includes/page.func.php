@@ -41,7 +41,7 @@ function start_page() {
   <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/ie6.css" type="text/css">
  <![endif]-->
 
- <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw_v06.css" type="text/css">
+ <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw_v07.css" type="text/css">
  <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout_v01.css" type="text/css">
 </head>
 
@@ -87,6 +87,9 @@ function redirect_to($href = null) {
     // Falls das redirekt vom index.php kommt dann portal zeigen. Ansonsten login.
     if (strstr($PHP_SELF, "index.php")) {
       $href = "portal.php?SELF=".$PHP_SELF;
+      if(isset($_REQUEST['message'])) {
+        $href .= "&message=".urlencode($_REQUEST['message']);
+      }
     }
     else {
       $href = "login.php?redirect=1&SELF=".$PHP_SELF."&error=".$error;

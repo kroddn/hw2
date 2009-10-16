@@ -51,6 +51,10 @@ if(!function_exists("show_fatal_error")) {
     echo '<b class="error"><i>Ihr wacht auf, reibt euch den Kopf und versucht euch zu erinnern, was passiert ist. Da hört ihr eine Stimme in eurem Kopf: </i>"Ihr wurdet soeben Zeugen eines aussergew&ouml;hnlichen Ereignisses, wendet euch mit folgenem Code an die Admins: <p>\''.$string.'\'."<p><i>Ihr reibt euch die Augen und '.$goback;
     echo "</body>";
     echo "</html>";
+    if(defined("DEBUG_SERVICE")) {
+        debug_print_backtrace();
+    }
+    
     die();
   }
  }
@@ -65,7 +69,7 @@ if (!function_exists("show_log_fatal_error")) {
     do_mysql_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysql_escape_string($logstr)."',UNIX_TIMESTAMP(),'".mysql_escape_string($HTTP_SERVER_VARS['HTTP_REFERER'])."')");
     $errid = mysql_insert_id();
     $showstr .= ":".$errid;
-    show_fatal_error($showstr);
+    show_fatal_error($showstr);    
   }
  }
 

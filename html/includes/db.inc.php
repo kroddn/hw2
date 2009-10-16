@@ -115,7 +115,14 @@ function do_mysql_query($string, $conn=null, $abort = true) {
   } 
   
   if (! ($res = mysql_query($string, $conn)) ) {
-    $sql = "INSERT INTO log_mysqlerr(qry,err,time,scriptname,referer, player, post_str, get_str) VALUES ('".mysql_escape_string($string)."',\n'".mysql_escape_string(mysql_error())."',\n".time().",\n'".$scriptname."',\n'".mysql_escape_string($HTTP_SERVER_VARS['HTTP_REFERER'])."',\n $pid,\n $post,\n $get)";
+    ob_start();
+    debug_print_backtrace();
+    // jetzt wird der content ins log geschrieben.
+    $trace = ob_get_contents();
+    ob_end_clean();
+    
+    $scripttrace = mysql_escape_string($scriptname."\n". $trace);
+    $sql = "INSERT INTO log_mysqlerr(qry,err,time,scriptname,referer, player, post_str, get_str) VALUES ('".mysql_escape_string($string)."',\n'".mysql_escape_string(mysql_error())."',\n".time().",\n'".$scripttrace."',\n'".mysql_escape_string($HTTP_SERVER_VARS['HTTP_REFERER'])."',\n $pid,\n $post,\n $get)";
 
     // Diese Query wird nun auf alle Fälle auf das Session-Objekt "con" ausgeführt,
     // weil die Fehlermeldungen auf alle Fälle im Gameserver-Log landen sollen.

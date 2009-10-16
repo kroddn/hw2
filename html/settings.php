@@ -250,7 +250,7 @@ if (isset($acc_delete_process)) {
           $_SESSION['player']->MarkRemove();
         }
         else {
-          RemovePlayer_old();
+          RemovePlayer_old( $_SESSION['player']->getID() );
           
           session_destroy();
           $message = "Ihr Account wurde gelöscht.";

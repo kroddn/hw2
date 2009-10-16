@@ -106,7 +106,7 @@ function reset_players($delete = false) {
   $res = do_mysql_query("SELECT id,login FROM player WHERE status = 2");
   while($p = mysql_fetch_assoc($res)) {
     echo "Lösche Spieler '".$p['login']."' <br>\n";
-    removePlayer($p['id']);
+    RemovePlayer_old($p['id']);
   }
 
   return null;

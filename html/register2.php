@@ -123,7 +123,7 @@ if ($register) {
           $result = insert_new_player($p);
 
           if($result == null) {
-            header("Location:register3.php");
+            header("Location:register3.php?name=".urlencode($name) );
           }
           else {
             $registration = false;

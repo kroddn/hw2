@@ -95,18 +95,29 @@ function getClanRel($id1,$id2) {
     return 1;
 }
 
-//Funktion die in service.inc.php benützt wird um herauszufinden ob gekämpft wird!
-//Sofern der Spieler mit dem anderen Spieler nicht verbündet ist, aber die Orden verbündet sind, wird neutral zurückgegeben.
-//Return Wert:
-//0 == Feind
-//1 == Neutral
-//2 == Verbündet
+/**
+ * 
+ * Funktion die in service.inc.php benützt wird um herauszufinden ob gekämpft wird!
+ * Sofern der Spieler mit dem anderen Spieler nicht verbündet ist, aber die Orden verbündet sind, wird neutral zurückgegeben.
+ * Return Wert:
+ * 0 == Feind
+ * 1 == Neutral
+ * 2 == Verbündet
+ * 
+ * Bei herrenlosen Städten wird hier immer 0 zurück gegeben
+ */
 function getWarRel($id1, $id2) {  
-  if (!$id1)
+  if (!$id1) {
     log_fatal_error("getWarRel() id1 unset");
-  if (!$id2)
+  }
+  
+  if($id2 === null) return 0;
+  if (!$id2) {
     log_fatal_error("getWarRel() id2 unset");
+  }
 
+  
+    
   $id1 = intval($id1);
   $id2 = intval($id2);
     

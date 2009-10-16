@@ -152,7 +152,7 @@ if (!is_premium_noads()) {
   }
   // FirstAffait nur zwischen 23 und 5 Uhr!
   else if ( $timemod < 1000 && (date("G") >= 23 || date("G") <= 5) ) {
-    include("includes/firstaffair_140x600.html");
+    include("ads/firstaffair_140x600.php");
   }
   else if ( $timemod < 1600) {
     include("ads/sponsorads-skyscraper.php");
@@ -164,10 +164,10 @@ if (!is_premium_noads()) {
     include("ads/ebay_160x600.php");    
   }
   else if ($timemod < 3100) {
-    include("includes/mobile-skyscraper.html");
+    include("ads/mobile-skyscraper.php");
   }
   else if ($timemod < 3400) {
-    include("includes/ing_diba_120x600.html");
+    include("ads/ing_diba_120x600.php");
   }
   else {
       //include("includes/easyad_skyscraper.html");
@@ -223,19 +223,23 @@ function top_town () {
 
   $i=0;
   while ($data1 = mysql_fetch_assoc($res1)) {
-    $res2 = do_mysql_query("SELECT player.name, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE player.id=".$data1['owner']);
-    if ($data2 = mysql_fetch_assoc($res2)) {
-      $i++;
-      echo "<tr class=\"tblbody\">";
-      echo "<td nowrap>".$i.".</td>";
-      echo '<td class="padding-top: 0; padding-bottom: 0px;">'.getReliImage($data1['religion'])."</td>";
-      echo "<td nowrap>".get_city_htmllink($data1, false)."</td>";
-      echo "<td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</td>";
-      echo "<td nowrap>".get_loyality_string($data1['loyality'])."</td>";
-      echo "<td nowrap>".getReliImage($data2['religion'])." ".get_info_link($data2['name'], 'player', 1)."</td>";
-      //echo "<td nowrap>".get_info_link($data2['clan'],'clan')."</td>";
+    if($data1['owner']) {
+      $res2 = do_mysql_query("SELECT player.name, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE player.id=".$data1['owner']);
+      $data2 = mysql_fetch_assoc($res2);
     }
-  }
+    else {
+      $data2 = null;
+    }
+
+    $i++;
+    echo "<tr class=\"tblbody\">";
+    echo "<td nowrap>".$i.".</td>";
+    echo '<td class="padding-top: 0; padding-bottom: 0px;">'.getReliImage($data1['religion'])."</td>";
+    echo "<td nowrap>".get_city_htmllink($data1, false)."</td>";
+    echo "<td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</td>";
+    echo "<td nowrap>".get_loyality_string($data1['loyality'])."</td>";
+    echo "<td nowrap>".($data2 ? (getReliImage($data2['religion'])." ".get_info_link($data2['name'], 'player', 1) ) : "Herrenlos")."</td>";
+  }//while
 }  // function top_town ()
 
 

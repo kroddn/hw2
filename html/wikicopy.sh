@@ -5,7 +5,7 @@ if [ ! -f $q ]; then
 fi
 
 while [ $# -gt 0 ]; do
-    scp $1 kroddn@www4:/home/hw2_oldgame1/html/$1
+    scp $1 kroddn@www4:/home/mediawiki-1.11.0/$1
     shift
 done
 

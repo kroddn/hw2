@@ -23,8 +23,10 @@
  **************************************************************************/
 
 require_once("start_header.php");
-
 ?>
+
+
+
 
 <tr valign="top" style="padding: 0px; margin: 0px;">
 	<td width="24%" valign="top" style="padding: 0px; margin: 0px;"><?php
@@ -59,7 +61,17 @@ zitat_table();
 			<td>
 			<table cellspacing="0" cellpadding="0" width="100%">
 				<tr>
-					<td><font style="font-family: Tahoma; font-size: 11px;"><b><i>Vorbei
+					<td>
+<?php 
+if($_REQUEST['message']) {
+    echo "<center><div style=\"width: 90%; border: 2px solid black; padding: 10px;\">";
+    echo "<h1 style=\"color: #FF2020;\">Nachricht an Sie</h1>";
+    echo $_REQUEST['message'];
+    echo "</div></center>";
+}
+else {
+?>					
+					<font style="font-family: Tahoma; font-size: 11px;"><b><i>Vorbei
 					geht Ihr an den Bogen- und Armbrustschützen, die Euren
 					heimkehrenden Reitern den Rückzug decken. Doch kein Gegner wagt
 					sich in die Reichweite der Pfeile. Noch nicht. Weniger als die
@@ -76,12 +88,16 @@ zitat_table();
 					hoffnungslos. Endlos erstreckte sich das Heer der Ungläubigen. Dann
 					unvermittelt, setzen die Trommeln ein. Ihr kniet nieder und sprecht
 					ein Gebet. Überall auf der Mauer tun es die Männer Euch gleich,
-					knien nieder und beten. Und dann beginnt es....</i></b></font></td>
+					knien nieder und beten. Und dann beginnt es....</i></b></font>
+<?php } ?>
+					</td>
 					<td width="2"></td>
-					<td width="88" valign="top" align="right"><?
-					define("VOTE_VERTICAL", 1);
-					include ("includes/vote.inc.php");
-					?></td>
+					<td width="88" valign="top" align="right">
+                    <?php
+					   define("VOTE_VERTICAL", 1);
+					   include ("includes/vote.inc.php");
+					?>
+					</td>
 				</tr>
 			</table>
 			<p><a href="register.php" title="Jetzt kostenlos registrieren"><img

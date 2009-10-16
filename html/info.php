@@ -101,7 +101,8 @@ if (isset($name) && (!isset($id))) {
           print_playerinfo($id);
           $count++;
         }
-        break;
+        
+        break; // player
       case "clan" :
         $name = mysql_escape_string($name);
         $res = do_mysql_query("SELECT id FROM clan WHERE name like '%".$name."%' LIMIT 10");
@@ -402,8 +403,13 @@ function print_towninfo ($id) {
     echo '<table><tr class="tblhead"><td colspan="2">Stadtinfo</td></tr>';
     echo "<tr class='tblbody'><td>Name</td><td>".$data1['cityname']."</tr>\n";
     echo "<tr class='tblbody'><td>Konfession</td><td>".($data1['creligion'] == 1 ? "Christlich" : "Islamisch")."</tr>\n";
-    echo "<tr class='tblbody'><td>Besitzer</td><td><a href='".$PHP_SELF."?show=player&name=".urlencode($data1['playername']).(isset($popup) ? "&popup=".$popup : "")."'>".$data1['playername']."</a></tr>";
-    echo "<tr class='tblbody'><td>Orden</td><td>".$data1['clan']."</tr>\n";
+    if($data1['playername']) {
+      echo "<tr class='tblbody'><td>Besitzer</td><td><a href='".$PHP_SELF."?show=player&name=".urlencode($data1['playername']).(isset($popup) ? "&popup=".$popup : "")."'>".$data1['playername']."</a></tr>";
+      echo "<tr class='tblbody'><td>Orden</td><td>".$data1['clan']."</tr>\n";      
+    }
+    else {
+      echo "<tr class='tblbody'><td>&nbsp;</td><td><b>Herrenlose</b> Stadt</td></tr>";
+    }
 
     // Die Bevölkerung nicht genau anzeigen
     echo "<tr class='tblbody'><td>Stadtgr&ouml;ße</td><td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</tr>\n";    

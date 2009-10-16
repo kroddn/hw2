@@ -246,7 +246,16 @@ if (isset($acc_delete_process)) {
       if($acc_delete2==1) $del=false;
 
       if($del==true) {
-        $_SESSION['player']->Remove_old();
+        if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) {
+          $_SESSION['player']->MarkRemove();
+        }
+        else {
+          RemovePlayer_old();
+          
+          session_destroy();
+          $message = "Ihr Account wurde gelöscht.";
+          header("location: index.php?message=".urlencode($message) );
+        }
       }
     }
 }
@@ -1127,25 +1136,43 @@ function show_account() {
 
 
   <tr height="10"><td></td></tr><tr class="tblhead_22">
+  <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) { ?>
+    <td colspan="2"><h2><a name="acc_accdel">Account zum Löschen vormerken</a></h2></td>
+  <?php } else { ?>
     <td colspan="2"><h2><a name="acc_accdel">Account löschen</a></h2></td>
+  <?php }?>
   </tr>
   <tr class="tbldanger">
     <td colspan="2" align="center">
       <table border="0" cellpadding="0" cellspacing="0">
-	<tr>
+	  <tr>
 	  <td><b>#1</b>&nbsp;<select name="acc_delete0"><option value="0">JA</option><option value="1" selected>NEIN</option></select></td>
 	  <td><b>#2</b>&nbsp;<select name="acc_delete1"><option value="0">JA</option><option value="1" selected>NEIN</option></select></td>
 	  <td><b>#3</b>&nbsp;<select name="acc_delete2"><option value="0">JA</option><option value="1" selected>NEIN</option></select></td>
-        </tr>
+      </tr>
 	<tr><td colspan="3">&nbsp;</td></tr>
 	<tr>
-	  <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT LÖSCHEN"></td>
+  <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) { ?>
+	  <td colspan="3" align="center">
+	       <input type="submit" name="acc_delete_process" value="ACCOUNT ZUM LÖSCHEN VORMERKEN">
+	  </td>
+  <?php } else { ?>
+      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT LÖSCHEN"></td>
+  <?php }?>
 	</tr>
       </table>
     </td>
   </tr>
   <tr class="tbldanger">
-    <td colspan="2" align="center">Achtung: Eine Accountlöschung kann nicht rückgängig gemacht werden!</td>
+    <td colspan="2" align="center" style="color: white;">
+    <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) { ?>
+       Ihr Account wird zum Löschen lediglich <b>&quot;markiert&quot;</b>. Die wirkliche Löschung
+       des Accounts erfolgt etwa 24 Stunden später. Alle Städte werden dabei als <b>Herrenlose Städte</b> freigegeben.
+       Sie können diese Vormerkung jederzeit revidieren, indem Sie sich innerhalb der 24 Stunden einloggen.
+    <?php } else { ?> 
+    Achtung: Eine Accountlöschung kann nicht rückgängig gemacht werden!
+    <?php } ?>
+    </td>    
   </tr>
   <tr height="10"><td></td></tr><tr class="tblhead_22">
     <td colspan="2"><h2><a name="acc_vacmod">Urlaubsmodus</a></h2></td>

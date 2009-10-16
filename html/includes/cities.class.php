@@ -1204,15 +1204,21 @@ class Cities {
     }
     
     // $data1 is Ein- und Ausgabevariable!!!
-    $res1 = do_mysql_query("SELECT player.nooblevel, player.holiday, map.id,city.owner,city.population as pop, map.x, map.y ".                      
+    $res1 = do_mysql_query("SELECT player.id AS pid, player.nooblevel, player.holiday, map.id,city.owner,city.population as pop, map.x, map.y ".                      
                            " FROM map LEFT JOIN city USING(id) LEFT JOIN player ON city.owner=player.id ".
                            " WHERE x=".$x." AND y=".$y);
     
-    if (!($data1 = mysql_fetch_assoc($res1)) || !$data1['owner'] ) {
+
+    if (!($data1 = mysql_fetch_assoc($res1)) ) {
       return "Zielstadt ungültig";
     }
+
+    // Falls owner gesetzt ist muss es auch einen entsprechenden player geben
+    if( $data1['owner'] && !$data1['pid'] ) {
+      return "Fehler. Die Stadt hat einen ungültigen Besitzer.";
+    }  
     
-    if ($data1['owner'] < 10) {
+    if ($data1['owner'] != null && $data1['owner'] < 10) {
        return "Admin-Städte können nicht angegriffen werden.";
     }
     

@@ -6,9 +6,11 @@
   
   
 - "freie Städte"
-  * player NULL
+  * owner NULL
+  * cityunit - Spielertruppen bleiben, fremde Truppen werden gelöscht
   * Bevölkerung verhält sich wie bei normalen Städten
   * Jeder Spieler hat automatisch Krieg mit diesen Städten
+  * SPÄTER: Stadt produziert Truppen
   
 - Bonuspunkte fürs Voting
 

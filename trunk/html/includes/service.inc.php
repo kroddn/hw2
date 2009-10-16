@@ -1064,7 +1064,7 @@ function updateRes() {
   $res1 = do_mysql_query("SELECT id,name,lastres,religion,wood,iron,stone,gold,clan,points,avatar, ".
 			             " holiday>UNIX_TIMESTAMP() AS holiday".
                          " FROM player WHERE lastres >0 AND lastres+".$tick."<= UNIX_TIMESTAMP() ".
-                         "  AND activationkey IS NULL AND name IS NOT NULL");
+                         "  AND name IS NOT NULL");
   
   echo " Tick = ".$tick.", Upt = '".date("d.m.y G:i:s", $upt)."' ($upt), Datensätze: ".mysql_numrows($res1)."\n";
   

@@ -1,16 +1,16 @@
 - Löschfunktion
-  * Verzögertes Löschen/Löschmarkierung
-  * Eigentliches Löschen erst nach 24 Stunden
-  * Löschmarkierung durch Login wieder deaktivieren
-  * Städte werden zu "freie Städte"
+  * [DONE] Verzögertes Löschen/Löschmarkierung
+  * [DONE] Eigentliches Löschen erst nach 24 Stunden
+  * [DONE] Löschmarkierung durch Login wieder deaktivieren
+  * [DONE] Städte werden zu "freie Städte"
   
   
 - "freie Städte"
-  * owner NULL
-  * cityunit - Spielertruppen bleiben, fremde Truppen werden gelöscht
-  * Bevölkerung verhält sich wie bei normalen Städten
-  * Jeder Spieler hat automatisch Krieg mit diesen Städten
-  * SPÄTER: Stadt produziert Truppen
+  * [DONE] owner NULL
+  * [DONE] cityunit - Spielertruppen bleiben, fremde Truppen werden gelöscht
+  * [DONE] Bevölkerung verhält sich wie bei normalen Städten
+  * [DONE] Jeder Spieler hat automatisch Krieg mit diesen Städten
+  * Stadt produziert Truppen
   
 - Bonuspunkte fürs Voting
 
@@ -19,6 +19,4 @@
 - Multihunter erweitern
   * "Annotations" von Multihuntern zu Spielern
   * Logging von Änderungen am Spielerstatus
-  
-  
   

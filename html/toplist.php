@@ -321,6 +321,7 @@ function top_population() {
 			" player.religion, clan.name as clan ".
 			" FROM city LEFT JOIN player ON player.id = city.owner ".
 			" LEFT JOIN clan ON player.clan = clan.id ".
+            " WHERE city.owner IS NOT NULL ".
 			" GROUP BY owner ORDER BY population DESC LIMIT 100"); 
 
   // $res1 = do_mysql_query("SELECT player.id AS id, player.name AS name, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id");

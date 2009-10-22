@@ -265,7 +265,7 @@ define("TOURNAMENT_MAX_PLAYERS", 64);*/
 	 		tDebug("\nLetztes Turnier zu mehr als 75% belegt -> erstelle Turnier mit gleicher Spielerzahl ...\n");
 	 		create_tournament($maxtour_time+7200,$max_players);
 		}
-		else if((($num_players / $max_players) >= 0.5) && (($num_players / $max_players) < 0.75)) 		{
+		else if((($num_players / $max_players) >= 0.25) && (($num_players / $max_players) < 0.75)) 		{
 			tDebug("\nLetztes Turnier zu weniger als 75% belegt -> erstelle Turnier mit erniedrigter Spielerzahl ...\n");
 			if ($max_players >= TOURNAMENT_MIN_PLAYERS + 4) $max_players -= 4;
 			create_tournament($maxtour_time+7200,$max_players);

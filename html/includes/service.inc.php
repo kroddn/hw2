@@ -321,8 +321,13 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
     $res1 = do_mysql_query("SELECT name FROM unit WHERE id = '".$erg[$i]['id']."'");
     $data1 = mysql_fetch_assoc($res1);
     $message['attacker'] .= $data1['name'].": ".$erg[$i]['count']."\n";
-    $uowner = do_mysql_query("SELECT name FROM player WHERE id=".$erg[$i]['player']);
-    $uownerName = mysql_fetch_assoc($uowner);
+    if($erg[$i]['player']) {
+      $uowner = do_mysql_query("SELECT name FROM player WHERE id=".$erg[$i]['player']);
+      $uownerName = mysql_fetch_assoc($uowner);
+    }
+    else {
+      $uownerName['name'] = "herrenlosen Adligen";
+    }
     $message['defender'] .= $data1['name'].": ".$erg[$i]['count']." von ".$uownerName['name']."\n";
   }
 

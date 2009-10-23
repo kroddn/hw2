@@ -1,0 +1,97 @@
+From kroddn@holy-wars2.de Thu Oct 22 19:17:00 2009
+Received: from moutng.kundenserver.de ([212.227.126.188])
+	by www4.holy-wars2.de with esmtp (Exim 4.69)
+	(envelope-from <kroddn@holy-wars2.de>)
+	id 1N11HY-0005ga-4w
+	for mail@holy-wars2.de; Thu, 22 Oct 2009 19:17:00 +0200
+Received: from viper.psitronic (port-213-009-033-002.adsl.ncore.de [213.9.33.2])
+	by mrelayeu.kundenserver.de (node=mreu1) with ESMTP (Nemesis)
+	id 0MJ09d-1N3VBn0t8z-002PW3; Thu, 22 Oct 2009 19:16:54 +0200
+Received: from i7.psitronic ([10.0.0.52])
+	by viper.psitronic with esmtp (Exim 4.63)
+	(envelope-from <kroddn@holy-wars2.de>)
+	id 1N11HR-0000Cp-1T
+	for mail@holy-wars2.de; Thu, 22 Oct 2009 19:16:53 +0200
+Message-ID: <4AE09384.3030203@holy-wars2.de>
+Date: Thu, 22 Oct 2009 19:16:52 +0200
+From: Kroddn <kroddn@holy-wars2.de>
+User-Agent: Thunderbird 2.0.0.21 (X11/20090302)
+MIME-Version: 1.0
+To: mail@holy-wars2.de
+Subject: Re: Registrierung bei Holy-Wars 2
+References: <E1N10VW-0005ML-CZ@www4.holy-wars2.de>
+In-Reply-To: <E1N10VW-0005ML-CZ@www4.holy-wars2.de>
+X-Enigmail-Version: 0.95.7
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8bit
+X-Spam-Flag: YES
+X-Spam-Score: -1.4
+X-Spam-Level: -
+X-Spam-Report: Spam detection software, running on the system "viper.psitronic", has
+	identified this incoming email as possible spam.  The original message
+	has been attached to this so you can view it (if it isn't spam) or label
+	similar future email.  If you have any questions, see
+	the administrator of that system for details.
+	Content preview:  mail@holy-wars2.de schrieb: > Sehr geehrter Teilnehmer,
+	> ihr Account wurde erfolgreich erstellt. Willkommen bei Holy-Wars 2! >
+	> Ihre Zugansdaten: > Login: kroddn TestD > Passwort: sollte bekannt
+	sein > Aktivierungscode: q543px4577 > > Nach Ihrem ersten Login können
+	Sie einen Spielernamen wählen! > Um Ihren Account vollständig zu
+	aktivieren, klicken Sie einfach auf > "Antworten" und senden diese
+	komplette Email an uns zurück. > Wichtig ist, dass die folgende Zeile
+	bei uns ankommt: > Aktivierungscode: q543px4577 > > Vergessen Sie nicht,
+	nach dem ersten Login Ihre Ausgangsstadt umzubenennen und > weitere
+	Informationen unter dem Menüpunkt Einstellungen zu hinterlegen! > >
+	Bitte installieren Sie auch gleich den Grafik-Pack, um unseren Server zu
+	> schonen und die Spielgeschwindigkeit zu erhöhen. Download unter: >
+	http://dev.holy-wars2.de/grafikpaket/hw_grafik_v3.10.zip > > Diese eMail
+	wurde automatisch generiert. > > Viel Spaß wünscht Ihnen das Team von
+	Holy-Wars 2 [...] 
+	Content analysis details:   (-1.4 points, 5.0 required)
+	pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	-1.4 ALL_TRUSTED            Passed through trusted hosts only via SMTP
+X-Provags-ID: V01U2FsdGVkX18TZgjK2QSTVbu2ihcGViMmXjz/sWHnHSR/5+T
+ u4TdJGECipENnKNVWcCYgOKM8DKVMmvAwL/M+cEcYCzCw/EJN/
+ BeP49Fi/e6I0omSUuCfXJY2KjUYYpDI
+X-SA-Exim-Connect-IP: 212.227.126.188
+X-SA-Exim-Mail-From: kroddn@holy-wars2.de
+X-SA-Exim-Scanned: No (on www4.holy-wars2.de); SAEximRunCond expanded to false
+
+
+
+mail@holy-wars2.de schrieb:
+> Sehr geehrter Teilnehmer,
+> ihr Account wurde erfolgreich erstellt. Willkommen bei Holy-Wars 2!
+> 	
+> Ihre Zugansdaten:
+> Login: kroddn TestD
+> Passwort: sollte bekannt sein
+> Aktivierungscode: q543px4577
+> 
+> Nach Ihrem ersten Login können Sie einen Spielernamen wählen!
+> Um Ihren Account vollständig zu aktivieren, klicken Sie einfach auf
+> "Antworten" und senden diese komplette Email an uns zurück. 
+> Wichtig ist, dass die folgende Zeile bei uns ankommt:  
+> Aktivierungscode: q543px4577
+> 
+> Vergessen Sie nicht, nach dem ersten Login Ihre Ausgangsstadt umzubenennen und
+> weitere Informationen unter dem Menüpunkt Einstellungen zu hinterlegen!
+> 
+> Bitte installieren Sie auch gleich den Grafik-Pack, um unseren Server zu
+> schonen und die Spielgeschwindigkeit zu erhöhen. Download unter:
+> http://dev.holy-wars2.de/grafikpaket/hw_grafik_v3.10.zip
+> 
+> Diese eMail wurde automatisch generiert.
+> 		
+> Viel Spaß wünscht Ihnen das Team von Holy-Wars 2
+
+-- 
+***************************
+Holy-Wars 2 Administrator
+
+kroddn@holy-wars2.de
+http://www.holy-wars2.de
+***************************
+
+

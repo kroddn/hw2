@@ -43,7 +43,17 @@
 
 define("LOGFILE", "/tmp/parse_email.log");
 
-file_put_contents(LOGFILE, "SENDER: ".getenv("SENDER")."\n", FILE_APPEND);
+$sender = getenv("SENDER");
+if($sender == null || strlen($sender) < 5) {
+  echo "Ungültige Absender-Emailadresse.\r\n";
+  exit(1);  
+}
+
+logTMP("SENDER: ".$sender);
+
+// FIXME: verhindere DAO-Attacken, indem mehrere Emails vom selbern
+// Absender geblockt werden.
+
 
 // read from stdin
 $fd = fopen("php://stdin", "r");
@@ -78,10 +88,55 @@ else {
  * 
  */
 function parse_email($email) {
+  // Die gesamte Email ins Logfile schreiben
   file_put_contents(LOGFILE, $email, FILE_APPEND);
   
-  echo "NOT IMPLEMENTED YET!\r\n";
+  // Den Inhalt der Mail durchsuchen, nach Aktivierungsschlüssel
+  $matches = 0; $pos = 0;
+  $search = "Aktivierungscode: ";
+  $searchlen = strlen($search);
+  while( ($pos = strpos($email, $search, $pos)) !== FALSE ) {
+    // Untersütze Aktivierungscodes von 8-16 Zeichen Länge
+    $substring = substr($email, $pos + $searchlen, 20);
+    if(eregi("([a-z0-9]{8,16})[::white::]*", $substring, $regs)) {
+      logTMP("Aktivierungscode '".$regs[1]."' gefunden!\r\n", true);
+      
+      // Aktivierungskey gültig?
+      if(check_activation($regs[1])) {
+        exit(0);
+      }
+    }
+    else {
+      logTMP("Kein gültiger Aktivierungscode in '$substring' gefunden!");
+    }    
+    
+    $matches++;
+    $pos+=$searchlen;
+  }
+  
+  logTMP($matches." Übereinstimmungen gefunden.");
+  
+  // Beende
+  echo "Kein passender Aktivierungsschlüssel in Datenbank(en) vorhanden.\r\n";
   exit(1);
+}
+
+/**
+ * Baut eine Verdingung zur Aktivierungskey-Datenbank auf und überprüft,
+ * ob der Benutzer dort den passenden Schlüssel hinterlegt hatte.
+ * 
+ * @param $key
+ * @return unknown_type
+ */
+function check_activation($key) {
+  $sender = getenv("SENDER");
+  
+}
+
+
+function logTMP($str, $doEcho = false) {
+  if(doEcho) echo $str."\r\n"; 
+  file_put_contents(LOGFILE, "$str\n", FILE_APPEND);
 }
 
 ?>

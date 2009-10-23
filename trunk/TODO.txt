@@ -12,6 +12,12 @@ Löschfunktion
   * [DONE] Jeder Spieler hat automatisch Krieg mit diesen Städten
   * WICHTIG: Spieler im Noobschutz sollten KEINEN Krieg mit diesen Städten haben
   * Stadt produziert Truppen
+
+Aktivierung:
+  * Nicht-Aktivierte Spieler tauchen nicht in der Toplist auf - Bug oder gar Feature?
+  * Beim Login Info einblenden, wie man aktivieren kann 
+    (Email Link klicken oder Email an HW2 senden)
+  * 
   
 Bonuspunkte fürs Voting
 

@@ -61,6 +61,26 @@ if($activate) {
   }
   else {$activationerror = "Es existiert kein Account mit diesem Login!";}
 } // if($activate)
+
+if( defined("NEW_ACTIVATION") && NEW_ACTIVATION)
+{
+?>
+<tr><td colspan="3" valign="top" class="tblhead">
+<center>
+<div style="width: 500px; font-size: 12px; ">
+Um Ihren Account vollständig zu aktivieren, folgen Sie entweder den Anweisungen
+aus der Email nach der Registrierung oder loggen Sie sich wie
+gewohnt ein und folgen Sie dort den Aktivierungsanweisungen.
+<p></p>
+<a href="login.php">Zum Login</a>
+</div>
+</center>
+</td>
+</tr>
+<?php 
+}
+else 
+{
 ?>
 <form name="login" action="<? echo $PHP_SELF; ?>" method="POST">
 <tr><td colspan="3" valign="top">
@@ -99,11 +119,12 @@ bitte per Email an einen Multihunter oder besuchen Sie den IRC,<br>
 unter Angabe Ihres Logins und der Email-Adresse, unter der Sie sich angemeldet haben.
 </div>
 </center>
-
-</td></tr></table> <!-- Start-Header-Table -->
+</td></tr>
+<?php } ?>
+</table> <!-- Start-Header-Table -->
 
 <p>
-<div align="center">
+<div align="center" style="height: 120px; width: 800px; ">
 <? include("ads/openinventory_728x90.php"); ?>
 </div>
 

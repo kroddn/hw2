@@ -82,31 +82,47 @@ function insert_new_player(&$p) {
   
   $nameencode = urlencode($login);
   
-  mail($p['email'], "Registrierung bei Holy-Wars 2", 
-"Sehr geehrter Teilnehmer,\r\n
-Ihr Account wurde erfolgreich erstellt. Willkommen bei Holy-Wars 2!\r\n
+  mail($p['email'], 
+       "Registrierung bei Holy-Wars 2", 
+"Sehr geehrter Teilnehmer,
+ihr Account wurde erfolgreich erstellt. Willkommen bei Holy-Wars 2!
 	
-Ihre Zugansdaten:\r\n
-Login: $login\r\n
-Passwort: sollte bekannt sein\r\n
-Aktivierungscode: $key\r\n
+Ihre Zugansdaten:
+Login: $login
+Passwort: sollte bekannt sein
+Aktivierungscode: $key
 
-Nach Ihrem ersten Login können Sie einen Spielernamen wählen!\r\n
+Nach Ihrem ersten Login können Sie einen Spielernamen wählen!
 
-Der Account lässt sich über diesen Link oder über die Portal-Seite von Holy-Wars 2 aktivieren.\r\n
-$hw2_base_url/activate.php?activationcode=$key&loginname=$nameencode&activate=1\r\n
-		
+"
+  .( 
+  (defined("NEW_ACTIVATION") && NEW_ACTIVATION)
+  // *********************** Neue Aktivierung *******************************
+  ? "Um Ihren Account vollständig zu aktivieren, klicken Sie einfach auf
+\"Antworten\" und senden diese komplette Email an uns zurück. 
+Wichtig ist, dass die Absender-Emailadresse mit der während der Registrierung
+angegebenen Adresse übereinstimmmt und dass die folgende Zeile bei uns ankommt:  
+Aktivierungscode: $key"
+  // *********************** alte Aktivierung *******************************
+  : "Der Account lässt sich über diesen Link aktivieren.
+$hw2_base_url/activate.php?activationcode=$key&loginname=$nameencode&activate=1
+
+Falls dieser Link nicht funktioniert, können Sie auch auf der Login-Seite
+die Aktivierung aufrufen, und den Aktivierungscode eingeben."
+  
+)."
+
 Vergessen Sie nicht, nach dem ersten Login Ihre Ausgangsstadt umzubenennen und
-weitere Informationen unter dem Menüpunkt Einstellungen zu hinterlegen!\r\n
+weitere Informationen unter dem Menüpunkt Einstellungen zu hinterlegen!
 
 Bitte installieren Sie auch gleich den Grafik-Pack, um unseren Server zu
 schonen und die Spielgeschwindigkeit zu erhöhen. Download unter:
 ".(defined("URL_BASE") ? URL_BASE : "http://www.holy-wars2.de" )."/grafikpaket/hw_grafik_v".(defined("GFX_VERSION") ? GFX_VERSION : "2.03").".zip
 
-Diese eMail wurde automatisch generiert. Bitte antworten Sie nicht dieser eMail-Adresse.\r\n
+Diese eMail wurde automatisch generiert.
 		
-Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: noreply@holy-wars2.de");
-
+Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de");
+  
 
   if ($p['ref'] != null) {
     $res7=do_mysql_query("SELECT id FROM player WHERE id = ".$p['ref']);

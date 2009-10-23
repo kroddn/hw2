@@ -32,6 +32,19 @@
 ***************************************************/
 include_once("includes/session.inc.php");
 
+
+/** 
+ * WICHTIG!
+ * 
+ * Diese Datei wird von start_page aus page.func.php automatisch aufgerufen,
+ * wenn eine Session aktiv ist. Das sorgt dafür, dass die Aktualisierung der
+ * Top und Border Frames mit Resourcen und Forschungspunkten auch zum richtigen
+ * Zeitpunkt aktualisiert wird.
+ * 
+ * Diese Datei also NICHT automatisch einbinden, ausser wenn start_page aus
+ * irgendwelchen Gründen nicht verwendet wird.
+ */
+
 $res1=do_mysql_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coalesce(holiday, 0) > UNIX_TIMESTAMP() AS holidaymode, status ".
                      " FROM player WHERE id=".$_SESSION['player']->getID());
 

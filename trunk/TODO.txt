@@ -27,3 +27,8 @@ Multihunter erweitern
   * "Annotations" von Multihuntern zu Spielern
   * Logging von Änderungen am Spielerstatus
   
+Plünderungen/Brandschatzung - Abbrechen der Ausbildung
+ * Dem Verteidiger ne Nachricht übermitteln wenn Truppenausbildung angebrochen wurde
+ * Ausbildung nur dann abbrechen, wenn auch wirklich geplündert wurde
+ 
+ 

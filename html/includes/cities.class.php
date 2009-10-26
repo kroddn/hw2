@@ -1167,6 +1167,7 @@ class Cities {
     $x = intval($x);
     $y = intval($y);
     
+    
     if ($_SESSION['player']->getGold() <= 0) {
       return "Ihnen fehlen die Mittel, einen Angriff zu starten (kein Gold).";
     }
@@ -1285,10 +1286,11 @@ class Cities {
     $error = $this->checkAttackMove($x, $y, $from, $data1);
     if($error != null) return $error;
     
-
-    if (!isset ($data1['owner'])) {
+    // Stadt herrenlose
+    if (!isset($data1['owner'])) {
       $error = "data1['owner'] NULL in ".__FILE__.":".__LINE__;
-      show_log_fatal_error($error, $error);
+      //show_log_fatal_error($error, $error);
+      return "In die herrenlose Stadt könnt ihr keine Truppen verlegen!";
     }
 
     if ($data1['owner'] != $this->player) {

@@ -219,7 +219,7 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
     echo " Called attCity(".$defenders.",".$unitowner.",".$end.",".$aid.",".$tactic.") ";
 
   $res_city = do_mysql_query("SELECT owner FROM city WHERE id=".$end);
-  $data_city = mysql_fetch_assoc($res1);
+  $data_city = mysql_fetch_assoc($res_city);
   
   $res2 = do_mysql_query("SELECT unit, count FROM armyunit WHERE aid=".$aid);
   $i = 0;
@@ -246,7 +246,7 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
         $df[$i]['id'] = $units['unit'];
         $df[$i]['count'] = $units['count'];
         $df[$i]['player'] = $defowner;
-        if (DEBUG_SERVICE) echo "Einheit: ".$units['unit'].", Anzahl: ".$units['count']."\n";
+        if (DEBUG_SERVICE) echo "  Einheit: ".$units['unit'].", Anzahl: ".$units['count']." Besitzer: ".$defowner."\n";
         $i ++;
       }
     } // foreach
@@ -259,7 +259,7 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
       $df[$i]['id'] = $units['unit'];
       $df[$i]['count'] = $units['count'];
       // $df[$i]['player'] = $defowner; // Owner ist NULL
-      if (DEBUG_SERVICE) echo "Einheit: ".$units['unit'].", Anzahl: ".$units['count']."\n";
+      if (DEBUG_SERVICE) echo "  Einheit: ".$units['unit'].", Anzahl: ".$units['count']." Besitzer: HERRENLOS\n";
       $i ++;
     }
   }
@@ -338,7 +338,7 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Sieg: ".$cityName."','".$message['attacker']."',4)");
   do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
 
-  if (!isset ($defenders) || sizeof($defenders) == 0) {
+  if(!isset($defenders) || sizeof($defenders) == 0) {
     if (DEBUG_SERVICE)
       echo " Message an Besitzer<br>";
 
@@ -348,7 +348,7 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   else {
     foreach ($defenders as $def) {
       if (DEBUG_SERVICE)
-        echo " Message an Defender  n";
+        echo " Message an Defender $def";
       
       do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Niederlage: ".$cityName."','".$message['defender']."',4)");
       do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$def);

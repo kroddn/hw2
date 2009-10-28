@@ -87,18 +87,18 @@ function fight($at, $df, $defensebonus, $tactic) {
     $combat = true;
     // Kampfrunden
     while ($combat) {
-        if (sizeof($df) == 0 && sizeof($at) != 0) {
-            $combat = false;
+        // Die Fälle abdecken dass eine oder beide der Armeen besiegt wurde
+        if (sizeof($df) == 0 && sizeof($at) != 0) {            
             return $at;
         }
-        elseif (sizeof($at) == 0 && sizeof($df) != 0) {
-            $combat = false;
+        elseif (sizeof($at) == 0 && sizeof($df) != 0) {           
             return $df;
         }
-        elseif (sizeof($at) == 0 && sizeof($df) == 0) {
-            $combat = false;
+        elseif (sizeof($at) == 0 && sizeof($df) == 0) {            
             return false;
         }
+        
+        // Ansonsten hier weiter im Schleifendurchlauf        
         $atcount = 0;
         $atmain = 0;
         $atbonus1 = 0;

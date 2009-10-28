@@ -214,9 +214,21 @@ function check_settler($city_id) {
 	}
 }
 
+
+/**
+ * Führe den Stadtangriff durch
+ * 
+ * @param $defenders  Array der Stadtverteidiger. Die ID des Stadtbesitzers ist da immer
+ *                    mit drin
+ * @param $unitowner 
+ * @param $end
+ * @param $aid
+ * @param $tactic
+ * @return unknown_type
+ */
 function attCity($defenders, $unitowner, $end, $aid, $tactic) {
   if (DEBUG_SERVICE)
-    echo " Called attCity(".$defenders.",".$unitowner.",".$end.",".$aid.",".$tactic.") ";
+    echo "\n Called attCity(".$defenders.",".$unitowner.",".$end.",".$aid.",".$tactic.") ";
 
   $res_city = do_mysql_query("SELECT owner FROM city WHERE id=".$end);
   $data_city = mysql_fetch_assoc($res_city);
@@ -313,7 +325,7 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
     log_fatal_error("attMsg(cityName): Endstadt: ".$end.", DefOwn: ".$defowner.", AttOwn: ".$attowner." attstr: ".$attstr.", defstr: ".$defstr." defender: ".$defowner);
   }
 
-  $message['attacker'] = "Die Stadt <b>".$cityName."</b> des Spielers <b>".$playerName."</b> wurde auf Euer Geheiß hin angegriffen. Eure Truppen konnten den Sieg erringen.".$attstr."\n\n";
+  $message['attacker'] = "Die Stadt <b>".$cityName."</b> des Spielers <b>".$playerName."</b> wurde auf Euer Geheiß hin angegriffen. Eure Truppen konnten den Sieg erringen. ".$attstr."\n\n";
   $message['attacker'] .= "<b>Folgende Einheiten überlebten die Schlacht:</b>\n";
   $message['defender'] = "Die Stadt <b>".$cityName."</b> wurde von <b>".$playerName2."</b> angegriffen. Die verteidigenden Truppen waren dem Feind leider unterlegen. ".$defstr."\n\n";
   $message['defender'] .= "<b>Folgende Einheiten des Angreifers überlebten die Schlacht:</b>\n";
@@ -338,7 +350,7 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Sieg: ".$cityName."','".$message['attacker']."',4)");
   do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
 
-  if(!isset($defenders) || sizeof($defenders) == 0) {
+  if(!$defenders || sizeof($defenders) == 0) {
     if (DEBUG_SERVICE)
       echo " Message an Besitzer<br>";
 
@@ -682,26 +694,41 @@ function CheckPlayerDeleted($playerid, $ignorecity) {
 }
 
 
-
+/**
+ * Hole die (eindeutigen) IDs der zusätzlichen Verteidiger einer Stadt.
+ * 
+ * @param $cityid
+ * @param $cityowner
+ * @return unknown_type
+ */
 function getDefenderIDs($cityid, $cityowner) {
-  $def = array ();
+  // leeres Array nalegen
+  $def = array();
   
-  if($cityowner) {
-    $defenders = do_mysql_query("SELECT DISTINCT owner FROM cityunit WHERE owner != ".$cityowner." AND city=".$cityid);
-
-    // Sichergehen das der Stadtbesitzer als Verteidiger eingetragen ist (damit er aufjedenfall einen Kampfbericht bekommt)
-    array_push($def, $cityowner);
-    if (DEBUG_SERVICE)
+  
+  if (DEBUG_SERVICE) {
     echo " CityID: ".$cityid." CityOwner: ".($cityowner ? $cityowner : "NULL")." ";
-    while ($defender = mysql_fetch_assoc($defenders)) {
+  }
+    
+  // Nicht herrenlos
+  if($cityowner) {
+    // Stadtverteidiger gehört auf alle Fälle dazu!
+    array_push($def, $cityowner);
+    
+    $defenders_res = do_mysql_query("SELECT DISTINCT owner FROM cityunit WHERE owner != ".$cityowner." AND city=".$cityid);
+
+    // Sichergehen das der Stadtbesitzer als Verteidiger eingetragen ist (damit er aufjedenfall einen Kampfbericht bekommt)    
+    while ($defender = mysql_fetch_assoc($defenders_res)) {
       array_push($def, $defender['owner']);
       if (DEBUG_SERVICE)
-      echo " Defender:".$defender['owner']." \n";
+        echo " Defender:".$defender['owner']." \n";
     }
-
+  }
+  else {
+     if (DEBUG_SERVICE) echo " HERRENLOS, keine defender_ids\n";
   }
   
-  return def;
+  return $def;
 }
 
 
@@ -717,6 +744,14 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
   //Alle Verteidiger zusammenzaehlen
   $defender_ids = getDefenderIDs($cityid, $cityowner);  
+  
+  
+  if (0   && DEBUG_SERVICE) {
+    echo "Verteidiger-IDs:\n";
+    var_dump($defender_ids);
+    echo "\n";
+  }
+  
   
   $erg = attCity($defender_ids, $armyowner, $cityid, $armyid, $tactic);
 

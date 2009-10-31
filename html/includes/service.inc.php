@@ -350,12 +350,17 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Sieg: ".$cityName."','".$message['attacker']."',4)");
   do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
 
+  // Nachrichten an die Verteidiger
   if(!$defenders || sizeof($defenders) == 0) {
-    if (DEBUG_SERVICE)
-      echo " Message an Besitzer<br>";
+    if($defowner) {
+    if (DEBUG_SERVICE) echo " Message an Besitzer\n";
 
     do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$defowner.",".$endtime.",'Niederlage: ".$cityName."','".$message['defender']."',4)");
     do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$defowner);
+    }
+    else {
+      if (DEBUG_SERVICE) echo "HERRENLOS erhält keinen Bericht\n";
+    }
   }
   else {
     foreach ($defenders as $def) {
@@ -453,13 +458,7 @@ function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
       do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$defowner);
     }
   } 
-  else {
-    if (DEBUG_SERVICE) {
-      echo "<br>";
-      var_dump($defenders);
-      echo "<br>";
-    }
-
+  else {   
     foreach ($defenders as $def) {
       if (DEBUG_SERVICE)
         echo " Message an Defender $def\n";

@@ -131,6 +131,8 @@ function parse_email($email) {
 function check_activation($key) {
   $sender = getenv("SENDER");
   
+  
+  
 }
 
 

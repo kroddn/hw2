@@ -99,10 +99,18 @@ function redirect_to($href = null) {
   // Falls bereits eine Seite gestartet wurde, einen JavaScript Redirekt machen
   if(!isset($GLOBALS['page_started']) || !$GLOBALS['page_started']) {
     start_page();
+  }
+  
+  $url = $href."?error=".$error;
   ?>
     <script language="JavaScript" type="text/javascript">
     <!--
-      parent.window.location.href='<? echo $href;?>';
+      if(parent) {
+    	  parent.window.location.href='<? echo $url; ?>';
+      }
+      else {
+    	  window.location.href='<? echo $url; ?>';
+      }
     // -->
     </script>
     Konnte Player nicht initialisieren oder Session-Fehler.<br>
@@ -113,8 +121,8 @@ function redirect_to($href = null) {
     <a href="http://www.holy-wars2.de/portal.php">Hier</a> gehts zum Portal.
            
   <? 
-  }
-  else {
+
+  if($whatisthat) {
     include("portal.php");
   } 
   

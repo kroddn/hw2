@@ -1196,10 +1196,10 @@ class Cities {
     if ($check['isblock']) {
       $diff = $check['rest'];
       if ($diff < 82800) {
-        $in = "23 Stunden und ".date("i", $diff)." Minuten";
+        $in = date("H", $diff)." Stunden und ".date("i", $diff)." Minuten";
       }
       else {
-        $in = date("H:i", $diff)." Stunden";
+        $in = date("H", $diff)." Stunden";
       }
       return "Ihre Truppen verweigern aufgrund der Bitte Ihrer Dorfbewohner den Marschbefehl.<br/>Die neu gegr&uuml;ndete Stadt muss noch mindestens ".$in." bewacht werden!";
     }

@@ -196,15 +196,17 @@ function sms_send($nr, $text) {
  * SMS wirklich versenden.
  *
  * Ruft das HTTP-Interface der Firma "Mobile Marketing System" auf.
- * http://www.mobile-marketing-system.de/faq/http-schnittstelle
+ * http://www.mobile-marketing-system.de/faq/http-schnittstelle.
+ * 
+ * Die Konstanten SMS_xxx sind in /etc/hw2/sms.config.php definiert.
  */
 function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
   if($text == null || strlen($text) < 1) return "FAIL_SMS_EMPTY";
   $text = trim($text);
   if (strlen($text) > SMS_MAX_LEN) return "FAIL_SMS_MAX_LEN";
   
-  $username     = SMS_SERVER_USERNAME; // hier bitte Ihre Kundennummer eintragen
-  $password     = SMS_SERVER_PASSWORD; // hier bitte das in den Einstellungen definierte Password
+  $username     = SMS_SERVER_USERNAME; // Kundennummer eintragen
+  $password     = SMS_SERVER_PASSWORD; // in den Einstellungen definiertes Passwort
   $kostenstelle = SMS_SERVER_KOSTENSTELLE;
   
   //  $absender = "84040"; // 99ct
@@ -223,6 +225,9 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
     $route    = "route2";
   }
       
+  // Bei Premium-Pro Usern ist die Absendernummer einstellbar,
+  // das nun hier durchführen. In diesem Fall MUSS route1 benutzt
+  // werden, da nur dort der Absender frei konfigurierbar ist.
   if ($absender_nr != null) {
     $absender = $absender_nr;
     $route    = "route1";
@@ -241,43 +246,57 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
                        urlencode($kostenstelle),
                        isset($absender) ? "&sender=".urlencode($absender) : ""
                        );
+                       
+  // Im Admin-Account Debug-Ausgaben anzeigen
   if($_SESSION['player']->isAdmin()) {
     echo "\n<!-- $sms_query -->\n";
   }
   
+  
   if(function_exists("curl_init"))
-    {
-      $ch = curl_init($sms_query);
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-      $result = curl_exec($ch);
-      curl_close($ch);
-    }
+  {
+    $ch = curl_init($sms_query);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $result = curl_exec($ch);
+    curl_close($ch);
+  }
   else
-    {    
-      // Siehe http://de2.php.net/manual/en/reserved.variables.php#reserved.variables.phperrormsg
-      ini_set("track_errors", "1");
+  {
+    // Siehe http://de2.php.net/manual/en/reserved.variables.php#reserved.variables.phperrormsg
+    ini_set("track_errors", "1");
 
-      $fp = @fopen($sms_query, "r");
+    $fp = @fopen($sms_query, "r");
 
-      $errormsg = $php_errormsg;
-      ini_set("track_errors", "0");
+    $errormsg = $php_errormsg;
+    ini_set("track_errors", "0");
 
-      if($fp) {
-	while(!feof($fp))
-	  {
-	    $result .= fread($fp,4096);
-	  }      	
-	fclose($fp);
+    if($fp) {
+      $result = ""; // Leer initialisieren
+      
+      while(!feof($fp))
+      {
+        $result .= fread($fp, 4096);
       }
-      else {
-	$result = "Fehler beim Öffnen";
-        log_fatal_error("SMS-Senden schlug fehl: '".$errormsg."'");
-      }
+      fclose($fp);
     }
+    else {
+      $result = "Fehler beim Öffnen";
+      log_fatal_error("SMS-Senden schlug fehl: '".$errormsg."'");
+    }
+  }
 
   if(stristr($result, "OK MSG")) {
     $result = null;
   }
+  else {
+      // FIXME: hier könnte man die unter:
+      // http://www.mobile-marketing-system.de/faq/http-schnittstelle/#http-schnittstelle-meldet-fehler
+      // zu findenden Resultcodes auswerten.
+    if($result == "011") {
+      $result = "&quot;Ungültige Zeichen (Nicht GSM-Zeichen) im Nachrichtentext&quot;";
+    }   
+  }
+  
   
   return $result;
 }

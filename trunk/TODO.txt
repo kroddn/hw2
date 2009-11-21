@@ -4,6 +4,11 @@ Löschfunktion
   * [DONE] Löschmarkierung durch Login wieder deaktivieren
   * [DONE] Städte werden zu "freie Städte"
   * Löschen von Städten direkt, falls Account zu jung/im Noobschutz?  
+ 
+ 
+Noobschutz
+  * Aufheben des Noobschutzes, wenn man sich 48 Stunden nicht eingeloggt hat
+  
   
 "freie Städte"
   * [DONE] owner NULL
@@ -13,19 +18,28 @@ Löschfunktion
   * WICHTIG: Spieler im Noobschutz sollten KEINEN Krieg mit diesen Städten haben
   * Stadt produziert Truppen
 
+
 Aktivierung:
-  * Nicht-Aktivierte Spieler tauchen nicht in der Toplist auf - Bug oder gar Feature?
+  * Nicht-Aktivierte Spieler tauchen nicht in der Toplist auf - Feature!!!
   * Beim Login Info einblenden, wie man aktivieren kann 
     (Email Link klicken oder Email an HW2 senden)
-  * 
+  * Aktivieren durch Email
+  
+  
+"Spionage" überarbeiten
+  * Wahrscheinlichkeit des Überlebens einzelner Angreifer abhängig von Truppenzahl in Stadt und Anzahl angreifer
+    
   
 Bonuspunkte fürs Voting
 
+
 Kaufen von PA für Bonuspunkte
+
 
 Multihunter erweitern
   * "Annotations" von Multihuntern zu Spielern
   * Logging von Änderungen am Spielerstatus
+  
   
 Plünderungen/Brandschatzung - Abbrechen der Ausbildung
  * Dem Verteidiger ne Nachricht übermitteln wenn Truppenausbildung angebrochen wurde

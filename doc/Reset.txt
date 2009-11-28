@@ -28,6 +28,11 @@ man mit zwei/drei Updatebefehlen hinkommt:
 Der cronjob "hwha" sowie der "service.php" beenden sich nun automatisch,
 wenn ein fixes Rundenende eingestellt wurde. Ebenso startet der cron erst
 dann, wenn eine "starttime" in der Zukunft angelegt wurde.
+Diese beiden also nun starten ;-)
+Beispiel (NICHT als root ausführen!):
+ cd /home/hw2_speed/cron
+ ./hwha_speed
+ sudo ./service.sh
 
 Danach im Adminmenü unter "Wartung" den Reset durchführen.
 WICHTIG: Die Schritte, die dort aufgelistet sind, ebenfalls ausführen.

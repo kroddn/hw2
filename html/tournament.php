@@ -35,6 +35,8 @@ require_once("includes/tournament.inc.php");
 require_once("includes/premium.inc.php");
 
 start_page();
+
+define("TOURNAMENT_CONFIRM_TEXT", "JETZT Attacke!!!");
 ?>
 <script language="JavaScript">
 //<!--
@@ -184,7 +186,7 @@ if(isset($tid) && isset($part) &&
             $act = mysql_fetch_assoc($actres);
              
             if($act['cnt'] >= $part_max) {
-              $error = "Maximal ".TOURNAMENT_MAX_Pt.ART." (".(TOURNAMENT_MAX_PART_PREMIUM)." für Premium-User) Voranmeldungen für Turniere erlaubt.";
+              $error = "Maximal ".TOURNAMENT_MAX_PART." (".(TOURNAMENT_MAX_PART_PREMIUM)." für Premium-User) Voranmeldungen für Turniere erlaubt.";
             }
             else if($act['parallel']) {
               $error = "Bereits ein Turnier parallel.";
@@ -192,14 +194,25 @@ if(isset($tid) && isset($part) &&
             else {
               do_mysql_query("UPDATE player SET bonuspoints = bonuspoints-".TOURNAMENT_PART_BONUSPOINT.
               " WHERE id = $pid AND bonuspoints >= ".TOURNAMENT_PART_BONUSPOINT);
-              if(mysql_affected_rows() > 0) {
+                            
+              $allow_it = true;
+              
+              
+              // Für Newbs, die bisher noch an keinem Turnier teilgenommen hatten, wird
+              // die Teilnahme gestattet. Einfach schauen, ob es schon eine Anmeldung gab/gibt.
+              if(mysql_affected_rows() == 0) {                
+                $test_count = do_mysql_query("SELECT tid FROM tournament_players WHERE player = $pid LIMIT 1");
+                if(mysql_num_rows($test_count) > 0) {
+                  $error = "Ihr habt nicht genügend Bonuspunkte!";
+                  $allow_it = false;
+                }                   
+              }
+              
+              if($allow_it) {
                 $inform = "Teilnahme angemeldet. <b>Vergesst nicht</b>: wenn das Turnier beginnt, müßt Ihr Euch".
-                "<br> erneut hier melden! (zwischen ".date("d.m.y H:i", $t['time'])." und ".date("H:i", $t['time']+TOURNAMENT_DURATION).")";
+                "<br> erneut hier melden und ".TOURNAMENT_CONFIRM_TEXT." bestätigen! (zwischen ".date("d.m.y H:i", $t['time'])." und ".date("H:i", $t['time']+TOURNAMENT_DURATION).")";
                 do_mysql_query("INSERT INTO tournament_players (tid,player) VALUES ($tid, $pid)");
                 $_SESSION['player']->updateResources();
-              }
-              else {
-                $error = "Ihr habt nicht genügend Bonuspunkte!";
               }
             }
           }
@@ -211,6 +224,7 @@ if(isset($tid) && isset($part) &&
           }
           else if($t['part']) {
             $inform = "Turnier jetzt bestreiten";
+            
             do_mysql_query("UPDATE tournament_players SET booktime=UNIX_TIMESTAMP() ".
             " WHERE tid=$tid AND player=$pid AND booktime IS NULL");
             if(mysql_affected_rows() > 0) {
@@ -296,7 +310,8 @@ in Kurzfassung:</span>
 	
 	<li>Für die Anmeldung an einem Turnier müßt ihr <? echo TOURNAMENT_PART_BONUSPOINT; ?>
 	Bonuspunkte berappen. Diese werden Euch aber bei der Bestätigung der
-	Teilnahme wieder gutgeschrieben.
+	Teilnahme wieder gutgeschrieben.<br>
+	Neue Spieler dürfen EIN Turnier ohne Abzug von Bonuspunkten bestreiten!
 	
 	
 	<li>Habt Ihr Euch zu einem Turnier gemeldet, dann müßt Ihr Euch
@@ -422,7 +437,7 @@ while($t = mysql_fetch_assoc($tourn)) {
         if($t['booktime'])
         $action = 'Ihr Kämpft!';
         else
-        $action = sprintf($url, 2, 'JETZT Attacke!!!');
+        $action = sprintf($url, 2, TOURNAMENT_CONFIRM_TEXT);
       }
       else
       $action = sprintf($url, 0,'Rückzieher'); 

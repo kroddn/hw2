@@ -1,5 +1,5 @@
 Turniere
-  * Für das ERSTE Turnier keine Bonuspunkte verlangen
+  * [DONE 01.12.2009] Für das ERSTE Turnier keine Bonuspunkte verlangen
 
 Löschfunktion
   * [DONE] Verzögertes Löschen/Löschmarkierung

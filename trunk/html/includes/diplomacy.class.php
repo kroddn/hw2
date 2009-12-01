@@ -193,7 +193,7 @@ class diplomacy {
   }
 
   function canNotBND($id1, $id2) {
-    $res = do_mysql_query("SELECT city.name AS cname,p1.name AS pname FROM city,army,player AS p1, player AS p2 WHERE city.id=army.end AND p1.id=city.owner AND p2.id=army.aid AND ((p1.id=".$id1." AND p2.id=".$id2.") OR (p1.id=".$id2." AND p2.id=".$id1.")) AND army.mission IN ('attack', 'despoil', 'burndown')");
+    $res = do_mysql_query("SELECT city.name AS cname, p1.name AS pname FROM city,army,player AS p1, player AS p2 WHERE city.id=army.end AND p1.id=city.owner AND p2.id=army.aid AND ( (p1.id=".$id1." AND p2.id=".$id2.") OR (p1.id=".$id2." AND p2.id=".$id1.")) AND army.mission IN ('attack', 'despoil', 'burndown')");
     if (mysql_num_rows($res)) {
       while ($data = mysql_fetch_assoc($res)) {
         $msg .= "Angriff von ".$data['pname']." auf ".$data['cname']."\n";
@@ -211,7 +211,8 @@ class diplomacy {
     $res1 = do_mysql_query("SELECT id,name,religion FROM player WHERE id=".$pid);
     if (($data1 = mysql_fetch_assoc($res1)) && ($this->religion == $data1['religion'])) {
       if ($msg = $this->canNotBND($this->player,$pid)) {
-        $this->message($this->player, "Bündnisangebot an ".$data1['name']." fehlgeschlagen", "Ihr wollt dem Spieler ".$data1['name']." ein Bündnisangebot unterbreiten, folgende Angriffe stehen dem noch entgegen:\n\n".$msg);
+        $this->message($this->player, "Bündnisangebot an ".$data1['name']." fehlgeschlagen", 
+                                      "Ihr wollt dem Spieler ".$data1['name']." ein Bündnisangebot unterbreiten, folgende Angriffe stehen dem noch entgegen:\n\n".$msg);
         return "Fehlgeschlagen. Prüft Eure <a href=\"messages.php\">Nachrichten</a>!";
       }
       else {

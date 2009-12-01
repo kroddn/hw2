@@ -1,3 +1,6 @@
+Turniere
+  * Für das ERSTE Turnier keine Bonuspunkte verlangen
+
 Löschfunktion
   * [DONE] Verzögertes Löschen/Löschmarkierung
   * [DONE] Eigentliches Löschen erst nach 24 Stunden

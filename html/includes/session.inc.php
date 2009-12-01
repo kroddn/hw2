@@ -143,13 +143,14 @@ if(!$noclickcount && $click->count % 89 == 15 && !is_premium_no_click_hint() && 
   }
 }
 
-// Alle 223 Clicks einen Hinweis abbilden
-if(!$noclickcount && $click->count % 523 == 199 && !is_premium_no_click_hint() ) {
-  include("halt.php");
-  exit();
-}
-else // Alle 287 Clicks einen Hinweis zum Werben neuer Spieler einbinden
-if(!$noclickcount && $click->count % 687 == 180 && !is_premium_no_click_hint() ) {
+//// Alle 223 Clicks einen Hinweis abbilden
+//if(!$noclickcount && $click->count % 523 == 199 && !is_premium_no_click_hint() ) {
+//  include("halt.php");
+//  exit();
+//}
+//else // Alle 287 Clicks einen Hinweis zum Werben neuer Spieler einbinden
+
+if(!$noclickcount && $click->count % 687 == 200 && !is_premium_no_click_hint() ) {
   include("recruit.php");
   exit();
 }

@@ -1,25 +1,25 @@
 <?php
 /*************************************************************************
-    This file is part of "Holy-Wars 2" 
-    http://holy-wars2.de / https://sourceforge.net/projects/hw2/
+ This file is part of "Holy-Wars 2"
+ http://holy-wars2.de / https://sourceforge.net/projects/hw2/
 
-    Copyright (C) 2003-2009 
-    by Markus Sinner, Gordon Meiser, Laurenz Gamper, Stefan Neubert
+ Copyright (C) 2003-2009
+ by Markus Sinner, Gordon Meiser, Laurenz Gamper, Stefan Neubert
 
-    "Holy-Wars 2" is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+ "Holy-Wars 2" is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-    Former copyrights see below.
+ Former copyrights see below.
  **************************************************************************/
 
 
@@ -27,7 +27,7 @@
  * Copyright (c) 2006 by Holy-Wars2.de
  *
  * written by Markus Sinner
- * 
+ *
  * 01. Aug 2006
  ***************************************************/
 require_once("includes/session.inc.php");
@@ -106,15 +106,15 @@ if(isset($newtournament) && is_numeric($gold) && is_numeric($maxp) && is_numeric
   else if($stime > 60*24*7) {
     $error = "Mehr als ".(60*24*7)." Stunden (7 Tage) im Vorraus können keine Turniere angesetzt werden.";
   }
-  else {  
+  else {
     do_mysql_query("UPDATE player SET gold = gold - $gold,cc_resources=1 WHERE id = $pid AND gold >= $gold");
     if(mysql_affected_rows() > 0) {
       $sql = sprintf("INSERT INTO tournament (organizer, gold, maxplayers, time) ".
 		     "VALUES (%d, %d, %d, round((unix_timestamp() + 60*%d)/%d)*%d )",
-		     $pid, $gold, $maxp, $stime, TOURNAMENT_MODULO, TOURNAMENT_MODULO);
+      $pid, $gold, $maxp, $stime, TOURNAMENT_MODULO, TOURNAMENT_MODULO);
       if($_SESSION['player']->isAdmin())
-	echo $sql;
-    
+      echo $sql;
+
       do_mysql_query($sql);
     }
   }
@@ -131,13 +131,13 @@ if(isset($calc) && $_SESSION['player']->isMaintainer()) {
  *
  * "tournamentmagic" dient dazu, dass man nicht mehrmals die Seite neu lädt.
  */
-if(isset($tid) && isset($part) && 
-   (!isset($_SESSION['tournamentmagic']) || $tmagic == $_SESSION['tournamentmagic'])
-   ) {
+if(isset($tid) && isset($part) &&
+(!isset($_SESSION['tournamentmagic']) || $tmagic == $_SESSION['tournamentmagic']))
+{
 
   $tid = intval($tid);
   $part= intval($part);
-  
+
   $tres = do_mysql_query("SELECT t.*,tp.player AS part,".
 			 " unix_timestamp() > time+".TOURNAMENT_DURATION." AS over,".
 			 " unix_timestamp() > time AND unix_timestamp() < time+".TOURNAMENT_DURATION." AS now".
@@ -147,7 +147,7 @@ if(isset($tid) && isset($part) &&
 			 " WHERE t.tid = $tid");
   if(mysql_num_rows($tres) == 1) {
     $t = mysql_fetch_assoc($tres);
-    
+
     if($t['over']) {
       $error = "Turnier vorüber.";
     }
@@ -165,7 +165,7 @@ if(isset($tid) && isset($part) &&
             $error  = "Nicht angemeldet.";
           }
           break;
-          
+
         case 1:
           if($t['part']) {
             $error  = "Bereits angemeldet.";
@@ -177,17 +177,17 @@ if(isset($tid) && isset($part) &&
             " FROM tournament_players LEFT JOIN tournament USING(tid) ".
             " WHERE player = $pid AND time + ".TOURNAMENT_DURATION."> UNIX_TIMESTAMP()";
 
-	    $actres = do_mysql_query($actsql);
-	    if($_SESSION['player']->isAdmin()) {
-	      echo $actsql;
-	    }
+            $actres = do_mysql_query($actsql);
+            if($_SESSION['player']->isAdmin()) {
+              echo $actsql;
+            }
             $act = mysql_fetch_assoc($actres);
              
             if($act['cnt'] >= $part_max) {
               $error = "Maximal ".TOURNAMENT_MAX_Pt.ART." (".(TOURNAMENT_MAX_PART_PREMIUM)." für Premium-User) Voranmeldungen für Turniere erlaubt.";
             }
             else if($act['parallel']) {
-                $error = "Bereits ein Turnier parallel.";
+              $error = "Bereits ein Turnier parallel.";
             }
             else {
               do_mysql_query("UPDATE player SET bonuspoints = bonuspoints-".TOURNAMENT_PART_BONUSPOINT.
@@ -241,54 +241,112 @@ if($error == null) {
 ?>
 
 <style type="text/css">
+tr.col0 {
+	background: #FFEFDF;
+	text-align: center;
+}
 
-tr.col0 { background: #FFEFDF; text-align: center; }
-tr.col1 { background: #FFDFEF; text-align: center; }
-tr.col2 { background: #AAEEAA; text-align: center; font-weight: bold; }
-tr.col3 { background: #FF9090; text-align: center; }
+tr.col1 {
+	background: #FFDFEF;
+	text-align: center;
+}
 
-div.error  { background: #FFC090; border: 1px solid black; color: black; width: 500px; padding: 8px; margin-bottom: 5px; } 
-div.inform { background: #90FF90; border: 1px solid black; color: black; width: 500px; padding: 8px; margin-bottom: 5px; } 
+tr.col2 {
+	background: #AAEEAA;
+	text-align: center;
+	font-weight: bold;
+}
 
-th { font-size: 12px; }
+tr.col3 {
+	background: #FF9090;
+	text-align: center;
+}
+
+div.error {
+	background: #FFC090;
+	border: 1px solid black;
+	color: black;
+	width: 500px;
+	padding: 8px;
+	margin-bottom: 5px;
+}
+
+div.inform {
+	background: #90FF90;
+	border: 1px solid black;
+	color: black;
+	width: 500px;
+	padding: 8px;
+	margin-bottom: 5px;
+}
+
+th {
+	font-size: 12px;
+}
 </style>
 
 <h1>Turniere</h1>
-Ihr könnt hier an Ritter-Turnieren teilnehmen. Die Teilnahme ist im Prinzip kostenlos.
-<p>
-<span style="font-size: 16px;">Hier die Regeln <b>zur Teilnahme</b> in Kurzfassung:</span>
+Ihr könnt hier an Ritter-Turnieren teilnehmen. Die Teilnahme ist im
+Prinzip kostenlos.
+<p><span style="font-size: 16px;">Hier die Regeln <b>zur Teilnahme</b>
+in Kurzfassung:</span>
 <ul style="width: 600px;">
-<li>Die Sieger eines Turnieres erhalten Gold.
-<li>Für die Anmeldung an einem Turnier müßt ihr <? echo TOURNAMENT_PART_BONUSPOINT; ?> Bonuspunkte
-    berappen. Diese werden Euch aber bei der Bestätigung der Teilnahme wieder gutgeschrieben.
-<li>Habt Ihr Euch zu einem Turnier gemeldet, dann müßt Ihr Euch innerhalb der angegebenen
-    Zeitspanne auf die Turnierseite begeben und dort <b>Eure Teilnahme bestätigen</b>!
-<li>Bestätigt Ihr die Teilnahme nicht, dann sind die <? echo TOURNAMENT_PART_BONUSPOINT; ?> Bonuspunkte verloren.
-<li>Es müssen mindestens die Häfte der maximalen Teilnehmer ihre Teilnahme am Turnier 
-    bestätigt haben. Ansonsten fällt es aus.
-<li>Das Turnier startet automatisch am Ende der angegebenen Zeitspanne. Ihr bekommt eine
-    Nachricht, wie das Ergebnis ausgefallen ist.
-<li>Haben sich mehr Spieler angemeldet, als das Turnier angibt, dann spielen jene Spieler mit, die
-    sich am frühesten angemeldet haben. Es ist also lohnend, sich früh anzumelden. Die übrigen Spieler sind
-    dann halt leider Zuschauer.
-<li>Ein Spieler kann an <? echo TOURNAMENT_MAX_PART;?> (<? echo TOURNAMENT_MAX_PART_PREMIUM;?>, wenn er Premium-User ist) 
-    Turnier<? if(TOURNAMENT_MAX_ORGANIZE > 1) echo "en";?> teilnehmen 
+	<li>Die Sieger eines Turnieres erhalten Gold.
+	
+	
+	<li>Für die Anmeldung an einem Turnier müßt ihr <? echo TOURNAMENT_PART_BONUSPOINT; ?>
+	Bonuspunkte berappen. Diese werden Euch aber bei der Bestätigung der
+	Teilnahme wieder gutgeschrieben.
+	
+	
+	<li>Habt Ihr Euch zu einem Turnier gemeldet, dann müßt Ihr Euch
+	innerhalb der angegebenen Zeitspanne auf die Turnierseite begeben und
+	dort <b>Eure Teilnahme bestätigen</b>!
+	
+	
+	<li>Bestätigt Ihr die Teilnahme nicht, dann sind die <? echo TOURNAMENT_PART_BONUSPOINT; ?>
+	Bonuspunkte verloren.
+	
+	
+	<li>Es müssen mindestens die Häfte der maximalen Teilnehmer ihre
+	Teilnahme am Turnier bestätigt haben. Ansonsten fällt es aus.
+	
+	
+	<li>Das Turnier startet automatisch am Ende der angegebenen Zeitspanne.
+	Ihr bekommt eine Nachricht, wie das Ergebnis ausgefallen ist.
+	
+	
+	<li>Haben sich mehr Spieler angemeldet, als das Turnier angibt, dann
+	spielen jene Spieler mit, die sich am frühesten angemeldet haben. Es
+	ist also lohnend, sich früh anzumelden. Die übrigen Spieler sind dann
+	halt leider Zuschauer.
+	
+	
+	<li>Ein Spieler kann an <? echo TOURNAMENT_MAX_PART;?> (<? echo TOURNAMENT_MAX_PART_PREMIUM;?>,
+	wenn er Premium-User ist) Turnier<? if(TOURNAMENT_MAX_ORGANIZE > 1) echo "en";?>
+	teilnehmen
+
 </ul>
 
 <h2 style="color: red">Fehler bitte im Forum melden!</h2>
-Derzeit bekannte Fehler:<p>
+Derzeit bekannte Fehler:
+<p>
 <ul>
-<li>Es können mehr Spieler teilnehmen, als eigentlich maximal eingestellt ist.
+	<li>Es können mehr Spieler teilnehmen, als eigentlich maximal
+	eingestellt ist.
+
 </ul>
 <hr>
 <h1>Die Turniere</h1>
-Euch stehen <? echo $_SESSION['player']->getBonuspoints(); ?> Bonuspunkte zur Verfügung.<p>
-<?
+Euch stehen
+<? echo $_SESSION['player']->getBonuspoints(); ?>
+Bonuspunkte zur Verfügung.
+<p><?
 if(isset($part)) {
   if($inform != null) {
     echo '<div class="inform">'.$inform."</div>\n";
     if(!is_premium_noads())
-      include("includes/easyad_layer.html");
+    include("includes/easyad_layer.html");
   }
   if($error != null) {
     echo "<a name=\"mark\"></a>\n";
@@ -298,17 +356,17 @@ if(isset($part)) {
 
 switch($sort) {
   case "gold":
-  $order = "gold DESC";
-  break;
+    $order = "gold DESC";
+    break;
   case "player":
-  $order = "name ASC";
-  break;
+    $order = "name ASC";
+    break;
   case "booknr":
-  $order = "count DESC";
-  break;
+    $order = "count DESC";
+    break;
   case "time":
   default:
-  $order = "t.time,tid";
+    $order = "t.time,tid";
 }
 
 echo '<table cellpadding="0" cellspacing="0" width="600"><tr><td><h2>Eigenes Turnier veranstalten</h2></td>';
@@ -341,7 +399,7 @@ $isover = true;
 while($t = mysql_fetch_assoc($tourn)) {
   $starttime = $t['time'];
   $endtime   = $t['time']+TOURNAMENT_DURATION;
-  
+
   $url= '<a href="'.$PHP_SELF.'?tmagic='.$tournamentmagic.'&tid='.$t['tid'].'&part=%d">%s</a>';
   if($t['over']) {
     $action = "vorüber";
@@ -355,10 +413,10 @@ while($t = mysql_fetch_assoc($tourn)) {
     if($isover) {
       $isover = false;
       echo '</table><hr><table cellpadding="0" cellspacing="0" width="600"><tr><td><h2>Zukünftige Turniere</h2></td></tr></table>';
-      
+
       printTableHeader(1);
     }
-    
+
     if($t['me'] > 0) {
       if($t['now']) {
         if($t['booktime'])
@@ -376,60 +434,86 @@ while($t = mysql_fetch_assoc($tourn)) {
 
   printf("<tr class=\"col%d\"><td>%d</td><td nowrap>%s <b>%s</b></td><td style=\"padding: 0px;\">-</td><td nowrap>%s</td>".
 	 "<td>%s</td><td>%s</td><td>%s / %d / %d</td><td>%s</td></tr>\n",
-	 $t['now'] ? 2 : ($t['over'] ? 3 : $i), $t['tid'], 
-	 date("d.m.y", $starttime), date("H:i", $starttime), date("H:i", $endtime),
-	 $t['name'] ? $t['name'] : "Server",
-	 $t['gold'] > TOURNAMENT_MAX_GOLD ? "<b>".$t['gold']." !!!</b>" : $t['gold'], 
-	 $t['count_book'] < $t['maxplayers']/2
-	   ? '<span style="color: red; font-weight: bold;" title="Bisher nehmen nicht genug Spieler am Turnier teil!">'.$t['count_book']."</span>" 
-	   : $t['count_book'], 
-	 $t['count'], $t['maxplayers'], 
-	 $action
-	 );
-  
+  $t['now'] ? 2 : ($t['over'] ? 3 : $i), $t['tid'],
+  date("d.m.y", $starttime), date("H:i", $starttime), date("H:i", $endtime),
+  $t['name'] ? $t['name'] : "Server",
+  $t['gold'] > TOURNAMENT_MAX_GOLD ? "<b>".$t['gold']." !!!</b>" : $t['gold'],
+  $t['count_book'] < $t['maxplayers']/2
+  ? '<span style="color: red; font-weight: bold;" title="Bisher nehmen nicht genug Spieler am Turnier teil!">'.$t['count_book']."</span>"
+  : $t['count_book'],
+  $t['count'], $t['maxplayers'],
+  $action
+  );
+
   $i = ++$i%2;
 }
 ?>
 </table>
-<p>
-<span style="font-size: 16px;">Hier die Regeln <b>für Veranstalter</b> in Kurzfassung:</span>
+<p><span style="font-size: 16px;">Hier die Regeln <b>für Veranstalter</b>
+in Kurzfassung:</span>
 <ul style="width: 600px;">
-<li>Jeder Spieler kann <? echo TOURNAMENT_MAX_ORGANIZE;?> (<? echo TOURNAMENT_MAX_ORGANIZE_PREMIUM;?>, wenn er Premium-User ist) Turnier<? if(TOURNAMENT_MAX_ORGANIZE > 1) echo "e";?> veranstalten. Bereits absolvierte Turniere zählen natürlich nicht mit.
-<li>Der Veranstalter legt die Höhe des Preisgeldes fest. Diesen Betrag erhält der Veranstalter nicht mehr zurück.
-<li>Pro teilnehmendem Spieler erhält der Veranstalter <? echo TOURNAMENT_HOLD_BONUSPOINT; ?> 
-    Bonuspunkt<? if(TOURNAMENT_HOLD_BONUSPOINT > 1) echo "e"; ?>.
-<li>Der Veranstalter legt die maximale Anzahl an Teilnehmern fest. Das Turnier <b>findet nicht statt</b>,
-    wenn weniger als die Hälfte dieser Zahl ihre Teilnahme <b>bestätigt</b> haben.
-<li>Die Mindestanzahl von <? echo TOURNAMENT_MIN_PLAYERS; ?> Teilnehmern gilt hier natürlich auch. 
-    Das bedeutet, der Veranstalter muß als Maximalzahl mindestens <? echo 2*TOURNAMENT_MIN_PLAYERS; ?> 
-    Teilnehmer eintragen.
+	<li>Jeder Spieler kann <? echo TOURNAMENT_MAX_ORGANIZE;?> (<? echo TOURNAMENT_MAX_ORGANIZE_PREMIUM;?>,
+	wenn er Premium-User ist) Turnier<? if(TOURNAMENT_MAX_ORGANIZE > 1) echo "e";?>
+	veranstalten. Bereits absolvierte Turniere zählen natürlich nicht mit.
+	
+	
+	
+	<li>Der Veranstalter legt die Höhe des Preisgeldes fest. Diesen Betrag
+	erhält der Veranstalter nicht mehr zurück.
+	
+	
+	<li>Pro teilnehmendem Spieler erhält der Veranstalter <? echo TOURNAMENT_HOLD_BONUSPOINT; ?>
+	Bonuspunkt<? if(TOURNAMENT_HOLD_BONUSPOINT > 1) echo "e"; ?>.
+	
+	
+	<li>Der Veranstalter legt die maximale Anzahl an Teilnehmern fest. Das
+	Turnier <b>findet nicht statt</b>, wenn weniger als die Hälfte dieser
+	Zahl ihre Teilnahme <b>bestätigt</b> haben.
+	
+	
+	<li>Die Mindestanzahl von <? echo TOURNAMENT_MIN_PLAYERS; ?>
+	Teilnehmern gilt hier natürlich auch. Das bedeutet, der Veranstalter
+	muß als Maximalzahl mindestens <? echo 2*TOURNAMENT_MIN_PLAYERS; ?>
+	Teilnehmer eintragen.
+
 </ul>
 
 <a name="ownTournament"></a>
 <h2>Turnier veranstalten</h2>
-Hier könnt Ihr ein Turnier veranstalten.<p>
-<?
+Hier könnt Ihr ein Turnier veranstalten.
+<p><?
 if(isset($newtournament)) {
   if($inform != null) {
     echo '<div class="inform">'.$inform."</div>\n";
     if(!is_premium_noads())
-      include("includes/sponsorads-popdown.html");
+    include("includes/sponsorads-popdown.html");
   }
   if($error != null) {
     echo "<a name=\"mark\"></a>\n";
-    echo '<div class="error"><b>Fehler: </b>'.$error."</div>\n";    
+    echo '<div class="error"><b>Fehler: </b>'.$error."</div>\n";
   }
 }
 ?>
 <form method="get" action="<? echo $PHP_SELF; ?>">
 <table>
-<tr><td>Preisgeld:</td><td><input name="gold" size="10" value="<? echo $gold; ?>"> Gold</td></tr>
-<tr><td>Teilnehmer:</td><td><input name="maxp" size="10" value="<? echo $maxp; ?>"> maximal</td></tr>
-<tr><td>Start in :</td><td><input size="4" name="stime" value="<? echo $stime; ?>"> Minuten</td></tr>
-<tr><td colspan="2">
- <input type="submit" name="newtournament" value="Turnier veranstalten" 
-  onClick="return confirm('Sind Sie sicher, dass Sie das Turnier veranstalten möchten?')">
-</td></tr>
+	<tr>
+		<td>Preisgeld:</td>
+		<td><input name="gold" size="10" value="<? echo $gold; ?>"> Gold</td>
+	</tr>
+	<tr>
+		<td>Teilnehmer:</td>
+		<td><input name="maxp" size="10" value="<? echo $maxp; ?>"> maximal</td>
+	</tr>
+	<tr>
+		<td>Start in :</td>
+		<td><input size="4" name="stime" value="<? echo $stime; ?>"> Minuten</td>
+	</tr>
+	<tr>
+		<td colspan="2"><input type="submit" name="newtournament"
+			value="Turnier veranstalten"
+			onClick="return confirm('Sind Sie sicher, dass Sie das Turnier veranstalten möchten?')">
+		</td>
+	</tr>
 </table>
 </form>
 
@@ -451,16 +535,17 @@ end_page();
 
 
 function printTableHeader($nr) {
-?>
-<table cellspacing="0" <? if($nr == 0) echo 'id="tournamentDone" style="display: none"'; ?>>
-<tr>
- <th width="10">Nr.</th>
- <th width="120" colspan="3"><a href="?sort=time">Zeitraum</a></th>
- <th width="80"><a href="?sort=player">Veranstalter</a></th>
- <th width="80"><a href="?sort=gold">Preisgeld</a></th>
- <th width="80"><a href="?sort=booknr">Angemeldet</a></th>
- <th width="130">Aktion</th>
-</tr>
-<?
+  ?>
+<table cellspacing="0"
+<? if($nr == 0) echo 'id="tournamentDone" style="display: none"'; ?>>
+	<tr>
+		<th width="10">Nr.</th>
+		<th width="120" colspan="3"><a href="?sort=time">Zeitraum</a></th>
+		<th width="80"><a href="?sort=player">Veranstalter</a></th>
+		<th width="80"><a href="?sort=gold">Preisgeld</a></th>
+		<th width="80"><a href="?sort=booknr">Angemeldet</a></th>
+		<th width="130">Aktion</th>
+	</tr>
+	<?
 }
 ?>

@@ -1,0 +1,326 @@
+@CHARSET "ISO-8859-1";
+
+h1 { font-size: 16px; margin-bottom: 5px; }
+h2 { font-size: 14px; margin-bottom: 3px;  }
+
+
+#windrose {
+ width: 70px;
+ height: 70px;
+ border: 0px;
+ position: absolute;
+ z-index: 12;
+ top: 10px;
+ left: 10px;
+}
+#windrose[id] {
+ position: fixed;
+}
+/*#nav21 { position: absolute;}
+#nav22 { position: absolute;}
+#nav23 { position: absolute;} */
+#nav21[id] { position: fixed;}
+#nav22[id] { position: fixed;}
+#nav23[id] { position: fixed;}
+
+#map {
+  /* Layout fixed, Strings beeinflussen die Tabelle nicht */
+  table-layout:fixed;
+}
+
+#map td {
+ width:40px;
+ height:40px;
+ text-align:center;
+ vertical-align: middle;
+ margin:0px; 
+ padding:0px;
+}
+
+/* Karte: Stadtinfo */
+#map .cityinfo {
+	position:absolute;
+	cursor:pointer; 
+    
+    text-align:center;
+    font-size: 10px;
+    font-weight: normal;
+    	
+	-moz-opacity:0.5; 
+	filter:Alpha(opacity=50, finishopacity=50, style=2);
+}
+
+#map #citysettle {
+    -moz-opacity:0.5; 
+    filter:Alpha(opacity=50, finishopacity=50, style=2);
+    background:transparent;
+}
+	
+.nopadding {
+	padding-top: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+body,input,file,select,option,div,a,td,textarea {
+	font-family: Tahoma;
+	font-size: 11px;
+	color: 000000;
+}
+
+.small { font-family: Tahoma; font-size: 9px; }
+  
+body {
+ padding-top:4px;
+}
+
+a {
+ text-decoration:none;
+ font-weight:bold;
+ color: 303030;
+}
+a:hover {
+	text-decoration:none;
+	color: 606060;
+}
+a.hell {
+	text-decoration:none;
+	font-weight:bold;
+	color: 505050;
+}
+a.hell:hover {
+	text-decoration:none;
+	color: 707070;
+}
+a.green {
+	text-decoration:none;
+	color: #50FF50;
+}
+a.green:hover {
+	text-decoration:none;
+	font-weight:bold;
+	color: #40AA40;
+}
+a.red {
+       color: red;
+}
+input.register {
+ border-width : 0px;
+ margin: 0px;
+ padding: 0px;
+ height: 14px;
+ width: 14px;
+}
+div.register {
+ margin: 1px;
+ padding: 1px;
+ height: 6px;
+}
+hr.register {
+ padding-top:   0px;
+ padding-bottom:0px;
+ padding-left:  0px;
+ padding-right: 0px;    
+ margin-top:   1px;
+ margin-bottom:2px;
+ margin-left:  0px;
+ margin-right: 0px;
+ text-align: left;
+}
+td {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	padding-left: 4px;
+	padding-right: 4px;
+}
+td.msg,div.msg {
+	border-width : 3px;
+	border-color: FFFFC8;
+	border-style : solid;
+	padding: 4px;
+	background-color: FFFFFF;
+	
+}
+.error {
+	color: AA0000;
+}
+.timer_error {
+ color: FF0000;
+ font-weight: bold;
+}
+.noerror {
+	color: 008800;
+}
+.koord {
+        cursor:pointer; 
+        font-weight: normal; 
+        font-size:9px; 
+        color: #808080;
+}
+.koord_hilight {
+        cursor:pointer; 
+        font-weight: bold; 
+        font-size:9px; 
+        color: #CCCC80;
+}
+input {
+	border-width : 1px;
+	border-color: Black;
+	border-style : solid;
+	padding-left: 1px;
+}
+input.file {
+	border-width : 1px;
+	border-color: Black;
+	border-style : solid;
+	padding-left: 1px;
+}
+textarea {
+	border-width : 1px;
+	border-color: F0F0AA;
+	border-style : solid;
+	padding-left: 1px;
+}
+input.noborder {
+	border-width : 0px;
+}
+.tblhead {
+	background-color: #F0F0AA;
+}
+.tblhead_err {
+	background-color: #80A0D0;
+    color: #FF4040;
+}
+.tblhead_22 {
+  font-size: medium;
+  font-weight: bold;
+  background-color: #F0F0AA;
+  height: 22;
+  vertical-align: bottom;
+  text-align: center;
+}
+.tblerror_22 {
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #FF8080;
+  height: 22;
+  vertical-align: bottom;
+  text-align: center;
+}
+.tblbody {
+	background-color: #FFFFC8;
+}
+tr.tblbody:hover, tr.tblbody:active, tr.tblbody:focus {
+	background-color: #FFFFE9;
+}
+#markcity a       { color: FF6060; }
+#markcity a:hover { color: B06060; }
+.pos {
+	color: #000088;
+}
+a.pos:hover {
+	color: #8888FF;
+}
+.tbldanger {
+	background-color: #FF2020;
+}
+.tblokay {
+	background-color: #20FF20;
+}
+.book0 {
+	background-color: #FFFFC8;
+}
+.book1 {
+	background-color: #FFFF80;
+}
+.statusline {
+	color: E0E0AA;
+}
+a.statusline {
+/*	color: F0F0AA; */
+}
+select.statusline,option.statusline {
+	font-size: 11px;
+	font-weight: bold;
+/*	background-color: 351008; */
+    background: transparent;
+    border: none;   
+    color: black;
+}
+div.little_space {
+  height: 5px;
+}
+span.unit {
+  border: none;
+  text-align: right;
+  width: 70px;
+  height: 20px;
+  display:block;
+}
+span.click {
+  font-weight: bold;  
+}
+span.click:hover {
+  font-weight: bold;
+  text-decoration:none;
+  color: 606060;
+}
+
+/* Die Statistik-Tabellen */
+#stats  { margin-top: 5px; margin-bottom: 5px; }
+#stats table { border-spacing: 0px; border: 0px; border-collapse: collapse; empty-cells:show; }
+#stats td    { padding-right: 2px; border-right:1px solid #CCCC20; border-bottom: 1px solid #CCCC20;}
+#stats td.cityname { text-align: left; padding: 0px; padding-left: 1px; padding-right: 2px; }
+
+/* Die Adressbuch-Tabellen */
+#adr table { border-spacing: 0px; border-collapse: collapse; 
+             empty-cells:show; border: 1px solid #CCCC20; }
+
+#adr tr       { background-color: #FFFFC8; }
+#adr tr.line1 { background-color: #FFFFCC; }
+#adr tr.line0 { background-color: #FFEFA0; }
+
+#adr td,th { border-collapse: collapse; 
+             border-spacing: 0px; 
+             border-bottom: 1px solid #CCCC20; 
+           }
+#adr hr { width: 500px; }
+
+/* Die Menüpunkte oben auf der Einstellungen-Seite */
+#settings_menu { width: 600; border: 0px; }
+#settings_menu td { vertical-align: middle; text-align: center; padding: 6px; background-color: #FFFFC8;}
+#settings_menu td.active { background-color: #F0F0AA; }
+
+/* Die Tabellen der Einstellungs-Teile */
+#settings { width: 600; border: 0px; border-collapse:collapse; }
+#settings { background-color: #FFFFC8; }
+#settings tr.tblhead_22 { border-top: 2px solid grey; text-align: center; }
+#settings td { vertical-align: middle; padding: 2px; margin: 2px; }
+#settings h2 { font-size: 14px; margin: 4px; }
+
+#remaining_sms { font-weight: bold; color: blue;  }
+
+
+#vote tr {
+  background-color: #FFFFC8;
+  height: 36px;
+}
+#vote td {
+  vertical-align: middle;
+}
+
+#maininfo {
+  margin-left: 0px;
+  padding: 0px;
+}
+
+#maininfo td {
+  padding: 0px;
+}
+
+#maininfo div.box {
+  margin-top: 2px;
+  margin-bottom: 1px;
+  width: 450px;
+  background-color: #FFFFC8;  /* wie tblbody */
+}

@@ -51,6 +51,53 @@ function getReliImage($religion) {
   return sprintf("<img align=\"top\" src=\"%s/reli_icon_%d.gif\" alt=\"%s\" title=\"%s\"/>", $GLOBALS['imagepath'], $religion, $reli_str, $reli_str);  
 }
 
+/**
+ * Grafik für Resourcen/Rüstungsgüter zurückliefern.
+ * @param $res
+ * @return unknown_type
+ */
+function getResImage($res) {
+  switch($res) {
+    case 'gold':       return "gold.gif";
+    case 'wood':       return "wood.gif";
+    case 'iron':       return "iron.gif";
+    case 'stone':      return "stone.gif";
+    case 'shortrange': return "sword.gif";
+    case 'longrange':  return "bow.gif";
+    case 'armor':      return "armor.gif";
+    case 'horse':      return "horse.gif";
+  }
+}
+
+/**
+ * Grafik für Resourcen/Rüstungsgüter zurückliefern.
+ * @param $res
+ * @return unknown_type
+ */
+function getResName($res) {
+  switch($res) {
+    case 'gold':       return "Gold";
+    case 'wood':       return "Holz";
+    case 'iron':       return "Eisen";
+    case 'stone':      return "Stein";
+    case 'shortrange': return "Nahkampfwaffe";
+    case 'longrange':  return "Fernkampfwaffe";
+    case 'armor':      return "Rüstung";
+    case 'horse':      return "Pferd";
+  }
+}
+
+
+/**
+ * Grafik für Resourcen/Rüstungsgüter zurückliefern.
+ * @param $res
+ * @return unknown_type
+ */
+function getResImageCode($res) {
+  return sprintf('<img src="%s/%s" title="%s" alt="%s" border="0">',  $GLOBALS['imagepath'], getResImage($res), getResName($res), getResName($res));
+}
+
+
 // link for adding a player to adressbook
 function player_to_adr($name) {
   return (is_premium_adressbook() 
@@ -239,7 +286,7 @@ if(!function_exists("checkSettle")) {
 }
 
 /**
- * Lösche den Spieler.
+ * Lösche den Spieler sofort und komplett.
  * Alte Version vor dem 16.10.2009.
  *
  * @return null bei Erfolg

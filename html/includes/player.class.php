@@ -301,6 +301,11 @@ class Player {
     return $this->activationtime;
   }
   
+  // Das "Alter" dieses Accounts zurückgeben
+  function getAccountAge() {
+    return (time() - $this->activationtime);
+  }
+  
   // gibt den Punktestand zurück
 	function getPoints() {
 		$sql=mysql_query("SELECT points FROM player WHERE id = ".$this->id);
@@ -823,6 +828,7 @@ class Player {
       $_SESSION['session_duration'] = 0;
       return null;
     } // holidaymode
+    
     
     
     /**

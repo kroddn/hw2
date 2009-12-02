@@ -50,76 +50,95 @@ if(defined("HISPEED") && HISPEED) {
   die();
 }
 
+$player = $_SESSION['player'];
 $player->setActivePage(basename(__FILE__));
 
+
+$error = $player->canTrade();
+if ($error != null) {
+  //  Seitenstart
+  start_page();
+  start_body();
+  echo "<h1 class='error'>".$error."</h1>";
+  end_page();
+  die();
+}
+
+$error = null;
+
+// Neues Angebot aufgeben
 if ($aufgeben) {
-  $market->put($wantsType, $wantsQuant, $hasType, $hasQuant);
+  $error = $market->put($wantsType, $wantsQuant, $hasType, $hasQuant);
   $help = $wantsType;
   $wantsType = $hasType;
   $hasType = $help;
 }
 
 if ($recipient) {
-  $market->sendRes($type, $quant, $recipient);
+  $error = $market->sendRes($type, $quant, $recipient);
 }
 
+// Annehmen geklickt
 if ($id) {
-  $market->click($id);
+  $error = $market->click($id);
+}
+else if (isset($sendback)) {
+  $error = $market->sendBack($sendback);
+}
+else if (isset($del)) {
+  $error = $market->delOffer($del);
+}
+else if (isset($punish)) {
+  $error = $market->punishOffer($punish);
 }
 
-if (isset($sendback)) {
-  $market->sendBack($sendback);
- }
 
-if (isset($del)) {
-  $market->delOffer($del);
- }
-
-if (isset($punish)) {
-  $market->punishOffer($punish);
- }
-
-if (isset($wantsType)) 
+if (isset($wantsType)) {
   $market->setWantsType($wantsType);
-
-if (isset($hasType))  
+}
+if (isset($hasType)) {  
   $market->setHasType($hasType);
+}
 
-if (isset($sort))
+// Sortieren
+if(isset($sort)) {
   $market->setSort($sort);
+}
 
+// Vor/Rückblättern
 if (isset($prev)) {
   $market->show_prev();
- }
-
-if (isset($next)) {
+}
+else if (isset($next)) {
   $market->show_next();
- }
+}
 
 
 if (isset($all) || isset($view)) {
   unset($own);
 }
 
-if (isset($own))
-     $market->setOwn(1);
-else
-     $market->setOwn(0);
-     
+// Schalter "Eigene Angebote"
+if (isset($own)) {
+  $market->setOwn(1);
+}
+else {
+  $market->setOwn(0);
+}
+ 
 // Seitenstart     
 start_page();
 start_body();
 
-
-$error = $player->canTrade();
+// Fehlerausgabe
 if ($error != null) {
+  //  Seitenstart
   echo "<h1 class='error'>".$error."</h1>";
-  end_page();
-  die();
 }
+
 ?>
 <h1 style="margin:2px; ">Marktplatz in <? echo $_SESSION['cities']->getACName(); ?></h1>
-<form name="marketform" action="marketplace.php" method="POST">
+<form name="marketform" action="marketplace.php" method="GET">
 <table cellspacing="1" width="520" cellpadding="0" border="0">
 <tr>
 	<td class="tblhead" colspan="4"><strong>Ressourcen senden</strong></td>
@@ -224,23 +243,25 @@ else {
 </tr>
 </table>
 <div class="little_space"></div>
-<table width="520" cellpadding="0" cellspacing="1">
+<table cellpadding="0" cellspacing="1">
 <tr>
   <td colspan="1" class="tblhead" width="100" style="text-align:center;"><b>Spieler</b></td>
-  <td colspan="2" class="tblhead" width="150" style="text-align:center;"><b>sucht</b></td>
-  <td colspan="2" class="tblhead" width="150" style="text-align:center;"><b>bietet</b></td>
-  <td colspan="1" class="tblhead" width="50" style="text-align:center;"><b>Verh&auml;ltnis</b></td>
-  <td colspan="1" class="tblhead" width="50" style="text-align:center;">&nbsp;</td>
+  <td colspan="2" class="tblhead" width="100" style="text-align:center;"><b>sucht</b></td>
+  <td colspan="2" class="tblhead" width="100" style="text-align:center;"><b>bietet</b></td>
+  <td colspan="1" class="tblhead" width="50"  style="text-align:center;"><b>Verh&auml;ltnis</b></td>
+  <td colspan="1" class="tblhead" width="50"  style="text-align:center;"><b>Aktion</b></td>
 <?php
-  if ($player->isMarketmod())
+  if ($player->isMarketmod()) { 
     echo "<td colspan='3' class='tblhead'><b>Marktmoderation</b></td>";
-	echo "</tr>";
+  }
+    
+echo "</tr>";
 
 if ($market->getOwn() == 1) {
   $res1 = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,market.id AS id,ratio,player,city.name AS cname".
 			 " FROM market LEFT JOIN player ON market.player=player.id LEFT JOIN city ON city.id=market.city".
 			 " WHERE player=".$player->getID()." LIMIT ".$market->getStart().",".$market->getNum());
-} 
+}
 else {
   $qry="SELECT wantsType,wantsQuant,hasType,hasQuant,market.id AS id,ratio,player,player.name,city.name AS cname".
     " FROM market LEFT JOIN player ON market.player=player.id LEFT JOIN city ON city.id=market.city ";
@@ -249,12 +270,13 @@ else {
     if ($market->getWantsType() != "all") {
       $qry .= " AND hasType='".$market->getWantsType()."'";
     }
-  } else if ($market->getWantsType() != "all") {
+  } 
+  else if ($market->getWantsType() != "all") {
     $qry .= "WHERE hasType='".$market->getWantsType()."'";
   }
   $qry .= " ORDER BY ratio ".$market->getSort()." LIMIT ".$market->getStart().",".$market->getNum();
   $res1 = do_mysql_query($qry);
- }
+}
 
 while ($data1=mysql_fetch_array($res1)) {
   echo "\n<tr";
@@ -262,21 +284,24 @@ while ($data1=mysql_fetch_array($res1)) {
   echo ">\n";
   echo "  <td nowrap class=\"tblbody\"><a ".($data1['player']==$player->getID() ? 'style="color:blue;" ' : "")."href=\"info.php?show=player&name=".$data1['name']."\">".$data1['name']."</a></td>";
   echo "  <td nowrap class=\"tblbody\" style=\"text-align:right;\">".$data1['wantsQuant']."</td>";
-  echo "  <td nowrap class=\"tblbody\">".$market->gerres[$data1['wantsType']]."</td>";
+  echo "  <td nowrap class=\"tblbody\" width=\"20\">".getResImageCode($data1['wantsType'])."</td>";
   echo "  <td nowrap class=\"tblbody\" style=\"text-align:right;\">".$data1['hasQuant']."</td>";
-  echo "  <td nowrap class=\"tblbody\">".$market->gerres[$data1['hasType']]."</td>";  
+  echo "  <td nowrap class=\"tblbody\" width=\"20\">".getResImageCode($data1['hasType'])."</td>";  
 
   echo "  <td class=\"tblbody\" style=\"text-align:center;\"><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n";
   echo "<tr><td width=\"23\" style=\"padding:0px;text-align:right;\">1</td><td style=\"padding:0px;\" width=\"4\">:</td><td style=\"padding:0px;\" width=\"23\">".round(($data1['hasQuant']/$data1['wantsQuant']),2)."</td></tr>";
   echo "</table></td>\n";
-  echo "  <td class=\"tblbody\"><a href='marketplace.php?id=".$data1['id'].(isset($own) ? "&own=1' " : "' ").
-    ($data1['player']==$player->getID() && $data1['cname'] ? 'title="nach '.$data1['cname'].'"' : "").">";
+  echo "  <td class=\"tblbody\">";
+  echo "<a href='marketplace.php?id=".$data1['id'].(isset($own) ? "&own=1'" : "'").
+        ' title="'.($data1['player']==$player->getID() ? "Zurücknehmen" : "Annehmen").($data1['cname'] ? ' nach '.$data1['cname'] : ""). '">';
 
+    // Aktionsbuttons
   if ($data1['player'] == $player->getID()) {
-    echo "Zur&uuml;cknehmen";
+    printf('<img src="%s/%s" alt="Zurücknehmen" border="0">', $GLOBALS['imagepath'], 'delete.png' );
   } 
   else {  
-    echo "Annehmen";
+    //echo "Annehmen";
+    printf('<img src="%s/%s" alt="Annehmen" border="0">', $GLOBALS['imagepath'], 'despoil.gif' );
   }
 
   echo "</a></td>";
@@ -302,8 +327,11 @@ else {
   echo "<td colspan=\"3\" class=\"tblbody\" align=\"right\"><input accesskey=\",\" type=\"submit\" name=\"prev\" value=\"<< (ALT+,)\"";
 }
 
-if ($market->getStart() == 0) {echo " disabled ";}
-echo "></td><td colspan=\"3\" class=\"tblbody\"></td>";
+if ($market->getStart() == 0) {
+  echo " disabled ";
+}
+printf("></td><td colspan=\"3\" class=\"tblbody\">Seite %d</td>", $market->getPage() );
+
 echo "<td class=\"tblbody\" align=\"left\"><input accesskey=\".\" type=\"submit\" name=\"next\" value=\"(ALT+.) >>\"";
 if (mysql_num_rows($res1) < $market->getNum()) {echo " disabled ";}
 echo "></td></tr>";
@@ -314,7 +342,7 @@ echo "></td></tr>";
 
 <div class="little_space"></div>
 <table width="520" cellspacing="1" cellpadding="0" border="0">
-<form action="<? echo $PHP_SELF; ?>" method="POST">
+<form action="<? echo $PHP_SELF; ?>" method="GET">
 	<tr>
 		<td class="tblhead" colspan="4"><strong>Angebot aufgeben</strong></td>
         </tr>

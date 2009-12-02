@@ -113,7 +113,7 @@ die Aktivierung aufrufen, und den Aktivierungscode eingeben."
 )."
 
 Vergessen Sie nicht, nach dem ersten Login Ihre Ausgangsstadt umzubenennen und
-weitere Informationen unter dem Menüpunkt Einstellungen zu hinterlegen!
+weitere Informationen unter dem Menüpunkt MyHW2 zu hinterlegen!
 
 Bitte installieren Sie auch gleich den Grafik-Pack, um unseren Server zu
 schonen und die Spielgeschwindigkeit zu erhöhen. Download unter:

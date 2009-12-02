@@ -42,6 +42,8 @@ include_once("includes/multi.inc.php");
 include_once("includes/premium.inc.php");
 include_once("includes/sms.func.php");
 
+define("TIME_IMMED_DELETE", 24*3600);
+
 $_SESSION['player']->setActivePage(basename(__FILE__));
 
 // Einstellungen neu laden
@@ -246,7 +248,7 @@ if (isset($acc_delete_process)) {
       if($acc_delete2==1) $del=false;
 
       if($del==true) {
-        if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) {
+        if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) {
           $_SESSION['player']->MarkRemove();
         }
         else {
@@ -1068,12 +1070,14 @@ function show_account() {
     <td width="50%"><b>Spielername</b></td>
     <td><? echo $_SESSION['player']->getName(); ?></td>
   </tr>
-  <tr class="tblbody">
+  <tr class="tblbody" valign="top">
     <td width="50%"><b>Account-ID</b></td>
-    <td><? echo $_SESSION['player']->getID(); ?></td>
+    <td><? echo $_SESSION['player']->getID(); ?><br>
+    Angelegt am <?php echo date("d.m.Y G:i", $_SESSION['player']->getRegTime()); ?>
+    </td>
   </tr>
 	<tr class="tblbody" valign="top">
-         <td width="50%"><b>Session-Infos</b></td>
+         <td width="50%" valign="top"><b>Session-Infos</b></td>
          <td>
           IP-Adresse: <? echo $_SESSION['player']->getIp(); ?><br>
           Sitzungsdauer: <? echo round( (time() - $_SESSION['login_time'])/60); ?> Minuten<br>
@@ -1136,10 +1140,13 @@ function show_account() {
 
 
   <tr height="10"><td></td></tr><tr class="tblhead_22">
-  <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) { ?>
+  <?php   
+   // in der ersten 24 Spielstunde kann man den Account direkt löschen  
+   if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE ) { 
+  ?>
     <td colspan="2"><h2><a name="acc_accdel">Account zum Löschen vormerken</a></h2></td>
   <?php } else { ?>
-    <td colspan="2"><h2><a name="acc_accdel">Account löschen</a></h2></td>
+    <td colspan="2"><h2><a name="acc_accdel">Account SOFORT löschen</a></h2></td>
   <?php }?>
   </tr>
   <tr class="tbldanger">
@@ -1152,12 +1159,12 @@ function show_account() {
       </tr>
 	<tr><td colspan="3">&nbsp;</td></tr>
 	<tr>
-  <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) { ?>
+  <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) { ?>
 	  <td colspan="3" align="center">
 	       <input type="submit" name="acc_delete_process" value="ACCOUNT ZUM LÖSCHEN VORMERKEN">
 	  </td>
   <?php } else { ?>
-      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT LÖSCHEN"></td>
+      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT SOFORT LÖSCHEN"></td>
   <?php }?>
 	</tr>
       </table>
@@ -1165,7 +1172,7 @@ function show_account() {
   </tr>
   <tr class="tbldanger">
     <td colspan="2" align="center" style="color: white;">
-    <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) { ?>
+    <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) { ?>
        Ihr Account wird zum Löschen lediglich <b>&quot;markiert&quot;</b>. Die wirkliche Löschung
        des Accounts erfolgt etwa 24 Stunden später. Alle Städte werden dabei als <b>Herrenlose Städte</b> freigegeben.
        Sie können diese Vormerkung jederzeit revidieren, indem Sie sich innerhalb der 24 Stunden einloggen.

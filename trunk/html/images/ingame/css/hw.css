@@ -324,3 +324,11 @@ span.click:hover {
   width: 450px;
   background-color: #FFFFC8;  /* wie tblbody */
 }
+
+.marketline {
+    background-color: #FFFFC8;
+}
+
+tr.marketline:hover, tr.marketline:active, tr.marketline:focus {
+    background-color: #FFFFE9;
+}

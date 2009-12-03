@@ -41,7 +41,7 @@ function start_page() {
   <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/ie6.css" type="text/css">
  <![endif]-->
 
- <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?20091021" type="text/css">
+ <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?20091202" type="text/css">
  <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout_v01.css" type="text/css">
 </head>
 

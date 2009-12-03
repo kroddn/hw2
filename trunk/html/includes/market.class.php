@@ -705,26 +705,13 @@ function takeBack($id) {
    *         Andernfalls eine Fehlermeldung, die beschreibt, wieso die Spieler nicht handeln dürfen
    */
   function checkMayTrade($id1, $id2) {
-    // Prüfen, ob die beiden Spieler eine gemeinsame Multiexception haben.
-    // Es werden alle Datensätze abgefragt, bei denen die gleiche Exception-ID vorliegt
-    // und die beiden Spieler enthalten sind.
-    $sql = "SELECT ex.comment,e1.id AS id1,e2.id AS id2 FROM multi_exceptions_players e1 ".
-           " LEFT JOIN multi_exceptions_players e2 ON (e2.player = $id2 AND e1.eid=e2.eid) ".
-           " LEFT JOIN multi_exceptions ex ON (e1.eid=ex.id) ".
-           " WHERE e1.player = $id1 AND e2.player = $id2";
-    $res = do_mysql_query($sql);
-    while($ex = mysql_fetch_assoc($res)) {
-      // Falls wir hier reinkommen ist eine entsprechende Exception vorhanden
-      
-      $error = sprintf("Der Handel mit diesem Spieler ist untersagt, weil eine MultiException vorliegt. Begründung: &quot;%s&quot;.", $ex['comment'] );
-
-      // SQL DEBUG in DEV oder wenn Admin ausführt
-      if( $_SESSION['player']->isAdmin() || defined("HW2DEV") && HW2DEV ) {
-        $error .= "<br>".$sql;
-      }
-      
-      return $error;
-    }
+    // Multiexception testen
+    $check = checkMultiException($id1, $id2);
+    
+    if($check != null) {
+        $error = sprintf("Der Handel mit diesem Spieler ist untersagt, weil eine MultiException vorliegt. Begründung: &quot;%s&quot;.", $check );
+        return $error;
+    }    
     
     return null;
   }

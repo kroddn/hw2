@@ -1262,6 +1262,11 @@ class Cities {
         }
       }
       
+      // Multi-Exception berücksichtigen
+      if(null != ($check_ex = checkMultiException($_SESSION['player']->getID(), $data1['owner'])) ) {
+        return "Ihr könnt keinen Spieler angreifen oder Truppen senden, wenn er in einer Multi-Exception-Gruppe mit Euch ist.";        
+      }
+      
       if ($_SESSION['player']->isMultihunter() && !$_SESSION['player']->isAdmin()) {
         $status_res = do_mysql_query("SELECT status FROM player WHERE id=".$data1['owner']);
         if (($status = mysql_fetch_assoc($status_res)) &&

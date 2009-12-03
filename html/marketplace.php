@@ -185,7 +185,7 @@ else {
 <div class="little_space"></div>
 <table width="520" cellspacing="1" cellpadding="0" border="0">
 	<tr>
-		<td class="tblhead" colspan="8"><strong>Angebote anzeigen</strong></td>
+		<td width="520" class="tblhead" colspan="8"><strong>Angebote anzeigen</strong></td>
 	</tr>
 	<tr>
 		<td class="tblbody" colspan="2">
@@ -245,11 +245,11 @@ else {
 <div class="little_space"></div>
 <table cellpadding="0" cellspacing="1">
 <tr>
-  <td colspan="1" class="tblhead" width="100" style="text-align:center;"><b>Spieler</b></td>
-  <td colspan="2" class="tblhead" width="100" style="text-align:center;"><b>sucht</b></td>
-  <td colspan="2" class="tblhead" width="100" style="text-align:center;"><b>bietet</b></td>
-  <td colspan="1" class="tblhead" width="50"  style="text-align:center;"><b>Verh&auml;ltnis</b></td>
-  <td colspan="1" class="tblhead" width="50"  style="text-align:center;"><b>Aktion</b></td>
+  <td colspan="1" class="tblhead" width="180" style="text-align:center;"><b>Spieler</b></td>
+  <td colspan="2" class="tblhead" width="80" style="text-align:center;"><b>sucht</b></td>
+  <td colspan="2" class="tblhead" width="80" style="text-align:center;"><b>bietet</b></td>
+  <td colspan="1" class="tblhead" width="60"  style="text-align:center;"><b>Verh&auml;ltnis</b></td>
+  <td colspan="1" class="tblhead" width="60"  style="text-align:center;"><b>Aktion</b></td>
 <?php
   if ($player->isMarketmod()) { 
     echo "<td colspan='3' class='tblhead'><b>Marktmoderation</b></td>";
@@ -279,21 +279,25 @@ else {
 }
 
 while ($data1=mysql_fetch_array($res1)) {
-  echo "\n<tr";
-  if($data1['player']==$player->getID() && $data1['cname']) echo ' title="nach '.$data1['cname'].'"';
+  echo "\n<tr class=\"marketline\"  ";
+  if($data1['player']==$player->getID() && $data1['cname']) {
+    echo ' title="nach '.$data1['cname'].'"';    
+  }
   echo ">\n";
-  echo "  <td nowrap class=\"tblbody\"><a ".($data1['player']==$player->getID() ? 'style="color:blue;" ' : "")."href=\"info.php?show=player&name=".$data1['name']."\">".$data1['name']."</a></td>";
-  echo "  <td nowrap class=\"tblbody\" style=\"text-align:right;\">".$data1['wantsQuant']."</td>";
-  echo "  <td nowrap class=\"tblbody\" width=\"20\">".getResImageCode($data1['wantsType'])."</td>";
-  echo "  <td nowrap class=\"tblbody\" style=\"text-align:right;\">".$data1['hasQuant']."</td>";
-  echo "  <td nowrap class=\"tblbody\" width=\"20\">".getResImageCode($data1['hasType'])."</td>";  
+  echo "  <td nowrap><a ".($data1['player']==$player->getID() ? 'style="color:blue;" ' : "")."href=\"info.php?show=player&name=".$data1['name']."\">".$data1['name']."</a></td>";
+  echo "  <td nowrap style=\"text-align:right;\">".$data1['wantsQuant']."</td>";
+  echo "  <td nowrap width=\"20\">".getResImageCode($data1['wantsType'])."</td>";
+  echo "  <td nowrap style=\"text-align:right;\">".$data1['hasQuant']."</td>";
+  echo "  <td nowrap width=\"20\">".getResImageCode($data1['hasType'])."</td>";  
 
-  echo "  <td class=\"tblbody\" style=\"text-align:center;\"><table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n";
-  echo "<tr><td width=\"23\" style=\"padding:0px;text-align:right;\">1</td><td style=\"padding:0px;\" width=\"4\">:</td><td style=\"padding:0px;\" width=\"23\">".round(($data1['hasQuant']/$data1['wantsQuant']),2)."</td></tr>";
-  echo "</table></td>\n";
-  echo "  <td class=\"tblbody\">";
+  echo "  <td style=\"text-align:center;\">";
+  echo "     <table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"0\"\n";
+  echo "        <tr><td width=\"23\" style=\"padding:0px;text-align:right;\">1</td><td style=\"text-align:center; padding:0px;\" width=\"4\">:</td><td style=\"padding:0px;\" width=\"23\">".round(($data1['hasQuant']/$data1['wantsQuant']),2)."</td></tr>";
+  echo "     </table>";
+  echo "  </td>\n";
+  echo "  <td>";
   echo "<a href='marketplace.php?id=".$data1['id'].(isset($own) ? "&own=1'" : "'").
-        ' title="'.($data1['player']==$player->getID() ? "Zurücknehmen" : "Annehmen").($data1['cname'] ? ' nach '.$data1['cname'] : ""). '">';
+        ' title="'.($data1['player']==$player->getID() ? "Zurücknehmen".($data1['cname'] ? ' nach '.$data1['cname'] : "") : "Annehmen").'">';
 
     // Aktionsbuttons
   if ($data1['player'] == $player->getID()) {
@@ -301,14 +305,14 @@ while ($data1=mysql_fetch_array($res1)) {
   } 
   else {  
     //echo "Annehmen";
-    printf('<img src="%s/%s" alt="Annehmen" border="0">', $GLOBALS['imagepath'], 'despoil.gif' );
+    printf('<img src="%s/%s" alt="Anneh men" border="0">', $GLOBALS['imagepath'], 'despoil.gif' );
   }
 
   echo "</a></td>";
   if ($player->isMarketmod()) {
-    echo "  <td class=\"tblbody\"><a href='marketplace.php?sendback=".$data1['id']."'>Zurückschicken</a></td>";
-    echo "  <td class=\"tblbody\"><a href='marketplace.php?del=".$data1['id']."'>Löschen</a></td>";
-    echo "  <td class=\"tblbody\"><a onClick=\"return confirm('Wirklich bestrafen?')\" href='marketplace.php?punish=".$data1['id']."'>Bestrafen</a></td>";
+    echo "  <td><a href='marketplace.php?sendback=".$data1['id']."'>Zurückschicken</a></td>";
+    echo "  <td><a href='marketplace.php?del=".$data1['id']."'>Löschen</a></td>";
+    echo "  <td><a onClick=\"return confirm('Wirklich bestrafen?')\" href='marketplace.php?punish=".$data1['id']."'>Bestrafen</a></td>";
   }
   echo "</tr>";
  }

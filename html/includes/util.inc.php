@@ -2036,4 +2036,39 @@ function printRoundTimes()
   }
 }
 
+
+  /**
+   * Prüfen, ob zwei Spieler eine gemeinsame Multiexception haben
+   * 
+   * @param $id1  ID des ersten Spielers
+   * @param $id2  ID des ersten Spielers
+   * 
+   * @return null, falls die beiden Spieler KEINE Exception haben
+   *         Andernfalls eine Fehlermeldung, die den "comment" der Exception liefert.
+   */
+  function checkMultiException($id1, $id2) {
+    // Prüfen, ob die beiden Spieler eine gemeinsame Multiexception haben.
+    // Es werden alle Datensätze abgefragt, bei denen die gleiche Exception-ID vorliegt
+    // und die beiden Spieler enthalten sind.
+    $sql = "SELECT ex.comment,e1.id AS id1,e2.id AS id2 FROM multi_exceptions_players e1 ".
+           " LEFT JOIN multi_exceptions_players e2 ON (e2.player = $id2 AND e1.eid=e2.eid) ".
+           " LEFT JOIN multi_exceptions ex ON (e1.eid=ex.id) ".
+           " WHERE e1.player = $id1 AND e2.player = $id2";
+    $res = do_mysql_query($sql);
+    while($ex = mysql_fetch_assoc($res)) {
+      // Falls wir hier reinkommen ist eine entsprechende Exception vorhanden
+      
+      $error = $ex['comment'];
+
+      // SQL DEBUG in DEV oder wenn Admin ausführt
+      if( $_SESSION['player']->isAdmin() || defined("HW2DEV") && HW2DEV ) {
+        $error .= "<br>".$sql;
+      }
+      
+      return $error;
+    }
+    
+    return null;
+  }
+
 ?>

@@ -1219,7 +1219,8 @@ class Cities {
       return "Fehler. Die Stadt hat einen ungültigen Besitzer.";
     }  
     
-    if ($data1['owner'] != null && $data1['owner'] < 10) {
+    // Angriff/Verlegungen zu Adminstädten nur durch Admins erlauben
+    if ($data1['owner'] != null && $data1['owner'] < 10 && $check['owner'] >= 10) {
        return "Admin-Städte können nicht angegriffen werden.";
     }
     
@@ -1262,8 +1263,8 @@ class Cities {
         }
       }
       
-      // Multi-Exception berücksichtigen
-      if(null != ($check_ex = checkMultiException($_SESSION['player']->getID(), $data1['owner'])) ) {
+      // Multi-Exception berücksichtigen (nicht bei Herrenlosen Städten versteht sich
+      if($data1['owner'] != null && null != ($check_ex = checkMultiException($_SESSION['player']->getID(), $data1['owner'])) ) {
         return "Ihr könnt keinen Spieler angreifen oder Truppen senden, wenn er in einer Multi-Exception-Gruppe mit Euch ist.";        
       }
       

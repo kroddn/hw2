@@ -68,12 +68,12 @@ else {
 
 <table cellspacing = "1" cellpadding="0" border="0">
   <tr height="20" class="tblhead">
-    <td <? printActive("city"); ?>><a href="<?php echo "$PHP_SELF?show=city"; ?>">Stadtverwaltung</a></td>
+    <td <? printActive("city"); ?>><a href="<?php echo "$PHP_SELF?show=city"; ?>">Allgemeines</a></td>
     <td <? printActive("ressources"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=ressources"; ?>">Ressourcen</a></td>
-    <td <? printActive("weapons"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=weapons"; ?>">Waffen</a></td>
-    <td <? printActive("gold"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=gold"; ?>">Gold</a></td>
-    <td <? printActive("build"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=build"; ?>">Gebäude in Bau</a></td>
-    <td <? printActive("troops"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=troops"; ?>">Truppen in Ausbildung</a></td>
+    <td <? printActive("weapons"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=weapons"; ?>">Rüstung/Militär  </a></td>
+    <td <? printActive("gold"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=gold"; ?>">Goldbilanz</a></td>
+    <td <? printActive("build"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=build"; ?>">Gebäudebau</a></td>
+    <td <? printActive("troops"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=troops"; ?>">Truppenausbildung</a></td>
     <td <? printActive("wert"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=wert"; ?>">Buchwert</a></td>
     <td <? printActive("troopoverview"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=troopoverview"; ?>">Truppenübersicht</a></td>
   </tr>

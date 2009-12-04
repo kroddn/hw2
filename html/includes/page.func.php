@@ -41,12 +41,12 @@ function start_page() {
   <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/ie6.css" type="text/css">
  <![endif]-->
 
- <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?20091202" type="text/css">
- <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout_v01.css" type="text/css">
+ <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?20091204" type="text/css">
+ <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout.css?20091204" type="text/css">
 </head>
 
 <script language="JavaScript" src="js/timer.js" type="text/javascript" ></script>
-<script language="JavaScript" src="js/infopopup_v01.js" type="text/javascript"></script>
+<script language="JavaScript" src="js/infopopup.js?20091204" type="text/javascript"></script>
 
 
 <?

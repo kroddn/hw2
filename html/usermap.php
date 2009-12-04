@@ -31,15 +31,20 @@
  ***************************************************/
  include_once("includes/db.inc.php");
  include_once("includes/session.inc.php");
- if (!isset($_GET['uid']))
+ if(isset($_GET['uid']))
  {
-    $what = "WHERE player.id = ".$_SESSION['player']->id;
+    start_page();
+    start_body();
+    echo '<h1 class="error">Fehler: die Anzeige von Spielerdaten über deren ID wird aus Sicherheitsgründen nicht mehr unterstützt. Bitte melden Sie die Stelle, von wo aus dieser Aufruf stattgefunden hat, damit dieser Fehler behoben werden kann.</h1><p>';
+    end_page();
  }
  else if(isset($_GET['name'])) {
-    $what = "WHERE player.name = ".mysql_escape_string($_GET['name'])." OR player.id = ".$_SESSION['player']->id;
+    $what = "WHERE player.name = '".mysql_escape_string($_GET['name'])."' OR player.id = ".$_SESSION['player']->id;
+    include_once("includes/worldmap.inc.php");
  }
  else {
-    $what = "WHERE player.id = ".mysql_escape_string($_GET['uid'])." OR player.id = ".$_SESSION['player']->id;
+    $what = "WHERE player.id = ".$_SESSION['player']->id;
+    include_once("includes/worldmap.inc.php");
  }
- include_once("includes/worldmap.inc.php");
+ 
 ?>

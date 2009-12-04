@@ -210,7 +210,7 @@ class MapVersion3 {
 
       // eine Grafikzelle in der Tabelle oeffnen und Hintergrund eintragen
       echo( "\t\t".            
-            '<td style="background-image:url(\''.$background_image."');\">");
+            '<td style="background-image:url(\''.$background_image."');\">\n");
       
       // Wenn wir Berge ausgeben wollen, dann diese in einem neuen Layer ausgeben
       if ( $field['type'] == 4 ) {
@@ -230,14 +230,14 @@ class MapVersion3 {
       else if ($hilight) {
         echo '<div style="position:absolute; border: 1px solid white; width: 40px; height: 40px; z-index:6; '.
           'top:'.(($j*40)-40).'; left:'.(($i*40)-40).
-          ';" class="'.$kclass.'">'.$field['x'].':'.$field['y']."</div>";
+          ';" class="'.$kclass.'">'.$field['x'].':'.$field['y']."</div>\n";
       }
 
       // Spezialressourcen ausgeben
       if ( $field['special'] > 0) {
         echo '<div style="z-index:51;position:absolute; left:'.($starty+($i*40)-3).'; top:'.($startx+($j*40)-5).'">'.
           '  <img src="'.$imagepath.$folder.'/s'.$field['special'].'.gif">'.       
-          '</div>';
+          "</div>\n";
         //'.sprintf('title="S%d bei %d:%d"', $field['special'], $field['x'], $field['y']).'
       }
 
@@ -258,7 +258,7 @@ class MapVersion3 {
         echo( '<div style="z-index:19; position:absolute; left:'.($starty+($i*40)-80).
               '; top:'.($startx+($j*40)-80).'; '.
               '            width:200px; height:200px; border:1px solid '.$bordcol.';">'.
-              '</div>' );
+              "</div>\n" );
 
         // Default Werte
         $fontColor = 'black';
@@ -302,39 +302,44 @@ class MapVersion3 {
           
           // Ordeninfo vorbereiten       
           if ( !isset($field['clan']) || $field['clan'] == '' ) {
-            $clanlink = ( '<br />'.
-			'geh&ouml;rt zur Zeit<br />'.
-			'keinem Orden an!<br />&nbsp;' );
+            $clanlink = ( '<br>'.
+			'geh&ouml;rt zur Zeit<br>'.
+			'keinem Orden an!<br>&nbsp;' );
           }
           else {
             $clan_name = get_clan_name($field['clan']);
-            $clanlink = ( '&nbsp;ist<br />'.
-			'Anh&auml;nger des Ordens<br />'.$clan_name.'<br />'.
+            $clanlink = ( '&nbsp;ist<br>'.
+			'Anh&auml;nger des Ordens<br>'.$clan_name.'<br>'.
 			'<a href=info.php?show=clan&id='.$field['clan'].'>Zur Ordensseite</a>' );
           }
           
           // Spielernamen säubern
           $ownername = str_replace(" ", "%20", $field['ownername']);
-          $ownerlink = 'Herrscher: <a class="hell" href="javascript:playerinfo('.$field['ownerid'].')">'.$field['ownername'].'</a>';
+          $ownerlink = 'Herrscher: <a class="hell" href="javascript:playerinfo(\''.urlencode($field['ownername']).'\')">'.$field['ownername'].'</a>';
+          // Spezielle konvertierung für den "Zurück" Button, der per JavaScript code HTML in ein div einfügt
+          $js_ownerlink = htmlentities('Herrscher: <a class="hell" href="javascript:playerinfo(\\\''.urlencode($field['ownername']).'\\\')">'.$field['ownername'].'</a>', ENT_QUOTES);
         }
         
         echo( '<div id="i'.$field['cityid'].'" class="cityinfo" '.
 	      '     style="left:'.($starty + $i*40 - 79).'; top:'.(($startx+($j*40))+66).'; color:'.$fontColor.';'.
 	      '     width:198px; height:53px; z-index:306; background-color:'.$backColor.';">'."\n".
-	      '  <a class="hell" href="javascript:towninfo('.$field['cityid'].')">'.$field['name'].'</a><br>'.
+	      '  <a class="hell" style="" href="javascript:towninfo('.$field['cityid'].')">'.$field['name'].'</a><br>'.
 	      '  '.$ownerlink.'<br>'.
 	      '  <i>kein Spionagebericht</i><br>'.
 	      '  Status: '.get_population_string($field['population'], $field['prosperity'])."\n".
 	      '</div>'."\n" );
 
+        /// Was soll das ganze hier... nochmal denselben Inhalt als id=jXXXXX ????
+/*
         echo( '<div id="j'.$field['cityid'].'" class="cityinfo" '.
 	      '     style="left:'.($starty + $i*40 - 79 ).'; top:'.(($startx+($j*40))+66).'; color:'.$fontColor.';'.	      
-	      '     width:200px; z-index:307; background:transparent;">'."\n".
-	      '  <a class="hell" href="javascript:towninfo('.$field['cityid'].')">'.$field['name'].'</a><br />'.
-	      '  '.$ownerlink.'<br />'.
-	      '  <i>kein Spionagebericht</i><br />'.
+	      '     width:198px; z-index:307; background:transparent;">'."\n".
+	      '  <a class="hell" href="javascript:towninfo('.$field['cityid'].')">'.$field['name'].'</a><br>'.
+	      '  '.$ownerlink.'<br>'.
+	      '  <i>kein Spionagebericht</i><br>'.
 	      '  Status: '.get_population_string($field['population'], $field['prosperity'])."\n".
 	      '</div>'."\n" );
+*/
 
         echo( '<div id="a'.$field['cityid'].'" style="cursor:pointer; border-top: 1px solid white;'.
 	      '     border-left: 1px solid white; position:absolute; background-color:#F0F0AA;'.
@@ -343,13 +348,13 @@ class MapVersion3 {
 	      '     display:block; width:17px; height:17px; z-index:308; text-align:center;"'.
 	      '     onclick="tipThis(\'<strong>Mylord '.$_SESSION['player']->getName().'!</strong><br>'.
 	      '     Soll diese '.get_population_string($field['population'], $field['prosperity']).' auf Euer'.
-	      '     Gehei&szlig; hin attakiert werden?<br />'.
+	      '     Gehei&szlig; hin attakiert werden?<br>'.
 	      '     <a href=\\\'general.php?selectx='.($i+$gox-1).'&selecty='.($j+$goy-1).'\\\'>ATTACKE!'.
 	      '     </a>\',\''.$field['cityid'].'\');">'.
 	      'A'.
 	      '</div>'."\n" );
         
-        // Ordensinfo nur bei spielern
+        // Ordensinfo nur bei Spielern, herrenlose Städte nicht
         if($field['ownername']) {
           echo( '<div id="b'.$field['cityid'].'" style="cursor:pointer; border-top: 1px solid white;'.
 	           '     border-left: 1px solid white; position:absolute; background-color:#F0F0AA;'.
@@ -362,17 +367,17 @@ class MapVersion3 {
 	      '</div>'."\n" );
         }
 
+        // Den Button mit <         
         echo( '<div id="c'.$field['cityid'].'" style="cursor:pointer; border-top: 1px solid white;'.
-	      '     border-left: 1px solid white; position:absolute; background-color:#F0F0AA;'.
-	      '     left:'.( $starty + $i*40 + 102).'; top:'.(($startx+($j*40))+102).'; color:black;'.
-	      '     -moz-opacity:0.5; filter:Alpha(opacity=50, finishopacity=50, style=2);'.
-	      '     display:block; width:17px; height:16px; z-index:308; text-align:center;"'.
-	      '     onclick="tipThis(\''.
-	      '     <a href=\\\'javascript:towninfo('.$field['cityid'].')\\\'>'.$field['name'].'</a><br>'.
-	      //'     Herrscher: <a href=\\\'info.php?show=player&name='.$ownername.'\\\'>'.$field['ownername'].'</a><br />'.
-	      htmlentities($ownerlink, ENT_QUOTES)."<br>".
-	      '     <i>kein Spionagebericht</i><br>'.
-	      '     Status: '.get_population_string($field['population'], $field['prosperity']).'\',\''.$field['cityid'].'\');">'.
+	      ' border-left: 1px solid white; position:absolute; background-color:#F0F0AA;'.
+	      ' left:'.( $starty + $i*40 + 102).'; top:'.(($startx+($j*40))+102).'; color:black;'.
+	      ' -moz-opacity:0.5; filter:Alpha(opacity=50, finishopacity=50, style=2);'.
+	      ' display:block; width:17px; height:16px; z-index:308; text-align:center;"'.
+	      ' onclick="tipThis(\''.
+	      ' <a href=\\\'javascript:towninfo('.$field['cityid'].')\\\'>'.$field['name'].'</a><br>'.
+	      $js_ownerlink."<br>".
+	      ' <i>kein Spionagebericht</i><br>'.
+	      ' Status: '.get_population_string($field['population'], $field['prosperity']).'\',\''.$field['cityid'].'\');">'.
 	      '&lt;'.
 	      '</div>'."\n" );
 

@@ -50,6 +50,10 @@ h2 { font-size: 14px; margin-bottom: 3px;  }
 	filter:Alpha(opacity=50, finishopacity=50, style=2);
 }
 
+#map .cityinfo a {
+	font-size: 10px;
+}	
+	
 #map #citysettle {
     -moz-opacity:0.5; 
     filter:Alpha(opacity=50, finishopacity=50, style=2);

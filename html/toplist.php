@@ -447,7 +447,12 @@ function top_honor() {
 ?>
 
 <td colspan="5">
-<br>Bonuspunkte haben keinen Einfluss auf das Spiel an sich. Man kann Bonuspunkte im Moment durch Werbung von neuen Mitspielern über den Link in den <a href="settings.php?show=account">Einstellungen</a> gewinnen, oder indem man sich regelmässig einloggt (siehe <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?t=7735#98554">hier</a>).<br>
+<br>Bonuspunkte haben keinen Einfluss auf das Spiel an sich. 
+    Man kann Bonuspunkte im Moment durch Werbung von neuen Mitspielern über den Link in den
+    <a href="settings.php?show=account">Einstellungen</a> gewinnen, oder indem man sich 
+    regelmässig einloggt (siehe <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?t=7735#98554">hier</a>).
+    <br>
+    Einige Spieler tauchen hier nicht auf, weil sie das in ihren Einstellungen deaktiviert haben.    
 </td></tr><tr class="tblhead">
   
 <td width="10">Platz</td>
@@ -457,7 +462,12 @@ function top_honor() {
 <td nowrap>Orden</td>
 
 <?
-  $res3 = do_mysql_query("SELECT player.name AS name, (player.bonuspoints + coalesce(sum(player_monument.honor),0) ) AS points, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id LEFT JOIN player_monument ON player.id=player_monument.player WHERE activationkey IS NULL AND player.name IS NOT NULL GROUP BY player.name ORDER BY points DESC LIMIT 100");
+  $disable_bonus_flag = 32;
+  $res3 = do_mysql_query("SELECT player.name AS name, (player.bonuspoints + coalesce(sum(player_monument.honor),0) ) AS points, player.religion AS religion, clan.name AS clan ".
+    "FROM player ".
+    " LEFT JOIN clan ON player.clan = clan.id ".
+    " LEFT JOIN player_monument ON player.id=player_monument.player ".
+    " WHERE activationkey IS NULL AND player.name IS NOT NULL AND (player.settings & ".$disable_bonus_flag.") = 0 GROUP BY player.name ORDER BY points DESC LIMIT 100");
   
   $i=0;
   while ($data3 = mysql_fetch_assoc($res3)) {

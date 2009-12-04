@@ -68,7 +68,7 @@ if (isset($acceptsmsrules)) {
 // Einstellungen ändern
 if (isset($changesettings) || isset($savesettings)) {
   foreach($arr_settings as $i => $name) {
-    $_SESSION['settings'][$name] = $$name   == 1;    
+    $_SESSION['settings'][$name] = ($$name == 1);    
   }
   
   // Die Einstellungen auch abspeichern
@@ -455,7 +455,7 @@ function show_settings_menu($show) {
     <a href="?show=game">Spiel</a></td>
     
     <td onMouseOver="setClickHint('<? echo $hints['grapa']; ?>')"   nowrap width="20%" <? if ($show=="grapa")   echo 'class="active"';?>>
-    <a href="?show=grapa">Grafik / Menü</a></td>
+    <a href="?show=grapa">Grafik / Sonstiges</a></td>
     
     <td onMouseOver="setClickHint('<? echo $hints['sms']; ?>')"     nowrap width="20%" <? if ($show=="sms")     echo 'class="active"';?>>
     <a href="?show=sms">SMS</a></td>
@@ -794,11 +794,12 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
 <div style="width:400px; border: 1px solid black; text-align: left; margin: 4px; ">
 <?php
   {
-    settings_check_button_br("forum_own",               "Forum in einem extra Fenster öffnen.");    
-    settings_check_button_br("map_own",                 "Karte in einem extra Fenster öffnen.");
-    settings_check_button_br("library_own",             "Bibliothek in einem extra Fenster öffnen.");
-    settings_check_button_br("hide_banner",             "Werbe-Banner nicht anzeigen (Premium-Account).");    
-    settings_check_button_br("disable_login_counter",   "Login-Ticker ausblenden.");
+    settings_check_button_br("forum_own",                     "Forum in einem extra Fenster öffnen.");    
+    settings_check_button_br("map_own",                       "Karte in einem extra Fenster öffnen.");
+    settings_check_button_br("library_own",                   "Bibliothek in einem extra Fenster öffnen.");
+    settings_check_button_br("hide_banner",                   "Werbe-Banner nicht anzeigen (Premium-Account).");    
+    settings_check_button_br("disable_login_counter",         "Login-Ticker ausblenden.");
+    settings_check_button_br("disable_toplist_bonuspoints",   "Auftauchen in der Toplist Bonuspunkte unterdrücken.");
 
     if ($_SESSION['player']->isAdmin()) {
       $setts = do_mysql_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$_SESSION['player']->getID());

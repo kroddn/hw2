@@ -48,7 +48,7 @@ start_page();
 // JavaScript-Funktion öffnet Kindfenster für die Suche nach einer Städten
 function popUp(sel) {
   if(sel=="world")
-    var win = window.open("usermap.php?uid="+<?php echo $_SESSION['player']->id; ?>,"Weltkarte","width=820,height=800,left=0,scrollbars=yes,top=0,dependent=yes");
+    var win = window.open("usermap.php","Weltkarte","width=820,height=800,left=0,scrollbars=yes,top=0,dependent=yes");
   else if(sel=="help")
     var win = window.open("library.php?s1=0&s2=0&s3=0&menu=0","Hilfe","width=700,height=650,left=0,top=0,scrollbars=yes,dependent=yes");
   win.focus();

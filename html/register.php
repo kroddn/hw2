@@ -195,7 +195,7 @@ require_once("start_header.php");
                 <td class="tblbody" >Spielen mehrere Spieler über einen Router oder über denselben Computer (gleiche IP-Adresse), 
 dann <b>muss</b> eine sogenannte Multi-Exception in den Einstellungen beantragt werden. Jeglicher Fluss von Resourcen zwischen den betroffenen
 Spielern ist ausnahmslos untersagt, auch wenn die Ressourcen über Dritte weitergeleitet werden. In solchen Fällen wird auch das Weiterleiten
-der Resourcen geahndet.
+der Resourcen geahndet. Ebenso sind Truppenbewegungen untersagt.
 </td>
 	</tr>
 

@@ -40,10 +40,8 @@ function parent_goto(ref){
     //    window.close();
   }       
 }
-function minnimap(id) {
-  window.open("usermap.php?uid="+id,"Karte","width=840,height=820,left=0,top=0,status=no,scrollbars=yes,dependent=yes");
-}
-function minnimapname(name) {
+
+function minimapname(name) {
   window.open("usermap.php?name="+name,"Karte","width=840,height=820,left=0,top=0,status=no,scrollbars=yes,dependent=yes");
 }
 //-->
@@ -52,7 +50,7 @@ function minnimapname(name) {
 start_body();
 
 //check for errors
-if (isset($name) && (!isset($id))) {
+if(isset($name) && (!isset($id))) {
   $admin_id = $_SESSION['player']->isMaintainer() && is_numeric($name) ? intval($name) : 0;
   $count=1;
   $name=trim($name);
@@ -130,15 +128,17 @@ if (isset($name) && (!isset($id))) {
     } // switch
   }
 } // if (isset($name) && (!isset($id))) {
+
 else {
   if (!isset($id)) {
     echo '<h1 class="error">Fehler: keine ID angegeben</h1><p>';
   } 
   else {
-   
-    
     switch ($show) {
-    case "player": print_playerinfo($id); break;
+    case "player": 
+      echo '<h1 class="error">Fehler: die Anzeige von Spielerdaten über deren ID wird aus Sicherheitsgründen nicht mehr unterstützt. Bitte melden Sie die Stelle, von wo aus dieser Aufruf stattgefunden hat, damit dieser Fehler behoben werden kann.</h1><p>'; 
+      break; 
+    
     case "town":   print_towninfo($id);   break;
     case "clan":   print_claninfo($id);   break;
     } // switch
@@ -250,8 +250,8 @@ function print_playerinfo ($id) {
 	}
 
     echo "<table style=\"margin-top:10px;\" width=\"400\" cellpadding=\"1\" cellspacing=\"1\">\n";
-    echo "<tr><td width=\"40\" rowspan=\"2\"><img title=\"Alle Städte zeigen\" src=\"".$imagepath."/windrose_klein.gif\" onclick=\"minnimap(".$id.");\"></td><td class=\"tblhead\" width=\"100%\"><strong>".$data1['name']."s St&auml;dte</strong></td></tr>\n";
-    echo "<tr><td class=\"tblbody\"><a href=\"#\" onclick=\"minnimap(".$id.");\">Alle St&auml;dte auf einen Blick</a></td></tr>\n";
+    echo "<tr><td width=\"40\" rowspan=\"2\"><img title=\"Alle Städte zeigen\" src=\"".$imagepath."/windrose_klein.gif\" onclick=\"minimapname('".urlencode($data1['name'])."');\"></td><td class=\"tblhead\" width=\"100%\"><strong>".$data1['name']."s St&auml;dte</strong></td></tr>\n";
+    echo "<tr><td class=\"tblbody\"><a href=\"#\" onclick=\"minimapname('".urlencode($data1['name'])."');\">Alle St&auml;dte auf einen Blick</a></td></tr>\n";
     echo "</table>\n";
     
     echo "<table cellpadding=\"1\" cellspacing=\"1\" width=\"400\" style=\"margin-top:10px;\">\n";

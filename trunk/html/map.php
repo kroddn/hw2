@@ -93,7 +93,7 @@ function hideNavElements() {
 }
 function tipThis(a,b) {
 	document.getElementById("i"+b).innerHTML = a;
-	document.getElementById("j"+b).innerHTML = a;
+	/* document.getElementById("j"+b).innerHTML = a; */
 }
 
 function hideCity(id) {

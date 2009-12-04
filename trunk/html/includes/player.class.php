@@ -36,14 +36,18 @@
 include_once("includes/config.inc.php");
 
 // Array zum matchen von Settings zu Binär-Masken
+// Das bit entspricht "2 hoch arrayindex"
 $GLOBALS['arr_settings']
      = array(0 => 'map_own',
              1 => 'forum_own',
              2 => 'library_own',
              3 => 'hide_banner',
-             4 => 'disable_login_counter'
+             4 => 'disable_login_counter',
+             5 => 'disable_toplist_bonuspoints'
             );
 
+            
+            
 if(!defined("MSG_RECIPIENT_READ")) {
 	die("MSG_RECIPIENT_READ nicht definiert. config.inc.php richtig eingebunden?");
 }            
@@ -547,6 +551,7 @@ class Player {
       do_mysql_query("UPDATE player SET settings = ".$newsettings." WHERE id = ".$this->id);
       return null;
     }
+    
 
     // Einstellungen wiederherstellen
     function loadSettings($tmpsettings = null) {
@@ -578,6 +583,8 @@ class Player {
         $this->email=$value;
 	}
 
+	
+	
   function changePassword($oldpw, $newpw1, $newpw2) {
     $res=mysql_query("SELECT id FROM player WHERE password = md5('".mysql_escape_string($oldpw)."') AND id = ".$this->getID());
     if(mysql_num_rows($res)==1) {

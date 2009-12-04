@@ -1146,7 +1146,8 @@ function updateRes() {
         if(DEBUG_SERVICE)
           echo "Spieler hat kein Premium mehr oder nicht genug Punkte -> Lösche Avatar\n";
             
-        do_mysql_query("UPDATE player SET avatar = 0 WHERE id = ".$pid);
+        // Avatar weg. Settings weg.
+        do_mysql_query("UPDATE player SET avatar = 0, settings=0 WHERE id = ".$pid);
 
         $filename=AVATAR_DIR.$pid.".jpg";
         if(is_file($filename)) {

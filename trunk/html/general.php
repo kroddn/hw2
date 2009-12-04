@@ -449,7 +449,7 @@ else {
       //       verschmelzen in eien Funktion!
       echo '<tr class="tblbody">';
       if ($remaining > 0) {
-        echo '<td colspan="2" nowrap>Die Armee des Spielers <a href="javascript:playerinfo(\''.$data_spy['owner'].'\')"><b>'.$data_spy['ownername'].'</b></a>'.
+        echo '<td colspan="2" nowrap>Die Armee des Spielers <a href="javascript:playerinfo(\''.urlencode($data_spy['ownername']).'\')"><b>'.$data_spy['ownername'].'</b></a>'.
           ' erreicht Eure Stadt <a href="javascript:towninfo(\''.$data_spy['end'].'\')"><b>'.$data_spy['cityname'].'</b></a> in ';
 
         echo '</td><td align="right">';

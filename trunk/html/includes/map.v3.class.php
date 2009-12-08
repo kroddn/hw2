@@ -267,7 +267,8 @@ class MapVersion3 {
         if($field['ownername'] == null) {
           $ownername = "Barbaren";
           $clanlink  = "";
-          $ownerlink = "Herrenlose Stadt";
+          $ownerlink    = "Herrenlose Stadt";
+          $js_ownerlink = "Herrenlose Stadt";
 
           // Beziheung zur Herrenlosen Stadt ist Krieg
           $backColor = "red";

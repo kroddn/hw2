@@ -74,7 +74,7 @@ function arrivalSettle($end, $start, $endtime, $aid, $missiondata, $religion, $o
 
   $res2 = do_mysql_query($sql);
 
-  // Eine Stadt an dieser Stelle existiert bereits
+  // Eine Stadt an dieser Stelle existiert bereits - Umkehren
   if ($data2 = mysql_fetch_assoc($res2)) {
     do_mysql_query("UPDATE army SET mission='return',end=".$start.",start=".$end.",endtime=endtime+endtime-starttime,starttime=".$endtime." WHERE aid=".$aid);
     do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.", UNIX_TIMESTAMP(),'Stadtgründung fehlgeschlagen','Eine Stadt konnte nicht gegründet werden, weil das Gebiet bereits von einer anderen Stadt belegt wurde.',3)");
@@ -87,8 +87,8 @@ function arrivalSettle($end, $start, $endtime, $aid, $missiondata, $religion, $o
     }
     
     // Stadteintrag anfertigen und armyblock setzen
-    $newname = "neue Stadt ".$owner."-".$aid;
-    do_mysql_query("INSERT INTO city (id,name,population,religion,food,owner,attackblock) VALUES (".$end.",'".$newname."',".$missiondata.",".$religion.",0,".$owner.", UNIX_TIMESTAMP() + ".(BLOCKSETTLEARMY).")");
+    $newname = "neue Stadt ".$end."-".$aid;
+    do_mysql_query("INSERT INTO city (id,name,population,religion,food,owner,attackblock) VALUES (".$end.",'".mysql_escape_string($newname)."',".$missiondata.",".$religion.",0,".$owner.", UNIX_TIMESTAMP() + ".(BLOCKSETTLEARMY).")");
     do_mysql_query("DELETE FROM army WHERE aid=".$aid);
     
 

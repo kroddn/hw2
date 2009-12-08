@@ -458,7 +458,7 @@ else {
       }
       else {
 
-        echo '<td colspan="3">Die Armee des Spielers <a href="javascript:playerinfo(\''.$data_spy['owner'].'\')"><b>'.$data_spy['ownername'].'</b></a>'.
+        echo '<td colspan="3">Die Armee des Spielers <a href="javascript:playerinfo(\''.urlencode($data_spy['ownername']).'\')"><b>'.$data_spy['ownername'].'</b></a>'.
           ' steht vor Eurer Stadt <a href="javascript:towninfo(\''.$data_spy['end'].'\')"><b>'.$data_spy['cityname']."</b></a>. ";
         // Bei Belagerung einen entsprechenden Text vorbereiten
         if ($data_spy['mission'] == 'siege') {
@@ -696,7 +696,7 @@ if ($from == $cities->getActiveCity()) {
 
 <?php
 // Fremdstationierungen anzeigen
-$res_garrison = do_mysql_query("SELECT x,y,cityunit.owner AS uowner, unit.id AS unitid, unit.name AS uname, unit.cost, cityunit.count,city.name AS cname, p1.name AS pname, city.id AS cid,city.owner AS cowner ".
+$res_garrison = do_mysql_query("SELECT x,y,cityunit.owner AS uowner, unit.id AS unitid, unit.name AS uname, unit.cost, cityunit.count,city.name AS cname, p1.name AS pname, city.id AS cid, city.owner AS cowner ".
                       " FROM unit,cityunit,city,map,player AS p1,player AS p2 ".                     
                       " WHERE map.id=city.id AND unit.id=cityunit.unit AND cityunit.city=city.id AND p1.id=city.owner AND p1.id<>p2.id AND p2.id=cityunit.owner AND p2.id=".$_SESSION['player']->getID().
                       " ORDER BY city.id,unitid");
@@ -717,7 +717,7 @@ $cid = "";
     	echo '<tr><td colspan="3" class="tblhead">'.
         '<a href="javascript:towninfo(\''.$data['cid'].'\')">'.$data['cname']."</a> ".
         '(<a href="map.php?gox='.$data['x'].'&goy='.$data['y'].'">'.$data['x'].':'.$data['y'].'</a>)'.
-        ' von <a href="javascript:playerinfo(\''.$data['cowner'].'\')">'.$data['pname'].'</a> ';
+        ' von <a href="javascript:playerinfo(\''.urlencode($data['pname']).'\')">'.$data['pname'].'</a> ';
 
     	$href= $PHP_SELF.'?from='.$data['cid'];
     	if(isset($selectx)) $href .= "&selectx=".$selectx;

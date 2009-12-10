@@ -42,7 +42,8 @@ function parent_goto(ref){
 }
 
 function minimapname(name) {
-  window.open("usermap.php?name="+name,"Karte","width=840,height=820,left=0,top=0,status=no,scrollbars=yes,dependent=yes");
+  var win = window.open("usermap.php?name="+name,"Karte","width=840,height=820,left=0,top=0,status=no,scrollbars=yes,dependent=yes");
+  win.focus();
 }
 //-->
 </script>

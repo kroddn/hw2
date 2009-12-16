@@ -37,7 +37,6 @@ require_once("includes/premium.inc.php");
 include_once("includes/cities.class.php");
 include_once("includes/research.class.php");
 include_once("includes/player.class.php");
-// require_once("includes/map.class.php");
 require_once("includes/db.class.php");
 require_once("includes/banner.inc.php");
 include_once("includes/page.func.php");
@@ -89,7 +88,7 @@ else {
 
 // Logout ausfuehren
 if($logout) {
-  log_logout();
+  logout();
   session_destroy();
   //do_log("User logged out, session destroyed...");  
   $GLOBALS['error'] = "logout";
@@ -98,7 +97,7 @@ if($logout) {
 
 // Automatisch ausloggen wenn die Sessionzeit überschritten wurde
 if(isPlayerSet() && time() > $session_duration + $login_time) {
-  log_logout();
+  logout();
   session_destroy();
   $GLOBALS['error'] = "session_duration_exceeded&limit=".$session_duration."&duration=".( time() -  $login_time);
   goto_login();
@@ -184,7 +183,7 @@ else if ( isPlayerSet() ) {
  
   // Wenn die Runde noch nicht freigegeben wurde...
   if(!check_round_startet() && !$player->isAdmin() ) {
-    log_logout();
+    logout();
     session_destroy();
     //do_log("User logged out, session destroyed...");
     $GLOBALS['error'] = "round_not_yet_started";
@@ -193,7 +192,7 @@ else if ( isPlayerSet() ) {
   
   // Wenn die Runde beendet...
   if(check_round_ended() && !$player->isAdmin() ) { // && !$player->isAdmin()
-    log_logout();
+    logout();
     session_destroy();
     //do_log("User logged out, session destroyed...");
     $GLOBALS['error'] = "round_ended";
@@ -211,11 +210,14 @@ function isPlayerSet() {
   return isset($_SESSION['player']) && strtolower(get_class($_SESSION['player'])) == "player";
 }
 
-function log_logout() {
+
+/**
+ * Aktualisiere das log_login mit dem Zeitpunkt des logouts
+ * @return unknown_type
+ */
+function logout() {
   if ( isPlayerSet() ) {
-    do_mysql_query("UPDATE log_login SET logouttime = UNIX_TIMESTAMP() ".
-                   " WHERE id = ".$_SESSION['player']->getID().
-                   " ORDER BY time DESC LIMIT 1" );
+    $_SESSION['player']->logout();
   }
 }
 

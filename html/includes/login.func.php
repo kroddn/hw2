@@ -65,7 +65,8 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
     $sql_login = do_mysql_query("SELECT id, login, name, password, status, hwstatus, statusdescription, activationkey, holiday FROM player WHERE login = '".mysql_escape_string($loginname)."'");
     if ($db_login = mysql_fetch_assoc($sql_login)) {
       $agent  = getenv('HTTP_USER_AGENT');
-      do_mysql_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent) VALUES (".$db_login['id'].",'".mysql_escape_string($loginname)."','".md5($loginpassword)."','".$db_login['password']."','".$db_login['status']."','".mysql_escape_string($sec_code)."','".$_SESSION['sec_key']."', UNIX_TIMESTAMP(),'".getenv('REMOTE_ADDR')."', '".mysql_escape_string($agent)."')");
+      do_mysql_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".
+                     "VALUES (".$db_login['id'].",'".mysql_escape_string($loginname)."','".md5($loginpassword)."','".$db_login['password']."','".$db_login['status']."','".mysql_escape_string($sec_code)."','".$_SESSION['sec_key']."', UNIX_TIMESTAMP(),'".getenv('REMOTE_ADDR')."', '".mysql_escape_string($agent)."', '".session_id()."')");
 
       $GLOBALS['premium_flags']  = get_premium_flags ($db_login['id']);
       $GLOBALS['premium_expire'] = get_premium_expire($db_login['id']);

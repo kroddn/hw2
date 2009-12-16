@@ -1134,13 +1134,14 @@ function updateRes() {
       echo "  ".date("d.m.y G:i:s")." Updatecount = ".$updatecount." ... Problem? -> pid=".$data1['id']."  lastres='".date("d.m.y G:i:s", $data1['lastres'])."' (".$data1['lastres'].")\n";
     }
 
+    
+    $flags = get_premium_flags($pid);
 
-      // Avatar überprüfen, ggf. löschen
+    // Avatar überprüfen, ggf. löschen
     if($data1['avatar'] > 0) {
       $pid = $data1['id'];
       
-      // Hat der Spieler KEIN Premium UND unter 1 MIO Punkte?
-      $flags = get_premium_flags($pid);
+      // Hat der Spieler KEIN Premium UND unter 1 MIO Punkte?      
       $avatar_top_points = defined("AVATAR_TOP_POINTS") ? AVATAR_TOP_POINTS : 1000000;
       if($avatar_top_points > $data1['points'] && $flags == 0 ) {
         if(DEBUG_SERVICE)
@@ -1155,6 +1156,9 @@ function updateRes() {
         }
       }      
     }
+    
+    // FIXME: Einstellungen und Signatur für nicht-mehr-premium-user zurücksetzen
+    
     
     for ($i = 0; $i < $updatecount; ++ $i) {
       // Gold initialisieren. Wird am ende der Schleife angepasst
@@ -1447,8 +1451,9 @@ SELECT
           do_mysql_query("UPDATE clan SET gold=gold+".$tax." WHERE id=".$data1['clan']);
         }
 
-        if($gold-$data1['gold'] != 0)
-        echo ",income=".($gold-$data1['gold']);
+        if($gold-$data1['gold'] != 0) {
+          echo ",income=".($gold-$data1['gold']);
+        }
 
         // Gold wird nur differentiell updated, weil sonst eine Race-Condition entstehen könnte
         // (Wenn der Spieler während des Service-Laufs den Goldbetrag ändert

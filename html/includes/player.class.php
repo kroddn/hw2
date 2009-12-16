@@ -163,8 +163,27 @@ class Player {
 
     // Einstellungen laden
     $this->loadSettings( intval($db_player['settings']) );    
+  } // Player
+  
+  /**
+   * Den Spieler ausloggen.
+   * Zeitpunkt des Logouts in Tabelle log_login vermerken
+   * 
+   * @return unknown_type
+   */
+  function logout() {
+    // FIXME: Wenn man von mehreren PCs aus einloggt, wird hier
+    // vermutlich der falsche Datensatz aktualisiert
+    do_mysql_query("UPDATE log_login SET logouttime = UNIX_TIMESTAMP() ".
+                   " WHERE id = ".$this->getID().
+                   " ORDER BY time DESC LIMIT 1" );
+    
+    // Lastclick setzen
+    do_mysql_query("UPDATE player SET lastseen = UNIX_TIMESTAMP() ".
+                   " WHERE id = ".$this->getID() );
+  
   }
-
+  
   
   function tutorialInc($to) {
     do_mysql_query("UPDATE player SET tutorial = ".intval($to)." WHERE id = ".$this->id);
@@ -671,8 +690,15 @@ class Player {
 	function getSID() {
 		return $this->sid;
 	}
+	
+	/**
+	 * Aktualisiert den Eintrag in der Tabelle "player_online". Falls noch keiner
+	 * existiert, wird ein neue Eintrag angelegt
+	 * 
+	 * @return unknown_type
+	 */
 	function updatelastclick() {
-		$this->lastclick=time();
+		$this->lastclick = time();
 		$res=mysql_query("SELECT uid FROM player_online WHERE uid = '".$this->getID()."'");
 		if(mysql_num_rows($res)==1)
 		{
@@ -680,14 +706,16 @@ class Player {
 		}
 		else
 		{
-			mysql_query("INSERT INTO player_online VALUES (".$this->getID().", UNIX_TIMESTAMP(), '".$this->getSID()."')");
+			mysql_query("INSERT INTO player_online (uid, lastclick, sid) VALUES (".$this->getID().", UNIX_TIMESTAMP(), '".$this->getSID()."')");
 		}
 	}
+	
 	function updateDescription($desc) {
 	  $desc=save_html($desc);
 	  do_mysql_query("UPDATE player set description = '".mysql_escape_string($desc)."' WHERE id = ".$this->getID());
 	  $this->description=$desc;
 	}
+	
 	function updateMsgSignature($sig) {
           $maxlen = 500;
           $maxlines = 5;

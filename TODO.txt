@@ -1,3 +1,8 @@
+Login/Logout
+  * Tabelle log_login um session_id erweitern und bei log_logout() entsprechend
+    den Eintrag mit dieser session_id aktualisieren
+    
+
 Turniere
   * [DONE 01.12.2009] Für das ERSTE Turnier keine Bonuspunkte verlangen
 
@@ -6,8 +11,8 @@ Löschfunktion
   * [DONE] Eigentliches Löschen erst nach 24 Stunden
   * [DONE] Löschmarkierung durch Login wieder deaktivieren
   * [DONE] Städte werden zu "freie Städte"
-  * Löschen von Städten direkt, falls Account zu jung/im Noobschutz?  
- 
+  * [DONE] Löschen von Städten direkt, falls Account zu jung/im Noobschutz?  
+
  
 Noobschutz
   * Aufheben des Noobschutzes, wenn man sich 48 Stunden nicht eingeloggt hat
@@ -23,7 +28,7 @@ Noobschutz
 
 
 Aktivierung:
-  * Nicht-Aktivierte Spieler tauchen nicht in der Toplist auf - Feature!!!
+  * [DONE] Nicht-Aktivierte Spieler tauchen nicht in der Toplist auf - Feature!!!
   * Beim Login Info einblenden, wie man aktivieren kann 
     (Email Link klicken oder Email an HW2 senden)
   * Aktivieren durch Email

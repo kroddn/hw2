@@ -24,9 +24,10 @@
 
 /**
  * Neue HW2-Seite beginnen.
- * FIXME: nach diesem Aufruf sollte 
- *  include_once("includes/update.inc.php");
- * eingebunden werden, damit Top und Bottom-Leite aktualisiert werden
+ * 
+ * ACHTUNG: in diesem Aufruf wird "includes/update.inc.php" eingebunden,
+ * sofern eine session gestartet wurde, damit Top und Bottom-Leite aktualisiert 
+ * werden.
  */
 function start_page() { 
   $GLOBALS['page_started'] = TRUE;
@@ -41,7 +42,7 @@ function start_page() {
   <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/ie6.css" type="text/css">
  <![endif]-->
 
- <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?20091204" type="text/css">
+ <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?20091216" type="text/css">
  <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout.css?20091204" type="text/css">
 </head>
 
@@ -57,7 +58,12 @@ function start_page() {
 } // start_page
 
 
-
+/**
+ * Den Seitenrumpf starten. Binded ein Werbebanner mit ein.
+ * 
+ * @param $banner
+ * @return unknown_type
+ */
 function start_body($banner = true) {
 ?>
 <body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" background="<? echo $GLOBALS['imagepath']; ?>/bg.gif">
@@ -69,7 +75,13 @@ function start_body($banner = true) {
 <? } // if banner
 } // start_body()
 
-
+/**
+ * Seitenrumpf und Seite abschließen.
+ *
+ * Sorgt für Einbindung der Tutorial-Themen.
+ * 
+ * @return unknown_type
+ */
 function end_page() {
   if(!$GLOBALS['standalone'] && isset($_SESSION['player']) && $_SESSION['player']->tutorialLevel() >= 0) {
     include("includes/tutorial.inc.php");
@@ -121,7 +133,7 @@ function redirect_to($href = null) {
     <a href="http://www.holy-wars2.de/portal.php">Hier</a> gehts zum Portal.
            
   <? 
-
+  // FIXME: Wieso wurde hier mal portal.php inkludiert?
   if($whatisthat) {
     include("portal.php");
   } 

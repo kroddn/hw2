@@ -336,3 +336,10 @@ span.click:hover {
 tr.marketline:hover, tr.marketline:active, tr.marketline:focus {
     background-color: #FFFFE9;
 }
+
+.tooltip {
+    position: absolute;
+    display: none;
+    background-color: #FFFFFF;
+    border:1px solid black;
+}

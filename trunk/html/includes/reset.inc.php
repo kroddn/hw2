@@ -71,9 +71,9 @@ function reset_players($delete = false) {
   // Ressourcen der "Admins" zurücksetzen
   do_mysql_query("UPDATE player SET ".
 		 " lastres=unix_timestamp(),gold=40000,wood=4000,stone=4000,iron=0,rp=30,".
-		 " pos=NULL,religion=NULL,name=NULL,activationtime=NULL,".
-		 " points=0,pointsavg=0,pointsupd=0,".
-		 " cc_towns=1,cc_resources=1,cc_messages=1,nooblevel=5,".
+		 " pos=NULL, religion=NULL, name=NULL, activationtime=NULL, signature=NULL, ".
+		 " points=0, pointsavg=0, pointsupd=0,".
+		 " cc_towns=1, cc_resources=1, cc_messages=1, nooblevel=5,".
 		 " clan=NULL, clanstatus=0, clanapplication=NULL, avatar=0,".
 		 " lastclickbonuspoints=0,".
 		 " signature = NULL, holiday = 0, toplist = NULL");

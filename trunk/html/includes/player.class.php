@@ -167,7 +167,7 @@ class Player {
   
   /**
    * Den Spieler ausloggen.
-   * Zeitpunkt des Logouts in Tabelle log_login vermerken
+   * Zeitpunkt des Logouts in Tabelle log_login vermerken.
    * 
    * @return unknown_type
    */
@@ -175,8 +175,8 @@ class Player {
     // FIXME: Wenn man von mehreren PCs aus einloggt, wird hier
     // vermutlich der falsche Datensatz aktualisiert
     do_mysql_query("UPDATE log_login SET logouttime = UNIX_TIMESTAMP() ".
-                   " WHERE id = ".$this->getID().
-                   " ORDER BY time DESC LIMIT 1" );
+                   " WHERE id = ".$this->getID()." AND sid = '".mysql_escape_string( session_id() )."'"
+                   );
     
     // Lastclick setzen
     do_mysql_query("UPDATE player SET lastseen = UNIX_TIMESTAMP() ".

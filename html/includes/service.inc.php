@@ -347,6 +347,8 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
     $message['attacker'] .= "\n\n<b>Sie haben die letzte Stadt des Spielers ".$playerName." zerstört. Seine Streitkräfte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...</b>";
     $message['defender'] .= "\n\n<b>Sire, welch Unglück! Unsere letzte Stadt wurde zerstört! Eure Streitkräfte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, während Ihr selbst aber fliehen konntet. <br>[i]Ihr schwört Rache und baut Euer Imperium erneut auf...[/i]</b>";
   }
+  
+  echo " Message an AttOwner $attowner\n"; 
   do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Sieg: ".$cityName."','".$message['attacker']."',4)");
   do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
 
@@ -375,7 +377,7 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
 
 function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
   if (DEBUG_SERVICE)
-    echo " DEFWIN ";
+    echo " DEFWIN\n";
 
   do_mysql_query("DELETE FROM army WHERE aid = ".$aid);
   do_mysql_query("DELETE FROM armyunit WHERE aid = ".$aid);
@@ -447,6 +449,9 @@ function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
     }
     $message['defender'] .= $data1['name'].": ".$erg[$i]['count']." von ".$uownerName['name']."\n";
   }
+  
+  if (DEBUG_SERVICE)
+    echo " Message an AttOwner $attowner\n";
   do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Angriff aufgerieben: ".$cityName."','".$message['attacker']."',4)");
   do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
   
@@ -597,6 +602,7 @@ function arrivalArmy() {
         echo " Stadt vorhanden\n ";
 
       // Wenn wir selbst Besitzer der Zieltadt sind, dann kann es nur Heimkehr oder Verschiebung sein.
+      // FIXME: Das kann man zusammenkürzen, zu viele ifs ohne else
       if ($data1['owner'] == $data7['owner']) {
         if (($data1['mission'] == "move") || ($data1['mission'] == 'return')) {
           if ($data1['mission'] == "move")
@@ -612,8 +618,13 @@ function arrivalArmy() {
             $missionstr .= "Brandschatzen)";
           if ($data1['mission'] == "despoil")
             $missionstr .= "Plündern)";
+          if ($data1['mission'] == "siege")
+            $missionstr .= "Belagern)";
         }
-        arrivalMove($data1['end'], $data1['owner'], $data1['endtime'], $data1['missiondata'], $data1['aid'], $missionstr);
+        // Bei Belagerungen muss der aktuelle timestamp verwendet werden:
+        $endtime = $data1['mission'] == "siege" ? time() : $data1['endtime'];
+        
+        arrivalMove($data1['end'], $data1['owner'], $endtime, $data1['missiondata'], $data1['aid'], $missionstr);
         continue;
       } // Wir selbst sind besitzer -> Rückkehr oder Verschiebung
 
@@ -638,8 +649,7 @@ function arrivalArmy() {
         //log_fatal_error(" Mission: ".$mission." CityID: ".$data1['end']." CityOwner: ".$data7['owner']." CityName: ".$data7['name']." CityPopulation: ".$data7['population']." ArmyID: ".$data1['aid']." ArmyOwner: ".$data1['owner']." ArmyArrival: ".$data1['endtime']." Tactic: ".$data1['tactic']." ");
         if ($mission == "siege") {
           // Belagerung. Nichts ausser logging
-          echo "Belagerung. CityID: ".$data1['end']." CityOwner: ".$data7['owner']." CityName: ".$data7['name']." CityPopulation: ".$data7['population']." ArmyID: ".$data1['aid']." ArmyOwner: ".$data1['owner']." ArmyArrival: ".$data1['endtime']." Tactic: ".$data1['tactic']."\n";
-          
+          echo "Belagerung. CityID: ".$data1['end']." CityOwner: ".$data7['owner']." CityName: ".$data7['name']." CityPopulation: ".$data7['population']." ArmyID: ".$data1['aid']." ArmyOwner: ".$data1['owner']." ArmyArrival: ".$data1['endtime']." Tactic: ".$data1['tactic']."\n";          
         }
         else {
           arrivalAttack($mission, $data1['end'], $data7['owner'], $data7['name'], $data7['population'], $data1['aid'], $data1['owner'], $data1['endtime'], $data1['tactic']);

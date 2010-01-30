@@ -1091,6 +1091,7 @@ class Cities {
  
     // Darf der Spieler überhaupt hierhin siedeln?
     if(defined("START_POS_NEW") && START_POS_NEW) {
+      // Zunächst prüfen, ob wir uns NICHT im gleichen Sektor befinden
       if( intval($x/40) != intval($this->city_x/40) || intval($y/40) != intval($this->city_y/40) ) {
         $needcount = round(sqrt(($x - $this->city_x)*($x - $this->city_x) + ($y - $this->city_y)*($y - $this->city_y)));
         // Nicht im Heimatsektor. Nachschauen, ob genug Begleitschutz mitgesendet wurde.
@@ -1100,8 +1101,9 @@ class Cities {
       
         // Ist das Ziel im Siedlungsgebiet?
         $msg = isInSettleArea($x, $y);
-        if($msg != null)
-        return $msg;
+        if($msg != null) {
+          return $msg;
+        }
       }
     }
 
@@ -1255,11 +1257,14 @@ class Cities {
         $toy = $dataB['y'];
         
         // Ausserhalb des aktuellen Sektors darf nicht in den Siedlungsbereich angegriffen werden
-        if( intval($x/40) != intval($tox/40) || intval($y/40) != intval($toy/40)) {
-          $mesg = isInSettleArea($x, $y);
+        if(defined("DISABLE_SETTLEAREA_ATTACK") && DISABLE_SETTLEAREA_ATTACK) {
+          if( intval($x/40) != intval($tox/40) || intval($y/40) != intval($toy/40)) {
+            $mesg = isInSettleArea($x, $y);
 
-          if($mesg != null)
-            return $mesg;
+            if($mesg != null) {
+              return $mesg;
+            }
+          }
         }
       }
       

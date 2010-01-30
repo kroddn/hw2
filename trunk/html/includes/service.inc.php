@@ -344,8 +344,8 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   }
 
   if ($playerkilled == true) {
-    $message['attacker'] .= "\n\n<b>Sie haben die letzte Stadt des Spielers ".$playerName." zerstört. Seine Streitkräfte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...</b>";
-    $message['defender'] .= "\n\n<b>Sire, welch Unglück! Unsere letzte Stadt wurde zerstört! Eure Streitkräfte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, während Ihr selbst aber fliehen konntet. <br>[i]Ihr schwört Rache und baut Euer Imperium erneut auf...[/i]</b>";
+    $message['attacker'] .= "\n\n[b]Sie haben die letzte Stadt des Spielers ".$playerName." zerstört. Seine Streitkräfte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...[/b]";
+    $message['defender'] .= "\n\n[b]Sire, welch Unglück! Unsere letzte Stadt wurde zerstört! Eure Streitkräfte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, während Ihr selbst aber fliehen konntet. [b][i]Ihr schwört Rache und baut Euer Imperium erneut auf...[/i][/b]";
   }
   
   echo " Message an AttOwner $attowner\n"; 

@@ -161,9 +161,12 @@ function reset_config()
   do_mysql_query("DELETE FROM config WHERE name IN ('settleradius')");
 
   // Set settleradius
-  if(HISPEED)      $reset_radius = 5;
-  else if(SPEED)   $reset_radius = 2;
-  else             $reset_radius = 3;
+  if(defined("HISPEED") && HISPEED)  
+      $reset_radius = 5;
+  else if(defined("SPEED") && SPEED)   
+    $reset_radius = 2;
+  else             
+    $reset_radius = 3;
   
   
   do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".

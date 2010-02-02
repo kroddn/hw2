@@ -3,7 +3,7 @@
     This file is part of "Holy-Wars 2" 
     http://holy-wars2.de / https://sourceforge.net/projects/hw2/
 
-    Copyright (C) 2003-2009 
+    Copyright (C) 2003-2010 
     by Markus Sinner, Gordon Meiser, Laurenz Gamper, Stefan Neubert
 
     "Holy-Wars 2" is free software: you can redistribute it and/or modify
@@ -64,7 +64,7 @@ function create_tournament($time, $maxplayers) {
  */
 function calc_tournaments() {
   if (!defined("ENABLE_TOURNAMENT") || !ENABLE_TOURNAMENT)
-    return;
+  return;
 
   tDebug("<h2 style=\"color: red;\">Starte Turniere</h2>\n");
 
@@ -75,7 +75,7 @@ function calc_tournaments() {
 
   $num = mysql_num_rows($tourn);
   $num_tour = $num;
-  
+
   tDebug("$num Turniere warten auf Durchführung\n<ul>\n");
   while($t = mysql_fetch_assoc($tourn)) {
     unset($R);
@@ -91,17 +91,17 @@ function calc_tournaments() {
     $parts = do_mysql_query("SELECT tp.*,p.name FROM tournament_players tp ".
 			    " LEFT JOIN player p ON p.id = tp.player ".
 			    " WHERE tid = ".$t['tid']." AND booktime IS NOT NULL ORDER BY rand()");
-    $num = mysql_num_rows($parts); 
+    $num = mysql_num_rows($parts);
     $num_players = $num;
     $max_players = $t['maxplayers'];
     $bonus = TOURNAMENT_HOLD_BONUSPOINT * $num;
 
     tDebug("<br>\n".$num." bestätigte Teilnehmer <b>".
-	   ( $num < $t['maxplayers'] / 2
-	     ? "<font color=\"red\">(nicht genug)</font>" 
-	     : "<font color=\"green\">(genug)</font>" ).
+    ( $num < $t['maxplayers'] / 2
+    ? "<font color=\"red\">(nicht genug)</font>"
+    : "<font color=\"green\">(genug)</font>" ).
 	   "</b>:\n<ul style=\"margin-top: 0px;\"><!-- Teilnehmer -->\n");
-    
+
     $text .= ", ".$num." Teilnehmer\n[list]";
 
     $i = 0;
@@ -127,11 +127,11 @@ function calc_tournaments() {
     /**
      * Nun die Kämpfe austragen.
      */
-    if($t['maxplayers'] >= TOURNAMENT_MIN_PLAYERS && 
-       $num >= $t['maxplayers'] / 2) {  
+    if($t['maxplayers'] >= TOURNAMENT_MIN_PLAYERS &&
+    $num >= $t['maxplayers'] / 2) {
       tDebug($R);
       $text .= "Das Turnier Nr. ".$t['tid']." beginnt...\n";
-      $result = tournament_fight(&$R, &$text);           
+      $result = tournament_fight(&$R, &$text);
 
       /* Gewinner ausgeben */
       $firstgold = round($t['gold'] * 0.75);
@@ -141,7 +141,7 @@ function calc_tournaments() {
       $text .= "\nGewinner des Turniers:[list]";
 
       tDebug("<li>".$result['first']['name'].", erhält $firstgold Gold Prämie</li>\n");
-      tDebug("<li>".$result['second']['name'].", erhält $secondgold Gold Prämie</li>\n");    
+      tDebug("<li>".$result['second']['name'].", erhält $secondgold Gold Prämie</li>\n");  
       $text .= "\n[*] ".$result['first']['name'].", erhält $firstgold Gold Prämie";
       $text .= "\n[*] ".$result['second']['name'].", erhält $secondgold Gold Prämie\n[/list]";
 
@@ -158,24 +158,24 @@ function calc_tournaments() {
       // Die Nachricht nun an alle beteiligten Spieler senden
       $organizer_sent = false;
       foreach($R as $pl) {
-	$topic = "Turnierteilnahme: erfolglos";
-	if($result['first']['player']==$pl['player']) 
-	  $topic = "Turnierteilnahme: Sieger!";
-	else if($result['second']['player'] == $pl['player'])
-	  $topic = "Turnierteilnahme: Zweitplatzierter!";
+        $topic = "Turnierteilnahme: erfolglos";
+        if($result['first']['player']==$pl['player'])
+        $topic = "Turnierteilnahme: Sieger!";
+        else if($result['second']['player'] == $pl['player'])
+        $topic = "Turnierteilnahme: Zweitplatzierter!";
 
-	$body = $text;
-	if($t['organizer'] == $pl['player']) {
-	  $body .= "\n\n[b]Ihr erhaltet $bonus Bonuspunkte für die Ausrichtung des Turniers[/b].";
-	  $organizer_sent = true;
-	}
+        $body = $text;
+        if($t['organizer'] == $pl['player']) {
+          $body .= "\n\n[b]Ihr erhaltet $bonus Bonuspunkte für die Ausrichtung des Turniers[/b].";
+          $organizer_sent = true;
+        }
 
-	inform_tournament_player($pl['player'], $topic, $body);	
+        inform_tournament_player($pl['player'], $topic, $body);
       }
-      
+
       if(!$organizer_sent && $t['organizer']) {
-	$body .= "\n\n[b]Ihr erhaltet $bonus Bonuspunkte für die Ausrichtung des Turniers[/b].";
-	inform_tournament_player($t['organizer'], $topic, $body);
+        $body .= "\n\n[b]Ihr erhaltet $bonus Bonuspunkte für die Ausrichtung des Turniers[/b].";
+        inform_tournament_player($t['organizer'], $topic, $body);
       }
 
       tDebug($R);
@@ -184,96 +184,96 @@ function calc_tournaments() {
       $notparts = do_mysql_query("SELECT player FROM tournament_players ".
 				 " WHERE tid = ".$t['tid']." AND booktime IS NULL");
       while($pl = mysql_fetch_assoc($notparts)) {
-	$topic = "Turnier verpasst";
-	$body = "[b]Ihr selbst habt das Turnier verpasst[/b], weil Ihr Eure Teilnahme nicht rechtzeitig bestätigt habt.\n\n";
-	$body .= $text;
-	inform_tournament_player($pl['player'], $topic, $body);	
+        $topic = "Turnier verpasst";
+        $body = "[b]Ihr selbst habt das Turnier verpasst[/b], weil Ihr Eure Teilnahme nicht rechtzeitig bestätigt habt.\n\n";
+        $body .= $text;
+        inform_tournament_player($pl['player'], $topic, $body);
       }
     }
     else {
       if($t['maxplayers'] < TOURNAMENT_MIN_PLAYERS) {
-	// Fehler. So ein Turnier sollte es nicht geben!
-	tDebug("FEHLER: maxplayers zu klein!<br>\n");
+        // Fehler. So ein Turnier sollte es nicht geben!
+        tDebug("FEHLER: maxplayers zu klein!<br>\n");
       }
       else {
-	// Turnier findet nicht statt: Teilnehmermangel
-	// Den Verpassern ne Nachricht schicken
-	$players = do_mysql_query("SELECT player FROM tournament_players ".
+        // Turnier findet nicht statt: Teilnehmermangel
+        // Den Verpassern ne Nachricht schicken
+        $players = do_mysql_query("SELECT player FROM tournament_players ".
 				  " WHERE tid = ".$t['tid']);
-	while($pl = mysql_fetch_assoc($players)) {
-	  $topic = "Turnier ausgefallen";
-	  $body = "Das Turnier ist ausgefallen, weil nicht genügend Teilnehmer bestätigt haben.\n\n";
-	  $body .= $text;
-	  inform_tournament_player($pl['player'], $topic, $body);	
-	}     
+        while($pl = mysql_fetch_assoc($players)) {
+          $topic = "Turnier ausgefallen";
+          $body = "Das Turnier ist ausgefallen, weil nicht genügend Teilnehmer bestätigt haben.\n\n";
+          $body .= $text;
+          inform_tournament_player($pl['player'], $topic, $body);
+        }
       }
-    }  
+    }
 
     do_mysql_query("UPDATE tournament SET calctime = UNIX_TIMESTAMP() WHERE tid = ".$t['tid']);
     if($t['organizer']) {
       do_mysql_query("UPDATE player SET bonuspoints = bonuspoints + $bonus WHERE id = ".$t['organizer']);
     }
-    
+
 
     /*define("TOURNAMENT_MIN_PLAYERS", 4);
-define("TOURNAMENT_MAX_PLAYERS", 64);*/
-	// Test wieviel Turniere noch ausgeschrieben sind
-	/*$tourtodo = do_mysql_query("SELECT * FROM tournament WHERE time + ".TOURNAMENT_DURATION." > unix_timestamp( ) AND time < unix_timestamp( ) + (24*60*60)");
+     define("TOURNAMENT_MAX_PLAYERS", 64);*/
+    // Test wieviel Turniere noch ausgeschrieben sind
+    /*$tourtodo = do_mysql_query("SELECT * FROM tournament WHERE time + ".TOURNAMENT_DURATION." > unix_timestamp( ) AND time < unix_timestamp( ) + (24*60*60)");
     $numtodo24 = mysql_num_rows($tourtodo);*/
     $maxtour = do_mysql_query("SELECT max(time) as max FROM tournament");
     $get_maxtour = mysql_fetch_assoc($maxtour);
     $maxtour_time = $get_maxtour['max'];
-    
+
     // Wenn weniger als 10 Turniere innerhalb der nächsten 24h
     //if($numtodo24 < 10) {
-		if(($num_players / $max_players) >= 1) {
-			tDebug("\nLetztes Turnier war voll -> erstelle Turnier mit erhöhter Spielerzahl ...\n");
-			if (($max_players + 4) <= TOURNAMENT_AUTOCREATE_MAX_PLAYERS) $max_players += 4; 
-			create_tournament($maxtour_time + 7200, $max_players);
-			
-			// Sonderbehandlung, noch schnell ein weiteres Turnier innerhalb der nächsten 3h einführen (falls möglich) 
-			$tour3 = do_mysql_query("SELECT * FROM tournament WHERE time > unix_timestamp( ) AND time < unix_timestamp( ) + (3*60*60)");
+    if(($num_players / $max_players) >= 1) {
+      tDebug("\nLetztes Turnier war voll -> erstelle Turnier mit erhöhter Spielerzahl ...\n");
+      if (($max_players + 4) <= TOURNAMENT_AUTOCREATE_MAX_PLAYERS) $max_players += 4;
+      create_tournament($maxtour_time + 7200, $max_players);
+      	
+      // Sonderbehandlung, noch schnell ein weiteres Turnier innerhalb der nächsten 3h einführen (falls möglich) 
+      $tour3 = do_mysql_query("SELECT * FROM tournament WHERE time > unix_timestamp( ) AND time < unix_timestamp( ) + (3*60*60)");
     		$numtodo3 = mysql_num_rows($tour3);
     		if($numtodo3>0) {
-				$timenum = 0;
-	    		while($get_tour3 = mysql_fetch_assoc($tour3)) {
-					$time3[$timenum] = $get_tour3['time'];
-					$timenum++;
-				}
-				$inserted = 0;
-				$timediff = 10;
-				while(($inserted==0) && ($timediff<=170)) {
-				 	$testtime = round(((time() + 60*$timediff)/TOURNAMENT_MODULO)*TOURNAMENT_MODULO);
-				 	for($i=0;$i<$numtodo3;$i++) {
-						if($time3[$i]!=$testtime) {
-							$inserted = 1;
-							create_tournament($testtime,$max_players);
-							tDebug("\nZusätzliches Turnier innerhalb der nächsten 3h eingefügt ...\n");
-							break;
-						}
-					}
-					$timediff+=10;
-				}
-			}
-			else {
-				$testtime = round(((time() + 60*60)/TOURNAMENT_MODULO)*TOURNAMENT_MODULO);
-				create_tournament($testtime,$max_players);
-				tDebug("\nZusätzliches Turnier findet in 1h statt ...\n");	
-			}
-		}
-		else if((($num_players / $max_players) >= 0.75) && (($num_players / $max_players) < 1)) {
-	 		tDebug("\nLetztes Turnier zu mehr als 75% belegt -> erstelle Turnier mit gleicher Spielerzahl ...\n");
-	 		create_tournament($maxtour_time+7200,$max_players);
-		}
-		else if((($num_players / $max_players) >= 0.25) && (($num_players / $max_players) < 0.75)) 		{
-			tDebug("\nLetztes Turnier zu weniger als 75% belegt -> erstelle Turnier mit erniedrigter Spielerzahl ...\n");
-			if ($max_players >= TOURNAMENT_MIN_PLAYERS + 4) $max_players -= 4;
-			create_tournament($maxtour_time+7200,$max_players);
-		}	
-	//}
+    		  $timenum = 0;
+    		  while($get_tour3 = mysql_fetch_assoc($tour3)) {
+    		    $time3[$timenum] = $get_tour3['time'];
+    		    $timenum++;
+    		  }
+    		  $inserted = 0;
+    		  $timediff = 10;
+    		  while(($inserted==0) && ($timediff<=170)) {
+    		    $testtime = round(((time() + 60*$timediff)/TOURNAMENT_MODULO)*TOURNAMENT_MODULO);
+    		    for($i=0;$i<$numtodo3;$i++) {
+    		      if($time3[$i]!=$testtime) {
+    		        $inserted = 1;
+    		        create_tournament($testtime,$max_players);
+    		        tDebug("\nZusätzliches Turnier innerhalb der nächsten 3h eingefügt ...\n");
+    		        break;
+    		      }
+    		    }
+    		    $timediff+=10;
+    		  }
+    		}
+    		else {
+    		  $testtime = round(((time() + 60*60)/TOURNAMENT_MODULO)*TOURNAMENT_MODULO);
+    		  create_tournament($testtime,$max_players);
+    		  tDebug("\nZusätzliches Turnier findet in 1h statt ...\n");	
+    		}
+    }
+    else if((($num_players / $max_players) >= 0.75) && (($num_players / $max_players) < 1)) {
+      tDebug("\nLetztes Turnier zu mehr als 75% belegt -> erstelle Turnier mit gleicher Spielerzahl ...\n");
+      create_tournament($maxtour_time+7200,$max_players);
+    }
+    else if((($num_players / $max_players) >= 0.25) && (($num_players / $max_players) < 0.75)) 		{
+      tDebug("\nLetztes Turnier zu weniger als 75% belegt -> erstelle Turnier mit erniedrigter Spielerzahl ...\n");
+      if ($max_players >= TOURNAMENT_MIN_PLAYERS + 4) $max_players -= 4;
+      create_tournament($maxtour_time+7200,$max_players);
+    }
+    //}
   } // while($t ...
   tDebug("</ul>\n<p>\n");
-}
+} // function calc_tournaments() 
 
 
 /**
@@ -283,7 +283,7 @@ function inform_tournament_player($pl, $topic, $body) {
   if(is_numeric($pl) && $pl > 0) {
     $sql = sprintf("INSERT INTO message (date,category,recipient,sender,header,body) ".
 		   " VALUES (UNIX_TIMESTAMP(), 5, %d, '%s', '%s', '%s')",
-		   $pl, "Der Turnierbote", $topic, $body);
+    $pl, "Der Turnierbote", $topic, $body);
     do_mysql_query($sql);
     do_mysql_query("UPDATE player SET cc_messages=1 WHERE id = ".$pl);
   }
@@ -310,7 +310,7 @@ function getRPG($pid) {
  */
 function tournament_fight(&$OR, &$text) {
   $R = $OR;
-  
+
   $round=0;
   tDebug("<ul style=\"margin-top: 0px;\">");
   $text .= "[list]";
@@ -321,66 +321,67 @@ function tournament_fight(&$OR, &$text) {
     $log = pow(2, floor(log($c) / log(2)));
     tDebug("<li>Runde $round, Teilnehmer: $c, Grenze: $log");
     $text .= "\n[*][u]Runde ${round}[/u], Teilnehmer: $c";
-    
+
     // Bei ungerader Teilnehmerzahl kommt einer durch Losentscheid weiter
     if($c % 2 == 1) {
       // Wenn nur einer mehr als eine 2er-Potenz mitspielt,
       // dann kicke einen raus.
       $fortune = rand(0, $c-1);
       if($c - $log == 1) {
-	tDebug("<br>".$R[$fortune]['name']." (".$fortune.") fliegt durch Losentscheid raus");
-	$text .= "\n[b]".$R[$fortune]['name']."[/b] fliegt durch Losentscheid raus";
+        tDebug("<br>".$R[$fortune]['name']." (".$fortune.") fliegt durch Losentscheid raus");
+        $text .= "\n[b]".$R[$fortune]['name']."[/b] fliegt durch Losentscheid raus";
       }
       else {
-	tDebug("<br>".$R[$fortune]['name']." (".$fortune.") kommt durch Losentscheid weiter");
-	$text .= "\n[b]".$R[$fortune]['name']."[/b] kommt durch Losentscheid weiter";
+        tDebug("<br>".$R[$fortune]['name']." (".$fortune.") kommt durch Losentscheid weiter");
+        $text .= "\n[b]".$R[$fortune]['name']."[/b] kommt durch Losentscheid weiter";
 
-	// Glück erhöhen, damit derjenige beim nächstenmal nicht nochmal Glück hat
-	$R[$fortune]['fortune'] += 1;
+        // Glück erhöhen, damit derjenige beim nächstenmal nicht nochmal Glück hat
+        $R[$fortune]['fortune'] += 1;
 
-	// In nächste Runde übertragen
-	$RN[$j++] = $R[$fortune];
+        // In nächste Runde übertragen
+        $RN[$j++] = $R[$fortune];
       }
       // Den Eintrag in dieser Runde löschen
-      unset($R[$fortune]);       
+      unset($R[$fortune]);
     }
-    
+
     $round2 = 0;
     // Nun jeweils 2 kämpfen und den Sieger weiterkommen lassen (Kampfrunden)
     while(sizeof($R) > 0 && $round2++ < 20) {
       tDebug("<br>Kampf $round2 mit ".sizeof($R)." Teilnehmern - ");
       $text .= "\nKampf $round2 - ";
-      
+
       $a = array_pop($R); $b = array_pop($R);
       if(tournament_duell($a, $b) == 0) {
-	$OR[$a['nr']]['victories']++;
-	$OR[$b['nr']]['defeats']++;
-	// Rückgabewerte speichern
-	$ret['second'] = &$b;
-	$ret['first']  = &$a;
-	$RN[$j++] = $a;
+        $OR[$a['nr']]['victories']++;
+        $OR[$b['nr']]['defeats']++;
+        // Rückgabewerte speichern
+        $ret['second'] = &$b;
+        $ret['first']  = &$a;
+        $RN[$j++] = $a;
 
-	// Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
-	do_mysql_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$b['player']);
+        // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
+        do_mysql_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$b['player']);
       }
       else {
-	$OR[$a['nr']]['defeats']++;
-	$OR[$b['nr']]['victories']++;
-	// Rückgabewerte speichern
-	$ret['second'] = &$a;
-	$ret['first']  = &$b;
-	$RN[$j++] = $b;	
+        $OR[$a['nr']]['defeats']++;
+        $OR[$b['nr']]['victories']++;
+        // Rückgabewerte speichern
+        $ret['second'] = &$a;
+        $ret['first']  = &$b;
+        $RN[$j++] = $b;
 
-	// Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
-	do_mysql_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$a['player']);
-      }	
+        // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
+        do_mysql_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$a['player']);
+      }
       tDebug($ret['first']['name']." besiegt ".$ret['second']['name']);
       $text .= "[b]".$ret['first']['name']."[/b] besiegt [b]".$ret['second']['name']."[/b]";
-    }
+    } // while
+    
     $R = $RN;
     unset($RN);
-  }
-   
+  } // while
+ 
   tDebug("</ul>");
   $text .= "\n[/list]\n";
 

@@ -1144,13 +1144,11 @@ function updateRes() {
       echo "  ".date("d.m.y G:i:s")." Updatecount = ".$updatecount." ... Problem? -> pid=".$data1['id']."  lastres='".date("d.m.y G:i:s", $data1['lastres'])."' (".$data1['lastres'].")\n";
     }
 
-    
+    $pid = $data1['id'];
     $flags = get_premium_flags($pid);
 
     // Avatar überprüfen, ggf. löschen
     if($data1['avatar'] > 0) {
-      $pid = $data1['id'];
-      
       // Hat der Spieler KEIN Premium UND unter 1 MIO Punkte?      
       $avatar_top_points = defined("AVATAR_TOP_POINTS") ? AVATAR_TOP_POINTS : 1000000;
       if($avatar_top_points > $data1['points'] && $flags == 0 ) {

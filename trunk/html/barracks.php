@@ -198,7 +198,11 @@ $nobarracks = true;
 
 for($i=0;$i<sizeof($units);++$i) {
   $possible = max(0, $units[$i]['possible']);
-  $maxpossible = $units[$i]['maxpossible'];
+  
+  // FIXME: Durch das max wird verhindert, dass dem Benutzer hier negative Werte angezeigt werden
+  // Dieser "Bug" müsste eigentlich in cities.class.php gefixt werden.
+  $maxpossible = max(0, $units[$i]['maxpossible']);
+  
   if ($maxpossible>0) $nobarracks = false;
   
   $img = getUnitImage($units[$i]);

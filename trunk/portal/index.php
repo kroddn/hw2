@@ -134,22 +134,26 @@ span.fat_u {
  padding: 1px;
  font-family: Tahoma;
  font-size: 11px;
+ line-height: 16px;
  text-align: center;
  background: #404040;
  color: white;
  position: absolute;
  top: 120px;
- left: 646px;
+ left: 655px;
  z-index: 2;
  border: 0;
- width: 142px;
- height: 96px;
+ width:  132px;
+ height: 145px;
 }
 #links a { color: white; }
 #links a:hover { color: #CCCCCC; font-weight: bold; }
 #links br {
  padding: 0px;
- margin: 0px 1px 0px 0px;
+ margin: 0px 2px 0px 0px;
+}
+#links img {
+ margin-top: 3px;
 }
 
 #icons {
@@ -395,9 +399,10 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     <DIV id="links">
       <span style="font-size: 13px;">Partner</span><br><hr>
       <a href="http://www.mightofmagic.de/" style="color: #50FFB0" target="_blank">Might of Magic</a><br>
-      <a href="http://www.kneipengame.com/" style="color: #B050FF" target="_blank">Kneipengame</a><br>
+      <a title="Kneipengame" href="http://www.kneipengame.com/" style="color: #B050FF" target="_blank"><img border="0" src="gfx/kneipengame_88x31.jpg" alt="Kneipengame"/></a><br>
+      <a title="Industrie Tycoon 2" href="http://www.itycoon2.de/" style="color: #FFFF50" target="_blank"><img border="0" src="http://www.itycoon2.de/pr/88x31.gif" alt="Industrie Tycoon 2"/></a><br>
       <br>
-      <a href="http://www.psitronic.de/" style="color: #DD4040" target="_blank">psitronic IT-Solutions</a><br>           
+      <a href="http://www.psitronic.de/" style="color: #EE4040" target="_blank">psitronic IT-Solutions</a><br>           
     </DIV>
     
     

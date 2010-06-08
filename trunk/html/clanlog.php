@@ -65,56 +65,60 @@ if(!$_SESSION['player']->clanstatus) {
 
 
 if( $_GET['activity']==true) {
-  echo "<table cellpadding=\"1\" cellspacing=\"1\">\n";
-  echo "<tr>\n";
-  echo "  <td class=\"tblhead\">Name</td>\n";
-  // echo "  <td class=\"tblhead\">Registriert seit:</td>\n";
-  echo "  <td class=\"tblhead\" colspan=\"2\">Letzte Aktivität (Datum/aktueller Status):</td>\n";
-  echo "  <td class=\"tblhead\">Punkte</td>\n";
-  echo "  <td class=\"tblhead\">Durch.Punkte</td>\n";
-  echo "  <td class=\"tblhead\">Ordensrang</td>\n";
-  echo "  <td class=\"tblhead\">&nbsp;</td>\n";
-  echo "</tr>\n";
-  $res1=do_mysql_query("SELECT id,name,clanstatus, regtime,lastseen,points,".
-                       "       round(pointsavg/pointsupd) as avgpoints ".
-                       " FROM player ".
-                       " WHERE clan=".$_SESSION['player']->clan." ORDER BY name ASC");
-  while($data1=mysql_fetch_object($res1)) {
-    //$p=&new player($data1['id'],0);
-    $p = $data1;
-
-    echo "<tr>";
-    echo "  <td class=\"tblbody\">".get_info_link($p->name,"player",1)."</td>\n";
-    
-    // echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$p->regtime)."</td>\n";
-
-    $online = do_mysql_query_fetch_assoc("SELECT lastclick FROM player_online WHERE uid = ".$p->id);
-    
-    if ( time() - $online['lastclick'] < 3*60 ) {
-      echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$online['lastclick'])."</td>\n";
-      echo "  <td class=\"tblbody\"><span title=\"In den letzen 3 Minuten online gewesen\" style=\"color:green; font-weight: bold\">online</span></td>\n";
-    }
-    else if ( time() - $online['lastclick'] < 5*60 ){
-      echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$online['lastclick'])."</td>\n";
-      echo "  <td class=\"tblbody\"><span title=\"In den letzen 5 Minuten online gewesen\" style=\"color:orange; font-weight: bold\">online</span></td>\n";
-    }
-    else {
-      echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$p->lastseen)."</td>\n";
-      echo "  <td class=\"tblbody\"><span style=\"color:red;\">offline</span></td>\n";
-    }
-    
-    echo "  <td class=\"tblbody\">".prettyNumber($p->points)."</td>\n";
-    echo "  <td class=\"tblbody\">".prettyNumber($p->avgpoints)."</td>\n";
-    echo "  <td class=\"tblbody\">".getPlayerClanFunctions($p->clanstatus)."</td>\n";
-    $num = getAttacksAgainstPlayer($p->id);
-    if($num > 0)
-      echo "  <td class=\"tblbody\"><span style=\"color:red;\">wird angegriffen (".$num.")!</span></td>\n";
-    else
-      echo "  <td class=\"tblbody\">&nbsp;</td>\n";
+  if($_SESSION['player']->clan) {
+    echo "<table cellpadding=\"1\" cellspacing=\"1\">\n";
+    echo "<tr>\n";
+    echo "  <td class=\"tblhead\">Name</td>\n";
+    // echo "  <td class=\"tblhead\">Registriert seit:</td>\n";
+    echo "  <td class=\"tblhead\" colspan=\"2\">Letzte Aktivität (Datum/aktueller Status):</td>\n";
+    echo "  <td class=\"tblhead\">Punkte</td>\n";
+    echo "  <td class=\"tblhead\">Durch.Punkte</td>\n";
+    echo "  <td class=\"tblhead\">Ordensrang</td>\n";
+    echo "  <td class=\"tblhead\">&nbsp;</td>\n";
     echo "</tr>\n";
-  }
-  echo "</table>";
 
+    $res1=do_mysql_query("SELECT id,name,clanstatus, regtime,lastseen,points,".
+                         "       round(pointsavg/pointsupd) as avgpoints ".
+                         " FROM player ".
+                         " WHERE clan=".$_SESSION['player']->clan." ORDER BY name ASC");
+    while($data1=mysql_fetch_object($res1)) {
+      //$p=&new player($data1['id'],0);
+      $p = $data1;
+      
+      echo "<tr>";
+      echo "  <td class=\"tblbody\">".get_info_link($p->name,"player",1)."</td>\n";
+      
+      // echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$p->regtime)."</td>\n";      
+      $online = do_mysql_query_fetch_assoc("SELECT lastclick FROM player_online WHERE uid = ".$p->id);
+      
+      if ( time() - $online['lastclick'] < 3*60 ) {
+        echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$online['lastclick'])."</td>\n";
+        echo "  <td class=\"tblbody\"><span title=\"In den letzen 3 Minuten online gewesen\" style=\"color:green; font-weight: bold\">online</span></td>\n";
+      }
+      else if ( time() - $online['lastclick'] < 5*60 ){
+        echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$online['lastclick'])."</td>\n";
+        echo "  <td class=\"tblbody\"><span title=\"In den letzen 5 Minuten online gewesen\" style=\"color:orange; font-weight: bold\">online</span></td>\n";
+      }
+      else {
+        echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$p->lastseen)."</td>\n";
+        echo "  <td class=\"tblbody\"><span style=\"color:red;\">offline</span></td>\n";
+      }
+      
+      echo "  <td class=\"tblbody\">".prettyNumber($p->points)."</td>\n";
+      echo "  <td class=\"tblbody\">".prettyNumber($p->avgpoints)."</td>\n";
+      echo "  <td class=\"tblbody\">".getPlayerClanFunctions($p->clanstatus)."</td>\n";
+      $num = getAttacksAgainstPlayer($p->id);
+      if($num > 0)
+        echo "  <td class=\"tblbody\"><span style=\"color:red;\">wird angegriffen (".$num.")!</span></td>\n";
+      else
+        echo "  <td class=\"tblbody\">&nbsp;</td>\n";
+      echo "</tr>\n";
+    } // while
+    echo "</table>";
+  }
+  else {
+    echo "Fehler. Bitte neu einloggen";
+  }  
 } 
 else {
   if (!$_SESSION['player']->isMinisterFinance()) {

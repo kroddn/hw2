@@ -257,8 +257,12 @@ class Clan {
     	removeClan($clan);
     }
     
+    // Spieler tritt selber aus
     if (($player == $this->player)) {
     	do_mysql_query("UPDATE player SET clan=NULL WHERE id=".$player);
+        $_SESSION['player']->clan = 0;
+
+
     	//Nachricht an OL und Innenminister wegen Austritt eines Members
     	$get_leave_name = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
     	$leave_name =  mysql_fetch_assoc($get_leave_name);
@@ -271,7 +275,7 @@ class Clan {
     	}
     	$this->update();
     }
-    // Innenminister
+    // Innenminister wirft member raus
     else if (($this->status & 2)) {
     	$res = do_mysql_query("SELECT clan,clanstatus FROM player WHERE id=".$player);
     	if ($data = mysql_fetch_assoc($res)) {
@@ -292,6 +296,9 @@ class Clan {
     			do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['id']);
     		}
     	}
+    }
+    else {
+      return "Ihr seid dazu nicht befugt.";
     }
   }
 

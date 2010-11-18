@@ -28,13 +28,17 @@
 </tr>
 <tr>
 
+<?php
+/*
 <td align="center">
  <a href="http://www.galaxy-news.de/?page=charts&amp;op=vote&amp;game_id=451" target="_blank" title="Vote@Galaxy-News">
   <img src="http://www.galaxy-news.de/images/vote.gif" border="0" alt="Galaxy-News Vote">
  </a>
 </td>
 
-<? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
+ if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; 
+*/
+?>
 
 <td align="center">
  <a href="http://www.gamingfacts.de/charts.php?was=abstimmen2&amp;spielstimme=349" target="_blank">

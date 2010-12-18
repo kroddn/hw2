@@ -28,17 +28,13 @@
 </tr>
 <tr>
 
-<?php
-/*
 <td align="center">
  <a href="http://www.galaxy-news.de/?page=charts&amp;op=vote&amp;game_id=451" target="_blank" title="Vote@Galaxy-News">
   <img src="http://www.galaxy-news.de/images/vote.gif" border="0" alt="Galaxy-News Vote">
  </a>
 </td>
 
- if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; 
-*/
-?>
+<? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
 
 <td align="center">
  <a href="http://www.gamingfacts.de/charts.php?was=abstimmen2&amp;spielstimme=349" target="_blank">
@@ -46,13 +42,17 @@
  </a>
 </td>
 
-<? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
+<?
+/* 
+if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n";
 
 <td align="center">
  <a href="http://www.browsergames24.de/modules.php?name=Web_Links&amp;lid=808&amp;l_op=ratelink" target="_blank">
   <img border="0" src="http://www.browsergames24.de/votebg.gif" alt="Das Infoportal rund um Browsergames">
  </a>
 </td>
+*/
+?>
 
 <? if(defined("VOTE_VERTICAL")) echo "</tr><tr>\n"; ?>
 

@@ -22,7 +22,7 @@
     Former copyrights see below.
  **************************************************************************/
 
-include("includes/db.inc.php");
+include("includes/db.inc.php"); 
 include("includes/player.class.php");
 session_start();
 ?>
@@ -129,9 +129,13 @@ else {
 <h2>Banküberweisung</h2>
 Hier die Daten des HW2-Kontos:<br>
 <? include("includes/konto.php"); ?>
+<? 
+/*
 <li>
 <h2>Premium-Lite per SMS</h2>
-<? include("includes/premium_sms.php");?>
+*/ ?>
+<? //include("includes/premium_sms.php");?>
+
 </ul>
 <hr>
 <a name="accounts"></a>
@@ -167,7 +171,9 @@ Hier die Daten des HW2-Kontos:<br>
 <li><font color="#FF2020"><b>NEU!!!</b></font> Diplomatie-Karte: Verbündete und Feinde im Überblick
 <li>Signatur bearbeitbar
 </ul>
-30 Tage EUR 2,99 oder <b>SMS* an 89998</b> mit Text &quot;<code><B><? 
+30 Tage EUR 2,99 
+<? if( defined("PREMIUM_SMS") && PREMIUM_SMS ) { ?>
+oder <b>SMS* an 89998</b> mit Text &quot;<code><B><? 
 echo SMS_PREMIUM_KEYWORD." "; 
 if (isset($_SESSION['player'])) {
  echo $_SESSION['player']->getID(); 
@@ -176,7 +182,9 @@ else {
  echo "&lt;ID&gt;";
 }
 ?>
-</B></code>&quot;<br />
+</B></code>&quot;
+<? } ?>
+<br />
 <table><tr><td>
 3 Monate EUR 6,00<br />
 6 Monate EUR 11,00<br />
@@ -184,9 +192,10 @@ else {
 </td><td>
 <? if(isset($_SESSION['player'])) paypal_button("6.00", "drei Monate Premium Lite"); ?>
 </td></tr></table>
+<? if( defined("PREMIUM_SMS") && PREMIUM_SMS ) { ?>
 <p>
 <font size="-1">*) EUR 2,99 pro SMS aus allen <b>deutschen</b> Netzen, zuzüglich eventueller Betreibergebühren.</font>
-
+<? } ?>
 <hr>
 <a name="premiumpro"><h2>HW2 Premium Pro</h2></a>
 <ul>

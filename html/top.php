@@ -139,7 +139,7 @@ if($player->isMultihunter())
 if($player->isNamehunter())
      echo '<td nowrap title="Namehunter"><a target="main" href="namehunter.php"><img alt="NH" border="0" src="'.$imagepath.'/nh.gif"></a></td>';
 
-if(!defined("HISPEED") || !HISPEED) {
+if( defined("SMS_SERVICE") && SMS_SERVICE && (!defined("HISPEED") || !HISPEED) ) {
   echo '<td nowrap title="SMS Senden"><a target="main" href="sms.php"><img border="0" alt="SMS Versand" src="'.GFX_PATH_LOCAL.'/sms_mini.gif"></a></td>';
 } 
 ?>

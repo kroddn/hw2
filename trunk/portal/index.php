@@ -411,9 +411,9 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     </DIV>      
 
     <DIV id="shortnews">
-      <font color="#8FFF4F">
-      <b>Neue Hauptrunde am 19. Februar 2010</font><br>
-      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?f=1&t=11038">hier im Forum</a>.      
+      <font color="#FF8F2F">
+      <b>Reset speed UND game1 25. Juni 2010</font><br>
+      Weitere Informationen <a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?f=1&t=11085">hier im Forum</a>.      
     </DIV>
 
 

@@ -135,7 +135,7 @@ else {
   $nr[1] = mysql_fetch_array($res);
 }
 
-if (1 || BOOKING_ALLOWED) {
+if (defined("BOOKING_ALLOWED") && BOOKING_ALLOWED) {
   $book_res = do_mysql_query("SELECT count(*) FROM booking WHERE status = 0");
   $book = mysql_fetch_array($book_res);
 }
@@ -463,7 +463,7 @@ function playing_div() {
   printf('<div style="margin-top:3px;">Zur Zeit spielen <b>%s</b> registrierte und aktivierte Spieler, davon sind <b>%s christliche</b> und <b>%s islamische</b> Spieler.',
          $nr[0] === -1 ? "?" : $nr[0][0]+$nr[1][0], $nr[0] === -1 ? "?" : $nr[0][0], $nr[1] === -1 ? "?" : $nr[1][0]);
   
-  if (BOOKING_ALLOWED) {
+  if (defined("BOOKING_ALLOWED") && BOOKING_ALLOWED) {
     echo "\nFür die neue Runde sind <b>".$book[0]."</b> Spieler vorangemeldet.\n";
   }
 

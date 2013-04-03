@@ -95,8 +95,11 @@ start_body();
 	<td><a <? printActive("population"); ?> href="<? echo $PHP_SELF; ?>?show=population">Einwohner</a></td>
   <?php if(!defined("HISPEED") ) { ?>
 	<td><a <? printActive("clan"); ?> href="<? echo $PHP_SELF; ?>?show=clan">Orden</a></td>
-  <?php } ?>
+  <?php } 
+        if(!defined("SPEED") && !defined("HISPEED")) {
+  ?>
 	<td><a <? printActive("honor"); ?> href="<? echo $PHP_SELF; ?>?show=honor">Bonuspunkte</a></td>
+  <?php } ?>
 	<td><a <? printActive("div"); ?> href="<? echo $PHP_SELF; ?>?show=div">Diverses</a></td>
 </tr>
 <tr>
@@ -125,10 +128,18 @@ switch($show) {
   case "population":
   case "clan":
   case "div":
-  case "honor":
     // Funktion zusammenbauen und aufrufen
     $function = "top_".$show;
     $function();
+    break;
+    
+  case "honor":
+    // Funktion zusammenbauen und aufrufen
+    // Honor nur bei normaler Runde
+    if(!defined("SPEED") && !defined("HISPEED")) {
+        $function = "top_".$show;			 
+    	$function();				 
+    }
     break;
 }
 ?>
@@ -144,7 +155,8 @@ switch($show) {
 <? 
 $timemod = time() % 3600;
 
-if (!is_premium_noads()) {   
+// Edit Sinner: Werbung vorläufig deaktiviert
+if (false && !is_premium_noads()) {   
   // In gewissen abständen rotieren
   if($timemod < 500) {
       //include("includes/easyad_skyscraper.html");
@@ -179,7 +191,8 @@ if (!is_premium_noads()) {
 <p>
 <div style="height: 602px; font-size: 10px; font-family: 'Times New Roman',Times,serif">
 <?
-if (!is_premium_noads()) {
+// Edit Sinner: Werbung vorläufig deaktiviert
+if (false && !is_premium_noads()) {
   if ( $timemod < 1000) {
     include("ads/ebay_160x600.php");
   }  
@@ -605,7 +618,8 @@ function top_div () {
   
 //  if (!is_premium_noads())
 //    include("includes/getprice-square.html");
-  if (!is_premium_noads())
+      // Edit Sinner: Werbung vorläufig deaktiviert
+  if (false && !is_premium_noads())
     include("ads/ing_diba_300x250.php");
 
   echo "</center><p>&nbsp;</td>";

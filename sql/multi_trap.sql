@@ -35,4 +35,4 @@ CREATE TABLE IF NOT EXISTS `multi_trap` (
   PRIMARY KEY (`mid`),
   UNIQUE KEY `code` (`code`),
   KEY `player` (`player`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=88060 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci AUTO_INCREMENT=1 ;

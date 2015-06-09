@@ -21,3 +21,6 @@ html/includes/service.php
  um den Daemon "nice" zu starten.
 
 
+sql/
+ Hier befinden sich SQL Skripte zum Aufbau der MySQL Datenbank.
+ Ein Setup-Skript gibt es derzeit nicht.

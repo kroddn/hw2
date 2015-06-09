@@ -1,0 +1,2 @@
+HWROOT=/home/hw2_game1
+REMOTE_ROOT=0

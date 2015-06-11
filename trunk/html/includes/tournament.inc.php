@@ -131,7 +131,7 @@ function calc_tournaments() {
     $num >= $t['maxplayers'] / 2) {
       tDebug($R);
       $text .= "Das Turnier Nr. ".$t['tid']." beginnt...\n";
-      $result = tournament_fight(&$R, &$text);
+      $result = tournament_fight($R, $text);
 
       /* Gewinner ausgeben */
       $firstgold = round($t['gold'] * 0.75);

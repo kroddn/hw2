@@ -2,7 +2,7 @@
     This file is part of "Holy-Wars 2" 
     http://holy-wars2.de / https://sourceforge.net/projects/hw2/
 
-    Copyright (C) 2003-2009 
+    Copyright (C) 2003-2015
     by Markus Sinner, Gordon Meiser, Laurenz Gamper, Stefan Neubert
 
     "Holy-Wars 2" is free software: you can redistribute it and/or modify

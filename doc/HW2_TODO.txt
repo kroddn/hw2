@@ -1,0 +1,35 @@
+TODO:
+
+Nachrichten Features:
+- Deutliches Design von nicht gelesenen Nachrichten
+- nach 1 Woche automatisch als archiviert markieren - nach 2 Wochen gelöscht
+- Favorites einbauen
+- Neue Nachrichten - Derzeit mit bugs da nicht angepasst an HW2-Grundsystem
+
+
+Code-Änderungen:
+choose_name
+	Angemeldet: <?php if($registered[0][0] < 1) echo "0"; else echo $registered[0][0]; echo " Christen und "; if($registered[1][0] < 1) echo "0"; else echo $registered[0][0]; echo " Moslems. <b>Wählt ".($registered[0][0] >= $registered[1][0] ? "Islam" : "Christentum").",</b> um das Gleichgewicht zu wahren."; ?>
+	wenn kein moslem angemeldet war wurde es nicht angezeigt!
+
+Überprüfen:
+- 2 Spieler konnten sich einloggen und spielen Ohne aktiviert zu sein! Hatten schon 9000+ Einwohner - Habe sie Manuell aktiviert!
+
+
+
+Ideen: 
+EVENTS - Goblinstadt 
+1. Eine Globale msg
+2. 24h Warten
+3. Freigeben zum attackieren
+4. Dort gibt es 50000 Einwohner die Nahrung für 24h haben
+5. Rundherum ist alles voller Berge und Diamanten/Gold
+
+Räuber:
+1. Wenn Einwohner zur Stadtgründung Ohne Schutz unterwegs sind -> 25% Chance auf Überfall und die Einwohner sterben
+
+Kreuzzug:
+1. Neu generierter Spieler mit X Units wird erstellt mit 9mrd Gold für Truppen-Gold 
+2. Greift top Spieler an und übernimmt städte (nie branden) 
+3. Wenn Einheiten Tod sind ist das Event vorbei.
+4. Der Spieler der am meisten Schaden errichtet hat kriegt Premium (zum Beispiel)

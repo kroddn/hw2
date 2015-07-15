@@ -1,0 +1,113 @@
+HW2-Neu Aufsetzen:
+
+1. Sub-Domain erstellen im Webinterface
+2. PHP-Versionen Installieren für register_globals
+	2.1 In Plesk unter Server - Plesk - Updates and Upgrades
+	2.2 Add/Remove Components
+	2.3 Web Hosting Features - Different PHP interpreter Versions
+	2.4 PHP 5.4 oder 5.3 am besten für HW2
+	2.5 Continue und Installation abwarten
+3. Sub-Domain einstellen
+	3.1 FTP-User anlegen
+		3.1.1 Erstellte Subdomain auswählen und auf "FTP Access" wechseln
+		3.1.2 "Add New FTP Account" anklicken
+		3.1.3 FTP-Account anlegen mit Home Directory auf Sub-Domain Root
+		3.1.4 Angaben bestätigen mit "OK"
+	3.2 Hosting Settings
+		3.2.1 Erstellte Subdomain auswählen und auf "Hosting Settings" wechseln
+		3.2.2 Document Root auf Unterordner /html einstellen
+		3.2.3 Unter PHP-Support FastCGI application auswählen (oder andere falls nicht Vorhanden)
+		3.2.4 PHP Version auswählen - am besten 5.4 oder 5.3 falls installiert
+		3.2.5 Auswahl bestätigen mit "OK"
+	3.3 PHP Settings
+		3.3.1 Erstellte Subdomain auswählen und auf "PHP Settings" wechseln
+		3.3.2 Damit HW2 funktioniert benötigen wir nur zwei Settings
+		3.3.3 "register_globals" auf On
+		3.3.4 "short_open_tag" auf On
+		3.3.5 Zum neuerstellen hilfreiche Einstellung: "display_errors" auf On
+		3.3.6 Weitere Einstellung sind nicht unbedingt nötig - Mit "OK" bestätigen
+	3.4 Web Server Settings
+		3.4.1 Erstellte Subdomain auswählen und auf "Web Server Settings" wechseln
+		3.4.2 Index Files - Enter custom Value
+		3.4.3 "portal.php" eintragen
+		3.4.4 Weitere Einstellung sind nicht unbedingt nötig - Mit "OK" bestätigen
+4. Datenbank erstellen und Tabellen einfügen
+	4.1 Datenbank-Vorbereitung
+		4.1.1 Unter einer Lokalen Verbindung mit z.B. XAMPP eine Datenbank erstellen (Kollation: "latin1_german2_ci")
+		4.1.2 Aktuelle SQL-Dateisammlung aus dem Sourceforge-Projekt unter der GNU Public License laden	 
+		4.1.3 Link zu Sourceforge Projekt: http://sourceforge.net/p/hw2/code/HEAD/tree/trunk/
+		4.1.4 "0_helpfiles/sql_insert.php" Editieren 
+		4.1.5 In Zeile 3 in der Datei den Pfad des Lokalen Ordners der SQL-Dateien anpassen
+		4.1.6 Ab Zeile 27 die Datenbank-Zugriffsdaten ändern (Datenbankname, User und Passwort falls vorhanden)
+		4.1.7 Die abgeänderte Datei in den Apache Localhost Ordner legen (in XAMPP unter htdocs)
+		4.1.8 Datei im Browser aufrufen und gucken ob unten irgendwelche Error angezeigt werden
+		4.1.9 Falls Nicht, können wir die Datenbank im phpmyadmin aufrufen und auf exportieren klicken
+		4.1.10 Als SQL-Datei exportieren und die runtergeladene Datei sichtbar speichern
+	4.2 Datenbank erstellen und Importieren
+		4.2.1 Unter Plesk auf "Databases klicken" und direkt auf "Add New Database"
+		4.2.2 Dort Alle wichtigen Daten eintragen und notieren (DB-Name wähle ich meist hw2_Runde)
+		4.2.3 Auswahl bestätigen mit "OK"
+		4.2.4 Erstellte Datenbank unter Webadmin aufrufen und Datenbank auswählen
+		4.2.5 Auf den Button Importieren klicken, zu importierende "Datei auswählen" und mit "OK" bestätigen
+		4.2.6 Falls keine Error aufgetreten sind phpmyadmin schließen und die Erstellung der DB ist abgeschlossen
+5. Files auf Server Laden
+	5.1 Am besten mit Filezilla mit dem unter 3.1 erstelltem Account einloggen
+	5.2 Alle Dateien aus dem Sourceforge Projekt aus 4.1.3 hochladen
+	5.3 Nochmals die Einstellung aus 3.2.2 überprüfen, damit der Server den richtigen html Root findet
+	5.4 Das richtige Image-Paket hochladen und in images hinterlegen
+6. Serverfiles von HW2 auf dem Server editieren
+	6.1 Config und Datenbankdaten ändern
+	6.1.1 Datei /html/conf/db.conf.php ändern
+		6.1.1.1 define("DBHOST", "XXX.XXX.XXX.XXX");	// IP des Servers einfügen - Oder localhost
+		6.1.1.2 define("DBUSER", "hw2_admin");			// Datenbank User einfügen
+		6.1.1.3 define("DBPASSWD", "Dgh$874n");			// Datenbank Passwort einfügen
+		6.1.1.4 define("DBSELECT", "hw2_normal");		// Datenbank Name einfügen
+	6.1.2 Datei /html/includes/config.inc.php ändern
+		6.1.2.1 define('URL_BASE', 'http://localhost');	// URL-Basis Definieren
+		6.1.2.2 Was man sonst kann: Image/Avatar-Pfade einstellen
+		6.1.2.3 Was man sonst kann: Typen von Religion, Geschwindigkeit, Forschung, Units etc
+		6.1.2.3 Was man sonst kann: Max-Players einstellen	
+	6.1.3 Datei /html/includes/db.config.php ändern
+		6.1.3.1 Was man hier Kann: Standart-Maps Definieren, SMS-Service aktivieren, Security Code an/ausschalten
+		6.1.3.2 Was man hier Kann: Spieltypes definiern wie Test, Speed, Apocalypse etc.
+		6.1.3.3 Was man hier Kann: Tickraten und Ressourcenraten definieren
+		6.1.3.4 Was man hier Kann: Loyalität, Skripte und Tourniere aktivieren
+7. Letzte Vorbereitung
+	7.1 Cron-Jobs Anpassen und Starten
+		7.1.1 Via SSH auf den Server zugreifen und sich als Root anmelden
+		7.1.2 "echo >> /Path/to/Domain.de/sub.domain.de/log/service.log" // Service-Log für später erstellen
+		7.1.3 Nach "cd /Path/to/Domain.de/sub.domain.de/cron" wechseln
+		7.1.4 In "vim hwroot.sh" HWROOT anpassen
+		7.1.5 In "vim hwha.h" SQL-Daten anpassen
+		7.1.6 Erst "make" dann "./hwha_dev" dann "./points_hw_dev" danach "./service.sh" ausführen
+	7.2 Datenbank-Admin hinzufügen
+		7.2.1 In die aus Punkt 4. erstellte Datenbank von HW2 einloggen
+		7.2.2 In die Tabelle Player wechseln und "Einfügen" drücken
+		7.2.3 INSERT INTO `hw2`.`player` (`id`, `login`, `name`, `description`, `password`, `email`, `register_email`, `sms`, `ip`, `lastseen`, `religion`, `pos`, `gold`, `wood`, `iron`, `stone`, `rp`, `recruiter`, `bonuspoints`, `lastclickbonuspoints`, `points`, `pointsavg`, `pointsupd`, `clan`, `clanstatus`, `clanapplication`, `clanapplicationtext`, `signature`, `status`, `statusdescription`, `nooblevel`, `holiday`, `activationkey`, `activationtime`, `regtime`, `mapsize`, `mapversion`, `cc_towns`, `cc_messages`, `cc_resources`, `lastres`, `gfx_path`, `hwstatus`, `settings`, `toplist`, `avatar`, `tutorial`) VALUES ('1', 'admin', 'Admin', NULL, MD5('AdminPasswort'), 'christophwaninger@gmail.com', 'christophwaninger@gmail.com', NULL, '000.000.000.000', '0', '1', NULL, '40000', '4000', '0', '4000', '30', NULL, '0', '0', '0', '1', '1', NULL, '0', NULL, NULL, NULL, NULL, NULL, '5', '0', NULL, NULL, '0', '4040', 'v3', '0', '0', '0', '0', '', '63', '0', NULL, '0', '0')
+		7.2.4 "ALTER TABLE player AUTO_INCREMENT = 10;" // Auto Inkrement fängt bei 10 an!
+	7.7 Map-Skripte kopieren
+		7.7.1 "fillmapwithres.php", "import.config.php", "import.php" und "startpos.php" in /html kopieren
+		7.7.2 "map.png", "colors.png", "map.func.php" in /html/admintools kopieren falls nicht vorhanden
+		7.7.3 Standartmap (map_shinta_europa_400x400.png) nach /html/maps kopieren		
+8. Runden Konfiguration
+	8.1 In die erstellte Datenbank für HW2 einloggen und in die Tabelle "config" wechseln
+	8.2 Weitere Datensätze anlegen bzw ändern für die Runden
+		INSERT INTO `hw2`.`config` (`name`, `value`, `creationtime`, `updatetime`) VALUES 
+			('starttime', UNIX_TIMESTAMP('2015-06-10 19:00'), '0', '0'), 
+			('endtime', UNIX_TIMESTAMP('2015-06-10 19:00'), '0', '0'), 
+			('roundname', 'My Roundname', '0', '0')
+			('tick', '180', '0', '0')				// Tick 180 ist HiSpeed Runde
+	8.3 Falls Speedrunde muss Das Logo geändert werden - von logo.png zu logospeed.png bzw logohispeed.png
+	8.4 Wie unter Punkt 6 erläutert die Runde konfigurieren
+11. Reset
+	11.1 Per SSH einloggen und service.sh suchen "ps ax|grep service" dann "kill" ID von service
+	11.2 Via Admin einloggen und unter Wartung Server Resetten + Karte
+	11.3 Unter includes/config.inc.php Pagetitel Anpassen
+	11.4 In Der Datenbank unter der Tabelle Config "roundname" ändern
+	11.5 Per SSH einloggen und in dem /cron Ordner "./service.sh" ausführen
+
+
+		
+		
+Errors:
+Syntax Fehler: Type zu Engine sql!

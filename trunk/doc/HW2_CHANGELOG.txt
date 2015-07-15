@@ -1,0 +1,30 @@
+CHANGELOG:
+	
+	player.class.php
+		Vorher:
+			// Anzahl neuer Nachrichten aktualisieren
+			function updateNewMessages() {
+				  $res1=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".$this->id." AND !(status & ".(MSG_RECIPIENT_READ|MSG_RECIPIENT_DELETED).")" );
+				  $num = mysql_fetch_array($res1);	
+			  $this->newmessages = $num[0];
+			}
+			
+		Nachher:
+			// Anzahl neuer Nachrichten aktualisieren
+			function updateNewMessages() {
+				  $res1=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".$this->id." AND status LIKE '0'");
+				  $num = mysql_fetch_array($res1);	
+			  $this->newmessages = $num[0];
+			}
+	
+	borderbottom.php
+		Vorher:
+			<td align="center" height="20" nowrap background="<? echo $imagepath; ?>/border_bottom.gif"><a class="statusline" target="main" href="messages.php?category=-1"><b><? echo $player->getNewMessages(); ?></b></a></td>
+			<td align="center" height="20" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"><a target="main" href="messages.php?category=-1"><img border="0" alt="Nachrichten" src="<? echo $imagepath; ?>/message.gif"></a></td>
+
+		Nachher:
+			<td align="center" height="20" nowrap background="<? echo $imagepath; ?>/border_bottom.gif"><a class="statusline" target="main" href="messages.php?show=read"><b><? echo $player->getNewMessages(); ?></b></a></td>
+			<td align="center" height="20" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"><a target="main" href="messages.php?show=read"><img border="0" alt="Nachrichten" src="<? echo $imagepath; ?>/message.gif"></a></td>
+
+
+		

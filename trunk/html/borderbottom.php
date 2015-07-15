@@ -97,8 +97,8 @@ for ($i=0;$i<sizeof($citylist);++$i) {
 </td>
 <td height="20" width="15" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"></td>
 
-<td align="center" height="20" nowrap background="<? echo $imagepath; ?>/border_bottom.gif"><a class="statusline" target="main" href="messages.php?category=-1"><b><? echo $player->getNewMessages(); ?></b></a></td>
-<td align="center" height="20" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"><a target="main" href="messages.php?category=-1"><img border="0" alt="Nachrichten" src="<? echo $imagepath; ?>/message.gif"></a></td>
+<td align="center" height="20" nowrap background="<? echo $imagepath; ?>/border_bottom.gif"><a class="statusline" target="main" href="messages.php?show=read"><b><? echo $player->getNewMessages(); ?></b></a></td>
+<td align="center" height="20" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"><a target="main" href="messages.php?show=read"><img border="0" alt="Nachrichten" src="<? echo $imagepath; ?>/message.gif"></a></td>
 <td align="center" height="20" nowrap background="<? echo $imagepath; ?>/border_bottom.gif">&nbsp;<a class="statusline" target="main" href="research.php"><b><? echo $player->getRp(); ?></b></a></td>
 <td align="center" height="20" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"><a target="main" href="research.php"><img border="0" alt="Forschungspunkte" src="<? echo $imagepath; ?>/rp.gif"></a></td>
 <td height="20" width="15" nowrap class="nopadding" background="<? echo $imagepath; ?>/border_bottom.gif"></td>

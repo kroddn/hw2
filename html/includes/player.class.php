@@ -524,7 +524,7 @@ class Player {
 	
 	// Anzahl neuer Nachrichten aktualisieren
 	function updateNewMessages() {
-          $res1=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".$this->id." AND !(status & ".(MSG_RECIPIENT_READ|MSG_RECIPIENT_DELETED).")" );
+          $res1=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".$this->id." AND status LIKE '0'");
           $num = mysql_fetch_array($res1);	
 	  $this->newmessages = $num[0];
 	}

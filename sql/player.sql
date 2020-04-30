@@ -1,5 +1,5 @@
 --
--- Tabellenstruktur für Tabelle `player`
+-- Tabellenstruktur fÃ¼r Tabelle `player`
 --
 
 CREATE TABLE IF NOT EXISTS `player` (
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `player` (
   `toplist` tinyint(3) default NULL,
   `avatar` tinyint(1) NOT NULL default '0',
   `tutorial` int(11) NOT NULL default '0' COMMENT 'Level des Tutorials',
-  `markdelete` int(11) NOT NULL default '0',
+  `markdelete` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `login` (`login`),
   UNIQUE KEY `name` (`name`)

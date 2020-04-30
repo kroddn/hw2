@@ -12,7 +12,7 @@
 
 -- --------------------------------------------------------
 -- 
--- Tabellenstruktur für Tabelle `clanf_auth_access`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_auth_access`
 -- 
 
 CREATE TABLE `clanf_auth_access` (
@@ -32,17 +32,17 @@ CREATE TABLE `clanf_auth_access` (
   `auth_mod` tinyint(1) NOT NULL default '0',
   KEY `group_id` (`group_id`),
   KEY `forum_id` (`forum_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_auth_access`
+-- Daten fÃ¼r Tabelle `clanf_auth_access`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_banlist`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_banlist`
 -- 
 
 CREATE TABLE `clanf_banlist` (
@@ -52,17 +52,17 @@ CREATE TABLE `clanf_banlist` (
   `ban_email` varchar(255) default NULL,
   PRIMARY KEY  (`ban_id`),
   KEY `ban_ip_user_id` (`ban_ip`,`ban_userid`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_banlist`
+-- Daten fÃ¼r Tabelle `clanf_banlist`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_categories`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_categories`
 -- 
 
 CREATE TABLE `clanf_categories` (
@@ -71,27 +71,27 @@ CREATE TABLE `clanf_categories` (
   `cat_order` mediumint(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (`cat_id`),
   KEY `cat_order` (`cat_order`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_categories`
+-- Daten fÃ¼r Tabelle `clanf_categories`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_config`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_config`
 -- 
 
 CREATE TABLE `clanf_config` (
   `config_name` varchar(255) NOT NULL default '',
   `config_value` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`config_name`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_config`
+-- Daten fÃ¼r Tabelle `clanf_config`
 -- 
 
 INSERT INTO `clanf_config` VALUES ('config_id', '1');
@@ -159,7 +159,7 @@ INSERT INTO `clanf_config` VALUES ('default_lang', 'english');
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_confirm`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_confirm`
 -- 
 
 CREATE TABLE `clanf_confirm` (
@@ -167,34 +167,34 @@ CREATE TABLE `clanf_confirm` (
   `session_id` char(32) NOT NULL default '',
   `code` char(6) NOT NULL default '',
   PRIMARY KEY  (`session_id`,`confirm_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_confirm`
+-- Daten fÃ¼r Tabelle `clanf_confirm`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_disallow`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_disallow`
 -- 
 
 CREATE TABLE `clanf_disallow` (
   `disallow_id` mediumint(8) unsigned NOT NULL auto_increment,
   `disallow_username` varchar(25) NOT NULL default '',
   PRIMARY KEY  (`disallow_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_disallow`
+-- Daten fÃ¼r Tabelle `clanf_disallow`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_forum_prune`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_forum_prune`
 -- 
 
 CREATE TABLE `clanf_forum_prune` (
@@ -204,17 +204,17 @@ CREATE TABLE `clanf_forum_prune` (
   `prune_freq` smallint(5) unsigned NOT NULL default '0',
   PRIMARY KEY  (`prune_id`),
   KEY `forum_id` (`forum_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_forum_prune`
+-- Daten fÃ¼r Tabelle `clanf_forum_prune`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_forums`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_forums`
 -- 
 
 CREATE TABLE `clanf_forums` (
@@ -244,17 +244,17 @@ CREATE TABLE `clanf_forums` (
   KEY `forums_order` (`forum_order`),
   KEY `cat_id` (`cat_id`),
   KEY `forum_last_post_id` (`forum_last_post_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_forums`
+-- Daten fÃ¼r Tabelle `clanf_forums`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_groups`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_groups`
 -- 
 
 CREATE TABLE `clanf_groups` (
@@ -266,10 +266,10 @@ CREATE TABLE `clanf_groups` (
   `group_single_user` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`group_id`),
   KEY `group_single_user` (`group_single_user`)
-) TYPE=MyISAM AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM AUTO_INCREMENT=4 ;
 
 -- 
--- Daten für Tabelle `clanf_groups`
+-- Daten fÃ¼r Tabelle `clanf_groups`
 -- 
 
 INSERT INTO `clanf_groups` VALUES (1, 1, 'Anonymous', 'Personal User', 0, 1);
@@ -279,7 +279,7 @@ INSERT INTO `clanf_groups` VALUES (3, 1, 'Moderatoren', '', 1, 0);
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_posts`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_posts`
 -- 
 
 CREATE TABLE `clanf_posts` (
@@ -301,17 +301,17 @@ CREATE TABLE `clanf_posts` (
   KEY `topic_id` (`topic_id`),
   KEY `poster_id` (`poster_id`),
   KEY `post_time` (`post_time`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_posts`
+-- Daten fÃ¼r Tabelle `clanf_posts`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_posts_text`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_posts_text`
 -- 
 
 CREATE TABLE `clanf_posts_text` (
@@ -320,17 +320,17 @@ CREATE TABLE `clanf_posts_text` (
   `post_subject` varchar(60) default NULL,
   `post_text` text,
   PRIMARY KEY  (`post_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_posts_text`
+-- Daten fÃ¼r Tabelle `clanf_posts_text`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_privmsgs`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_privmsgs`
 -- 
 
 CREATE TABLE `clanf_privmsgs` (
@@ -348,17 +348,17 @@ CREATE TABLE `clanf_privmsgs` (
   PRIMARY KEY  (`privmsgs_id`),
   KEY `privmsgs_from_userid` (`privmsgs_from_userid`),
   KEY `privmsgs_to_userid` (`privmsgs_to_userid`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_privmsgs`
+-- Daten fÃ¼r Tabelle `clanf_privmsgs`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_privmsgs_text`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_privmsgs_text`
 -- 
 
 CREATE TABLE `clanf_privmsgs_text` (
@@ -366,17 +366,17 @@ CREATE TABLE `clanf_privmsgs_text` (
   `privmsgs_bbcode_uid` varchar(10) NOT NULL default '0',
   `privmsgs_text` text,
   PRIMARY KEY  (`privmsgs_text_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_privmsgs_text`
+-- Daten fÃ¼r Tabelle `clanf_privmsgs_text`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_ranks`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_ranks`
 -- 
 
 CREATE TABLE `clanf_ranks` (
@@ -386,10 +386,10 @@ CREATE TABLE `clanf_ranks` (
   `rank_special` tinyint(1) default '0',
   `rank_image` varchar(255) default NULL,
   PRIMARY KEY  (`rank_id`)
-) TYPE=MyISAM AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM AUTO_INCREMENT=2 ;
 
 -- 
--- Daten für Tabelle `clanf_ranks`
+-- Daten fÃ¼r Tabelle `clanf_ranks`
 -- 
 
 INSERT INTO `clanf_ranks` VALUES (1, 'Site Admin', -1, 1, NULL);
@@ -397,7 +397,7 @@ INSERT INTO `clanf_ranks` VALUES (1, 'Site Admin', -1, 1, NULL);
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_search_results`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_search_results`
 -- 
 
 CREATE TABLE `clanf_search_results` (
@@ -406,10 +406,10 @@ CREATE TABLE `clanf_search_results` (
   `search_array` text NOT NULL,
   PRIMARY KEY  (`search_id`),
   KEY `session_id` (`session_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_search_results`
+-- Daten fÃ¼r Tabelle `clanf_search_results`
 -- 
 
 INSERT INTO `clanf_search_results` VALUES (769373391, '982c6218483f6be6d7257bdc8b1fa8df', 'a:7:{s:14:"search_results";s:1:"1";s:17:"total_match_count";i:1;s:12:"split_search";N;s:7:"sort_by";i:0;s:8:"sort_dir";s:4:"DESC";s:12:"show_results";s:6:"topics";s:12:"return_chars";i:200;}');
@@ -417,7 +417,7 @@ INSERT INTO `clanf_search_results` VALUES (769373391, '982c6218483f6be6d7257bdc8
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_search_wordlist`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_search_wordlist`
 -- 
 
 CREATE TABLE `clanf_search_wordlist` (
@@ -426,10 +426,10 @@ CREATE TABLE `clanf_search_wordlist` (
   `word_common` tinyint(1) unsigned NOT NULL default '0',
   PRIMARY KEY  (`word_text`),
   KEY `word_id` (`word_id`)
-) TYPE=MyISAM AUTO_INCREMENT=54 ;
+) ENGINE=MyISAM AUTO_INCREMENT=54 ;
 
 -- 
--- Daten für Tabelle `clanf_search_wordlist`
+-- Daten fÃ¼r Tabelle `clanf_search_wordlist`
 -- 
 
 INSERT INTO `clanf_search_wordlist` VALUES (0x6578616d706c65, 1, 0);
@@ -478,7 +478,7 @@ INSERT INTO `clanf_search_wordlist` VALUES (0x61736466, 52, 0);
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_search_wordmatch`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_search_wordmatch`
 -- 
 
 CREATE TABLE `clanf_search_wordmatch` (
@@ -487,10 +487,10 @@ CREATE TABLE `clanf_search_wordmatch` (
   `title_match` tinyint(1) NOT NULL default '0',
   KEY `post_id` (`post_id`),
   KEY `word_id` (`word_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_search_wordmatch`
+-- Daten fÃ¼r Tabelle `clanf_search_wordmatch`
 -- 
 
 INSERT INTO `clanf_search_wordmatch` VALUES (1, 1, 0);
@@ -564,7 +564,7 @@ INSERT INTO `clanf_search_wordmatch` VALUES (2, 53, 1);
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_sessions`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_sessions`
 -- 
 
 CREATE TABLE `clanf_sessions` (
@@ -578,17 +578,17 @@ CREATE TABLE `clanf_sessions` (
   PRIMARY KEY  (`session_id`),
   KEY `session_user_id` (`session_user_id`),
   KEY `session_id_ip_user_id` (`session_id`,`session_ip`,`session_user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_sessions`
+-- Daten fÃ¼r Tabelle `clanf_sessions`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_smilies`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_smilies`
 -- 
 
 CREATE TABLE `clanf_smilies` (
@@ -597,10 +597,10 @@ CREATE TABLE `clanf_smilies` (
   `smile_url` varchar(100) default NULL,
   `emoticon` varchar(75) default NULL,
   PRIMARY KEY  (`smilies_id`)
-) TYPE=MyISAM AUTO_INCREMENT=43 ;
+) ENGINE=MyISAM AUTO_INCREMENT=43 ;
 
 -- 
--- Daten für Tabelle `clanf_smilies`
+-- Daten fÃ¼r Tabelle `clanf_smilies`
 -- 
 
 INSERT INTO `clanf_smilies` VALUES (1, ':D', 'icon_biggrin.gif', 'Very Happy');
@@ -649,7 +649,7 @@ INSERT INTO `clanf_smilies` VALUES (42, ':mrgreen:', 'icon_mrgreen.gif', 'Mr. Gr
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_themes`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_themes`
 -- 
 
 CREATE TABLE `clanf_themes` (
@@ -697,10 +697,10 @@ CREATE TABLE `clanf_themes` (
   `img_size_poll` smallint(5) unsigned default NULL,
   `img_size_privmsg` smallint(5) unsigned default NULL,
   PRIMARY KEY  (`themes_id`)
-) TYPE=MyISAM AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM AUTO_INCREMENT=2 ;
 
 -- 
--- Daten für Tabelle `clanf_themes`
+-- Daten fÃ¼r Tabelle `clanf_themes`
 -- 
 
 INSERT INTO `clanf_themes` VALUES (1, 'subSilver', 'subSilver', 'subSilver.css', '', 'E5E5E5', '000000', '000000', '000000', '000000', '000000', 'EFEFEF', 'DEE3E7', 'D1D7DC', '', '', '', '98AAB1', '006699', 'FFFFFF', 'cellpic1.gif', 'cellpic3.gif', 'cellpic2.jpg', 'FAFAFA', 'FFFFFF', '', 'row1', 'row2', '', 'Verdana, Arial, Helvetica, sans-serif', 'Trebuchet MS', 'Courier, ''Courier New'', sans-serif', 10, 11, 12, '444444', '006600', 'FFA34F', '', '', '', NULL, NULL);
@@ -708,7 +708,7 @@ INSERT INTO `clanf_themes` VALUES (1, 'subSilver', 'subSilver', 'subSilver.css',
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_themes_name`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_themes_name`
 -- 
 
 CREATE TABLE `clanf_themes_name` (
@@ -744,10 +744,10 @@ CREATE TABLE `clanf_themes_name` (
   `span_class2_name` char(50) default NULL,
   `span_class3_name` char(50) default NULL,
   PRIMARY KEY  (`themes_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_themes_name`
+-- Daten fÃ¼r Tabelle `clanf_themes_name`
 -- 
 
 INSERT INTO `clanf_themes_name` VALUES (1, 'The lightest row colour', 'The medium row color', 'The darkest row colour', '', '', '', 'Border round the whole page', 'Outer table border', 'Inner table border', 'Silver gradient picture', 'Blue gradient picture', 'Fade-out gradient on index', 'Background for quote boxes', 'All white areas', '', 'Background for topic posts', '2nd background for topic posts', '', 'Main fonts', 'Additional topic title font', 'Form fonts', 'Smallest font size', 'Medium font size', 'Normal font size (post body etc)', 'Quote & copyright text', 'Code text colour', 'Main table header text colour', '', '', '');
@@ -755,7 +755,7 @@ INSERT INTO `clanf_themes_name` VALUES (1, 'The lightest row colour', 'The mediu
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_topics`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_topics`
 -- 
 
 CREATE TABLE `clanf_topics` (
@@ -777,10 +777,10 @@ CREATE TABLE `clanf_topics` (
   KEY `topic_moved_id` (`topic_moved_id`),
   KEY `topic_status` (`topic_status`),
   KEY `topic_type` (`topic_type`)
-) TYPE=MyISAM AUTO_INCREMENT=2 ;
+) ENGINE=MyISAM AUTO_INCREMENT=2 ;
 
 -- 
--- Daten für Tabelle `clanf_topics`
+-- Daten fÃ¼r Tabelle `clanf_topics`
 -- 
 
 INSERT INTO `clanf_topics` VALUES (1, 1, 'test', 5, 1104082388, 13, 1, 0, 0, 0, 1, 2, 0);
@@ -788,7 +788,7 @@ INSERT INTO `clanf_topics` VALUES (1, 1, 'test', 5, 1104082388, 13, 1, 0, 0, 0, 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_topics_watch`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_topics_watch`
 -- 
 
 CREATE TABLE `clanf_topics_watch` (
@@ -798,17 +798,17 @@ CREATE TABLE `clanf_topics_watch` (
   KEY `topic_id` (`topic_id`),
   KEY `user_id` (`user_id`),
   KEY `notify_status` (`notify_status`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_topics_watch`
+-- Daten fÃ¼r Tabelle `clanf_topics_watch`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_user_group`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_user_group`
 -- 
 
 CREATE TABLE `clanf_user_group` (
@@ -817,10 +817,10 @@ CREATE TABLE `clanf_user_group` (
   `user_pending` tinyint(1) default NULL,
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_user_group`
+-- Daten fÃ¼r Tabelle `clanf_user_group`
 -- 
 
 INSERT INTO `clanf_user_group` VALUES (3, 3, 0);
@@ -829,7 +829,7 @@ INSERT INTO `clanf_user_group` VALUES (3, 3, 0);
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_users`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_users`
 -- 
 
 CREATE TABLE `clanf_users` (
@@ -880,10 +880,10 @@ CREATE TABLE `clanf_users` (
   `user_newpasswd` varchar(32) default NULL,
   PRIMARY KEY  (`user_id`),
   KEY `user_session_time` (`user_session_time`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_users`
+-- Daten fÃ¼r Tabelle `clanf_users`
 -- 
 
 INSERT INTO `clanf_users` VALUES (-1, 1, 'Cheater', '', 0, 0, 0, 0, 0, 0, 0.00, NULL, NULL, 'd M Y H:i', 0, 0, 0, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
@@ -891,7 +891,7 @@ INSERT INTO `clanf_users` VALUES (-1, 1, 'Cheater', '', 0, 0, 0, 0, 0, 0, 0.00, 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_vote_desc`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_vote_desc`
 -- 
 
 CREATE TABLE `clanf_vote_desc` (
@@ -902,17 +902,17 @@ CREATE TABLE `clanf_vote_desc` (
   `vote_length` int(11) NOT NULL default '0',
   PRIMARY KEY  (`vote_id`),
   KEY `topic_id` (`topic_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_vote_desc`
+-- Daten fÃ¼r Tabelle `clanf_vote_desc`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_vote_results`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_vote_results`
 -- 
 
 CREATE TABLE `clanf_vote_results` (
@@ -922,17 +922,17 @@ CREATE TABLE `clanf_vote_results` (
   `vote_result` int(11) NOT NULL default '0',
   KEY `vote_option_id` (`vote_option_id`),
   KEY `vote_id` (`vote_id`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_vote_results`
+-- Daten fÃ¼r Tabelle `clanf_vote_results`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_vote_voters`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_vote_voters`
 -- 
 
 CREATE TABLE `clanf_vote_voters` (
@@ -942,17 +942,17 @@ CREATE TABLE `clanf_vote_voters` (
   KEY `vote_id` (`vote_id`),
   KEY `vote_user_id` (`vote_user_id`),
   KEY `vote_user_ip` (`vote_user_ip`)
-) TYPE=MyISAM;
+) ENGINE=MyISAM;
 
 -- 
--- Daten für Tabelle `clanf_vote_voters`
+-- Daten fÃ¼r Tabelle `clanf_vote_voters`
 -- 
 
 
 -- --------------------------------------------------------
 
 -- 
--- Tabellenstruktur für Tabelle `clanf_words`
+-- Tabellenstruktur fÃ¼r Tabelle `clanf_words`
 -- 
 
 CREATE TABLE `clanf_words` (
@@ -960,10 +960,10 @@ CREATE TABLE `clanf_words` (
   `word` char(100) NOT NULL default '',
   `replacement` char(100) NOT NULL default '',
   PRIMARY KEY  (`word_id`)
-) TYPE=MyISAM AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM AUTO_INCREMENT=1 ;
 
 -- 
--- Daten für Tabelle `clanf_words`
+-- Daten fÃ¼r Tabelle `clanf_words`
 -- 
 
         

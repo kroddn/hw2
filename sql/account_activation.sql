@@ -8,7 +8,7 @@
 CREATE TABLE IF NOT EXISTS `account_activation` (
   keyid int(10) NOT NULL PRIMARY KEY auto_increment,
   activationkey varchar(32) NOT NULL,
-  game1 varchar(16) NOT NULL, -- game1, game2, speed, hispeed
+  game1 varchar(16) NOT NULL -- game1, game2, speed, hispeed
   
   
   

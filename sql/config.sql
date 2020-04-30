@@ -1,5 +1,5 @@
--
--- Tabellenstruktur für Tabelle `config`
+--
+-- Tabellenstruktur fÃ¼r Tabelle `config`
 --
 
 CREATE TABLE IF NOT EXISTS `config` (

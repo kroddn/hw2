@@ -62,53 +62,53 @@ function arrivalSettle($end, $start, $endtime, $aid, $missiondata, $religion, $o
   getMapSize($fx, $fy);
 
   // Feld checken ( ob schon belegt die Umgegend )
-  $xy   = do_mysql_query_fetch_assoc("SELECT x,y FROM map WHERE id = ".$end); 
+  $xy   = do_mysqli_query_fetch_assoc("SELECT x,y FROM map WHERE id = ".$end); 
   $x    = $xy['x']; 
   $y    = $xy['y']; 
   
-  // $fx und $fy ist Kartengröße
+  // $fx und $fy ist KartengrÃ¶ÃŸe
   $sql = "SELECT city.owner AS owner, city.id AS id FROM city, map AS map1 ".
     " WHERE city.id=map1.id ".
     " AND map1.x >= ".max(0, $x - 4)." AND map1.x <= ".min($fx-1, $x + 4).
     " AND map1.y >= ".max(0, $y - 4)." AND map1.y <= ".min($fy-1, $y + 4);
 
-  $res2 = do_mysql_query($sql);
+  $res2 = do_mysqli_query($sql);
 
   // Eine Stadt an dieser Stelle existiert bereits - Umkehren
-  if ($data2 = mysql_fetch_assoc($res2)) {
-    do_mysql_query("UPDATE army SET mission='return',end=".$start.",start=".$end.",endtime=endtime+endtime-starttime,starttime=".$endtime." WHERE aid=".$aid);
-    do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.", UNIX_TIMESTAMP(),'Stadtgründung fehlgeschlagen','Eine Stadt konnte nicht gegründet werden, weil das Gebiet bereits von einer anderen Stadt belegt wurde.',3)");
+  if ($data2 = mysqli_fetch_assoc($res2)) {
+    do_mysqli_query("UPDATE army SET mission='return',end=".$start.",start=".$end.",endtime=endtime+endtime-starttime,starttime=".$endtime." WHERE aid=".$aid);
+    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.", UNIX_TIMESTAMP(),'StadtgrÃ¼ndung fehlgeschlagen','Eine Stadt konnte nicht gegrÃ¼ndet werden, weil das Gebiet bereits von einer anderen Stadt belegt wurde.',3)");
   } 
   else {
     // eventuelle Startposition entfernen
-    $res3 = do_mysql_query("SELECT startpositions.x AS x, startpositions.y AS y FROM startpositions,map WHERE startpositions.x>=map.x-4 AND startpositions.x<=map.x+4 AND startpositions.y>=map.y-4 AND startpositions.y<=map.y+4 AND map.id=".$end);
-    while ($data3 = mysql_fetch_assoc($res3)) {
-      do_mysql_query("DELETE FROM startpositions WHERE x=".$data3['x']." AND y=".$data3['y']);
+    $res3 = do_mysqli_query("SELECT startpositions.x AS x, startpositions.y AS y FROM startpositions,map WHERE startpositions.x>=map.x-4 AND startpositions.x<=map.x+4 AND startpositions.y>=map.y-4 AND startpositions.y<=map.y+4 AND map.id=".$end);
+    while ($data3 = mysqli_fetch_assoc($res3)) {
+      do_mysqli_query("DELETE FROM startpositions WHERE x=".$data3['x']." AND y=".$data3['y']);
     }
     
     // Stadteintrag anfertigen und armyblock setzen
     $newname = "neue Stadt ".$end."-".$aid;
-    do_mysql_query("INSERT INTO city (id,name,population,religion,food,owner,attackblock) VALUES (".$end.",'".mysql_escape_string($newname)."',".$missiondata.",".$religion.",0,".$owner.", UNIX_TIMESTAMP() + ".(BLOCKSETTLEARMY).")");
-    do_mysql_query("DELETE FROM army WHERE aid=".$aid);
+    do_mysqli_query("INSERT INTO city (id,name,population,religion,food,owner,attackblock) VALUES (".$end.",'".mysqli_escape_string($GLOBALS['con'], $newname)."',".$missiondata.",".$religion.",0,".$owner.", UNIX_TIMESTAMP() + ".(BLOCKSETTLEARMY).")");
+    do_mysqli_query("DELETE FROM army WHERE aid=".$aid);
     
 
-    // Armeedaten löschen und Bewachung hinzufügen
-    $res4 = do_mysql_query("SELECT unit, count FROM armyunit WHERE armyunit.aid=".$aid);
-    while ($data4 = mysql_fetch_assoc($res4)) {
-      do_mysql_query("INSERT INTO cityunit (city, unit, count, owner) VAluES (".$end.", ".$data4['unit'].", ".$data4['count'].", ".$owner.")");
+    // Armeedaten lÃ¶schen und Bewachung hinzufï¿½gen
+    $res4 = do_mysqli_query("SELECT unit, count FROM armyunit WHERE armyunit.aid=".$aid);
+    while ($data4 = mysqli_fetch_assoc($res4)) {
+      do_mysqli_query("INSERT INTO cityunit (city, unit, count, owner) VAluES (".$end.", ".$data4['unit'].", ".$data4['count'].", ".$owner.")");
     }
     
-    // Jetzt die Armeen löschen
-    do_mysql_query("DELETE FROM armyunit WHERE aid=".$aid);
+    // Jetzt die Armeen lÃ¶schen
+    do_mysqli_query("DELETE FROM armyunit WHERE aid=".$aid);
 
     // Bauernhof bauen
-    //TODO: define festlegen für Bauernhof
-    do_mysql_query("INSERT INTO citybuilding (city,building,count) VALUES (".$end.",1,1)");
+    //TODO: define festlegen fÃ¼r Bauernhof
+    do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$end.",1,1)");
     
     // Nachricht schreiben
-    do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.",".$endtime.",'Gründung: ".$newname."','Ein neue Siedlung wurde auf Euer Geheiß hin gegründet. ".$missiondata." Seelen sind in dieser neuen Siedlung beheimatet.',3)");
+    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.",".$endtime.",'Grï¿½ndung: ".$newname."','Ein neue Siedlung wurde auf Euer GeheiÃŸ hin gegrÃ¼ndet. ".$missiondata." Seelen sind in dieser neuen Siedlung beheimatet.',3)");
     // cc_towns aktualisieren
-    do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$owner);
+    do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$owner);
   }
 }
 
@@ -123,56 +123,56 @@ function arrivalSettle($end, $start, $endtime, $aid, $missiondata, $religion, $o
  * @return unknown_type
  */
 function arrivalMove($end, $owner, $endtime, $missiondata, $aid, $missionstr) {
-  $res1 = do_mysql_query("SELECT owner,name FROM city WHERE id=".$end);
-  $data1 = mysql_fetch_assoc($res1);
+  $res1 = do_mysqli_query("SELECT owner,name FROM city WHERE id=".$end);
+  $data1 = mysqli_fetch_assoc($res1);
 
-  //falls ein siedlertrupp zurückkommt, dann ew wieder erhöhen
+  //falls ein siedlertrupp zurÃ¼ckkommt, dann ew wieder erhÃ¶hen
   if ($missiondata != NULL) {
-    // Missionskosten werden NICHT erstattet, die Bevölkerung aber schon
-    do_mysql_query("UPDATE city SET population=population+".$missiondata." WHERE id=".$end);
+    // Missionskosten werden NICHT erstattet, die Bevï¿½lkerung aber schon
+    do_mysqli_query("UPDATE city SET population=population+".$missiondata." WHERE id=".$end);
   }
-  $res2 = do_mysql_query("SELECT unit, count FROM cityunit WHERE city=".$end." AND owner=".$owner);
-  while ($data2 = mysql_fetch_assoc($res2)) {
+  $res2 = do_mysqli_query("SELECT unit, count FROM cityunit WHERE city=".$end." AND owner=".$owner);
+  while ($data2 = mysqli_fetch_assoc($res2)) {
     $cg[$data2['unit']] = $data2['count'];
   }
-  $res3 = do_mysql_query("SELECT unit,count,name FROM armyunit,unit WHERE armyunit.unit=unit.id AND armyunit.aid=".$aid);
-  while ($data3 = mysql_fetch_assoc($res3)) {    
+  $res3 = do_mysqli_query("SELECT unit,count,name FROM armyunit,unit WHERE armyunit.unit=unit.id AND armyunit.aid=".$aid);
+  while ($data3 = mysqli_fetch_assoc($res3)) {    
     if ($cg[$data3['unit']] != null)
-      do_mysql_query("UPDATE cityunit SET count=count+".$data3['count']." WHERE unit=".$data3['unit']." AND owner=".$owner." AND city=".$end);
+      do_mysqli_query("UPDATE cityunit SET count=count+".$data3['count']." WHERE unit=".$data3['unit']." AND owner=".$owner." AND city=".$end);
     else
-      do_mysql_query("INSERT INtO cityunit VALUES (".$end.",".$data3['unit'].",".$data3['count'].",".$owner.")");
+      do_mysqli_query("INSERT INtO cityunit VALUES (".$end.",".$data3['unit'].",".$data3['count'].",".$owner.")");
 
     $unitstr .= $data3['count']." ".$data3['name'].", ";
   }
-  do_mysql_query("DELETE FROM army WHERE aid=".$aid);
-  do_mysql_query("DELETE FROM armyunit WHERE aid=".$aid);
-  do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.",".$endtime.",'".$missionstr.": ".$data1['name']."','".$unitstr." sind wohlbehalten in ".$data1['name']." eingetroffen.',4)");
+  do_mysqli_query("DELETE FROM army WHERE aid=".$aid);
+  do_mysqli_query("DELETE FROM armyunit WHERE aid=".$aid);
+  do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.",".$endtime.",'".$missionstr.": ".$data1['name']."','".$unitstr." sind wohlbehalten in ".$data1['name']." eingetroffen.',4)");
   // cc_messages aktualisieren
-  do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$owner);
+  do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$owner);
 }
 
 
 /**
- * Testet ob Siedler gelöscht werden müssen oder zu Umkehr bewegt werden müssen.
+ * Testet ob Siedler gelÃ¶scht werden mÃ¼ssen oder zu Umkehr bewegt werden mÃ¼ssen.
  * TODO @Morlock: Dokumentieren
  */
 function remove_settler($city_id) {
   //echo " -> OK\n";
-  $get_settler_data = do_mysql_query("SELECT aid as id, start, end, starttime, endtime, missiondata as settler FROM army WHERE start=".$city_id." AND mission='settle'");
-  if(mysql_num_rows($get_settler_data)>0) {
-    while($settler_data = mysql_fetch_assoc($get_settler_data)) {
+  $get_settler_data = do_mysqli_query("SELECT aid as id, start, end, starttime, endtime, missiondata as settler FROM army WHERE start=".$city_id." AND mission='settle'");
+  if(mysqli_num_rows($get_settler_data)>0) {
+    while($settler_data = mysqli_fetch_assoc($get_settler_data)) {
       // wenn weniger als 25 Siedler -> umkehren lassen
       if($settler_data['settler']<25) {
         if($settler_data['start']!=$settler_data['end']){
-          do_mysql_query("UPDATE army SET end = ".$settler_data['start'].", mission = 'return' WHERE aid=".$settler_data['id']);
+          do_mysqli_query("UPDATE army SET end = ".$settler_data['start'].", mission = 'return' WHERE aid=".$settler_data['id']);
           if (DEBUG_SERVICE) echo "remove_settler: Weniger als 25 Siedler unterwegs -> Rueckruf\n";
         }
       }
-      // wenn 0 Siedler -> kompletten Trupp löschen
+      // wenn 0 Siedler -> kompletten Trupp lÃ¶schen
       if($settler_data['settler']==0) {
-        $test_helptroops = do_mysql_query("SELECT aid FROM armyunit WHERE aid=".$settler_data['id']);
-        if(mysql_num_rows($test_helptroops)==0) {
-          do_mysql_query("DELETE FROM army WHERE aid=".$settler_data['id']);
+        $test_helptroops = do_mysqli_query("SELECT aid FROM armyunit WHERE aid=".$settler_data['id']);
+        if(mysqli_num_rows($test_helptroops)==0) {
+          do_mysqli_query("DELETE FROM army WHERE aid=".$settler_data['id']);
           if (DEBUG_SERVICE) echo "remove_settler: 0 Siedler gefunden -> Loesche Siedler\n";
         }
         else {
@@ -185,29 +185,29 @@ function remove_settler($city_id) {
 
 /**
  * Testet, ob Siedlertrupps unterwegs sind, und behandelt sie entsprechend -> siehe Kommentare
- * Auslöser ist Eroberung oder Brandschatzung.
+ * Auslï¿½ser ist Eroberung oder Brandschatzung.
  * TODO @Morlock: Dokumentieren
  */
 function check_settler($city_id) {
   echo " -> OK\n";
-  $get_settler_data = do_mysql_query("SELECT aid as id, start, end, starttime, endtime, missiondata as settler FROM army WHERE start=".$city_id." AND mission='settle'");
-  if(mysql_num_rows($get_settler_data)>0) {
-		while($settler_data = mysql_fetch_assoc($get_settler_data)) {
-			$get_settler_data2 = do_mysql_query("SELECT aid FROM armyunit WHERE aid=".$settler_data['id']);
-			// wenn Siedler ohne Trupp unterwegs sind -> Siedler löschen
-			if(!mysql_num_rows($get_settler_data2)) {
-				do_mysql_query("DELETE FROM army WHERE aid=".$settler_data['id']);
+  $get_settler_data = do_mysqli_query("SELECT aid as id, start, end, starttime, endtime, missiondata as settler FROM army WHERE start=".$city_id." AND mission='settle'");
+  if(mysqli_num_rows($get_settler_data)>0) {
+		while($settler_data = mysqli_fetch_assoc($get_settler_data)) {
+			$get_settler_data2 = do_mysqli_query("SELECT aid FROM armyunit WHERE aid=".$settler_data['id']);
+			// wenn Siedler ohne Trupp unterwegs sind -> Siedler lÃ¶schen
+			if(!mysqli_num_rows($get_settler_data2)) {
+				do_mysqli_query("DELETE FROM army WHERE aid=".$settler_data['id']);
 				if (DEBUG_SERVICE) echo "check_settler: Siedler ohne Begleitschutz -> Siedler loeschen\n";
 			}
-			// wenn Siedler mit Trupp unterwegs ist -> Siedler entfernen Trupp rückkehren lassen
-			// wenn Siedler noch nicht auf Rückkehr sind
+			// wenn Siedler mit Trupp unterwegs ist -> Siedler entfernen Trupp rÃ¼ckkehren lassen
+			// wenn Siedler noch nicht auf RÃ¼ckkehr sind
 			else if($settler_data['start']!=$settler_data['end']){
-				do_mysql_query("UPDATE army SET end = ".$settler_data['start'].", mission = 'return', missiondata = 0 WHERE aid=".$settler_data['id']);
+				do_mysqli_query("UPDATE army SET end = ".$settler_data['start'].", mission = 'return', missiondata = 0 WHERE aid=".$settler_data['id']);
 				if (DEBUG_SERVICE) echo "check_settler: Siedler mit Begleitschutz -> Siedler loeschen + Umkehr\n";
 			}
-			// der Trupp ist bereits auf der Rückreise -> nur Siedler entfernen
+			// der Trupp ist bereits auf der RÃ¼ckreise -> nur Siedler entfernen
 			else {
-			  do_mysql_query("UPDATE army SET mission = 'return', missiondata = 0 WHERE aid=".$settler_data['id']);
+			  do_mysqli_query("UPDATE army SET mission = 'return', missiondata = 0 WHERE aid=".$settler_data['id']);
 			  if (DEBUG_SERVICE) echo "check_settler: Siedler mit Begleitschutz -> Siedler nur loeschen, Trupp schon auf Umkehr\n";
 			}
 		} 
@@ -216,7 +216,7 @@ function check_settler($city_id) {
 
 
 /**
- * Führe den Stadtangriff durch
+ * Fï¿½hre den Stadtangriff durch
  * 
  * @param $defenders  Array der Stadtverteidiger. Die ID des Stadtbesitzers ist da immer
  *                    mit drin
@@ -230,17 +230,17 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
   if (DEBUG_SERVICE)
     echo "\n Called attCity(".$defenders.",".$unitowner.",".$end.",".$aid.",".$tactic.") ";
 
-  $res_city = do_mysql_query("SELECT owner FROM city WHERE id=".$end);
-  $data_city = mysql_fetch_assoc($res_city);
+  $res_city = do_mysqli_query("SELECT owner FROM city WHERE id=".$end);
+  $data_city = mysqli_fetch_assoc($res_city);
   
-  $res2 = do_mysql_query("SELECT unit, count FROM armyunit WHERE aid=".$aid);
+  $res2 = do_mysqli_query("SELECT unit, count FROM armyunit WHERE aid=".$aid);
   $i = 0;
   if (DEBUG_SERVICE) {
     echo "\nTruppen vor dem Kampf\n";
     echo "Angreifer ".$unitowner." greift an mit folgenden Truppen:\n";
   }
 
-  while ($data2 = mysql_fetch_assoc($res2)) {
+  while ($data2 = mysqli_fetch_assoc($res2)) {
     $at[$i]['id'] = $data2['unit'];
     $at[$i]['count'] = $data2['count'];
     $at[$i]['player'] = $unitowner;
@@ -252,9 +252,9 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
   $i = 0;
   if($data_city['owner']) {
     foreach ($defenders as $defowner) {
-      $cityunits = do_mysql_query("SELECT unit,count FROM cityunit WHERE city=".$end." AND owner=".$defowner);
+      $cityunits = do_mysqli_query("SELECT unit,count FROM cityunit WHERE city=".$end." AND owner=".$defowner);
       if (DEBUG_SERVICE) echo "Verteidiger ".$defowner." verteidigt mit folgenden Truppen:\n";
-      while ($units = mysql_fetch_assoc($cityunits)) {
+      while ($units = mysqli_fetch_assoc($cityunits)) {
         $df[$i]['id'] = $units['unit'];
         $df[$i]['count'] = $units['count'];
         $df[$i]['player'] = $defowner;
@@ -265,9 +265,9 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
   }
   else {
     // Stadt ist Herrenlos
-    $cityunits = do_mysql_query("SELECT unit,count FROM cityunit WHERE city=".$end);
+    $cityunits = do_mysqli_query("SELECT unit,count FROM cityunit WHERE city=".$end);
     if (DEBUG_SERVICE) echo "Verteidiger HERRENLOS verteidigt mit folgenden Truppen:\n";
-    while ($units = mysql_fetch_assoc($cityunits)) {
+    while ($units = mysqli_fetch_assoc($cityunits)) {
       $df[$i]['id'] = $units['unit'];
       $df[$i]['count'] = $units['count'];
       // $df[$i]['player'] = $defowner; // Owner ist NULL
@@ -276,8 +276,8 @@ function attCity($defenders, $unitowner, $end, $aid, $tactic) {
     }
   }
   
-  $res4 = do_mysql_query("SELECT sum(res_defense) FROM citybuilding,building WHERE citybuilding.building=building.id AND city=".$end);
-  if ($data4 = mysql_fetch_array($res4))
+  $res4 = do_mysqli_query("SELECT sum(res_defense) FROM citybuilding,building WHERE citybuilding.building=building.id AND city=".$end);
+  if ($data4 = mysqli_fetch_array($res4))
     $defbonus = $data4[0] ? $data4[0] : 0;
   else
     $defbonus = 0;
@@ -325,17 +325,17 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
     log_fatal_error("attMsg(cityName): Endstadt: ".$end.", DefOwn: ".$defowner.", AttOwn: ".$attowner." attstr: ".$attstr.", defstr: ".$defstr." defender: ".$defowner);
   }
 
-  $message['attacker'] = "Die Stadt <b>".$cityName."</b> des Spielers <b>".$playerName."</b> wurde auf Euer Geheiß hin angegriffen. Eure Truppen konnten den Sieg erringen. ".$attstr."\n\n";
-  $message['attacker'] .= "<b>Folgende Einheiten überlebten die Schlacht:</b>\n";
+  $message['attacker'] = "Die Stadt <b>".$cityName."</b> des Spielers <b>".$playerName."</b> wurde auf Euer GeheiÃŸ hin angegriffen. Eure Truppen konnten den Sieg erringen. ".$attstr."\n\n";
+  $message['attacker'] .= "<b>Folgende Einheiten Ã¼berlebten die Schlacht:</b>\n";
   $message['defender'] = "Die Stadt <b>".$cityName."</b> wurde von <b>".$playerName2."</b> angegriffen. Die verteidigenden Truppen waren dem Feind leider unterlegen. ".$defstr."\n\n";
-  $message['defender'] .= "<b>Folgende Einheiten des Angreifers überlebten die Schlacht:</b>\n";
+  $message['defender'] .= "<b>Folgende Einheiten des Angreifers Ã¼berlebten die Schlacht:</b>\n";
   for ($i = 0; $i < sizeof($erg); $i ++) {
-    $res1 = do_mysql_query("SELECT name FROM unit WHERE id = '".$erg[$i]['id']."'");
-    $data1 = mysql_fetch_assoc($res1);
+    $res1 = do_mysqli_query("SELECT name FROM unit WHERE id = '".$erg[$i]['id']."'");
+    $data1 = mysqli_fetch_assoc($res1);
     $message['attacker'] .= $data1['name'].": ".$erg[$i]['count']."\n";
     if($erg[$i]['player']) {
-      $uowner = do_mysql_query("SELECT name FROM player WHERE id=".$erg[$i]['player']);
-      $uownerName = mysql_fetch_assoc($uowner);
+      $uowner = do_mysqli_query("SELECT name FROM player WHERE id=".$erg[$i]['player']);
+      $uownerName = mysqli_fetch_assoc($uowner);
     }
     else {
       $uownerName['name'] = "herrenlosen Adligen";
@@ -344,24 +344,24 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   }
 
   if ($playerkilled == true) {
-    $message['attacker'] .= "\n\n[b]Sie haben die letzte Stadt des Spielers ".$playerName." zerstört. Seine Streitkräfte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...[/b]";
-    $message['defender'] .= "\n\n[b]Sire, welch Unglück! Unsere letzte Stadt wurde zerstört! Eure Streitkräfte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, während Ihr selbst aber fliehen konntet. [b][i]Ihr schwört Rache und baut Euer Imperium erneut auf...[/i][/b]";
+    $message['attacker'] .= "\n\n[b]Sie haben die letzte Stadt des Spielers ".$playerName." zerstÃ¶rt. Seine Streitkrï¿½fte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...[/b]";
+    $message['defender'] .= "\n\n[b]Sire, welch Unglï¿½ck! Unsere letzte Stadt wurde zerstÃ¶rt! Eure Streitkrï¿½fte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, wï¿½hrend Ihr selbst aber fliehen konntet. [b][i]Ihr schwï¿½rt Rache und baut Euer Imperium erneut auf...[/i][/b]";
   }
   
   echo " Message an AttOwner $attowner\n"; 
-  do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Sieg: ".$cityName."','".$message['attacker']."',4)");
-  do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
+  do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Sieg: ".$cityName."','".$message['attacker']."',4)");
+  do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
 
   // Nachrichten an die Verteidiger
   if(!$defenders || sizeof($defenders) == 0) {
     if($defowner) {
     if (DEBUG_SERVICE) echo " Message an Besitzer\n";
 
-    do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$defowner.",".$endtime.",'Niederlage: ".$cityName."','".$message['defender']."',4)");
-    do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$defowner);
+    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$defowner.",".$endtime.",'Niederlage: ".$cityName."','".$message['defender']."',4)");
+    do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$defowner);
     }
     else {
-      if (DEBUG_SERVICE) echo "HERRENLOS erhält keinen Bericht\n";
+      if (DEBUG_SERVICE) echo "HERRENLOS erhÃ¤lt keinen Bericht\n";
     }
   }
   else {
@@ -369,8 +369,8 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
       if (DEBUG_SERVICE)
         echo " Message an Defender $def";
       
-      do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Niederlage: ".$cityName."','".$message['defender']."',4)");
-      do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$def);
+      do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Niederlage: ".$cityName."','".$message['defender']."',4)");
+      do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$def);
     }
   }
 }
@@ -379,16 +379,16 @@ function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
   if (DEBUG_SERVICE)
     echo " DEFWIN\n";
 
-  do_mysql_query("DELETE FROM army WHERE aid = ".$aid);
-  do_mysql_query("DELETE FROM armyunit WHERE aid = ".$aid);
-  do_mysql_query("DELETE FROM cityunit WHERE city = ".$end);
+  do_mysqli_query("DELETE FROM army WHERE aid = ".$aid);
+  do_mysqli_query("DELETE FROM armyunit WHERE aid = ".$aid);
+  do_mysqli_query("DELETE FROM cityunit WHERE city = ".$end);
   for ($i = 0; $i < sizeof($erg); $i ++) {
     $owner_str = $erg[$i]['player'] ? $erg[$i]['player'] : "NULL";
     $sql = "INSERT INTO cityunit VALUES ('".$end."','".$erg[$i]['id']."','".$erg[$i]['count']."',".$owner_str.")";
     if (DEBUG_SERVICE)
       echo $sql."<br>\n";
 
-    do_mysql_query($sql);
+    do_mysqli_query($sql);
   }
 
   if($defowner) {
@@ -410,17 +410,17 @@ function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
     log_fatal_error("defWin(cityName): Endstadt: ".$end.", DefOwn: ".$defowner.", AttOwn: ".$attowner." attstr: ".$attstr.", defstr: ".$defstr." defname: ".$defplayerName);
   }
   // Nachricht schreiben
-  $message['attacker'] = "Die Stadt <b>".$cityName."</b> im Besitz von <b>".$playerName."</b> wurde auf Euer Geheiß hin angegriffen. Eure Truppen unterlagen jedoch den dort verteidigenden Einheiten.\n\n";
-  $message['attacker'] .= "<b>Folgende Einheiten des Verteidigers überlebten die Schlacht:</b>\n";
+  $message['attacker'] = "Die Stadt <b>".$cityName."</b> im Besitz von <b>".$playerName."</b> wurde auf Euer GeheiÃŸ hin angegriffen. Eure Truppen unterlagen jedoch den dort verteidigenden Einheiten.\n\n";
+  $message['attacker'] .= "<b>Folgende Einheiten des Verteidigers Ã¼berlebten die Schlacht:</b>\n";
   $message['defender'] = "Die Stadt <b>".$cityName."</b> wurde von <b>".$playerName2."</b> angegriffen. Die verteidigenden Truppen konnten die Stadt erfolgreich halten.\n\n";
-  $message['defender'] .= "<b>Folgende Einheiten überlebten die Schlacht:</b>\n";
+  $message['defender'] .= "<b>Folgende Einheiten Ã¼berlebten die Schlacht:</b>\n";
 
   for ($i = 0; $i < sizeof($erg); $i ++) {
-    $res1 = do_mysql_query("SELECT name FROM unit WHERE id = '".$erg[$i]['id']."'");
-    $data1 = mysql_fetch_assoc($res1);
+    $res1 = do_mysqli_query("SELECT name FROM unit WHERE id = '".$erg[$i]['id']."'");
+    $data1 = mysqli_fetch_assoc($res1);
     if($erg[$i]['player']) {
-      $uowner = do_mysql_query("SELECT name FROM player WHERE id=".$erg[$i]['player']);
-      $uownerName = mysql_fetch_assoc($uowner);
+      $uowner = do_mysqli_query("SELECT name FROM player WHERE id=".$erg[$i]['player']);
+      $uownerName = mysqli_fetch_assoc($uowner);
     }
     else {
       $uownerName = "HERRENLOS";
@@ -452,15 +452,15 @@ function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
   
   if (DEBUG_SERVICE)
     echo " Message an AttOwner $attowner\n";
-  do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Angriff aufgerieben: ".$cityName."','".$message['attacker']."',4)");
-  do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
+  do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Angriff aufgerieben: ".$cityName."','".$message['attacker']."',4)");
+  do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$attowner);
   
   
   if (!isset ($defenders) || sizeof($defenders) == 0) {
     alert("DEFENDERS NULL!!!\n");
     if($defowner) {
-      do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$defowner.",".$endtime.",'Angreifer besiegt: ".$cityName."','".$message['defender']."',4)");
-      do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$defowner);
+      do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$defowner.",".$endtime.",'Angreifer besiegt: ".$cityName."','".$message['defender']."',4)");
+      do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$defowner);
     }
   } 
   else {   
@@ -468,16 +468,16 @@ function defWin($aid, $end, $endtime, $attowner, $defenders, $defowner, $erg) {
       if (DEBUG_SERVICE)
         echo " Message an Defender $def\n";
       
-      do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Angreifer besiegt: ".$cityName."','".$message['defender']."',4)");
-      do_mysql_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$def);
+      do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Angreifer besiegt: ".$cityName."','".$message['defender']."',4)");
+      do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$def);
     }
   } // else
 }
 
 function fightDraw($aid, $end, $endtime, $attowner, $defowner, $defenders) {
-  do_mysql_query("DELETE FROM army WHERE aid = ".$aid);
-  do_mysql_query("DELETE FROM armyunit WHERE aid = ".$aid);
-  do_mysql_query("DELETE FROM cityunit WHERE city = ".$end);
+  do_mysqli_query("DELETE FROM army WHERE aid = ".$aid);
+  do_mysqli_query("DELETE FROM armyunit WHERE aid = ".$aid);
+  do_mysqli_query("DELETE FROM cityunit WHERE city = ".$end);
   
   if($defowner) {
     $playerName = resolvePlayerName($defowner);
@@ -500,47 +500,47 @@ function fightDraw($aid, $end, $endtime, $attowner, $defowner, $defenders) {
   }
   // Nachricht schreiben
 
-  $message['attacker'] = "Die Stadt <b>".$cityName."</b> des Spielers <b>".$playerName."</b> wurde auf Euer Geheiß hin angegriffen. Der Kampf endete mit einem unentschieden.\n\n";
+  $message['attacker'] = "Die Stadt <b>".$cityName."</b> des Spielers <b>".$playerName."</b> wurde auf Euer GeheiÃŸ hin angegriffen. Der Kampf endete mit einem unentschieden.\n\n";
   $message['defender'] = "Eure Stadt <b>".$cityName."</b> wurde vom Spieler <b>".$playerName2."</b> angegriffen. Der Kampf endete mit einem unentschieden.\n\n";
 
-  do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Angriff: ".$cityName."','".$message['attacker']."',4)");
-  do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$attowner);
+  do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$attowner.",".$endtime.",'Angriff: ".$cityName."','".$message['attacker']."',4)");
+  do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$attowner);
 
   foreach ($defenders as $def) {
-    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$def);
-    do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Angriff auf: ".$cityName."','".$message['defender']."',4)");
+    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$def);
+    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$def.",".$endtime.",'Angriff auf: ".$cityName."','".$message['defender']."',4)");
   }
 }
 
 //Reason:
 //0 == Es wird keine Nachricht verschickt
 //1 == Stadt nicht mehr vorhanden
-//2 == Kämpfe nicht gegen Neutralen Spieler
+//2 == Kï¿½mpfe nicht gegen Neutralen Spieler
 //3 == Ausgangsstadt existiert nicht mehr, neue Zielstadt suchen (Bei Missionstyp return)
 function goBack($armyid, $reason) {
   if (DEBUG_SERVICE)
     echo " goBack(".$armyid.",".$reason.") ";
   //Armeedaten holen
-  $res1 = do_mysql_query("SELECT aid, start, end, starttime, endtime, mission, missiondata, owner, tactic, player.religion AS religion FROM army,player WHERE army.owner=player.id AND army.aid=".$armyid);
-  $data1 = mysql_fetch_assoc($res1);
+  $res1 = do_mysqli_query("SELECT aid, start, end, starttime, endtime, mission, missiondata, owner, tactic, player.religion AS religion FROM army,player WHERE army.owner=player.id AND army.aid=".$armyid);
+  $data1 = mysqli_fetch_assoc($res1);
   $oldend = $data1['end'];
   if ($data1['mission'] == "return" || $data1['end'] == $data1['start']) {
     //Ausgangsstadt holen
-    $res7 = do_mysql_query("SELECT name,owner FROM city,map WHERE map.id=city.id AND city.id=".$data1['start']);
+    $res7 = do_mysqli_query("SELECT name,owner FROM city,map WHERE map.id=city.id AND city.id=".$data1['start']);
     //Stadt vorhanden und uns nicht neutral gesinnt?
-    $data7 = mysql_fetch_assoc($res7);
+    $data7 = mysqli_fetch_assoc($res7);
     if ($data7 != FALSE && ($data7['owner'] == $data1['owner'] || getWarRel($data7['owner'], $data1['owner']) != 1)) {
       if (DEBUG_SERVICE)
-        echo " Stadt vorhanden, einfach zurück armyowner: ".$data1['owner']." stadtowner: ".$data7['owner']." ";
-      //Zurück zur vorhanden Ausgangsstadt
-      do_mysql_query("UPDATE army SET end = start, mission = 'return', endtime = (".time()." + (endtime - starttime)), starttime=".time()." WHERE aid = ".$armyid);
+        echo " Stadt vorhanden, einfach zurÃ¼ck armyowner: ".$data1['owner']." stadtowner: ".$data7['owner']." ";
+      //ZurÃ¼ck zur vorhanden Ausgangsstadt
+      do_mysqli_query("UPDATE army SET end = start, mission = 'return', endtime = (".time()." + (endtime - starttime)), starttime=".time()." WHERE aid = ".$armyid);
     } else {
       //Neue Zielstadt berechnen
-      $pos_res = do_mysql_query("SELECT x,y FROM map WHERE id=".$data1['end']);
-      if ($pos = mysql_fetch_assoc($pos_res)) {
+      $pos_res = do_mysqli_query("SELECT x,y FROM map WHERE id=".$data1['end']);
+      if ($pos = mysqli_fetch_assoc($pos_res)) {
         $cty = getNearestOwnCity($pos['x'], $pos['y'], $data1['owner']);
-        $armyunits_res = do_mysql_query("SELECT speed FROM armyunit,unit WHERE armyunit.unit=unit.id AND armyunit.aid=".$data1['aid']." ORDER BY speed ASC LIMIT 1");
-        if ($armyunits = mysql_fetch_assoc($armyunits_res)) {
+        $armyunits_res = do_mysqli_query("SELECT speed FROM armyunit,unit WHERE armyunit.unit=unit.id AND armyunit.aid=".$data1['aid']." ORDER BY speed ASC LIMIT 1");
+        if ($armyunits = mysqli_fetch_assoc($armyunits_res)) {
           $speed = $armyunits['speed'];
         } else {
           $speed = 1;
@@ -549,17 +549,17 @@ function goBack($armyid, $reason) {
         
         if (DEBUG_SERVICE)
           echo " Speed auf ".$speed." gesetzt Startpos X: ".$pos['x']." Startpos Y: ".$pos['y']." NextCityX: ".$cty[2]." NextCityY: ".$cty[3]." WalkTime: ".$wt." ";
-        do_mysql_query("UPDATE army SET end = ".$cty[0].", start= ".$cty[0].", mission = 'return', endtime = ". (time() + $wt).", starttime=".time()." WHERE aid = ".$data1['aid']);
+        do_mysqli_query("UPDATE army SET end = ".$cty[0].", start= ".$cty[0].", mission = 'return', endtime = ". (time() + $wt).", starttime=".time()." WHERE aid = ".$data1['aid']);
       } else {
         log_fatal_error("id ".$data1['owner']." in map nicht gefunden, aid: ".$data1['aid']);
       }
     }
   } else {
-    do_mysql_query("UPDATE army SET end = start, mission = 'return', endtime = (".time()." + (endtime - starttime)), starttime=".time()." WHERE aid = ".$armyid);
+    do_mysqli_query("UPDATE army SET end = start, mission = 'return', endtime = (".time()." + (endtime - starttime)), starttime=".time()." WHERE aid = ".$armyid);
   }
   if ($reason != 0) {
-    $pos_res = do_mysql_query("SELECT name,owner,x,y FROM map LEFT JOIN city USING(id) WHERE map.id=".$oldend);
-    $pos = mysql_fetch_assoc($pos_res);
+    $pos_res = do_mysqli_query("SELECT name,owner,x,y FROM map LEFT JOIN city USING(id) WHERE map.id=".$oldend);
+    $pos = mysqli_fetch_assoc($pos_res);
     
     if ($reason == 1) {
       $message = "Die Stadt an den Koordinaten ".$pos['x'].":".$pos['y']." ist nicht mehr vorhanden.";
@@ -570,9 +570,9 @@ function goBack($armyid, $reason) {
     elseif ($reason == 3) {
       $message = "Die Heimatstadt an ".$pos['x'].":".$pos['y']." existiert nicht mehr. Es wurde eine neue gesucht.";
     }
-    do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['owner'].",".time().",'Heimkehr angeordnet','".$message."',4)");
+    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['owner'].",".time().",'Heimkehr angeordnet','".$message."',4)");
     // cc_messages aktualisieren
-    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['owner']);
+    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['owner']);
   }
 }
 
@@ -580,13 +580,13 @@ function arrivalArmy() {
   if (DEBUG_SERVICE)
     echo " arrivalArmy() aufgerufen ";
 
-  // Alle Armeen auswählen die jetzt auf "Bereit" stehen
-  $res1 = do_mysql_query("SELECT aid, start, end, starttime, endtime, mission, missiondata, owner, tactic, player.religion AS religion FROM army,player WHERE army.owner=player.id AND endtime<=".time()." ORDER BY endtime, aid");
+  // Alle Armeen auswï¿½hlen die jetzt auf "Bereit" stehen
+  $res1 = do_mysqli_query("SELECT aid, start, end, starttime, endtime, mission, missiondata, owner, tactic, player.religion AS religion FROM army,player WHERE army.owner=player.id AND endtime<=".time()." ORDER BY endtime, aid");
 
-  echo " Datensätze: ".mysql_numrows($res1)."\n";
+  echo " DatensÃ¤tze: ".mysqli_num_rows($res1)."\n";
 
   //Jede Armee einzeln durchgehen
-  while ($data1 = mysql_fetch_assoc($res1)) {
+  while ($data1 = mysqli_fetch_assoc($res1)) {
     //Falls siedeln, dann die Funktion das abfangen lassen
     if ($data1['mission'] == "settle") {
       arrivalSettle($data1['end'], $data1['start'], $data1['endtime'], $data1['aid'], $data1['missiondata'], $data1['religion'], $data1['owner']);
@@ -594,15 +594,15 @@ function arrivalArmy() {
     }
 
     //Alle restlichen Missionstypen brauchen eine Stadt, also schauen wir nach ob eine vorhanden ist
-    $res7 = do_mysql_query("SELECT name,owner,population,capital,x,y FROM city,map WHERE map.id=city.id AND city.id=".$data1['end']);
+    $res7 = do_mysqli_query("SELECT name,owner,population,capital,x,y FROM city,map WHERE map.id=city.id AND city.id=".$data1['end']);
 
     //Stadt vorhanden?
-    if ($data7 = mysql_fetch_assoc($res7)) {
+    if ($data7 = mysqli_fetch_assoc($res7)) {
       if (DEBUG_SERVICE)
         echo " Stadt vorhanden\n ";
 
       // Wenn wir selbst Besitzer der Zieltadt sind, dann kann es nur Heimkehr oder Verschiebung sein.
-      // FIXME: Das kann man zusammenkürzen, zu viele ifs ohne else
+      // FIXME: Das kann man zusammenkï¿½rzen, zu viele ifs ohne else
       if ($data1['owner'] == $data7['owner']) {
         if (($data1['mission'] == "move") || ($data1['mission'] == 'return')) {
           if ($data1['mission'] == "move")
@@ -617,7 +617,7 @@ function arrivalArmy() {
           if ($data1['mission'] == "burndown")
             $missionstr .= "Brandschatzen)";
           if ($data1['mission'] == "despoil")
-            $missionstr .= "Plündern)";
+            $missionstr .= "PlÃ¼ndern)";
           if ($data1['mission'] == "siege")
             $missionstr .= "Belagern)";
         }
@@ -626,7 +626,7 @@ function arrivalArmy() {
         
         arrivalMove($data1['end'], $data1['owner'], $endtime, $data1['missiondata'], $data1['aid'], $missionstr);
         continue;
-      } // Wir selbst sind besitzer -> Rückkehr oder Verschiebung
+      } // Wir selbst sind besitzer -> RÃ¼ckkehr oder Verschiebung
 
 
       //Beziehung zum Besitzer der Stadt ermitteln
@@ -634,7 +634,7 @@ function arrivalArmy() {
       if (DEBUG_SERVICE)
         printf(" Beziehung zum Besitzer der Stadt (PID %d) ermittelt: %d\n", $data7['owner'], $relation);
 
-      // Wenn die Stadt einem Gegner gehöhrt, kann es nur Angriff sein
+      // Wenn die Stadt einem Gegner gehÃ¶hrt, kann es nur Angriff sein
       if ($relation == 0) {
         $mission = $data1['mission'];
         // Falls kein Angriff eingestellt war, auf attack umstellen (default)
@@ -655,24 +655,24 @@ function arrivalArmy() {
           arrivalAttack($mission, $data1['end'], $data7['owner'], $data7['name'], $data7['population'], $data1['aid'], $data1['owner'], $data1['endtime'], $data1['tactic']);
         } // else
       } // if ($relation == 0)
-      //Falls die Stadt einem Verbündeten gehöhrt, kann es immer nur Stationieren sein
+      //Falls die Stadt einem VerbÃ¼ndeten gehÃ¶hrt, kann es immer nur Stationieren sein
       elseif ($relation == 2) {
         $missionstr = "Stationierung";
         arrivalMove($data1['end'], $data1['owner'], $data1['endtime'], $data1['missiondata'], $data1['aid'], $missionstr);
       }
-      //Falls sie sich neutral gegenüber stehen, wird Rückkehr angeohrdnet
+      //Falls sie sich neutral gegenÃ¼ber stehen, wird RÃ¼ckkehr angeohrdnet
       else {
         goBack($data1['aid'], 2);
       }
     } 
     else {
-      // Falls keine Stadt vorhanden ist, zurückkehren
-      // wenn schon auf dem Rückweg und keine Stadt vorhanden ist, nächstegelegene Suchen
+      // Falls keine Stadt vorhanden ist, zurÃ¼ckkehren
+      // wenn schon auf dem RÃ¼ckweg und keine Stadt vorhanden ist, nÃ¤chstegelegene Suchen
       if (DEBUG_SERVICE)
         echo " Stadt nicht vorhanden ";
 
       if ($data1['mission'] == 'return') {
-        // Die Stadt gibts nicht mehr, also Rückkehr
+        // Die Stadt gibts nicht mehr, also RÃ¼ckkehr
         goBack($data1['aid'], 3);
       } 
       else {
@@ -687,11 +687,11 @@ function arrivalArmy() {
 
 
 function CheckPlayerDeleted($playerid, $ignorecity) {
-  // Nachschauen ob der Spieler noch Städte hat
-  $res10 = do_mysql_query("SELECT id,name FROM city WHERE owner = ".$playerid." AND id <> ".$ignorecity);
+  // Nachschauen ob der Spieler noch StÃ¤dte hat
+  $res10 = do_mysqli_query("SELECT id,name FROM city WHERE owner = ".$playerid." AND id <> ".$ignorecity);
   if (DEBUG_SERVICE)
     echo " CheckPlayerDeleted(".$playerid.",".$ignorecity.") ";
-  if (mysql_num_rows($res10) == 0) {
+  if (mysqli_num_rows($res10) == 0) {
     echo " restart_player ";
     restart_player($playerid);
     return true;
@@ -704,7 +704,7 @@ function CheckPlayerDeleted($playerid, $ignorecity) {
 
 
 /**
- * Hole die (eindeutigen) IDs der zusätzlichen Verteidiger einer Stadt.
+ * Hole die (eindeutigen) IDs der zusÃ¤tzlichen Verteidiger einer Stadt.
  * 
  * @param $cityid
  * @param $cityowner
@@ -721,13 +721,13 @@ function getDefenderIDs($cityid, $cityowner) {
     
   // Nicht herrenlos
   if($cityowner) {
-    // Stadtverteidiger gehört auf alle Fälle dazu!
+    // Stadtverteidiger gehï¿½rt auf alle FÃ¼lle dazu!
     array_push($def, $cityowner);
     
-    $defenders_res = do_mysql_query("SELECT DISTINCT owner FROM cityunit WHERE owner != ".$cityowner." AND city=".$cityid);
+    $defenders_res = do_mysqli_query("SELECT DISTINCT owner FROM cityunit WHERE owner != ".$cityowner." AND city=".$cityid);
 
     // Sichergehen das der Stadtbesitzer als Verteidiger eingetragen ist (damit er aufjedenfall einen Kampfbericht bekommt)    
-    while ($defender = mysql_fetch_assoc($defenders_res)) {
+    while ($defender = mysqli_fetch_assoc($defenders_res)) {
       array_push($def, $defender['owner']);
       if (DEBUG_SERVICE)
         echo " Defender:".$defender['owner']." \n";
@@ -746,9 +746,9 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
   if (DEBUG_SERVICE)
     echo "DOING ".$mission;
-  //Da Angriff, erstmal alle Verteidiger und Angreifer zusammenzählen
+  //Da Angriff, erstmal alle Verteidiger und Angreifer zusammenzÃ¤hlen
 
-  //Flag ob Spieler Spieler augelöscht wurde
+  //Flag ob Spieler Spieler augelÃ¶scht wurde
   $playerkilled = false;
 
   //Alle Verteidiger zusammenzaehlen
@@ -793,9 +793,9 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
     if (DEBUG_SERVICE) {
       echo " ATTACKER ".$erg[0]['player']." wins \n";
       echo "Truppen vor dem Kampf\n";
-      $get_att_troops = do_mysql_query("SELECT unit, count FROM armyunit WHERE aid=".$armyid);
+      $get_att_troops = do_mysqli_query("SELECT unit, count FROM armyunit WHERE aid=".$armyid);
       $t = 0;
-      while ($att_troops = mysql_fetch_assoc($get_att_troops)) {
+      while ($att_troops = mysqli_fetch_assoc($get_att_troops)) {
 			  $tba[$t]['id'] = $att_troops['unit'];
 			  $tba[$t]['count'] = $att_troops['count'];
 			  echo "Einheit: ".$att_troops['unit'].", Anzahl: ".$att_troops['count']."\n";
@@ -816,35 +816,35 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 				  echo "Einheit: ".$loss[$t]['id'].", Anzahl: ".$loss[$t]['count']."\n";
 				}
 				else {
-				  echo "Einheit: ".$tba[$t]['id'].", Anzahl: ".$tba[$t]['count']." wurde komplett zerstört\n";
+				  echo "Einheit: ".$tba[$t]['id'].", Anzahl: ".$tba[$t]['count']." wurde komplett zerstÃ¶rt\n";
 				}
 			}
     }
 
     //Alle verteidigenden Einheiten entfernen
-    do_mysql_query("DELETE FROM armyunit WHERE aid = ".$armyid);
-    do_mysql_query("DELETE FROM cityunit WHERE city = ".$cityid);
+    do_mysqli_query("DELETE FROM armyunit WHERE aid = ".$armyid);
+    do_mysqli_query("DELETE FROM cityunit WHERE city = ".$cityid);
     
 
     //Erobern
     if ($mission == "attack") {
       if (DEBUG_SERVICE)
         echo " EROBERN ";
-      do_mysql_query("DELETE FROM army WHERE aid = ".$armyid);
-      do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$cityid);
-      do_mysql_query("DELETE FROM citybuilding_ordered WHERE city = ".$cityid);
-      do_mysql_query("DELETE FROM citybuilding WHERE city = ".$cityid." AND building IN (SELECT id FROM building WHERE makescapital=1)");
+      do_mysqli_query("DELETE FROM army WHERE aid = ".$armyid);
+      do_mysqli_query("DELETE FROM cityunit_ordered WHERE city = ".$cityid);
+      do_mysqli_query("DELETE FROM citybuilding_ordered WHERE city = ".$cityid);
+      do_mysqli_query("DELETE FROM citybuilding WHERE city = ".$cityid." AND building IN (SELECT id FROM building WHERE makescapital=1)");
       
       /**
-       * Loyalität Ändern.
+       * LoyalitÃ¤t Ã¤ndern.
        */
       if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY) {
-        $c = do_mysql_query_fetch_assoc("SELECT * FROM city WHERE id  = ".$cityid );        
+        $c = do_mysqli_query_fetch_assoc("SELECT * FROM city WHERE id  = ".$cityid );        
  
         $newloy = defined("MIN_LOYALITY") && MIN_LOYALITY > 0 ? MIN_LOYALITY : 0;
         
         // Wenn der Angreifer der "alte" Stadtbesitzer ist, dann bekommt er seine
-        // alte Loyalität zurück, sofern sie noch hoch genug ist.
+        // alte LoyalitÃ¤t zurÃ¼ck, sofern sie noch hoch genug ist.
         if($armyowner == $c['prev_owner']) {
           if($c['prev_loyality'] > $newloy)
             $newloy = $c['prev_loyality'];
@@ -853,15 +853,15 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
                            $armyowner, $newloy, $cityid
                            );
           echo $sql."\n";
-          do_mysql_query($sql);
+          do_mysqli_query($sql);
         }        
         // Ansonsten wird der Angreifer zum neuen Besitzer, hat MIN_LOYALITY,
         // und der aktuelle Besitzer wird zum alten Besitzer, falls seine
-        // derzeitige Loyalität hoch genug ist.
+        // derzeitige LoyalitÃ¤t hoch genug ist.
         else {
           if($c['loyality'] > $c['prev_loyality']) {
             // Der aktuelle Stadtbesitzer hat den ganz alten Stadtbesitzer an 
-            // Loyalität überholt und wird zum "alten Stadtbesitzer"
+            // LoyalitÃ¤t Ã¼berholt und wird zum "alten Stadtbesitzer"
             $prev_loy   = $c['loyality'];
             $prev_owner = $c['owner']; 
           }
@@ -877,31 +877,31 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
                           );
                           
           echo $sql."\n";
-          do_mysql_query($sql);
+          do_mysqli_query($sql);
         }        
       }
       else {
-        do_mysql_query("UPDATE city SET capital=0, owner = '".$armyowner."', populationlimit = NULL WHERE id = '".$cityid."'");
+        do_mysqli_query("UPDATE city SET capital=0, owner = '".$armyowner."', populationlimit = NULL WHERE id = '".$cityid."'");
       }      
       
-      // Markt Rücknahmen
+      // Markt RÃ¼cknahmen
       marketRetractionForCity($cityid);
       // Nochmal vorsichtshalber alles auf 0 setzen...
-      do_mysql_query("UPDATE city SET reserve_shortrange=0, reserve_longrange = 0, ".
+      do_mysqli_query("UPDATE city SET reserve_shortrange=0, reserve_longrange = 0, ".
                      " reserve_armor = 0,reserve_horse = 0 ".
                      " WHERE id = '".$cityid."'");
 
       
-      //Schauen ob der Spieler noch Städte hat
+      //Schauen ob der Spieler noch StÃ¤dte hat
       if($cityowner) {
         $playerkilled = CheckPlayerDeleted($cityowner, $cityid);
         if($playerkilled)
         remove_player_armies($cityowner);
       }
 	
-      // Die Überlebenden als Stadtwache eintragen
+      // Die Ã¼berlebenden als Stadtwache eintragen
       for ($i = 0; $i < sizeof($erg); $i ++) {
-        do_mysql_query("INSERT INTO cityunit VALUES ('".$cityid."','".$erg[$i]['id']."','".$erg[$i]['count']."',".($armyowner ? $armyowner : "NULL").")");
+        do_mysqli_query("INSERT INTO cityunit VALUES ('".$cityid."','".$erg[$i]['id']."','".$erg[$i]['count']."',".($armyowner ? $armyowner : "NULL").")");
       }
       $attstr = "Ihr habt die Stadt erobert.";
       $defstr = "Die Stadt wurde erobert.";
@@ -912,7 +912,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
     }
     //Brandschatzen
     elseif ($mission == "burndown") {
-      // Beim Brandschatzen wird zunächst gegen die Stadtbevölkerung angetreten
+      // Beim Brandschatzen wird zunÃ¤chst gegen die Stadtbevï¿½lkerung angetreten
       if (DEBUG_SERVICE)
         echo " BRAND \n";
 
@@ -926,8 +926,8 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
       $burndef[0]['count'] = $citypopulation;
       $burndef[0]['player'] = $cityowner;
 
-      $burnres = do_mysql_query("SELECT sum(res_defense) FROM citybuilding,building WHERE citybuilding.building=building.id AND id=".$cityid);
-      if ($burndata = mysql_fetch_assoc($burnres))
+      $burnres = do_mysqli_query("SELECT sum(res_defense) FROM citybuilding,building WHERE citybuilding.building=building.id AND id=".$cityid);
+      if ($burndata = mysqli_fetch_assoc($burnres))
         $defbonus = $defbonus ? $defbonus : 0;
       else
         $defbonus = 0;
@@ -936,19 +936,19 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
       // Angreifer hat gegen Dorfbewohner gewonnen
       if ($burnerg[0]['player'] == $armyowner) {
-        // Armee-Einheiten wieder einfügen
+        // Armee-Einheiten wieder einfï¿½gen
         for ($i = 0; $i < sizeof($burnerg); $i ++) {
-          do_mysql_query("INSERT INTO armyunit VALUES  (".$armyid.", ".$burnerg[$i]['id'].", ".$burnerg[$i]['count'].")");
+          do_mysqli_query("INSERT INTO armyunit VALUES  (".$armyid.", ".$burnerg[$i]['id'].", ".$burnerg[$i]['count'].")");
         }
         
-        //Schauen ob der Spieler noch Städte hat
+        //Schauen ob der Spieler noch StÃ¤dte hat
         if($cityowner) {        
           $playerkilled = CheckPlayerDeleted($cityowner, $cityid);
           if($playerkilled)
             remove_player_armies($cityowner);
         }
         
-        // Noch plündern vorm Brandschatzen
+        // Noch plÃ¼ndern vorm Brandschatzen
         $city['cid']     = $cityid;
         $city['owner']   = $cityowner;
         $city['attacker']= $armyowner;
@@ -958,27 +958,27 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
         //Heimkehr
         goBack($armyid, 0);
 
-        //Stadt löschen
+        //Stadt lÃ¶schen
         removeCity($cityid);
 
 
         $attstr = "\nEure treuen Untertanen hatten den Auftrag, bis auf den letzten Stein alles niederzubrennen. ";
-        $defstr = "\nDie Bewohner wurden barbarisch niedergemetzelt, die Gebäude in Brand gesteckt und alles ".
-          "geplündert, was den Feinden zwischen die Pranken geriet. Über die Menge an Gold, welches die ".
+        $defstr = "\nDie Bewohner wurden barbarisch niedergemetzelt, die GebÃ¤ude in Brand gesteckt und alles ".
+          "geplï¿½ndert, was den Feinden zwischen die Pranken geriet. Ã¼ber die Menge an Gold, welches die ".
           "Feinde erbeutet haben, sind uns keine Informationen bekannt.";
         
         if ($price['gold'] > 0) {
           $attstr .= "Einige verrichteten diese Aufgabe mit Freude und raubten alles, ".
             "was noch irgendwie wertvoll erschien.\n<b>Ihr habt ".$price['gold']." Gold erbeutet</b>, bevor der ".
-            "letzte Einwohner getötet oder vertrieben war.";
+            "letzte Einwohner getÃ¤tet oder vertrieben war.";
 
           if ($price['cgold'] > 0) {
-            $attstr .= "\nEinige Eurer Truppen entdeckten in den Gebäuden des ehemaligen Herrschers einige ".
-              "Vorräte an Gold und konnten ".$price['cgold']." Gold aus der Ordenskasse rauben.";
+            $attstr .= "\nEinige Eurer Truppen entdeckten in den GebÃ¤uden des ehemaligen Herrschers einige ".
+              "Vorrï¿½te an Gold und konnten ".$price['cgold']." Gold aus der Ordenskasse rauben.";
           }
         }
         else {
-          $attstr .= "Noch bevor die letzten Häuser in Brand gesteckt und die letzten Einwohner getötet ".
+          $attstr .= "Noch bevor die letzten Hï¿½user in Brand gesteckt und die letzten Einwohner getÃ¤tet ".
             "oder vertrieben waren, wurde Euren Truppen bereits klar, dass hier <b>nichts zu rauben war</b>.";
           if ($price['cgold'] > 0) {
             $attstr .= "\nZu ihrer Freude fanden einige wenige Truppen Gelder aus der Ordenskasse des ".
@@ -989,18 +989,18 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
         $erg = $burnerg;
       }
       elseif ($burnerg == NULL || $erg == false) {
-        do_mysql_query("DELETE FROM army WHERE aid = ".$armyid);
-        do_mysql_query("UPDATE city SET population=1 WHERE id=".$cityid);
-        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erzürnten Bevölkerung in Stücke gerissen wurden.";
+        do_mysqli_query("DELETE FROM army WHERE aid = ".$armyid);
+        do_mysqli_query("UPDATE city SET population=1 WHERE id=".$cityid);
+        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erzï¿½rnten Bevï¿½lkerung in Stï¿½cke gerissen wurden.";
         $defstr = "\nDie Stadtverteidigung wurde besiegt, beherzte Stadtbewohner konnten die Stadt jedoch retten. Viele bezahlten ihren Mut mit ihrem Leben.";
         unset ($erg);
         $erg = $brunerg;
         //Stadtbewohner haben gewonnen			
       }
       else {
-        do_mysql_query("DELETE FROM army WHERE aid = ".$armyid);
-        do_mysql_query("UPDATE city SET population=".$burnerg[0]['count']." WHERE id=".$cityid);
-        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erzürnten Bevölkerung in Stücke gerissen wurden.";
+        do_mysqli_query("DELETE FROM army WHERE aid = ".$armyid);
+        do_mysqli_query("UPDATE city SET population=".$burnerg[0]['count']." WHERE id=".$cityid);
+        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erzï¿½rnten Bevï¿½lkerung in Stï¿½cke gerissen wurden.";
         $defstr = "\nDie Stadtverteidigung wurde besiegt, beherzte Stadtbewohner konnten die Stadt jedoch retten. Viele bezahlten ihren Mut mit ihrem Leben.";
         unset ($erg);
         $erg = $burnerg;
@@ -1009,14 +1009,14 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
       echo "\ncheck_settler aufrufen [brandschatzen]";
       check_settler($cityid);
     }
-    //Plündern
+    //PlÃ¼ndern
     elseif ($mission == "despoil") {
       if (DEBUG_SERVICE)
-        echo " PLÜNDERN ";
+        echo " PLï¿½NDERN ";
 
       goBack($armyid, 0);
       for ($i = 0; $i < sizeof($erg); $i ++) {
-        do_mysql_query("INSERT INTO armyunit VALUES  (".$armyid.", ".$erg[$i]['id'].", ".$erg[$i]['count'].")");
+        do_mysqli_query("INSERT INTO armyunit VALUES  (".$armyid.", ".$erg[$i]['id'].", ".$erg[$i]['count'].")");
       }
       //despoil part of the script
       $desp['cid'] = $cityid;
@@ -1026,60 +1026,60 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
       if (defined("NEW_DESPOIL") && NEW_DESPOIL) {
         if (DEBUG_SERVICE)
-          echo "NEUES PLÜNDERN\n";
+          echo "NEUES PLï¿½NDERN\n";
 
         $price = compute_despoil_new($desp, $erg);
         var_dump($price);
         echo "price['settler'] 2 = ".$price['settler']."\n";
-        // Plünderung OK
+        // Plï¿½nderung OK
         if ($price['gold'] > 0) {
-          $attstr = "\nNach der erfolgreichen Überwindung der Stadtverteidigung habt Ihr die Stadt ".
-            "aufs äusserste ausgenommen und alles geraubt, was Eure Mannen tragen konnten.";
+          $attstr = "\nNach der erfolgreichen Ã¼berwindung der Stadtverteidigung habt Ihr die Stadt ".
+            "aufs ï¿½usserste ausgenommen und alles geraubt, was Eure Mannen tragen konnten.";
           if($price['penalty'] > 0) {
-            $attstr .= " Ganze <b>".$price['penalty']." Mannen des Pöbels</b> mußten mit ihrem Leben bezahlen.";
+            $attstr .= " Ganze <b>".$price['penalty']." Mannen des Pï¿½bels</b> muï¿½ten mit ihrem Leben bezahlen.";
           }
           if($price['settler'] > 0) {
             $attstr .= " Ebenso haben <b>".$price['settler']." Siedler des Gegners</b> ihr Leben gelassen, da ihr einen Grossteil des Nahrungsnachschubs geraubt habt.";
           }
-          $attstr .= "\n<b>Ihr habt ".$price['gold']." Gold geplündert</b>.";
+          $attstr .= "\n<b>Ihr habt ".$price['gold']." Gold geplï¿½ndert</b>.";
 
-          $defstr = "\nDer Schurke hat Eure wehrlosen Bürger auf niederträchtigste Weise beraubt und ".
+          $defstr = "\nDer Schurke hat Eure wehrlosen Bï¿½rger auf niedertrÃ¤chtigste Weise beraubt und ".
             "um Ihr Hab und Gut gebracht. ";
           if($price['penalty'] > 0) {
-            $defstr .= "Dabei kamen <b>".$price['penalty']."</b> wehrlose <b>Bürger</b> ums Leben.";
+            $defstr .= "Dabei kamen <b>".$price['penalty']."</b> wehrlose <b>Bï¿½rger</b> ums Leben.";
           }
           if($price['settler'] > 0) {
-            $defstr .= " <b>".$price['settler']."</b> eurer <b>Siedler mussten ihr Leben gelassen, da die plündernden Horden des Gegners einen Grossteil des Nahrungsnachschubs geraubt haben.";
+            $defstr .= " <b>".$price['settler']."</b> eurer <b>Siedler mussten ihr Leben gelassen, da die plÃ¼ndernden Horden des Gegners einen Grossteil des Nahrungsnachschubs geraubt haben.";
           }
-          $defstr .= "\n<b>Die Truppen raubten Güter im Wert von ".
+          $defstr .= "\n<b>Die Truppen raubten GÃ¼ter im Wert von ".
             $price['gold']." Gold</b>.";    
         }
-        // Zu wenig Truppen übrig
+        // Zu wenig Truppen ï¿½brig
         else if ($price['gold'] < 0) {
           $attstr = "\nEure Truppen konnten zwar die Stadtverteidigung besiegen, doch blieb ".
-            "Ihnen nicht genügend Kraft, um die erzürnten Bürger auszurauben. Sie traten die Flucht an.".
-            "\n<b>Ihr habt kein Gold geplündert!</b>";          
+            "Ihnen nicht genï¿½gend Kraft, um die erzï¿½rnten Bï¿½rger auszurauben. Sie traten die Flucht an.".
+            "\n<b>Ihr habt kein Gold geplï¿½ndert!</b>";          
           
-          $defstr = "\nDie Angreifer wichen vor den erzürnten Bürgern zurück und traten die Flucht an. ".
-            "\n<b>Sie raubten keine Güter</b>.";    
+          $defstr = "\nDie Angreifer wichen vor den erzï¿½rnten Bï¿½rgern zurÃ¼ck und traten die Flucht an. ".
+            "\n<b>Sie raubten keine GÃ¼ter</b>.";    
         }
         else {
           $attstr = "\nNachdem Eure Truppen die Stadtverteidigung siegreich hinter sich gelassen ".
-            "hatten, fanden sie armseelige und kümmerliche Behausungen vor. Elend und Hunger schwappten ".
+            "hatten, fanden sie armseelige und kï¿½mmerliche Behausungen vor. Elend und Hunger schwappten ".
             "ihnen entgegen. Nach kurzer Zeit gaben Eure Truppen die Suche nach Wertvollem auf und kehrten ".
-            "mit leeren Händen nach Hause.".
-            "\n<b>Ihr habt kein Gold geplündert</b>.";          
+            "mit leeren Hï¿½nden nach Hause.".
+            "\n<b>Ihr habt kein Gold geplï¿½ndert</b>.";          
           
-          $defstr = "\nDie vielen armen Bürger hatten nichts, was den Feinden hätte in die Hände fallen ".
-            "können.\n<b>Die Truppen gingen leer aus</b>.";    
+          $defstr = "\nDie vielen armen Bï¿½rger hatten nichts, was den Feinden hï¿½tte in die Hï¿½nde fallen ".
+            "kÃ¶nnen.\n<b>Die Truppen gingen leer aus</b>.";    
         }
 
         if ($price['cgold'] > 0) {
-          $attstr .= "\nSire! In den Verwaltungsgebäuden der Stadt lagerten Mittel aus der Ordenskasse. ".
-            "Wir haben uns kräftig bedient und <b>zusätzliche ".$price['cgold']." Gold gestohlen</b>!";
+          $attstr .= "\nSire! In den VerwaltungsgebÃ¤uden der Stadt lagerten Mittel aus der Ordenskasse. ".
+            "Wir haben uns krï¿½ftig bedient und <b>zusÃ¤tzliche ".$price['cgold']." Gold gestohlen</b>!";
 
-          $defstr .= "\nEin schlechter Tag für uns. <b>Aus der Ordenskasse wurden ".
-            $price['cgold']." Gold geraubt</b>. Was werden Eure Ordensbrüder dazu sagen?";         
+          $defstr .= "\nEin schlechter Tag fÃ¼r uns. <b>Aus der Ordenskasse wurden ".
+            $price['cgold']." Gold geraubt</b>. Was werden Eure Ordensbrï¿½der dazu sagen?";         
         }
 
       }
@@ -1093,8 +1093,8 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
         if ($price['cgold'] > 0)
           $resstr .= "\n\nDavon waren aus der Ordenskasse: ".$price['cgold']." Gold.";
 
-        $attstr = "\nSie konnten die Stadt erfolgreich plündern und folgende Ressourcen erbeuten:\n\n".$resstr;
-        $defstr = "\nEr konnte die Stadt plündern und erbeutete folgende Ressourcen:\n\n".$resstr;
+        $attstr = "\nSie konnten die Stadt erfolgreich plÃ¼ndern und folgende Ressourcen erbeuten:\n\n".$resstr;
+        $defstr = "\nEr konnte die Stadt plÃ¼ndern und erbeutete folgende Ressourcen:\n\n".$resstr;
       }
     }
     
@@ -1108,21 +1108,21 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 function updateRes() {
   $tick = TICK;
 
-  // alle auswählen deren Ressourcen (Einwohner,Gold,Städte etc.) aktualisiert werden müssen
+  // alle auswï¿½hlen deren Ressourcen (Einwohner,Gold,StÃ¤dte etc.) aktualisiert werden mÃ¼ssen
   $upt = time();
-  $res1 = do_mysql_query("SELECT id,name,lastres,religion,wood,iron,stone,gold,clan,points,avatar, ".
+  $res1 = do_mysqli_query("SELECT id,name,lastres,religion,wood,iron,stone,gold,clan,points,avatar, ".
 			             " holiday>UNIX_TIMESTAMP() AS holiday".
                          " FROM player WHERE lastres >0 AND lastres+".$tick."<= UNIX_TIMESTAMP() ".
                          "  AND name IS NOT NULL");
   
-  echo " Tick = ".$tick.", Upt = '".date("d.m.y G:i:s", $upt)."' ($upt), Datensätze: ".mysql_numrows($res1)."\n";
+  echo " Tick = ".$tick.", Upt = '".date("d.m.y G:i:s", $upt)."' ($upt), DatensÃ¤tze: ".mysqli_num_rows($res1)."\n";
   
 
 
   
-  // Schleifenzähler
+  // SchleifenzÃ¤hler
   $loop=0;
-  while ($data1 = mysql_fetch_assoc($res1)) {
+  while ($data1 = mysqli_fetch_assoc($res1)) {
     // URLAUBSMODUS ???    
     if ($data1['holiday'])
       $holiday = true;
@@ -1147,16 +1147,16 @@ function updateRes() {
     $pid = $data1['id'];
     $flags = get_premium_flags($pid);
 
-    // Avatar überprüfen, ggf. löschen
+    // Avatar Ã¼berprÃ¼fen, ggf. lÃ¶schen
     if($data1['avatar'] > 0) {
       // Hat der Spieler KEIN Premium UND unter 1 MIO Punkte?      
       $avatar_top_points = defined("AVATAR_TOP_POINTS") ? AVATAR_TOP_POINTS : 1000000;
       if($avatar_top_points > $data1['points'] && $flags == 0 ) {
         if(DEBUG_SERVICE)
-          echo "Spieler hat kein Premium mehr oder nicht genug Punkte -> Lösche Avatar\n";
+          echo "Spieler hat kein Premium mehr oder nicht genug Punkte -> LÃ¶sche Avatar\n";
             
         // Avatar weg. Settings weg.
-        do_mysql_query("UPDATE player SET avatar = 0, settings=0 WHERE id = ".$pid);
+        do_mysqli_query("UPDATE player SET avatar = 0, settings=0 WHERE id = ".$pid);
 
         $filename=AVATAR_DIR.$pid.".jpg";
         if(is_file($filename)) {
@@ -1165,7 +1165,7 @@ function updateRes() {
       }      
     }
     
-    // FIXME: Einstellungen und Signatur für nicht-mehr-premium-user zurücksetzen
+    // FIXME: Einstellungen und Signatur fÃ¼r nicht-mehr-premium-user zurÃ¼cksetzen
     
     
     for ($i = 0; $i < $updatecount; ++ $i) {
@@ -1179,7 +1179,7 @@ function updateRes() {
       $totwood = 0;
       $totiron = 0;
       $totstone = 0;
-      $res2 = do_mysql_query("
+      $res2 = do_mysqli_query("
 SELECT                                    
  sum(citybuilding.count * building.res_shortrange) AS incshortrange,
  sum(citybuilding.count * building.res_longrange) AS inclongrange,
@@ -1227,7 +1227,7 @@ SELECT
 );
     
 
-      $citycount = mysql_num_rows($res2);
+      $citycount = mysqli_num_rows($res2);
       $adm_level = get_adm_level($data1['id']);
 
       
@@ -1255,10 +1255,10 @@ SELECT
       $taxes = 0;
 
       /*** WHILE ***/
-      while ($data2 = mysql_fetch_assoc($res2)) {
+      while ($data2 = mysqli_fetch_assoc($res2)) {
         $herrenlos = $data1['id'] == null;
         
-        // Wenn länger als 30 Minuten belagert wurde...
+        // Wenn lÃ¤nger als 30 Minuten belagert wurde...
         $siege_time   = getSiegeTime($data2['id']);
         $siege_factor = getSiegeFactor( $siege_time );        
 
@@ -1286,7 +1286,7 @@ SELECT
         //stone
         $stone = get_inc_res($data2['rawstone'] + ($data2['incrawstone'] * RAWSTONE_PRODFACTOR * $res_eff), $data2['incstone'], 2, $storage, STONE_PRODFACTOR * $res_eff);
         
-        //ja, Lager haben eigentlich die 5fache Kapazität (1x res, 4x waffen)
+        //ja, Lager haben eigentlich die 5fache KapazitÃ¤t (1x res, 4x waffen)
         $storage = $data2['storage'];
         
         //oben ist jeweils das Neuproduzierte in $res
@@ -1304,7 +1304,7 @@ SELECT
         $gold = $horse['raw'];
 
         //armor
-        //$iron enthält das ganze Eisen, siehe shortrange
+        //$iron enthÃ¤lt das ganze Eisen, siehe shortrange
         $armor = get_inc_wep($iron['res'], $data2['incarmor'], ARMOR_COST, $storage, $data2['reserve_armor'], $data2['armor'], ARMOR_PRODFACTOR * $res_eff, $data2['max_armor']);
         $iron['res'] = $armor['raw'];
 
@@ -1331,8 +1331,8 @@ SELECT
         if ($prosperity < 0) alarm("prosperity < 0, Stadt ".$data2['id']."\n".__LINE__);
                  
         
-        /*********************** Loyalität behandeln *************************/
-        // Loyalität wird in Hundertstel Prozent gespeichert (0-10000)
+        /*********************** LoyalitÃ¤t behandeln *************************/
+        // LoyalitÃ¤t wird in Hundertstel Prozent gespeichert (0-10000)
         define("MAX_LOYALITY", 10000);
         
         if(defined("LOYALITY_GROWTH")) 
@@ -1357,7 +1357,7 @@ SELECT
         else {
           /**************************** Sonderbehandlung Siedler **************/
           // Siedler in die Nahrungsberechnung mit einbeziehen
-          $settler_data = do_mysql_query_fetch_array("SELECT sum(missiondata) as settler_sum FROM army WHERE start = ".$data2['id']." AND owner=".$data1['id']);          
+          $settler_data = do_mysqli_query_fetch_array("SELECT sum(missiondata) as settler_sum FROM army WHERE start = ".$data2['id']." AND owner=".$data1['id']);          
         }
         
         // population_settler = pop + settler
@@ -1372,45 +1372,45 @@ SELECT
         //if (DEBUG_SERVICE) echo "Buerger_Siedler_alt = ".($data2['pop']+$settler_data['settler_sum']).", Buerger_Siedler_neu = ".$population_settler.", Buerger_neu = ".$population.", Siedler = ".$settler_data['settler_sum']."\n"; 
         
         
-        // Wenn Gesamtzahl Einwohner < Anzahl Siedler oder Bürger < 1
+        // Wenn Gesamtzahl Einwohner < Anzahl Siedler oder Bï¿½rger < 1
         if(($population_settler<$settler_data['settler_sum']) || ($population<1)) {
           $settler_sum_old = $settler_data['settler_sum'];
           $settler_sum_new = $settler_data['settler_sum'] - abs($population) - 1;
           $population = 1;
           if (DEBUG_SERVICE) echo "Siedler sterben -> settler_sum_old = ".$settler_sum_old.", settler_sum_new = ".$settler_sum_new."\n";
-          $get_settler_data = do_mysql_query("SELECT aid,missiondata as settler FROM army WHERE start = ".$data2['id']." AND owner=".$data1['id']);
-          $settler_num = mysql_num_rows($get_settler_data);
+          $get_settler_data = do_mysqli_query("SELECT aid,missiondata as settler FROM army WHERE start = ".$data2['id']." AND owner=".$data1['id']);
+          $settler_num = mysqli_num_rows($get_settler_data);
           $settler_sum_new2 = 0;
           $count_settler_units = 0;
-          while ($settler_data = mysql_fetch_assoc($get_settler_data)) {
+          while ($settler_data = mysqli_fetch_assoc($get_settler_data)) {
             // Prozentzahl der sterbenden Siedler pro Trupp
             $settler_percentage = $settler_data['settler']/$settler_sum_old;
             $new_settler_amount = floor($settler_percentage * $settler_sum_new);
-            do_mysql_query("UPDATE army SET missiondata = ".$new_settler_amount." WHERE aid = ".$settler_data['aid']);
+            do_mysqli_query("UPDATE army SET missiondata = ".$new_settler_amount." WHERE aid = ".$settler_data['aid']);
             if (DEBUG_SERVICE) echo "army = ".$settler_data['aid'].", old_settler = ".$settler_data['settler'].", new_settler = ".$new_settler_amount.", settler_percentage = ".$settler_percentage."\n";
             $settler_sum_new2 += $new_settler_amount;
             //$last_aid = $settler_data['aid'];
             //$last_amount = $new_settler_amount;
-            // ID's und Grösse der Siedlertrupps in einem Feld speichern
+            // ID's und Grï¿½sse der Siedlertrupps in einem Feld speichern
             $settler_array[$count_settler_units]['id'] = $settler_data['aid'];
             $settler_array[$count_settler_units]['count'] = $new_settler_amount;
             $count_settler_units++;
           }
           // Test, ob korrekte Anzahl Siedler gestorben ist
-          // wenn nicht zufälligen Trupp auswählen und Differenz abziehen
+          // wenn nicht zufï¿½lligen Trupp auswï¿½hlen und Differenz abziehen
           if($settler_sum_new2<$settler_sum_new) {
-            //echo "Zu wenig Siedler gestorben -> gleiche aus: ".($settler_sum_new-$settler_sum_new2)." Siedler zusätzlich gestorben in army = ".$last_aid.", last_amount = ".$last_amount."\n";
+            //echo "Zu wenig Siedler gestorben -> gleiche aus: ".($settler_sum_new-$settler_sum_new2)." Siedler zusÃ¤tzlich gestorben in army = ".$last_aid.", last_amount = ".$last_amount."\n";
             $choose_settler_array_id = mt_rand(0,$count_settler_units-1);
             if (DEBUG_SERVICE) {
               echo "id = ".$settler_array[$choose_settler_array_id]['id'].", count = ".$settler_array[$choose_settler_array_id]['count'].", number = ".$choose_settler_array_id."\n";
-              echo "Zu wenig Siedler gestorben -> gleiche aus: ".($settler_sum_new-$settler_sum_new2)." Siedler zusätzlich gestorben in army = ".$settler_array[$choose_settler_array_id]['id']."\n";
+              echo "Zu wenig Siedler gestorben -> gleiche aus: ".($settler_sum_new-$settler_sum_new2)." Siedler zusÃ¤tzlich gestorben in army = ".$settler_array[$choose_settler_array_id]['id']."\n";
               echo "UPDATE army SET missiondata = ".($settler_array[$choose_settler_array_id]['count']-($settler_sum_new-$settler_sum_new2))." WHERE aid = ".$settler_array[$choose_settler_array_id]['id']."\n";
             }
-            do_mysql_query("UPDATE army SET missiondata = ".($settler_array[$choose_settler_array_id]['count']-($settler_sum_new-$settler_sum_new2))." WHERE aid = ".$settler_array[$choose_settler_array_id]['id']);
+            do_mysqli_query("UPDATE army SET missiondata = ".($settler_array[$choose_settler_array_id]['count']-($settler_sum_new-$settler_sum_new2))." WHERE aid = ".$settler_array[$choose_settler_array_id]['id']);
           }
         }
         
-        // müssen Siedler gelöscht oder zur Rückkehr gebracht werden?
+        // mÃ¼ssen Siedler gelÃ¶scht oder zur RÃ¼ckkehr gebracht werden?
         //echo "Aufruf von remove_settler in UpdateRes";
         remove_settler($data2['id']);
 
@@ -1424,10 +1424,10 @@ SELECT
 
         echo "\n cityid=".$data2['id'].",foodstorage=".$foodstorage_old.", foodstorage_new=".$foodstorage;
 
-        do_mysql_query("UPDATE city SET population=".$population.", food=".$foodstorage.", prosperity=".$prosperity.", loyality=".$loyality.", prev_loyality=".$prev_loyality.", rawwood=rawwood+".($wood['raw']-$data2['rawwood']).", rawiron=rawiron+".($iron['raw']-$data2['rawiron']).", rawstone=rawstone+".($stone['raw']-$data2['rawstone']).", shortrange=shortrange+'".$shortrange['res']."', longrange=longrange+'".$longrange['res']."', armor=armor+'".$armor['res']."', horse=horse+'".$horse['res']."' WHERE id = ".$data2['id']);
+        do_mysqli_query("UPDATE city SET population=".$population.", food=".$foodstorage.", prosperity=".$prosperity.", loyality=".$loyality.", prev_loyality=".$prev_loyality.", rawwood=rawwood+".($wood['raw']-$data2['rawwood']).", rawiron=rawiron+".($iron['raw']-$data2['rawiron']).", rawstone=rawstone+".($stone['raw']-$data2['rawstone']).", shortrange=shortrange+'".$shortrange['res']."', longrange=longrange+'".$longrange['res']."', armor=armor+'".$armor['res']."', horse=horse+'".$horse['res']."' WHERE id = ".$data2['id']);
         
         if(!$herrenlos) {
-          // Einnahmen der Gebäude berechnen:
+          // Einnahmen der GebÃ¤ude berechnen:
           // Im Urlaubsmodus ist res_eff auf 0
           if ($data2['incgold'] > 0)
             $gold+= floor($data2['incgold'] * $res_eff);
@@ -1436,7 +1436,7 @@ SELECT
 
 
           // Steuern und Forschung
-          // werden nur dann eingenommen, wenn die Stadt genügend Wohlstand hat
+          // werden nur dann eingenommen, wenn die Stadt genï¿½gend Wohlstand hat
           if ($data2['prosperity'] >= $attr) {
             $citytax   = floor($population/10) * GOLD_PRODFACTOR * $eff;
             $taxes+= $citytax;
@@ -1456,16 +1456,16 @@ SELECT
         if ($tax) {
           $gold -= $tax;
           log_clan_tax($data1['id'], $data1['clan'], $tax);
-          do_mysql_query("UPDATE clan SET gold=gold+".$tax." WHERE id=".$data1['clan']);
+          do_mysqli_query("UPDATE clan SET gold=gold+".$tax." WHERE id=".$data1['clan']);
         }
 
         if($gold-$data1['gold'] != 0) {
           echo ",income=".($gold-$data1['gold']);
         }
 
-        // Gold wird nur differentiell updated, weil sonst eine Race-Condition entstehen könnte
-        // (Wenn der Spieler während des Service-Laufs den Goldbetrag ändert
-        do_mysql_query("UPDATE player SET gold=gold+".($gold-$data1['gold']).
+        // Gold wird nur differentiell updated, weil sonst eine Race-Condition entstehen kÃ¶nnte
+        // (Wenn der Spieler wï¿½hrend des Service-Laufs den Goldbetrag ï¿½ndert
+        do_mysqli_query("UPDATE player SET gold=gold+".($gold-$data1['gold']).
                      ", rp=rp+".$research.
                      ", wood=wood+".(intval($totwood)-$data1['wood']).
                      ", iron=iron+".(intval($totiron)-$data1['iron']).
@@ -1478,20 +1478,20 @@ SELECT
 
 function updateToplist() {
   //player
-  do_mysql_query("UPDATE player SET toplist=NULL");
-  $res3 = do_mysql_query("SELECT player.status as locked, player.id AS id, player.name AS name, (player.points) AS points, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id ORDER BY points DESC LIMIT 100");
+  do_mysqli_query("UPDATE player SET toplist=NULL");
+  $res3 = do_mysqli_query("SELECT player.status as locked, player.id AS id, player.name AS name, (player.points) AS points, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id ORDER BY points DESC LIMIT 100");
   $i=0;
-  while ($data3 = mysql_fetch_assoc($res3)) {
+  while ($data3 = mysqli_fetch_assoc($res3)) {
     $i++;
-    do_mysql_query("UPDATE player SET toplist='".$i."' WHERE id='".$data3['id']."'");
+    do_mysqli_query("UPDATE player SET toplist='".$i."' WHERE id='".$data3['id']."'");
   }
   //clan
-  do_mysql_query("UPDATE clan SET toplist=NULL");
-  $res4 = do_mysql_query("SELECT clan.name AS name, clan.id AS clanid, clan.points AS points FROM clan ORDER BY clan.points DESC LIMIT 100");
+  do_mysqli_query("UPDATE clan SET toplist=NULL");
+  $res4 = do_mysqli_query("SELECT clan.name AS name, clan.id AS clanid, clan.points AS points FROM clan ORDER BY clan.points DESC LIMIT 100");
   $i=0;
-  while ($data4 = mysql_fetch_assoc($res4)) {
+  while ($data4 = mysqli_fetch_assoc($res4)) {
     $i++;
-    do_mysql_query("UPDATE clan SET toplist='".$i."' WHERE id='".$data4['clanid']."'");
+    do_mysqli_query("UPDATE clan SET toplist='".$i."' WHERE id='".$data4['clanid']."'");
   }
 }
 
@@ -1508,9 +1508,9 @@ function alarm ($string, $title = "ACHTUNG: Service ALARM") {
 /********************************************************************/
 echo "\n\n*******************************************************\n";
 if(!defined("TICK")) {
-  $res = do_mysql_query("SELECT value FROM config WHERE name='tick'");
-  if(mysql_num_rows($res) > 0) {
-    $t = mysql_fetch_array($res);
+  $res = do_mysqli_query("SELECT value FROM config WHERE name='tick'");
+  if(mysqli_num_rows($res) > 0) {
+    $t = mysqli_fetch_array($res);
     define("TICK", $t[0]);
   }
   else {
@@ -1530,7 +1530,7 @@ else {
   $sleepmax = 60;
 }
 
-// Hier ist der Einstiegspunkt für den Service
+// Hier ist der Einstiegspunkt fÃ¼r den Service
 while (1) {
   $now = time();
    
@@ -1570,7 +1570,7 @@ while (1) {
   
   
   
-  // Falls der Thread mal länger als eine Minute gebraucht hat ($sleep wäre dann < 0)
+  // Falls der Thread mal lÃ¤nger als eine Minute gebraucht hat ($sleep wï¿½re dann < 0)
   if ($sleep < $sleepmin) {
     $sleep = $sleepmin;
 
@@ -1587,7 +1587,7 @@ while (1) {
   }
   echo "Sleeping $sleep Seconds\n";
 
-  // xx Sekunden warten, schützt vor überhitzung ;-)
+  // xx Sekunden warten, schÃ¼tzt vor Ã¼berhitzung ;-)
   sleep($sleep);
   
   echo "Awaken\n\n";

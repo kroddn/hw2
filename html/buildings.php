@@ -47,19 +47,19 @@ $player->setActivePage(basename(__FILE__));
 $builderror = null;
 
 if (isset($build) && isset($count) && ($count>0)) {
-  $builderror = $cities->build($build,$count);
+  $builderror = $_SESSION['cities']->build($build,$count);
 } 
 else if (isset($stop)) {
-  $cities->abortBuilding($stop);
+  $_SESSION['cities']->abortBuilding($stop);
 } 
 else if (isset($destroy)) {
-  $error = $cities->destroyBuilding($destroy, 1);
+  $error = $_SESSION['cities']->destroyBuilding($destroy, 1);
 } 
 else if (isset($destroyall)) {
-  $error = $cities->destroyBuilding($destroyall, 99);
+  $error = $_SESSION['cities']->destroyBuilding($destroyall, 99);
 } 
 else if (isset($destroy2)) {
-  $error = $cities->destroyBuildingUninvented($destroy2);
+  $error = $_SESSION['cities']->destroyBuildingUninvented($destroy2);
 }
 
 
@@ -78,8 +78,8 @@ if($builderror != null) {
 <h1>Baumeister in <? echo $_SESSION['cities']->getACName()." ".getReliImage($_SESSION['cities']->getACReligion()); ?> </h1>
 <? if (BUILDINGSPEED > 1) echo "Errichten wird um Faktor ".BUILDINGSPEED." beschleunigt.<p>"; ?>
 
-Eine Anleitung findet sich <a href="library.php?s1=0&s2=3&s3=1">hier in der Bibliothek</a>. Dort wird auch der fundamentale <font color="red">Unterschied</font> zwischen <b>Lehmgruben</b> und <b>Steinbr¸chen</b> erkl‰rt!<p>
-<b>Achtung:</b> es sollten NIE mehr verarbeitende Geb‰ude gebaut werden als man erzeugende Geb‰ude hat. Es reicht zum Beispiel <b>1 S‰gewerk f¸r 2 Holzf‰ller</b>.
+Eine Anleitung findet sich <a href="library.php?s1=0&s2=3&s3=1">hier in der Bibliothek</a>. Dort wird auch der fundamentale <font color="red">Unterschied</font> zwischen <b>Lehmgruben</b> und <b>SteinbrÔøΩchen</b> erklÔøΩrt!<p>
+<b>Achtung:</b> es sollten NIE mehr verarbeitende Geb√§ude gebaut werden als man erzeugende Geb√§ude hat. Es reicht zum Beispiel <b>1 SÔøΩgewerk f√ºr 2 Holzf√§ller</b>.
 </td></tr>
 <tr><td>
 
@@ -89,7 +89,7 @@ Eine Anleitung findet sich <a href="library.php?s1=0&s2=3&s3=1">hier in der Bibl
 
 $actcat=-1;
 
-$bld=$cities->getBuildings();
+$bld=$_SESSION['cities']->getBuildings();
 
 for($i=0;$i<=sizeof($bld);++$i) {
 
@@ -97,7 +97,7 @@ for($i=0;$i<=sizeof($bld);++$i) {
     if ($bld[$i]['category']>$actcat){
       if ($actcat>=0 && $_SESSION['player']->getNoobLevel() > 0) {
         echo '<tr><td colspan="16" class="tblbody" align="center">';
-        echo'Achtung: bauen Sie <b>keine unnˆtigen Geb‰ude</b>. Lesen Sie sich zuerst die Bibliothek durch (auf den Geb‰udenamen klicken)</td></tr>';
+        echo'Achtung: bauen Sie <b>keine unnÔøΩtigen Geb√§ude</b>. Lesen Sie sich zuerst die Bibliothek durch (auf den Geb√§udenamen klicken)</td></tr>';
       }
       echo "<tr><td colspan='16'>&nbsp;</td></tr><tr><td colspan='3' class='tblhead'><b>".$buildingcategories[$bld[$i]['category']]."</b></td>";
       echo "<td colspan=\"3\" class=\"tblbody\" style=\"text-align:center; font-weight:bold;\">Kosten</td>";
@@ -121,9 +121,9 @@ for($i=0;$i<=sizeof($bld);++$i) {
     else echo "-";
     echo "</td>";
 
-    // Alter Link... funktioniert nur so lange wie keinen  neuen Geb‰ude kommen
+    // Alter Link... funktioniert nur so lange wie keinen  neuen Geb√§ude kommen
     //echo "<td class='tblbody' width='160'><a target='_new' href='library.php".$bld[$i]['lib']."'>";
-    $class = $bld[$i]['religion'] != null && $bld[$i]['religion'] != $_SESSION['player']->getReligion() ? "style='color: FF4040;' title='religionsfremdes Geb‰ude' " : "";
+    $class = $bld[$i]['religion'] != null && $bld[$i]['religion'] != $_SESSION['player']->getReligion() ? "style='color: FF4040;' title='religionsfremdes Geb√§ude' " : "";
     printf("<td class='tblbody' width='160'><a %s target='_new' href='library.php?s1=1&s2=%d&s3=0&building_id=%d'>",
            $class, $bld[$i]['category'], $bld[$i]['id'] );
     echo $bld[$i]['name'];
@@ -170,12 +170,12 @@ for($i=0;$i<=sizeof($bld);++$i) {
     echo "</td>";
 
     
-    /******** Die Menge mˆglicher zu bauender Geb‰ude auflisten ******/
+    /******** Die Menge m√∂glicher zu bauender Geb√§ude auflisten ******/
     $empty = 6;
     if ($possible>=1) {
       $maxpos = 1;
       $empty--;
-      echo "<td width='6' class='tblhead'><a ".($bld[$i]['makescapital'] ? 'onClick="return confirm(\'Dies ist ein Hauptstadtgeb‰ude... Ihr wisst was ihr tut?\')"' : "")."target='main' href='buildings.php?build=".$bld[$i]['id']."&count=1'><b>1</b></a></td>";
+      echo "<td width='6' class='tblhead'><a ".($bld[$i]['makescapital'] ? 'onClick="return confirm(\'Dies ist ein Hauptstadtgeb√§ude... Ihr wisst was ihr tut?\')"' : "")."target='main' href='buildings.php?build=".$bld[$i]['id']."&count=1'><b>1</b></a></td>";
     }
 
     if ($possible>=2) {
@@ -236,12 +236,12 @@ for($i=0;$i<=sizeof($bld);++$i) {
 
 
     if ($bld[$i]['destroy']) { 
-      printf("<td align='center' width='15' class='tblbody'><a title='Abreiﬂen' href='buildings.php?destroy=%d' %s><b class='error'>x</b></a>",
+      printf("<td align='center' width='15' class='tblbody'><a title='Abrei√üen' href='buildings.php?destroy=%d' %s><b class='error'>x</b></a>",
              $bld[$i]['id'], 
-             $bld[$i]['makescapital'] ? 'onClick="return confirm(\'Dies ist ein Hauptstadtgeb‰ude... Seid ihr ganz sicher?\')"' : ""  );
+             $bld[$i]['makescapital'] ? 'onClick="return confirm(\'Dies ist ein Hauptstadtgeb√§ude... Seid ihr ganz sicher?\')"' : ""  );
              
       if($bld[$i]['isbuild'] > 1) {
-        printf("&nbsp;<a title='Alle abreiﬂen' onClick=\"return confirm('Alle %d %s abreiﬂen?')\" href='buildings.php?destroyall=%d'><b class='error'>XX</b></a></td>",
+        printf("&nbsp;<a title='Alle abrei√üen' onClick=\"return confirm('Alle %d %s abrei√üen?')\" href='buildings.php?destroyall=%d'><b class='error'>XX</b></a></td>",
                $bld[$i]['isbuild'], $bld[$i]['name'], $bld[$i]['id']);
       }
       echo "</td>";
@@ -256,17 +256,17 @@ for($i=0;$i<=sizeof($bld);++$i) {
 
 if ($actcat==-1) {
 
-  echo "<tr><td class='tblhead' width='300' colspan=\"7\"><b>Geb‰ude</b></td></tr>";
+  echo "<tr><td class='tblhead' width='300' colspan=\"7\"><b>Geb√§ude</b></td></tr>";
 
-  echo "<tr><td class='tblbody' width='300' colspan=\"7\">es kˆnnen derzeit keine Geb‰ude gebaut werden. ‹berpr¸fen Sie Ihre <a href='research.php'>Forschungen</a>.</td></tr>";
+  echo "<tr><td class='tblbody' width='300' colspan=\"7\">es k√∂nnen derzeit keine Geb√§ude gebaut werden. √ºberpr√ºfen Sie Ihre <a href='research.php'>Forschungen</a>.</td></tr>";
 
 }
 
-// Unerforschte Geb‰ude anzeigen
-$show=$cities->getuninventedBuildings();
+// Unerforschte Geb√§ude anzeigen
+$show=$_SESSION['cities']->getuninventedBuildings();
 if ($show) {
-  // Unerforschte Geb‰ude anzeigen
-  echo "<tr><td colspan='14'>&nbsp;</td></tr><tr><td colspan=\"3\" class='tblhead'><b>Unerforschte Geb‰ude</b></td>";
+  // Unerforschte Geb√§ude anzeigen
+  echo "<tr><td colspan='14'>&nbsp;</td></tr><tr><td colspan=\"3\" class='tblhead'><b>Unerforschte Geb√§ude</b></td>";
   echo "<td colspan=\"3\" class=\"tblbody\" style=\"text-align:center; font-weight:bold;\">Erstattungskosten</td>";
   echo "<td align='center' width='15' class='tblbody'></td>";
   echo "</tr>\n";
@@ -288,7 +288,7 @@ if ($show) {
       echo "<tr>";
     }
   }
-# Religionsfremde Geb‰ude anzeigen
+# Religionsfremde Geb√§ude anzeigen
   for($i=0;$i<=sizeof($show)-1;++$i) {
     if ($show[$i]['same_religion']==false) {
       $show_other_religion_building=true;
@@ -296,7 +296,7 @@ if ($show) {
   }
 
   if ($show_other_religion_building==true) {
-    echo "<tr><td colspan='14'>&nbsp;</td></tr><tr><td colspan=\"3\" class='tblhead'><b>Religionsfremde Geb‰ude</b></td>";
+    echo "<tr><td colspan='14'>&nbsp;</td></tr><tr><td colspan=\"3\" class='tblhead'><b>Religionsfremde Geb√§ude</b></td>";
     echo "<td colspan=\"3\" class=\"tblbody\" style=\"text-align:center; font-weight:bold;\">Erstattungskosten</td>";
     echo "<td align='center' width='15' class='tblbody'></td>";
     echo "</tr>\n";
@@ -319,19 +319,19 @@ if ($show) {
       }
     }
   }
-} // Ende unerforschte Geb‰ude anzeigen
+} // Ende unerforschte Geb√§ude anzeigen
 
 echo "</table><p>";
 
 echo "<table cellspacing='1' cellpadding='0' border='0'>";
 
-echo "<tr><td width='300' class='tblhead' colspan='4'><b>Aktuelle Bauten in ".$cities->activecityname.":</a></b></td></tr>";
+echo "<tr><td width='300' class='tblhead' colspan='4'><b>Aktuelle Bauten in ".$_SESSION['cities']->activecityname.":</a></b></td></tr>";
 
-$ib=$cities->getInBuild();
+$ib=$_SESSION['cities']->getInBuild();
 
 if (sizeof($ib)==0) {
 
-  echo "<tr><td class='tblbody' width='300'>es existieren derzeit keine Auftr‰ge</td></tr>";
+  echo "<tr><td class='tblbody' width='300'>es existieren derzeit keine Auftr√§ge</td></tr>";
 
 }
 

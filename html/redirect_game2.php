@@ -25,11 +25,11 @@ Die Runde &quot;game1&quot; ist abgeschalten worden.
 Bis auf Weiteres wird auf einem anderen Server die Runde
 &quot;game2&quot; weiterlaufen. Am Ende der Runde 
 &quot;game2&quot; wird eine Verschmelzung stattfinden 
-und zukünftig nur noch eine Hauptrunde gestartet.
+und zukï¿½nftig nur noch eine Hauptrunde gestartet.
 </p>
 <p>
-Wir erhoffen uns, dass durch diese Maßnahme etwas mehr
-Spielspaß einhergeht, da die Spieler so nicht mehr auf
+Wir erhoffen uns, dass durch diese MaÃŸnahme etwas mehr
+SpielspaÃŸ einhergeht, da die Spieler so nicht mehr auf
 zwei Server verstreut spielen.
 </p>
 <p>
@@ -60,9 +60,6 @@ print_news_table();
 <?
 }
 
-if($redirect==1) {
-  include("ads/openinventory_popup.php");
-}
 ?>
 </center>
 </body>

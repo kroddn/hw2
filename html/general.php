@@ -44,7 +44,7 @@ $_SESSION['player']->setActivePage(basename(__FILE__));
 define("UNIT_SPAN_TEMPLATE", "<span class=\"unit\" title=\"%s\"><img style=\"float: left; margin:0px;\" alt=\"%s\" title=\"%s\" src=\"%s/%s\">%d</span>\n");
 
 if(!isset($from)) {
-  $from=$cities->getActiveCity();
+  $from=$_SESSION['cities']->getActiveCity();
 }
 else {
   if (!isset($producem)) $foreign = true;
@@ -59,34 +59,34 @@ if(isset($producem))
   switch($gtyp) {
     case 0:
       // Normal Attack
-      $error = $cities->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'attack');
+      $error = $_SESSION['cities']->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'attack');
       break;
     case 1:
       // Siege aktiviert. Siehe includes/db.config.php
       if (ENABLE_SIEGE) {
-        $error = $cities->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'siege');
+        $error = $_SESSION['cities']->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'siege');
       }
       break;
     case 2:
       //despoil
-      $error = $cities->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'despoil');
+      $error = $_SESSION['cities']->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'despoil');
       break;
     case 3:
       //burndown
-      $error = $cities->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'burndown');
+      $error = $_SESSION['cities']->attack($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic, 'burndown');
       break;
     case 4:
       //move
-      $error = $cities->move($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic);
+      $error = $_SESSION['cities']->move($coordx, $coordy, $unit, $from, $_SESSION['player'], $tactic);
       break;
     default:
       do_log("An error Occured while choosing the attack type!");
       die("An error Occured while choosing the attack type!");
       break;
   }
-  $cityid_res = do_mysql_query("SELECT id FROM map WHERE x = $coordx AND y = $coordy");
-  if ($cityid_res && mysql_num_rows($cityid_res)>0) {
-    $cityid   = mysql_fetch_assoc($cityid_res);
+  $cityid_res = do_mysqli_query("SELECT id FROM map WHERE x = $coordx AND y = $coordy");
+  if ($cityid_res && mysqli_num_rows($cityid_res)>0) {
+    $cityid   = mysqli_fetch_assoc($cityid_res);
     $markcity = $cityid['id'];
   }
 }
@@ -98,56 +98,56 @@ if(isset($sendback)) {
   $error = $_SESSION['cities']->sendBack(intval($unit), intval($owner));
 }
 
-// Truppen zurückpfeiffen
+// Truppen zurÃ¼ckpfeiffen
 if (isset($comeback) && is_numeric($comeback)) {
   $comeback = intval($comeback);
 
   // Die Armee holen
   // Wenn die Armee noch nicht angekommen ist, dann nur die Differenz bilden aus gelaufener und eigentlich zu laufende zeit,
   // ansonsten die volle Laufzeit
-  $res_armies=do_mysql_query("SELECT LEAST(UNIX_TIMESTAMP(), endtime) - starttime AS dif, army.owner, army.end, start, starttime, endtime, city.id AS city, city.name AS cityname, map.x, map.y ".
+  $res_armies=do_mysqli_query("SELECT LEAST(UNIX_TIMESTAMP(), endtime) - starttime AS dif, army.owner, army.end, start, starttime, endtime, city.id AS city, city.name AS cityname, map.x, map.y ".
                        " FROM army LEFT JOIN city ON army.start=city.id LEFT JOIN map ON army.start=map.id WHERE army.aid=".$comeback );
 
 
 
-  // Na is doch klar, nur was machen wenn der Datensatz überhaupt exisitert
-  if (mysql_num_rows($res_armies) == 1) {
-    $data1=mysql_fetch_assoc($res_armies);
+  // Na is doch klar, nur was machen wenn der Datensatz Ã¼berhaupt exisitert
+  if (mysqli_num_rows($res_armies) == 1) {
+    $data1=mysqli_fetch_assoc($res_armies);
 
     if ( $data1['owner'] != $_SESSION['player']->getID()) {
-      $error = "Sire, Ihr könnt doch keine Armee befehligen, über die Ihr kein Kommando habt!";
+      $error = "Sire, Ihr kÃ¶nnt doch keine Armee befehligen, Ã¼ber die Ihr kein Kommando habt!";
     }
     else if ( $data1['cityname'] && $data1['end'] == $data1['start']) {
-      // Falls die Armee schon zurückkehrt
-      $error = "Sire, diese Armee ist bereits auf der Rückreise nach &quot;".$data1['cityname']."&quot;!";
+      // Falls die Armee schon zurÃ¼ckkehrt
+      $error = "Sire, diese Armee ist bereits auf der RÃ¼ckreise nach &quot;".$data1['cityname']."&quot;!";
     }
     else {
       if ( $data1['mission'] != 'return' ) {
         // Einfach Ziel auf Ursprung setzen
-        do_mysql_query("UPDATE army SET end = start, mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$data1['dif']." WHERE aid = ".$comeback);
+        do_mysqli_query("UPDATE army SET end = start, mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$data1['dif']." WHERE aid = ".$comeback);
       }
       // Wenn die Ursprungsstadt nicht mehr existiert, dann abdrehen und
-      // zur nächstgelegenen Stadt laufen
+      // zur nÃ¤chstgelegenen Stadt laufen
       else {
         $dif = $data1['dif'];
 
         // Feststellen wo die Armee denn hinwollte
-        $res_back = do_mysql_query("SELECT map.x as x, map.y as y, end, start FROM army LEFT JOIN map ON map.id=army.end WHERE army.aid=".$comeback);
-        if(mysql_num_rows($res_back) == 1) {
-          $data2    = mysql_fetch_assoc($res_back);
+        $res_back = do_mysqli_query("SELECT map.x as x, map.y as y, end, start FROM army LEFT JOIN map ON map.id=army.end WHERE army.aid=".$comeback);
+        if(mysqli_num_rows($res_back) == 1) {
+          $data2    = mysqli_fetch_assoc($res_back);
 
-          // nächstgelegene Stadt bestimmen
-          $cit = do_mysql_query ("SELECT city.id, city.name, round(sqrt( (".$data2['x']."-x)*(".$data2['x']."-x)+(".$data2['y']."-y)*(".$data2['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." ORDER BY dist LIMIT 1");
-          if (mysql_num_rows($cit) && $city = mysql_fetch_assoc($cit) ) {
-            do_mysql_query("UPDATE army SET end = ".$city['id'].", mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$dif." WHERE aid = ".$comeback);
+          // nÃ¤chstgelegene Stadt bestimmen
+          $cit = do_mysqli_query ("SELECT city.id, city.name, round(sqrt( (".$data2['x']."-x)*(".$data2['x']."-x)+(".$data2['y']."-y)*(".$data2['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." ORDER BY dist LIMIT 1");
+          if (mysqli_num_rows($cit) && $city = mysqli_fetch_assoc($cit) ) {
+            do_mysqli_query("UPDATE army SET end = ".$city['id'].", mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$dif." WHERE aid = ".$comeback);
 
-            log_fatal_error("Armee kehrt nach ID ".$city['id']." zurück, da die Heimatstadt verloren ist");
+            log_fatal_error("Armee kehrt nach ID ".$city['id']." zurÃ¼ck, da die Heimatstadt verloren ist");
           }
           else {
-            show_log_fatal_error("Sie besitzen keine Städte mehr!", "Funktion Comeback: Spieler besitzt keine Städte mehr.");
-            $error = "Sie besitzen keine Städte mehr!";
+            show_log_fatal_error("Sie besitzen keine StÃ¤dte mehr!", "Funktion Comeback: Spieler besitzt keine StÃ¤dte mehr.");
+            $error = "Sie besitzen keine StÃ¤dte mehr!";
           }
-        } // if mysql_num_rows($res_back) 
+        } // if mysqli_num_rows($res_back) 
       } // else
     }
   } // if num_rows
@@ -207,7 +207,7 @@ function fillInKoords(elem) {
     updateTravelTime();
   }
   else {
-    document.getElementById("premiumerror").innerHTML = 'Auswahlliste nur für Premium-User!';
+    document.getElementById("premiumerror").innerHTML = 'Auswahlliste nur fÃ¼r Premium-User!';
   }
 }
 
@@ -223,11 +223,11 @@ if($error != null && strlen($error) > 0) {
   if(isset($coordy)) $selecty = $coordy;
 }
 
-// Verbündete Stadt ausgewählt
+// VerbÃ¼ndete Stadt ausgewÃ¤hlt
 if(isset($_GET['from'])) {
-  $resA=do_mysql_query("SELECT name, x, y from city LEFT JOIN map USING(id) WHERE city.id = ".$_GET['from']);
-  $dataA = mysql_fetch_assoc($resA);
-  $cityname = $dataA['name']." <i style=\"color: green;\">(verbündete Stadt)</i>";
+  $resA=do_mysqli_query("SELECT name, x, y from city LEFT JOIN map USING(id) WHERE city.id = ".$_GET['from']);
+  $dataA = mysqli_fetch_assoc($resA);
+  $cityname = $dataA['name']." <i style=\"color: green;\">(verbÃ¼ndete Stadt)</i>";
   $city_x = $dataA['x'];
   $city_y = $dataA['y'];
   ?>
@@ -240,9 +240,9 @@ if(isset($_GET['from'])) {
   <?
 }
 else {
-  $cityname = $cities->activecityname;
-  $city_x   = $cities->city_x;
-  $city_y   = $cities->city_y;
+  $cityname = $_SESSION['cities']->activecityname;
+  $city_x   = $_SESSION['cities']->city_x;
+  $city_y   = $_SESSION['cities']->city_y;
 }
 ?>
 <table style="width: 660px; margin-bottom: 1px;" class="tblhead">
@@ -260,7 +260,7 @@ else {
         </div>
         <div class="tblbody"
           style="text-align: center; margin-left: 2px; float: left; width: 128px;">
-          <a href="#" onclick="showhide('2');">Feindaufklärung</a>
+          <a href="#" onclick="showhide('2');">Feindaufklï¿½rung</a>
         </div>
         <div class="tblbody"
           style="text-align: center; margin-left: 2px; float: left; width: 128px;">
@@ -280,7 +280,7 @@ else {
 </table>
 
 <div id="tbl1" style="width: 660px; display: none; margin-top: 10px;" />
- <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
+ <!-- Tabelle genau in der GrÃ¶ÃŸe des darï¿½berliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr height="20">
     <td colspan="7" class="tblhead"><strong>Aktuelle Truppenbewegungen</strong></td>
@@ -302,15 +302,15 @@ else {
     <td>Aktion</td>
   </tr>
   <?
-  $res_moving = do_mysql_query("SELECT aid,start,end,army.owner,map.id,x,y,starttime,endtime,mission,missiondata,".
+  $res_moving = do_mysqli_query("SELECT aid,start,end,army.owner,map.id,x,y,starttime,endtime,mission,missiondata,".
                      " city.name as cityname,city.owner AS cowner ".
 		     "FROM army LEFT JOIN map ON map.id=army.end LEFT JOIN city ON map.id=city.id ".
 		     "WHERE army.owner=".$_SESSION['player']->getID()." ORDER BY ".$orderby);
-  if (mysql_num_rows($res_moving) == 0) {
+  if (mysqli_num_rows($res_moving) == 0) {
     echo "<tr><td colspan='7' class='tblbody'>keine Truppenbewegungen</td></tr>";
   }
   
-  while ($data1=mysql_fetch_assoc($res_moving)) {
+  while ($data1=mysqli_fetch_assoc($res_moving)) {
     $remaining=$data1['endtime']-time();
     $unittxt="";
 
@@ -318,34 +318,34 @@ else {
       case "settle":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/settle.png"    title="Siedeln"    alt="Siedeln">'; break;
       case "move":     $missiontext='<img src="'.$GLOBALS['imagepath'].'/move.png"      title="Verlegung" alt="Verlegung">'; break;
       case "return":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/return.png"    title="Heimkehr" alt="Heimkehr">'; break;
-      case "attack":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/schwerter.gif" title="Übernehmen" alt="Übernehmen">'; break; 
+      case "attack":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/schwerter.gif" title="ï¿½bernehmen" alt="ï¿½bernehmen">'; break; 
       case "burndown": $missiontext='<img src="'.$GLOBALS['imagepath'].'/death.gif"     title="Brandschatzen" alt="Brandschatzen">'; break;
-      case "despoil":  $missiontext='<img src="'.$GLOBALS['imagepath'].'/despoil.gif"   title="Plündern" alt="Plündern">'; break; 
+      case "despoil":  $missiontext='<img src="'.$GLOBALS['imagepath'].'/despoil.gif"   title="PlÃ¼ndern" alt="PlÃ¼ndern">'; break; 
       case "siege":    $missiontext='<img src="'.$GLOBALS['imagepath'].'/siege.png"     title="Belagern" alt="Belagern">'; break;
       default :        $missiontext="Unbekannt";
     }
 
 
-        $res2=do_mysql_query("SELECT armyunit.unit AS unit, unit.name AS name, count, religion, type, level".
+        $res2=do_mysqli_query("SELECT armyunit.unit AS unit, unit.name AS name, count, religion, type, level".
                        " FROM armyunit LEFT JOIN unit ON unit.id = armyunit.unit ".
                        " WHERE aid = ".$data1['aid']);
-        while ($data2=mysql_fetch_assoc($res2)) {
+        while ($data2=mysqli_fetch_assoc($res2)) {
           $unittxt .= sprintf(UNIT_SPAN_TEMPLATE,
                               $data2['name'], $data2['name'], $data2['name'],
                               $GLOBALS['imagepath'], getUnitImage($data2), $data2['count'] );
         }
 
         if($data1['mission'] != "return" ) {
-          $confirm = " onClick=\"return confirm('Rückkehr wirklich anordnen?')\" ";
-          $backtext = "<a ".$confirm." target='main' href='general.php?comeback=".$data1['aid']."'><b class='error'>Rückkehr anordnen</b></a>\n";
+          $confirm = " onClick=\"return confirm('RÃ¼ckkehr wirklich anordnen?')\" ";
+          $backtext = "<a ".$confirm." target='main' href='general.php?comeback=".$data1['aid']."'><b class='error'>RÃ¼ckkehr anordnen</b></a>\n";
         }
         else {
           $backtext = "&nbsp;";
         }
 
         //ende
-        $resX=do_mysql_query("SELECT city.id,name,x,y,owner AS cowner FROM city,map WHERE city.id = ".$data1['start']." AND map.id = city.id");
-        $dataX=mysql_fetch_assoc($resX);
+        $resX=do_mysqli_query("SELECT city.id,name,x,y,owner AS cowner FROM city,map WHERE city.id = ".$data1['start']." AND map.id = city.id");
+        $dataX=mysqli_fetch_assoc($resX);
 
         echo "<tr><td nowrap valign='top' class='tblbody' ".($markcity == $dataX['id'] ? " id='markcity'>" : ">" ).
     '<a '.($dataX['cowner']==$_SESSION['player']->getID() ? 'class="noerror"' : "" ).
@@ -399,7 +399,7 @@ else {
 </div>
 
 <div id="tbl2" style="width: 660px; display: none; margin-top: 10px;">
- <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
+ <!-- Tabelle genau in der GrÃ¶ÃŸe des darï¿½berliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr>
     <td colspan="1" class="tblhead"><strong>Feindaufkl&auml;rung</strong></td>
@@ -416,11 +416,11 @@ else {
   </tr>
   <?php
   // Hier wird nun jeder Armee-Datensatz solange verjoint, bis die Stadt auf die
-  // die Armee unterwegs ist ein Gebäude mit aufklärung hat. Existiert ein solches
-  // dann wird geschaut ob es innerhalb der Aufklärungszeit ankommt.
-  // Datensätze von Armeen, die zu Städten unterwegs sind in denen noch keine solches
-  // Gebäude errichtet ist (NULL-JOINS) fallen also sofort heraus.
-  $res_spy = do_mysql_query("SELECT
+  // die Armee unterwegs ist ein GebÃ¤ude mit aufklï¿½rung hat. Existiert ein solches
+  // dann wird geschaut ob es innerhalb der Aufklï¿½rungszeit ankommt.
+  // DatensÃ¤tze von Armeen, die zu StÃ¤dten unterwegs sind in denen noch keine solches
+  // GebÃ¤ude errichtet ist (NULL-JOINS) fallen also sofort heraus.
+  $res_spy = do_mysqli_query("SELECT
  army.aid AS aid, army.owner AS owner, player.name AS ownername, army.start AS start, city.name as cityname,
  army.end AS end, army.endtime AS endtime, army.missiondata AS missiondata, army.mission AS mission 
  FROM army
@@ -433,9 +433,9 @@ else {
  GROUP BY army.aid, res_scouttime HAVING army.endtime <= UNIX_TIMESTAMP() + COALESCE(max(res_scouttime), 0)
  ORDER BY ".$incorderby );
 
-  if(mysql_num_rows($res_spy)>0) {
-    while($data_spy=mysql_fetch_assoc($res_spy)) {
-      $res_spy_unit=do_mysql_query("SELECT armyunit.unit, armyunit.unit AS id, count,name,religion,type,level ".
+  if(mysqli_num_rows($res_spy)>0) {
+    while($data_spy=mysqli_fetch_assoc($res_spy)) {
+      $res_spy_unit=do_mysqli_query("SELECT armyunit.unit, armyunit.unit AS id, count,name,religion,type,level ".
                                    " FROM armyunit LEFT JOIN unit ON armyunit.unit = unit.id ".
                                    " WHERE aid = ".$data_spy['aid']." ORDER BY level");
       $remaining = $data_spy['endtime'] - time();
@@ -473,12 +473,12 @@ else {
       echo '</td>';
       echo "</tr>\n";
       echo '<tr class="tblbody">';
-      echo '<td valign="top">Eure Aufklärer konnten folgende Einheiten erspähen:</td>';
+      echo '<td valign="top">Eure Aufklï¿½rer konnten folgende Einheiten erspï¿½hen:</td>';
       echo '<td valign="top" colspan="2" nowrap>';
       $unitcount = 0;
-      while($data_spy_unit = mysql_fetch_assoc($res_spy_unit)) {
+      while($data_spy_unit = mysqli_fetch_assoc($res_spy_unit)) {
         $unitcount++;
-        //        echo "<b>".$cities->getUnitName($data_spy_unit['unit'])."</b>: ".$data_spy_unit['count']." ()<br>";
+        //        echo "<b>".$_SESSION['cities']->getUnitName($data_spy_unit['unit'])."</b>: ".$data_spy_unit['count']." ()<br>";
         printf(UNIT_SPAN_TEMPLATE,
         $data_spy_unit['name'], $data_spy_unit['name'], $data_spy_unit['name'],
         $GLOBALS['imagepath'], getUnitImage($data_spy_unit), $data_spy_unit['count'] );
@@ -486,7 +486,7 @@ else {
       }
       // Siedler nur anzeigen, wenn KEIN Geleitschutz dabei.
       if ($unitcount == 0 && $data_spy['missiondata'] > 0) {
-        echo "<b>Männer, Frauen und Kinder: </b>".$data_spy['missiondata']."<br>";
+        echo "<b>Mï¿½nner, Frauen und Kinder: </b>".$data_spy['missiondata']."<br>";
       }
       echo '</td>';
       echo "</tr>\n";
@@ -494,10 +494,10 @@ else {
     }
   }
   else if($_SESSION['player']->getScoutTime() <= 0) {
-    echo "<tr class='tblbody'><td colspan=\"3\"><font class='error'>kein Aufklärungsgebäude errichtet!</font></td></tr>";
+    echo "<tr class='tblbody'><td colspan=\"3\"><font class='error'>kein Aufklï¿½rungsgebÃ¤ude errichtet!</font></td></tr>";
   }
   else {
-    echo "<tr class='tblbody'><td colspan=\"3\">Keine Feindesaufklärungen</td></tr>";
+    echo "<tr class='tblbody'><td colspan=\"3\">Keine Feindesaufklï¿½rungen</td></tr>";
   }
 
   ?>
@@ -506,7 +506,7 @@ else {
 
 <div id="tbl3" style="width: 660px; display: none; margin-top: 10px;">
  <form action="<? echo $PHP_SELF; ?>" method="POST" name="attackform">
- <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
+ <!-- Tabelle genau in der GrÃ¶ÃŸe des darï¿½berliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr>
     <td colspan="3" class="tblhead"><strong>Neue Mission starten</strong></td>
@@ -519,7 +519,7 @@ else {
   <tr class="tblbody">
     <td valign="top" align="center"><select
       onChange="fillInKoords(this.value)">
-      <option value="0">Stadt auswählen...</option>
+      <option value="0">Stadt auswï¿½hlen...</option>
       <?
       $js = "";
       $me = $_SESSION['player']->getId();
@@ -532,9 +532,9 @@ ORDER BY owner != %d, owner, y
 ", 
       $me, $me, $me, $me);
 
-      $cres = do_mysql_query($sql);
+      $cres = do_mysqli_query($sql);
       $pos = 0;
-      while($c = mysql_fetch_object($cres)) {
+      while($c = mysqli_fetch_object($cres)) {
         printf("   <option value=\"%d\">%s %s</option>\n", $pos, $c->name, $c->owner != $me ? "(".$c->pname.")" : "(eigene)");
         if(is_premium_adressbook ()) {
           $js .= sprintf(" cities[%d] = new Array('%d','%d');\n", $pos, $c->x, $c->y);
@@ -574,7 +574,7 @@ ORDER BY owner != %d, owner, y
         </td>
       </tr>
       <tr>
-        <td><input type="radio" name="gtyp" value="2"> Plündern&nbsp;</td>
+        <td><input type="radio" name="gtyp" value="2"> PlÃ¼ndern&nbsp;</td>
         <td><input type="radio" name="gtyp" value="3"> Brandschatzen</td>
       </tr>
       <?
@@ -599,26 +599,26 @@ ORDER BY owner != %d, owner, y
     </table>
     </td>
     <td valign="top">
-    <input type="radio" name="tactic" value="2">Erstürmen<br />
+    <input type="radio" name="tactic" value="2">Erstï¿½rmen<br />
     <input type="radio" name="tactic" value="0" checked> Offensiv<br />
     <input type="radio" name="tactic" value="1"> Defensiv</td>
   </tr>
   <?php
   echo '<input type="hidden" name="from" value="'.$from.'">';
-  $res_cityunits = do_mysql_query("SELECT unit.id AS id,unit.name AS name,city.name AS cname, unit.cost as cost,count,speed,unit.type,unit.level,unit.religion ".
+  $res_cityunits = do_mysqli_query("SELECT unit.id AS id,unit.name AS name,city.name AS cname, unit.cost as cost,count,speed,unit.type,unit.level,unit.religion ".
   						          " FROM cityunit,unit,city ".
   						          " WHERE unit.id=cityunit.unit AND city.id=cityunit.city AND cityunit.city=".$from." AND cityunit.owner=".$_SESSION['player']->getID().
   						          " ORDER BY cityunit.unit");
 
-  if (mysql_num_rows($res_cityunits)==0) {
-    echo "<tr><td colspan='3' class='tblbody' style=\"padding-top:10px; padding-bottom:10px; font-weight:bold; color:red; text-align:center;\">Es sind keine Einheiten in  $cities->activecityname verfügbar!</td></tr>";
+  if (mysqli_num_rows($res_cityunits)==0) {
+    echo "<tr><td colspan='3' class='tblbody' style=\"padding-top:10px; padding-bottom:10px; font-weight:bold; color:red; text-align:center;\">Es sind keine Einheiten in " . $_SESSION['cities']->activecityname . " verfï¿½gbar!</td></tr>";
   }
   else {
     $elem_num = 0;
     $unitspeeds = "";
     
     // Den ersten Datensatz holen, damit der Stadtname bekannt ist
-    $data1 = mysql_fetch_assoc($res_cityunits);
+    $data1 = mysqli_fetch_assoc($res_cityunits);
     echo '<tr><td colspan="3" class="tblhead"><b>Eigene Truppen in '.$data1['cname'].'</b></td></tr>';
     do {
       echo "<tr class='tblbody'>\n";
@@ -634,7 +634,7 @@ ORDER BY owner != %d, owner, y
 
       $unitspeeds .= sprintf("unitspeeds[%d] = %d;\n", $elem_num, $data1['speed']);
       $elem_num++;
-    } while ($data1 = mysql_fetch_assoc($res_cityunits));
+    } while ($data1 = mysqli_fetch_assoc($res_cityunits));
   }
   ?>
   <script language="JavaScript">
@@ -643,18 +643,18 @@ ORDER BY owner != %d, owner, y
 //-->
 </script>
 <?
-// Aktuelle Stadt gewählt, verbündete stationierte Truppen anzeigen
-if ($from == $cities->getActiveCity()) {
-  $res2 = do_mysql_query("SELECT unit.id AS id,unit.name AS uname,count,owner,player.name AS pname FROM cityunit LEFT JOIN unit ON unit.id=cityunit.unit LEFT JOIN player ON player.id=cityunit.owner WHERE cityunit.city=".$from." AND cityunit.owner<>".$_SESSION['player']->getID()." ORDER BY owner, cityunit.unit");
-  if (mysql_num_rows($res2)>0) {
-    echo '<tr class="tblhead"><td colspan="3"><b>Verbündete Truppen</b></td></tr>';
-    while ($data2 = mysql_fetch_assoc($res2)) {
+// Aktuelle Stadt gewÃ¤hlt, verbÃ¼ndete stationierte Truppen anzeigen
+if ($from == $_SESSION['cities']->getActiveCity()) {
+  $res2 = do_mysqli_query("SELECT unit.id AS id,unit.name AS uname,count,owner,player.name AS pname FROM cityunit LEFT JOIN unit ON unit.id=cityunit.unit LEFT JOIN player ON player.id=cityunit.owner WHERE cityunit.city=".$from." AND cityunit.owner<>".$_SESSION['player']->getID()." ORDER BY owner, cityunit.unit");
+  if (mysqli_num_rows($res2)>0) {
+    echo '<tr class="tblhead"><td colspan="3"><b>VerbÃ¼ndete Truppen</b></td></tr>';
+    while ($data2 = mysqli_fetch_assoc($res2)) {
       echo "\n<tr class='tblbody'>\n";
       echo "<td>".$data2['uname']."</td>\n";
       echo "<td>".$data2['pname']."</td>\n";
-      // Anzahl und zurückschicken-Link
+      // Anzahl und zurÃ¼ckschicken-Link
       echo "<td>".$data2['count']."&nbsp;";
-      printf('<a href="?sendback=1&unit=%d&owner=%d" onClick="return confirm(\'Seid Ihr sicher, dass Ihr diese Einheiten zurückschicken wollt?\')"><img alt="Grafik fehlt" title="Einheit zum Besitzer zurückschicken" border="0" src="%s/%s"></a>', 
+      printf('<a href="?sendback=1&unit=%d&owner=%d" onClick="return confirm(\'Seid Ihr sicher, dass Ihr diese Einheiten zurÃ¼ckschicken wollt?\')"><img alt="Grafik fehlt" title="Einheit zum Besitzer zurÃ¼ckschicken" border="0" src="%s/%s"></a>', 
              $data2['id'], $data2['owner'], $imagepath, "delete.png");
       echo "</td>\n";
       echo "</tr>";
@@ -669,16 +669,16 @@ if ($from == $cities->getActiveCity()) {
     der <a href="library.php?open=0">Bibliothek</a> unter <b>Krieg und
     Kampf zu finden.</b>
     <h3>Truppen-Laufzeit</h3>
-    Die Laufzeit zur Zielstadt ist primär abhängig von der Entfernung
+    Die Laufzeit zur Zielstadt ist primï¿½r abhï¿½ngig von der Entfernung
     und Geschwindigkeit der langsamsten Einheit in der Armee.<br>
-    Je nach Größe der Armee dauert es zwischen <?php echo round(ARMY_TIME_TO_PREPARE/3600, 2); ?> Stunden
+    Je nach GrÃ¶ÃŸe der Armee dauert es zwischen <?php echo round(ARMY_TIME_TO_PREPARE/3600, 2); ?> Stunden
     und <?php echo round(ARMY_MAX_TIME/86400, 2); ?> Tagen (Realzeit), 
-    bis die Armee überhaupt losmarschiert (die sogenannte Vorbereitungszeit). 
-    Je 1.000 Mann erhöht sich die Laufzeit um <?php echo round(ARMY_TIME_PER_1000/60, 2); ?> Minuten, 
-    eine Armee benötigt aber mindestens <?php echo (ARMY_TIME_TO_PREPARE/60); ?> Minuten Vorbereitungszeit.
+    bis die Armee Ã¼berhaupt losmarschiert (die sogenannte Vorbereitungszeit). 
+    Je 1.000 Mann erhÃ¶ht sich die Laufzeit um <?php echo round(ARMY_TIME_PER_1000/60, 2); ?> Minuten, 
+    eine Armee benï¿½tigt aber mindestens <?php echo (ARMY_TIME_TO_PREPARE/60); ?> Minuten Vorbereitungszeit.
     
     <?php 
-    	// Ausgabe für Testrunden.
+    	// Ausgabe fÃ¼r Testrunden.
     	if (ARMY_SPEED_FACTOR > 10) 
     		echo "<h1 class='error'>Die Laufzeiten sind auf Faktor ".ARMY_SPEED_FACTOR.".</h1>"; 
    	?>
@@ -696,7 +696,7 @@ if ($from == $cities->getActiveCity()) {
 
 <?php
 // Fremdstationierungen anzeigen
-$res_garrison = do_mysql_query("SELECT x,y,cityunit.owner AS uowner, unit.id AS unitid, unit.name AS uname, unit.cost, cityunit.count,city.name AS cname, p1.name AS pname, city.id AS cid, city.owner AS cowner ".
+$res_garrison = do_mysqli_query("SELECT x,y,cityunit.owner AS uowner, unit.id AS unitid, unit.name AS uname, unit.cost, cityunit.count,city.name AS cname, p1.name AS pname, city.id AS cid, city.owner AS cowner ".
                       " FROM unit,cityunit,city,map,player AS p1,player AS p2 ".                     
                       " WHERE map.id=city.id AND unit.id=cityunit.unit AND cityunit.city=city.id AND p1.id=city.owner AND p1.id<>p2.id AND p2.id=cityunit.owner AND p2.id=".$_SESSION['player']->getID().
                       " ORDER BY city.id,unitid");
@@ -711,8 +711,8 @@ $cid = "";
   <tr class="tblhead"><td colspan="3"><strong>In folgenden fremden St&auml;dten wurden Truppen stationiert:</strong></td></tr>
   <tr class="tblbody"><td colspan="3">&nbsp;</td></tr>
   <?php 
-  if (mysql_num_rows($res_garrison) > 0) {
-  	while($data=mysql_fetch_assoc($res_garrison)) {
+  if (mysqli_num_rows($res_garrison) > 0) {
+  	while($data=mysqli_fetch_assoc($res_garrison)) {
   	  if($cid != $data['cid']) {
     	echo '<tr><td colspan="3" class="tblhead">'.
         '<a href="javascript:towninfo(\''.$data['cid'].'\')">'.$data['cname']."</a> ".
@@ -737,7 +737,7 @@ $cid = "";
   	}
   }
   else {
-  	echo "<tr class=\"tblbody\"><td colspan=\"3\" style=\"text-align:center;\"><br /><strong style=\"color:red\">Sie haben keine Truppen in fremden Städten stationiert!</strong><br /><br /></td></tr>";
+  	echo "<tr class=\"tblbody\"><td colspan=\"3\" style=\"text-align:center;\"><br /><strong style=\"color:red\">Sie haben keine Truppen in fremden StÃ¤dten stationiert!</strong><br /><br /></td></tr>";
   }
   ?>
  </table>

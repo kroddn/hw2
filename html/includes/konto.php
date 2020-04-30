@@ -22,7 +22,7 @@
     Former copyrights see below.
  **************************************************************************/
  ?>
-<h2>ACHTUNG: unsere Konto-Nr. hat sich geändert!</h2>
+<h2>ACHTUNG: unsere Konto-Nr. hat sich geÃ¤ndert!</h2>
 <table border="0" cellpadding="0" 
        style="font-size: 12px; font-family: monospace">
 <tr><td width="130">Inhaber:</td><td width="300">Markus Sinner</td></tr>
@@ -41,9 +41,9 @@ else {
 <tr><td colspan="2">&nbsp;</td><td>
 <tr><td>IBAN:</td><td>DE87 5535 0010 0004 3053 65</td></tr>
 <tr><td>BIC (SWIFT-Code):</td><td>MALADE51WOR</td></tr>
-<tr><td colspan="2"><i>Beim IBAN/BIC-Verfahren aus nicht-EU-Ländern bitte OUR als Zahlungstyp angeben!</i></td></tr>
+<tr><td colspan="2"><i>Beim IBAN/BIC-Verfahren aus nicht-EU-LÃ¤ndern bitte OUR als Zahlungstyp angeben!</i></td></tr>
 </table>
 <h2>Zahlung per Paypal</h2>
-Holy-Wars 2 unterstützt <img src="http://pics.ebaystatic.com/aw/pics/paypal/logoPaypal.gif">.<br>
-Um eine Zahlung vorzunehmen, überweisen Sie den Betrag an <img src="images/email3.png">.
-Vergessen Sie auch dabei nicht, Ihre HW2 ID und den gewünschten Premium-Account mit anzugeben.<br>
+Holy-Wars 2 unterstÃ¼tzt <img src="https://pics.ebaystatic.com/aw/pics/paypal/logoPaypal.gif">.<br>
+Um eine Zahlung vorzunehmen, Ã¼berweisen Sie den Betrag an <img src="images/email3.png">.
+Vergessen Sie auch dabei nicht, Ihre HW2 ID und den gewï¿½nschten Premium-Account mit anzugeben.<br>

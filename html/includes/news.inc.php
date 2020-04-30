@@ -37,13 +37,13 @@ function print_news($limit) {
     $limit = 8;
     
   echo '<table align="center" border="0" width="90%"><tr><td>';
-  $res = do_mysql_query ("SELECT id,text,topic,from_unixtime(time) as time FROM news ORDER BY id DESC LIMIT ".$limit);
-  if (mysql_num_rows($res)<1) {
+  $res = do_mysqli_query ("SELECT id,text,topic,from_unixtime(time) as time FROM news ORDER BY id DESC LIMIT ".$limit);
+  if (mysqli_num_rows($res)<1) {
     echo "Keine News!";
   }
   else {
     echo "<ul style=\"padding-left: 5px;\">\n";
-    while ($news = mysql_fetch_assoc($res)) {
+    while ($news = mysqli_fetch_assoc($res)) {
       echo "<li><b>".$news['topic']."</b> (".$news['time'].")<br>".$news['text'];      
     } // while
     echo "</ul>\n";

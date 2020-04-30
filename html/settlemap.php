@@ -33,7 +33,7 @@ if(!isset($radius)) $radius = getSettleRadius();
 
 // Einzeichnen.
 if(isset($_REQUEST['map'])) {
-  $remote = FALSE !== stristr($_REQUEST['map'], "http://");
+  $remote = FALSE !== stristr($_REQUEST['map'], "https://");
   if($remote) {    
     die("Forbidden: no remote maps allowed");
   }
@@ -55,7 +55,7 @@ if($_REQUEST['img'] == 1) {
   for($reli = 1; $reli <= 2; $reli++) {
     for($p = 0; $p < 3; $p++) {
       $where = getStartPos($p, $reli, $radius, $sx, $sy);
-      // $count = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM startpositions WHERE ".$where);
+      // $count = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM startpositions WHERE ".$where);
       if($reli == 1) $loc[$p]   = $where;
       else           $loc[5-$p] = $where;
     }

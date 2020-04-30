@@ -31,20 +31,20 @@
  * This File must not be used without permission
  ***************************************************/
 
-// Funktionen für Premium-Accounts
+// Funktionen fÃ¼r Premium-Accounts
 //
-// die Daten für Premiem-Accounts des Spielers befinden
+// die Daten fÃ¼r Premiem-Accounts des Spielers befinden
 // sich in einer Extra-Tabelle "premiumacc"
 
-// Tabelledefinition und erklärung siehe sql/premium.sql
+// Tabelledefinition und erklï¿½rung siehe sql/premium.sql
 
-// für defines benötigt
+// fÃ¼r defines benï¿½tigt
 include_once("includes/db.config.php");  
 
-// --- Konstanten für Werbefreie Accs ---
-// Normalerweise sind für ein FLAG auch alle darunterliegenden Flags
-// gesetzt. Ausnahme ist biesher NOADS, das kann man "ausschalten" für
-// Leute, die Zusätzlich zum Premium-Acc doch noch Werbebanner klicken
+// --- Konstanten fÃ¼r Werbefreie Accs ---
+// Normalerweise sind fÃ¼r ein FLAG auch alle darunterliegenden Flags
+// gesetzt. Ausnahme ist biesher NOADS, das kann man "ausschalten" fÃ¼r
+// Leute, die ZusÃ¤tzlich zum Premium-Acc doch noch Werbebanner klicken
 // wollen.
 define("PREMIUM_NOADS",  1);
 define("PREMIUM_LITE",   2);
@@ -57,23 +57,23 @@ define("XMAS_END", 1135638172);
 
 
 /**
- * Liefere eine Zeile/Array mit dem aktuell laufenden Premium-Datensatz zurück.
- * Die gültigen Datensätze werden nach Type sortiert, damit immer der "beste"
+ * Liefere eine Zeile/Array mit dem aktuell laufenden Premium-Datensatz zurÃ¼ck.
+ * Die gÃ¼ltigen DatensÃ¤tze werden nach Type sortiert, damit immer der "beste"
  * Premium-Account aktiviert wird.
  */
 function get_premium_row($pid) 
 {
-  // Hole den den neuesten gültigen Datensatz
-  $result = do_mysql_query ("SELECT type,expire,payd FROM premiumacc ".
+  // Hole den den neuesten gÃ¼ltigen Datensatz
+  $result = do_mysqli_query ("SELECT type,expire,payd FROM premiumacc ".
                             " WHERE player = ".intval($pid)." AND type > 0 AND start < UNIX_TIMESTAMP() ".
                             "   AND (expire > UNIX_TIMESTAMP() OR expire = 0) ".
                             " ORDER BY type DESC, expire!=0, expire DESC LIMIT 1");
-  return mysql_fetch_array($result);
+  return mysqli_fetch_array($result);
 }
 
 
 /**
- * Diese Funktion returniert die akutell gültigen
+ * Diese Funktion returniert die akutell gÃ¼ltigen
  * Premium-Flags des Spielers
  **/
 function get_premium_flags($pid) {
@@ -88,7 +88,7 @@ function get_premium_flags($pid) {
 
 
 /**
- * Ablaufdatum des Accounts als TIMESTAMP zurückliefern
+ * Ablaufdatum des Accounts als TIMESTAMP zurÃ¼ckliefern
  */
 function get_premium_payd($pid) {
   $flag = get_premium_row($pid);
@@ -101,7 +101,7 @@ function get_premium_payd($pid) {
 }
 
 /**
- * Ablaufdatum des Accounts als TIMESTAMP zurückliefern
+ * Ablaufdatum des Accounts als TIMESTAMP zurÃ¼ckliefern
  */
 function get_premium_expire($pid) {
   $flag = get_premium_row($pid);
@@ -114,7 +114,7 @@ function get_premium_expire($pid) {
 }
 
 /**
- * Ablaufdatum des Accounts als Datum/Uhrzeit String zurückliefern
+ * Ablaufdatum des Accounts als Datum/Uhrzeit String zurÃ¼ckliefern
  */
 function get_premium_expire_string($expire)
 {
@@ -220,7 +220,7 @@ function get_message_archive_size () {
 
 /** 
  * Die maximale Sitzungsdauer, nach der man rausgeworfen wird
- * (unabhängig von der Session-Livetime des Apache) (normalerweise 60 Minuten)
+ * (unabhï¿½ngig von der Session-Livetime des Apache) (normalerweise 60 Minuten)
  */
 function get_premium_session_time() {
   global $premium_flags, $premium_expire;
@@ -228,7 +228,7 @@ function get_premium_session_time() {
   if(defined("OLD_GAME") && OLD_GAME)     $default = 1200; // OLD
   else if( defined("HISPEED") && HISPEED) $default = 600;  // HiSpeedrunde
   else if( defined("SPEED") && SPEED)     $default = 1800; // Speedrunde
-  else                                    $default = 3600; // Normale Session-Länge
+  else                                    $default = 3600; // Normale Session-Lï¿½nge
   
   // Den Ablauf des PA einberechnen.
   $max = max($premium_expire-time(), $default);

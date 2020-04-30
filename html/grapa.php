@@ -27,18 +27,7 @@ start_body();
 <hr>
 <p>
 <div align="center">
-<? 
-$timemod = time() % 3600;
-if($timemod < 1200){
-  include("includes/ebay.flash.html");
-  echo "</div>";
-}
-else {
-    include("ads/sponsorads-leaderboard.php");
-    echo "</div>";
-    include("ads/sponsorads-framelayer.php");
-}
-?>
+
 </td></tr>
 
 </table>

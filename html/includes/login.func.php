@@ -21,13 +21,13 @@
 
     Former copyrights see below.
  **************************************************************************/
-
+ob_start();
 /**
  * Einen Spieler einloggen
  * 
  * @param $loginname     Account login
  * @param $loginpassword Account Passwort im Klartext
- * @param $sec_code      Security Code. Muss mit $_SESSION['sec_key'] übereinstimmen, falls dieser gesetzt ist.
+ * @param $sec_code      Security Code. Muss mit $_SESSION['sec_key'] Ã¼bereinstimmen, falls dieser gesetzt ist.
  * @param $nopw          Falls true, wird ohne Passwortvergleich eingeloggt
  * 
  * @return null bei Erfolg, einen String mit einer Fehlermeldung andernfalls
@@ -51,7 +51,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   include_once("includes/cities.class.php");
   include_once("includes/session.inc.php");
   include_once("includes/db.class.php");
-  //  include_once("includes/banner.inc.php");
+  include_once("includes/banner.inc.php");
   include_once("includes/browser.inc.php");
   include_once("includes/premium.inc.php");
   include_once("includes/sms.func.php");
@@ -62,11 +62,12 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   $loginerror = null;
   
   if (checkBez($loginname, 2, 40)) {
-    $sql_login = do_mysql_query("SELECT id, login, name, password, status, hwstatus, statusdescription, activationkey, holiday FROM player WHERE login = '".mysql_escape_string($loginname)."'");
-    if ($db_login = mysql_fetch_assoc($sql_login)) {
+    $sql_login = do_mysqli_query("SELECT id, login, name, password, status, hwstatus, statusdescription, activationkey, holiday FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
+    if ($db_login = mysqli_fetch_assoc($sql_login)) {
+      if ($db_login['status'] == "") { $db_login['status'] = 0; }
       $agent  = getenv('HTTP_USER_AGENT');
-      do_mysql_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".
-                     "VALUES (".$db_login['id'].",'".mysql_escape_string($loginname)."','".md5($loginpassword)."','".$db_login['password']."','".$db_login['status']."','".mysql_escape_string($sec_code)."','".$_SESSION['sec_key']."', UNIX_TIMESTAMP(),'".getenv('REMOTE_ADDR')."', '".mysql_escape_string($agent)."', '".session_id()."')");
+      do_mysqli_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".
+                     "VALUES (".$db_login['id'].",'".mysqli_escape_string($GLOBALS['con'], $loginname)."','".md5($loginpassword)."','".$db_login['password']."','".$db_login['status']."','".mysqli_escape_string($GLOBALS['con'], $sec_code)."','".$_SESSION['sec_key']."', UNIX_TIMESTAMP(),'".getenv('REMOTE_ADDR')."', '".mysqli_escape_string($GLOBALS['con'], $agent)."', '".session_id()."')");
 
       $GLOBALS['premium_flags']  = get_premium_flags ($db_login['id']);
       $GLOBALS['premium_expire'] = get_premium_expire($db_login['id']);
@@ -74,10 +75,9 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
       
       $secure = defined('NO_SECURITY') && NO_SECURITY || isset($_SESSION['sec_key']) && !strcmp($sec_code, $_SESSION['sec_key']) || $GLOBALS['premium_flags'] & PREMIUM_PRO;
       if ($secure) {
-        session_unregister("sec_key");
-        
+        unset($_SESSION['sec_key']);
         if ( $nopw || md5($loginpassword) == $db_login['password']) {
-          // Einloggen für aktivierte, nicht aktivierte und verdächtige Accounts zulassen
+          // Einloggen fÃ¼r aktivierte, nicht aktivierte und verdÃ¤chtige Accounts zulassen
           if ($db_login['status'] == NULL || $db_login['status'] == 3 || $db_login['status'] == 1) {
             if ($db_login['holiday'] < time()) 
             {
@@ -87,21 +87,21 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
               if(!check_round_startet() && $db_login['hwstatus'] != 63)
                 return "Die Runde hat noch nicht begonnen!";
                 
-              // Löschmarkierung zurücksetzen
-              do_mysql_query("UPDATE player SET markdelete=0 where id=".$db_login['id']);
+              // LÃ¶schmarkierung zurÃ¼cksetzen
+              do_mysqli_query("UPDATE player SET markdelete=0 where id=".$db_login['id']);
               
               if ( $db_login['password'] != NULL && $db_login['status'] != 1) {
-                do_mysql_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
+                do_mysqli_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
               }
               
-              // Prüfen, ob der Account schon 'name' gesetzt hat.
-              // falls nicht, dann den Auswahlbildschirm hierfür anzeigen
+              // Prï¿½fen, ob der Account schon 'name' gesetzt hat.
+              // falls nicht, dann den Auswahlbildschirm hierfÃ¼r anzeigen
               if($db_login['name'] == null) {
                 // Weiter unten wird die Variable wieder ausgewertet
                 $_SESSION['db_login'] = $db_login;
                 //$_SESSION['selectname'] = true;
-                header("Location: choose_name.php");
-                //include("choose_name.php");
+                header_redirect("choose_name.php"); 
+                
                 exit();
               }
               else {
@@ -113,6 +113,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
 
                 // Player anlegen
                 $player = new Player($db_login['id'], session_id());
+
                 $_SESSION['player']= $player;
                 
                 // Multi-Falle
@@ -121,12 +122,12 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                   multi_trap($player);
                 }
                 
-                // Abhängig von Spielereinstellung Map instanziieren
+                // Abhï¿½ngig von Spielereinstellung Map instanziieren
                 $map = MapFactory($player);
                 $map->centerOnCapital($player->getID());
                 $_SESSION['map'] = $map;
 
-                // Diverse Klassen für die Session initialisieren
+                // Diverse Klassen fÃ¼r die Session initialisieren
                 $cities = new Cities($player->getID(),$player->getReligion());
                 $_SESSION['cities'] = $cities;
 
@@ -151,7 +152,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 if($GLOBALS['hwathome']==1) {
                   $_SESSION['hwathome'] = 1;                
                 }
-                do_mysql_query("UPDATE player SET cc_messages=0, lastseen=UNIX_TIMESTAMP() where id=".$db_login['id']);
+                do_mysqli_query("UPDATE player SET cc_messages=0, lastseen=UNIX_TIMESTAMP() where id=".$db_login['id']);
                 $_SESSION['player']->updatelastclick();
 
                 
@@ -170,19 +171,19 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 $my_own_db = new DB("mysql");
                 $_SESSION['my_own_db'] = $my_own_db;
                 
-                $banner = $_SESSION['my_own_db']->query_fetch_array("SELECT banner_id FROM ".BANNER_TABLE." WHERE (expiretime IS NULL OR expiretime > ".time().") ORDER BY ".$my_own_db->random_function_name()." LIMIT 1");
-                $_SESSION['ad']->banner_id = $banner[0];
-                $_SESSION['ad']->magic = md5(rand());
+                //$banner = $_SESSION['my_own_db']->query_fetch_array("SELECT banner_id FROM ".BANNER_TABLE." WHERE (expiretime IS NULL OR expiretime > ".time().") ORDER BY ".$my_own_db->random_function_name()." LIMIT 1");
+                //$_SESSION['ad']->banner_id = $banner[0];
+                //$_SESSION['ad']->magic = md5(rand());
                 
                 check_sms_settings();
                 
                 logBrowser();
 
                 if($_SESSION['player']->isAdmin()) {
-                  header("Location: index.php");
+                  header_redirect("index.php");
                 }
                 else {
-                  header("Location: index.php");
+                  header_redirect("index.php");
                 }
                 
                 exit(0);
@@ -202,13 +203,13 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
       } // Security
       else {
         if (!isset($_SESSION['sec_key']) || strlen($_SESSION['sec_key']) < 1) {
-          $loginerror = "Cookie Fehler: der Security Code konnte nicht überprüft werden.<br> ".
-            "Ihr Browser sendet offensichtlich kein gültiges Cookie. Überprüfen Sie die Einstellungen und löschen Sie gegebenenfalls Ihre Cookies.";
+          $loginerror = "Cookie Fehler: der Security Code konnte nicht Ã¼berprï¿½ft werden.<br> ".
+            "Ihr Browser sendet offensichtlich kein gÃ¼ltiges Cookie. Ã¼berprÃ¼fen Sie die Einstellungen und lÃ¶schen Sie gegebenenfalls Ihre Cookies.";
         }
         else {
-          $loginerror = "Security Code falsch oder gar nicht eingegeben! Falls dieser Fehler öfter auftritt ".
+          $loginerror = "Security Code falsch oder gar nicht eingegeben! Falls dieser Fehler ï¿½fter auftritt ".
             "<a target=\"_new\" href=\"http://forum.holy-wars2.de/viewtopic.php?t=6876\">_HIER_</a> klicken.<br>".
-            "Premium-Pro-User können OHNE Security-Code einloggen!";
+            "Premium-Pro-User kÃ¶nnen OHNE Security-Code einloggen!";
         }
 
       }
@@ -216,10 +217,11 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
     else {$loginerror = "Es existiert kein Account mit diesem Login!<br>Habt Ihr vielleicht Spielername und Login verwechselt?";}
   }
   else {
-    $loginerror = "Ungültige Zeichen im Login!";
+    $loginerror = "UngÃ¼ltige Zeichen im Login!";
   }
   
   
   return $loginerror;
 } // function
+ob_end_flush();
 ?>

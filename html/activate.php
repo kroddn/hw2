@@ -37,12 +37,12 @@ $imagepath = "images/ingame";
 $csspath = "images/ingame/css";
 
 if($activate) {
-  $sql_login = do_mysql_query("SELECT id, status, activationkey FROM player WHERE login = '".mysql_escape_string($loginname)."'");
-  if(mysql_num_rows($sql_login)>0) {
-    $db_login = mysql_fetch_assoc($sql_login);
+  $sql_login = do_mysqli_query("SELECT id, status, activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
+  if(mysqli_num_rows($sql_login)>0) {
+    $db_login = mysqli_fetch_assoc($sql_login);
     if ($db_login['status']==1) {
       if ($activationcode == $db_login['activationkey']) {
-        do_mysql_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']);
+        do_mysqli_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']);
         echo "<tr><td colspan='3' valign='top' align='center'><div class='error'><h1>Ihr Account wurde erfolgreich aktiviert!</h2></div><br>\n";
         echo "<a href='login.php?name=".urlencode($loginname)."'>Zum Login</a>";
         die("</td></tr></table> <!-- Start-Header-Table -->");
@@ -53,10 +53,10 @@ if($activate) {
       }
     } // $db_login['status']==1
     else if ($db_login['status'] == null) {
-      $activationerror = "Ihr Account ist bereits aktiviert, Sie kˆnnen sich also ganz normal einloggen.";
+      $activationerror = "Ihr Account ist bereits aktiviert, Sie k√∂nnen sich also ganz normal einloggen.";
     }
     else {
-      $activationerror = "Ihr Accountstatus l‰sst keine Aktivierung zu.";
+      $activationerror = "Ihr Accountstatus l√§sst keine Aktivierung zu.";
     }
   }
   else {$activationerror = "Es existiert kein Account mit diesem Login!";}
@@ -68,7 +68,7 @@ if( defined("NEW_ACTIVATION") && NEW_ACTIVATION)
 <tr><td colspan="3" valign="top" class="tblhead">
 <center>
 <div style="width: 500px; font-size: 12px; ">
-Um Ihren Account vollst‰ndig zu aktivieren, folgen Sie entweder den Anweisungen
+Um Ihren Account vollst√§ndig zu aktivieren, folgen Sie entweder den Anweisungen
 aus der Email nach der Registrierung oder loggen Sie sich wie
 gewohnt ein und folgen Sie dort den Aktivierungsanweisungen.
 <p></p>
@@ -105,7 +105,7 @@ else
 
 </table>
 <br><input type="submit" value=" aktivieren " name="activate">
-<input type="button" onClick="window.location.href='index.php';" value=" zur¸ck ">
+<input type="button" onClick="window.location.href='index.php';" value=" zur√ºck ">
 </div>
 </form>
 <p>
@@ -113,7 +113,7 @@ else
 <div style="width: 480px; padding: 5px; background-color: #D0D000;">Sie haben immernoch keine Aktivierungsmail erhalten?<br>
 Normalerweise sollte die Email innerhalb von wenigen Minuten bei Ihnen sein,<br>
 gedulden Sie sich also noch einen Moment.<p>
-Sollte innerhalb der n‰chsten Stunden wider Erwarten <b>keine Email</b><br>
+Sollte innerhalb der n√§chsten Stunden wider Erwarten <b>keine Email</b><br>
 eintreffen, dann liegt wohl ein Problem beim Versand vor. Wenden Sie sich<br>
 bitte per Email an einen Multihunter oder besuchen Sie den IRC,<br>
 unter Angabe Ihres Logins und der Email-Adresse, unter der Sie sich angemeldet haben.
@@ -125,7 +125,6 @@ unter Angabe Ihres Logins und der Email-Adresse, unter der Sie sich angemeldet h
 
 <p>
 <div align="center" style="height: 120px; width: 800px; ">
-<? include("ads/openinventory_728x90.php"); ?>
 </div>
 
 </body>

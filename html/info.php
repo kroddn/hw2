@@ -30,6 +30,10 @@ include_once("includes/player.class.php");
 
 // Seite starten
 start_page();
+$id = $_GET['id'];
+$name = $_GET['name'];
+$show = $_GET['show'];
+$exactmatch = $_GET['exactmatch'];
 ?>
 
 <script language="JavaScript">
@@ -68,31 +72,31 @@ if(isset($name) && (!isset($id))) {
         else {
           if($_SESSION['player']->isMaintainer() && strpos($name, "@") !== FALSE)
           {
-            $name = mysql_escape_string($name);
-            $res = do_mysql_query("SELECT id FROM player WHERE email LIKE '%".$name."%' ".
+            $name = mysqli_escape_string($GLOBALS['con'], $name);
+            $res = do_mysqli_query("SELECT id FROM player WHERE email LIKE '%".$name."%' ".
                                     " ORDER BY name != '".$name."' LIMIT 20 ");
 
           }
           // Suche nach IP-Adresse, 4 Mal Zahlen mit Punkt getrennt
-          else if($_SESSION['player']->isMaintainer() && eregi('[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+', $name) !== FALSE)
+          else if($_SESSION['player']->isMaintainer() && preg_match('/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/i', $name))
           {
-            $name = mysql_escape_string($name);
-            $res = do_mysql_query("SELECT DISTINCT p.id FROM log_login l LEFT JOIN player p ON p.login=l.name".
+            $name = mysqli_escape_string($GLOBALS['con'], $name);
+            $res = do_mysqli_query("SELECT DISTINCT p.id FROM log_login l LEFT JOIN player p ON p.login=l.name".
                                     " WHERE l.ip LIKE '%".$name."%' ".
                                     " LIMIT 20 ");
 
           }
           else {
-            $name = mysql_escape_string($name);
+            $name = mysqli_escape_string($GLOBALS['con'], $name);
             $mask = isset($_REQUEST['exactmatch']) ? $name : "%".$name."%";
             
-            $res = do_mysql_query("SELECT id FROM player WHERE name LIKE '$mask' ".
+            $res = do_mysqli_query("SELECT id FROM player WHERE name LIKE '$mask' ".
             ($_SESSION['player']->isMaintainer() ? " OR login LIKE '$mask'" : "").
                                   " ORDER BY name != '".$name."' LIMIT 10 ");
           }
         }
 
-        while ($data = mysql_fetch_assoc($res)) {
+        while ($data = mysqli_fetch_assoc($res)) {
           if ($count>1) {
             echo "\n<hr>";
           }
@@ -103,10 +107,10 @@ if(isset($name) && (!isset($id))) {
         
         break; // player
       case "clan" :
-        $name = mysql_escape_string($name);
-        $res = do_mysql_query("SELECT id FROM clan WHERE name like '%".$name."%' LIMIT 10");
+        $name = mysqli_escape_string($GLOBALS['con'], $name);
+        $res = do_mysqli_query("SELECT id FROM clan WHERE name like '%".$name."%' LIMIT 10");
 
-        while ($data = mysql_fetch_assoc($res)) {
+        while ($data = mysqli_fetch_assoc($res)) {
           if ($count>1) {
             echo "\n<hr>";
           }
@@ -116,8 +120,8 @@ if(isset($name) && (!isset($id))) {
         }
         break;
       case "town":
-        $res = do_mysql_query("SELECT id FROM city WHERE name like '%".$name."%' ORDER BY name != '".$name."' LIMIT 10");
-        while ($data = mysql_fetch_assoc($res)) {
+        $res = do_mysqli_query("SELECT id FROM city WHERE name like '%".$name."%' ORDER BY name != '".$name."' LIMIT 10");
+        while ($data = mysqli_fetch_assoc($res)) {
           if ($count>1) {
             echo "\n<hr>";
           }
@@ -137,7 +141,7 @@ else {
   else {
     switch ($show) {
     case "player": 
-      echo '<h1 class="error">Fehler: die Anzeige von Spielerdaten über deren ID wird aus Sicherheitsgründen nicht mehr unterstützt. Bitte melden Sie die Stelle, von wo aus dieser Aufruf stattgefunden hat, damit dieser Fehler behoben werden kann.</h1><p>'; 
+      echo '<h1 class="error">Fehler: die Anzeige von Spielerdaten Ã¼ber deren ID wird aus SicherheitsgrÃ¼nden nicht mehr unterstÃ¼tzt. Bitte melden Sie die Stelle, von wo aus dieser Aufruf stattgefunden hat, damit dieser Fehler behoben werden kann.</h1><p>'; 
       break; 
     
     case "town":   print_towninfo($id);   break;
@@ -151,7 +155,7 @@ if (isset($popup)) {
   echo '<br><br><a href="javascript:window.close()"><u>Schliessen</u></a>';
 }
 else {
-  echo '<br><br><a href="'.$HTTP_REFERER.'"><u>Zurück</u></a>';
+  echo '<br><br><a href="'.$HTTP_REFERER.'"><u>ZurÃ¼ck</u></a>';
 }
 ?>
 
@@ -172,8 +176,8 @@ function print_playerinfo ($id) {
   global $popup, $imagepath;
   $id = intval($id);
   
-  $res1 = do_mysql_query("SELECT avatar, status, p.id AS id, p.name, p.login, p.description AS descr, religion, sms, p.clan AS clanid, clan.name AS clanname, clan.id AS clanid FROM player AS p LEFT JOIN clan ON p.clan=clan.id WHERE p.id=".$id);
-  if ($data1 = mysql_fetch_assoc($res1)) {
+  $res1 = do_mysqli_query("SELECT avatar, status, p.id AS id, p.name, p.login, p.description AS descr, religion, sms, p.clan AS clanid, clan.name AS clanname, clan.id AS clanid FROM player AS p LEFT JOIN clan ON p.clan=clan.id WHERE p.id=".$id);
+  if ($data1 = mysqli_fetch_assoc($res1)) {
     if ($data1['religion'] == 1)
       $relstr = "Christentums";
     else
@@ -200,7 +204,7 @@ function print_playerinfo ($id) {
     $rowspan = 3;
     if($data1['clanid'] > 0) $rowspan+=1;
     
-	echo "</td></tr>\n<tr><td class=\"tblbody\" colspan=\"3\">".getReliImage($data1['religion'])." Anhänger des ".$relstr.'</td>';
+	echo "</td></tr>\n<tr><td class=\"tblbody\" colspan=\"3\">".getReliImage($data1['religion'])." Anhï¿½nger des ".$relstr.'</td>';
          
         echo '<td class="tblhead" rowspan="'.$rowspan.'" style="padding: 0px;" align="center">';
         if($data1['avatar']==2) 
@@ -234,9 +238,9 @@ function print_playerinfo ($id) {
 	echo "</table>\n";
 
 
-    // EIn Link für Multihunter
+    // EIn Link fÃ¼r Multihunter
     if ($_SESSION['player']->isMultihunter()) {
-      echo "<p>".get_href("Multihunter-Überprüfung", "multihunter.php?showid=".$data1['id'] );      
+      echo "<p>".get_href("Multihunter-ï¿½berprï¿½fung", "multihunter.php?showid=".$data1['id'] );      
       switch ($data1['status']) {
       case 2: echo "<br><b class='error'>Spieler bereits gesperrt</b>"; break;
       case 3: echo "<br><b class='error'>Spieler unter Verdacht</b>"; break;	
@@ -245,24 +249,24 @@ function print_playerinfo ($id) {
 
 	if($data1['descr']) {
 		echo "<table style=\"margin-top:10px;\" width=\"400\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\"><tr>\n";
-		echo "<td class=\"tblhead\"><strong>H&ouml;rt, was sein Botschafter verkündet:</strong></td></tr>\n";
+		echo "<td class=\"tblhead\"><strong>H&ouml;rt, was sein Botschafter verkï¿½ndet:</strong></td></tr>\n";
 		echo "<tr><td class=\"tblbody\">".bbCode($data1['descr'])."</td></tr>\n";
 		echo "</table>\n";
 	}
 
     echo "<table style=\"margin-top:10px;\" width=\"400\" cellpadding=\"1\" cellspacing=\"1\">\n";
-    echo "<tr><td width=\"40\" rowspan=\"2\"><img title=\"Alle Städte zeigen\" src=\"".$imagepath."/windrose_klein.gif\" onclick=\"minimapname('".urlencode($data1['name'])."');\"></td><td class=\"tblhead\" width=\"100%\"><strong>".$data1['name']."s St&auml;dte</strong></td></tr>\n";
+    echo "<tr><td width=\"40\" rowspan=\"2\"><img title=\"Alle StÃ¤dte zeigen\" src=\"".$imagepath."/windrose_klein.gif\" onclick=\"minimapname('".urlencode($data1['name'])."');\"></td><td class=\"tblhead\" width=\"100%\"><strong>".$data1['name']."s St&auml;dte</strong></td></tr>\n";
     echo "<tr><td class=\"tblbody\"><a href=\"#\" onclick=\"minimapname('".urlencode($data1['name'])."');\">Alle St&auml;dte auf einen Blick</a></td></tr>\n";
     echo "</table>\n";
     
     echo "<table cellpadding=\"1\" cellspacing=\"1\" width=\"400\" style=\"margin-top:10px;\">\n";
     echo "<tr class=\"tblhead\" style=\"font-weight:bold;\">";
-    echo "<td>Name</td><td>Koord</td><td>Stadtgr&ouml;ße</td><td>Religion</td><td>Aktion</td></tr>";
+    echo "<td>Name</td><td>Koord</td><td>Stadtgr&ouml;ï¿½e</td><td>Religion</td><td>Aktion</td></tr>";
 
-    $res2 = do_mysql_query("SELECT city.id,x,y,name,population,prosperity,religion,capital ".
+    $res2 = do_mysqli_query("SELECT city.id,x,y,name,population,prosperity,religion,capital ".
                            " FROM city LEFT JOIN map ON city.id=map.id ".
                            " WHERE city.owner=".$id." ORDER BY capital DESC, y ASC");
-    while ($data2 = mysql_fetch_assoc($res2)) {
+    while ($data2 = mysqli_fetch_assoc($res2)) {
       echo '<tr class="tblbody">';
       echo "<td><a href='info.php?"."show=town&id=".$data2['id']. ( isset($popup) ? "&popup=".$popup : "")."'>".( ($data2['capital']) ? "<font color=red>".$data2['name']."</font>" : $data2['name'] )."</a></td>";
       echo "<td>".get_href($data2['x']."/".$data2['y'], "map.php?gox=".$data2['x']."&goy=".$data2['y'])."</td>";
@@ -288,17 +292,17 @@ function print_claninfo ($id) {
   global $popup;
   $id = intval($id);
 
-  $res1 = do_mysql_query("SELECT name,description FROM clan WHERE id=".$id);
-  $data1 = mysql_fetch_assoc($res1);
+  $res1 = do_mysqli_query("SELECT name,description FROM clan WHERE id=".$id);
+  $data1 = mysqli_fetch_assoc($res1);
 
-  $res2 = do_mysql_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC");
+  $res2 = do_mysqli_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC");
 
 
   echo "<table width=\"400\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\"><tr>\n";
   echo "<td class=\"tblhead\" colspan=\"2\">\n";
   echo "<h3 style=\"margin-bottom:0px;\">".$data1['name']."</h3>\n";
   echo "</td></tr>\n";
-  $data2 = mysql_fetch_assoc($res2);
+  $data2 = mysqli_fetch_assoc($res2);
   if($data2['religion'] == 1) {
     echo "<tr><td class=\"tblbody\" colspan=\"2\">Verfechter des Christentums</td></tr>\n";
   } else {
@@ -313,13 +317,13 @@ function print_claninfo ($id) {
   echo "<tr><td class=\"tblhead\">Feinde</td></tr>";
   echo "<tr><td class=\"tblbody\">";
 
-  $resA = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$id);
-  $resB = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$id);
-  if(mysql_num_rows($resA) < 1 && mysql_num_rows($resB) < 1)
+  $resA = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$id);
+  $resB = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$id);
+  if(mysqli_num_rows($resA) < 1 && mysqli_num_rows($resB) < 1)
   echo "-";
-  while ($dataA = mysql_fetch_assoc($resA))
+  while ($dataA = mysqli_fetch_assoc($resA))
   echo "<a href=\"info.php?show=clan&name=".$dataA['name']."\">".$dataA['name']."</a><br />\n";
-  while ($dataB = mysql_fetch_assoc($resB))
+  while ($dataB = mysqli_fetch_assoc($resB))
   echo "<a href=\"info.php?show=clan&name=".$dataB['name']."\">".$dataB['name']."</a><br />\n";
 
   echo "</td></tr>\n";
@@ -328,36 +332,36 @@ function print_claninfo ($id) {
   echo "<tr><td class=\"tblhead\">Nichtangriffspakte</td></tr>";
   echo "<tr><td class=\"tblbody\">";
 
-  $resA = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$id);
-  $resB = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$id);
-  if(mysql_num_rows($resA) < 1 && mysql_num_rows($resB) < 1)
+  $resA = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$id);
+  $resB = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$id);
+  if(mysqli_num_rows($resA) < 1 && mysqli_num_rows($resB) < 1)
   echo "-";
-  while ($dataA = mysql_fetch_assoc($resA))
+  while ($dataA = mysqli_fetch_assoc($resA))
   echo "<a href=\"info.php?show=clan&name=".$dataA['name']."\">".$dataA['name']."</a><br />\n";
-  while ($dataB = mysql_fetch_assoc($resB))
+  while ($dataB = mysqli_fetch_assoc($resB))
   echo "<a href=\"info.php?show=clan&name=".$dataB['name']."\">".$dataB['name']."</a><br />\n";
    
   echo "</td></tr>\n";
 
-  // Bündnisse
-  echo "<tr><td class=\"tblhead\">Bündnisse</td></tr>";
+  // BÃ¼ndnisse
+  echo "<tr><td class=\"tblhead\">BÃ¼ndnisse</td></tr>";
   echo "<tr><td class=\"tblbody\">";
 
-  $resA = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$id);
-  $resB = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$id);
-  if(mysql_num_rows($resA) < 1 && mysql_num_rows($resB) < 1)
+  $resA = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$id);
+  $resB = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$id);
+  if(mysqli_num_rows($resA) < 1 && mysqli_num_rows($resB) < 1)
   echo "-";
-  while ($dataA = mysql_fetch_assoc($resA))
+  while ($dataA = mysqli_fetch_assoc($resA))
   echo "<a href=\"info.php?show=clan&name=".$dataA['name']."\">".$dataA['name']."</a><br />\n";
-  while ($dataB = mysql_fetch_assoc($resB))
+  while ($dataB = mysqli_fetch_assoc($resB))
   echo "<a href=\"info.php?show=clan&name=".$dataB['name']."\">".$dataB['name']."</a><br />\n";
   echo "</td></tr></table><br />\n";
 
   // Status
-  $res2 = do_mysql_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC, name");
+  $res2 = do_mysqli_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC, name");
   echo "<table width=\"400\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n";
   $cat = -1;
-  while ($data2 = mysql_fetch_assoc($res2)) {
+  while ($data2 = mysqli_fetch_assoc($res2)) {
     if($data2['clanstatus'] == 63)
     $clanstatus = "Ordensleiter";
     elseif($data2['clanstatus'] == 0)
@@ -376,7 +380,7 @@ function print_claninfo ($id) {
     else
     $religion = "Islam";
      
-    // Zeile anhängen falls immernoch derselbe clanstatus
+    // Zeile anhï¿½ngen falls immernoch derselbe clanstatus
     if($cat == $clanstatus) {
       echo "<tr><td class=\"tblbody\"><a href=\"info.php?show=player&name=".$data2['name']."\">".$data2['name']."</a></td><td class=\"tblbody\" style=\"text-align:right; padding-right:4px;\">".number_format($data2['points'],0,",",".")."&nbsp;Pt.</td><td class=\"tblbody\">".$religion."</td></tr>";
     }
@@ -395,11 +399,11 @@ function print_towninfo ($id) {
   global $popup;
   $id = intval($id);
   
-  $res1 = do_mysql_query("SELECT clan.name as clan, city.name AS cityname,player.name AS playername,player.id as playerid,population,capital,x,y,prosperity,city.religion as creligion ".
+  $res1 = do_mysqli_query("SELECT clan.name as clan, city.name AS cityname,player.name AS playername,player.id as playerid,population,capital,x,y,prosperity,city.religion as creligion ".
                          " FROM city LEFT JOIN player ON (player.id=city.owner) LEFT JOIN clan ON player.clan=clan.id LEFT JOIN map ON city.id=map.id ".
                          " WHERE city.id=".$id);
 
-  if ($data1 = mysql_fetch_assoc($res1)) {
+  if ($data1 = mysqli_fetch_assoc($res1)) {
     echo "<br> <br>";
     echo '<table><tr class="tblhead"><td colspan="2">Stadtinfo</td></tr>';
     echo "<tr class='tblbody'><td>Name</td><td>".$data1['cityname']."</tr>\n";
@@ -412,8 +416,8 @@ function print_towninfo ($id) {
       echo "<tr class='tblbody'><td>&nbsp;</td><td><b>Herrenlose</b> Stadt</td></tr>";
     }
 
-    // Die Bevölkerung nicht genau anzeigen
-    echo "<tr class='tblbody'><td>Stadtgr&ouml;ße</td><td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</tr>\n";    
+    // Die Bevï¿½lkerung nicht genau anzeigen
+    echo "<tr class='tblbody'><td>Stadtgr&ouml;ï¿½e</td><td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</tr>\n";    
 
     // Hauptstadt anzeigen
     if ($data1['capital'])
@@ -428,20 +432,20 @@ function print_towninfo ($id) {
     echo "<td>".get_href("Angreifen", "general.php?selectx=".$data1['x']."&selecty=".$data1['y']);
 
     if ($_SESSION['player']->isAdmin()) {
-      echo '&nbsp;&nbsp;<a onClick="return confirm(\'Diese Stadt löschen?\')" href="adminmaintain.php?citydelete='.$id.'">Löschen</a>';
+      echo '&nbsp;&nbsp;<a onClick="return confirm(\'Diese Stadt lÃ¶schen?\')" href="adminmaintain.php?citydelete='.$id.'">LÃ¶schen</a>';
     }
     
     echo "</td></tr>";
 
-    // Die näheste eigene Stadt bestimmen
-    echo "<tr class='tblbody'><td>Nahe Städte</td><td>";
-    $cit = do_mysql_query ("SELECT city.id,name,round(sqrt( (".$data1['x']."-x)*(".$data1['x']."-x)+(".$data1['y']."-y)*(".$data1['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." AND city.id != ".$id." ORDER BY dist LIMIT 3");
+    // Die nï¿½heste eigene Stadt bestimmen
+    echo "<tr class='tblbody'><td>Nahe StÃ¤dte</td><td>";
+    $cit = do_mysqli_query ("SELECT city.id,name,round(sqrt( (".$data1['x']."-x)*(".$data1['x']."-x)+(".$data1['y']."-y)*(".$data1['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." AND city.id != ".$id." ORDER BY dist LIMIT 3");
     
-    while ($city=mysql_fetch_assoc($cit)) {
+    while ($city=mysqli_fetch_assoc($cit)) {
       echo $city['name']." (".$city['dist'].")<br>";
     }
 
-    $num_atts = do_mysql_query_fetch_assoc("SELECT count(*) AS cnt FROM army WHERE army.end = ".$id.
+    $num_atts = do_mysqli_query_fetch_assoc("SELECT count(*) AS cnt FROM army WHERE army.end = ".$id.
                                            " AND owner = ".$_SESSION['player']->GetID());
     if($num_atts['cnt'] > 0) {
       echo '<tr class="tblbody"><td colspan="2">'.$num_atts['cnt'].

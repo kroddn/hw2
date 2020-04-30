@@ -46,13 +46,13 @@ $tick = getConfig("tick");
 echo "<!-- TICK: $tick; -->";
 
 $upt=time();
-$res5=do_mysql_query("SELECT lastres FROM player WHERE id = ".$_SESSION['player']->getID());
-while ($data5=mysql_fetch_assoc($res5)) {
+$res5=do_mysqli_query("SELECT lastres FROM player WHERE id = ".$_SESSION['player']->getID());
+while ($data5=mysqli_fetch_assoc($res5)) {
   $next = ($data5['lastres']+$tick)-$upt;
   $ticker = "<b>Verbleibende Zeit bis zum n&auml;chsten Tick: ".$next."</b>&nbsp;<span class=\"noerror\" id=\"1\"><script type=\"text/javascript\">addTimer(".$next.",1);</script></span>&nbsp;";
 }
 
-// Zuletzt gewählte Ansicht in Session speichern
+// Zuletzt gewÃ¤hlte Ansicht in Session speichern
 if(isset($show)) {
   $_SESSION['kingdom_lastshow'] = $show;
 }
@@ -70,12 +70,12 @@ else {
   <tr height="20" class="tblhead">
     <td <? printActive("city"); ?>><a href="<?php echo "$PHP_SELF?show=city"; ?>">Allgemeines</a></td>
     <td <? printActive("ressources"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=ressources"; ?>">Ressourcen</a></td>
-    <td <? printActive("weapons"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=weapons"; ?>">Rüstung/Militär  </a></td>
+    <td <? printActive("weapons"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=weapons"; ?>">RÃ¼stung/Militï¿½r  </a></td>
     <td <? printActive("gold"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=gold"; ?>">Goldbilanz</a></td>
-    <td <? printActive("build"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=build"; ?>">Gebäudebau</a></td>
+    <td <? printActive("build"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=build"; ?>">GebÃ¤udebau</a></td>
     <td <? printActive("troops"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=troops"; ?>">Truppenausbildung</a></td>
     <td <? printActive("wert"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=wert"; ?>">Buchwert</a></td>
-    <td <? printActive("troopoverview"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=troopoverview"; ?>">Truppenübersicht</a></td>
+    <td <? printActive("troopoverview"); ?>class="tblhead"><a href="<?php echo "$PHP_SELF?show=troopoverview"; ?>">Truppenï¿½bersicht</a></td>
   </tr>
 </table>
 
@@ -123,7 +123,7 @@ switch($show) {
 </div>
  
 <table width="500"><tr><td align="center">
-<? if (!is_premium_noads()) { ?>
+<? if (!is_premium_noads() and false) { ?>
 <!-- BEGIN PARTNER PROGRAM - DO NOT CHANGE THE PARAMETERS OF THE HYPERLINK -->
 <A STYLE="color: blue;" HREF="http://partners.webmasterplan.com/click.asp?ref=249139&site=3237&type=text&tnb=2" TARGET="_new">Flirt-Fever!
 Kostenlos anmelden und coole Leute mit Bild kennenlernen!<br></a><A HREF="http://partners.webmasterplan.com/click.asp?ref=249139&site=3237&type=text&tnb=2" TARGET="_new">Klick hier!<br></a><IMG SRC="http://banners.webmasterplan.com/view.asp?site=3237&ref=249139&b=0&type=text&tnb=2" BORDER="0" WIDTH="1" HEIGHT="1">

@@ -58,14 +58,14 @@ if(isset($_REQUEST['activatetutorial']) ) {
 
 if (isset($acceptsmsrules)) {
   if (!isset($ireadit) || $ireadit != 1) {
-    $errormsg = "Bitte stimmen Sie den Nutzungsbedingungen vollständig zu, indem Sie das entsprechende Feld ankreuzen.";
+    $errormsg = "Bitte stimmen Sie den Nutzungsbedingungen vollstÃ¤ndig zu, indem Sie das entsprechende Feld ankreuzen.";
   }
   else {
     $errormsg = accept_sms_rules();
   }
 }
 
-// Einstellungen ändern
+// Einstellungen Ã¤ndern
 if (isset($changesettings) || isset($savesettings)) {
   foreach($arr_settings as $i => $name) {
     $_SESSION['settings'][$name] = ($$name == 1);    
@@ -77,7 +77,7 @@ if (isset($changesettings) || isset($savesettings)) {
       $_SESSION['player']->saveSettings();
     }
     else {
-      $errormsg = "Die Möglichkeit des dauerhaften Abspeicherns ist Besitzern eines Premium-Accounts vorbehalten.";
+      $errormsg = "Die Mï¿½glichkeit des dauerhaften Abspeicherns ist Besitzern eines Premium-Accounts vorbehalten.";
     }
   }
 
@@ -98,16 +98,16 @@ if(isset($gfx_path_value)) {
 
   switch($gfx_path_value) {
     case "":
-      $errormsg = "Der übermittelte Grafikpfad war leer.";
+      $errormsg = "Der Ã¼bermittelte Grafikpfad war leer.";
       break;
       case "HOWLY4":
         //if (defined("TEST_MODE") && TEST_MODE) {
-          $gfx_path = "http://www.howlywood.de/holynewer/images/ingame_v4";
+          $gfx_path = "";
           break;
         //}
       case "SERVER4":
         if(defined("OLD_GAME")) {
-          $errormsg = "Diese Grafik-Version wird nur auf neueren Servern unterstützt.";
+          $errormsg = "Diese Grafik-Version wird nur auf neueren Servern unterstÃ¼tzt.";
         }
         else if (defined("TEST_MODE") && TEST_MODE) {
           $gfx_path = "images/ingame_v4";
@@ -160,15 +160,15 @@ if ( (!defined("SPEED") || !SPEED) && isset($holidaymode) && isset($holidayduran
     }
   }
   else {
-    $errormsg = "Sie müssen 'Ja' im Feld neben<br>der Länge des Urlaubs wählen";
+    $errormsg = "Sie mÃ¼ssen 'Ja' im Feld neben<br>der Lï¿½nge des Urlaubs wï¿½hlen";
   }
 }
 
 if (isset($changesms)) {
   $sms = trim($sms);
-  $sms = ereg_replace( "[^0-9a-zA-Z\+]", "", $sms );
+  $sms = preg_replace( "/[^0-9a-zA-Z\+]/", "", $sms );
   
-  // Falls die Nummer mit 01 anfängt ersetze die 0 durch +49
+  // Falls die Nummer mit 01 anfï¿½ngt ersetze die 0 durch +49
   if (substr($sms,0,2) == "01") {
     $sms = "+49".substr($sms, 1);
   }
@@ -177,21 +177,21 @@ if (isset($changesms)) {
   if (strlen($sms) == 0) {
     $_SESSION['player']->changeSMS(null);
   }
-  // RegEx Überprüfung der SMS-Nummer
+  // RegEx Ã¼berprï¿½fung der SMS-Nummer
   else if ( valid_sms_nr($sms) ) {
     $_SESSION['player']->changeSMS($sms);
   }
   else {
-    $errormsg = "Die SMS Empfangsnummer ist ungültig.";
+    $errormsg = "Die SMS Empfangsnummer ist ungÃ¼ltig.";
   }
 }
 
 
 if (isset($changesms_sender_nr)) {
   $sms_sender_number = trim($sms_sender_number);
-  $sms_sender_number = ereg_replace( "[^0-9a-zA-Z\+]", "", $sms_sender_number );
+  $sms_sender_number = preg_replace( "/[^0-9a-zA-Z\+]/", "", $sms_sender_number );
   
-  // Falls die Nummer mit 01 anfängt ersetze die 0 durch +49
+  // Falls die Nummer mit 01 anfï¿½ngt ersetze die 0 durch +49
   if (substr($sms_sender_number,0,2) == "01") {
     $sms_sender_number = "+49".substr($sms_sender_number, 1);
   }
@@ -200,13 +200,13 @@ if (isset($changesms_sender_nr)) {
   if (strlen($sms_sender_number) == 0) {
     $_SESSION['player']->changeSMSSenderNumber(null);
   }
-  // RegEx Überprüfung der SMS-Nummer
+  // RegEx Ã¼berprï¿½fung der SMS-Nummer
   else if ( valid_sms_nr($sms_sender_number) ) {
     $_SESSION['player']->changeSMSSenderNumber($sms_sender_number, 
                                                (isset($show_sender_nr) && $show_sender_nr == 1) );
   }
   else {
-    $errormsg = "Die Absenderkennung ist ungültig.";
+    $errormsg = "Die Absenderkennung ist ungÃ¼ltig.";
   }
 }
 
@@ -222,11 +222,11 @@ if (isset($change_desc) && isset($theText)) {
 
 if (isset($change_passwd)) {
   if(empty($oldpw) || empty($newpw1) || empty($newpw2))
-    $errormsg .= "Sie haben nicht alle Felder ausgefüllt.";
+    $errormsg .= "Sie haben nicht alle Felder ausgefï¿½llt.";
   else {
     $err = $_SESSION['player']->changePassword($oldpw, $newpw1, $newpw2);
     if($err == null) 
-      $infomsg = "Passwort erfolgreich geändert.";
+      $infomsg = "Passwort erfolgreich geÃ¤ndert.";
     else
       $errormsg .= $err;
   }
@@ -239,7 +239,7 @@ if ($multi_note && $multi_players) {
 
 if (isset($acc_delete_process)) {
     if(defined("HISPEED")) {
-      $errormsg = "Löschen in der HiSpeed deaktiviert.";
+      $errormsg = "LÃ¶schen in der HiSpeed deaktiviert.";
     }
     else {
       $del=true;
@@ -255,8 +255,8 @@ if (isset($acc_delete_process)) {
           RemovePlayer_old( $_SESSION['player']->getID() );
           
           session_destroy();
-          $message = "Ihr Account wurde gelöscht.";
-          header("location: index.php?message=".urlencode($message) );
+          $message = "Ihr Account wurde gelÃ¶scht.";
+          header_redirect("index.php?message=".urlencode($message) );
         }
       }
     }
@@ -267,7 +267,7 @@ if(isset($_POST['zitattext']) && isset($_POST['zitat'])) {
     $errormsg = "Zitattext zu kurz.";
   }
   else {
-    do_mysql_query("INSERT INTO zitate (player,text) VALUES ('".$_SESSION['player']->id."','".mysql_escape_string(strip_tags($_POST['zitattext']))."')");
+    do_mysqli_query("INSERT INTO zitate (player,text) VALUES ('".$_SESSION['player']->id."','".mysqli_escape_string($GLOBALS['con'], strip_tags($_POST['zitattext']))."')");
   }
 }
 
@@ -280,8 +280,8 @@ if(isset($_GET['delete'])) {
       $del=unlink($filename);
     }
     if($del) {
-      do_mysql_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
-      $infomsg = "Avatar gelöscht.";
+      do_mysqli_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
+      $infomsg = "Avatar gelÃ¶scht.";
     }
   }
 }
@@ -291,7 +291,7 @@ if ($_FILES['userfile']) {
 	$upload_dir = AVATAR_DIR; 
 	$errormsg = do_upload($upload_dir, $upload_url);
     if ($errormsg == null) 
-      $infomsg = "Der Upload war erfolgreich. Ein Namehunter wird ihren Avatar in Kürze freischalten!";
+      $infomsg = "Der Upload war erfolgreich. Ein Namehunter wird ihren Avatar in Kï¿½rze freischalten!";
 } 
 
 //avatar file handle
@@ -305,11 +305,11 @@ function do_upload($upload_dir, $upload_url) {
   $file_path = $upload_dir.$file_name; 
 
   if ( $file_name =="") { 
-    return "Ungültiger Dateiname"; 
+    return "UngÃ¼ltiger Dateiname"; 
   } 
     
   else if ( $file_size > 1024*50) { 
-    return "Die Datei ist größer als 50KB."; 
+    return "Die Datei ist grÃ¶ÃŸer als 50KB."; 
   } 
   else {
     $size = GetImageSize ($_FILES['userfile']['tmp_name']);
@@ -338,7 +338,7 @@ function do_upload($upload_dir, $upload_url) {
       ImageDestroy($im);
       $path=$upload_dir.$_SESSION['player']->id.".jpg";
       if (ImageJPEG($small,$path,100)) {
-        do_mysql_query("UPDATE player SET avatar='1' WHERE id='".$_SESSION['player']->id."'");
+        do_mysqli_query("UPDATE player SET avatar='1' WHERE id='".$_SESSION['player']->id."'");
       } 
       else {
         return "Fehler beim Umwandeln des Bildes.";
@@ -349,15 +349,15 @@ function do_upload($upload_dir, $upload_url) {
     }
   }
   // Alle Namehunter Informieren
-  $nhs = do_mysql_query("SELECT id FROM player WHERE hwstatus&8");
-  while($nh = mysql_fetch_assoc($nhs)) {
+  $nhs = do_mysqli_query("SELECT id FROM player WHERE hwstatus&8");
+  while($nh = mysqli_fetch_assoc($nhs)) {
     $sql = sprintf("INSERT INTO message (recipient,date,header,body,category) ".
                    "VALUES (%d,UNIX_TIMESTAMP(),'%s','%s',9)",
                    $nh['id'],
-                   "Neuer Avatar für ".($_SESSION['player']->getName()),
-                   "Es liegt ein Avatar für ".($_SESSION['player']->getName())." zur Freigabe bereit.");
-    do_mysql_query($sql);
-    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id = ".$nh['id']);
+                   "Neuer Avatar fÃ¼r ".($_SESSION['player']->getName()),
+                   "Es liegt ein Avatar fÃ¼r ".($_SESSION['player']->getName())." zur Freigabe bereit.");
+    do_mysqli_query($sql);
+    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id = ".$nh['id']);
   }
 
   return null;
@@ -398,7 +398,7 @@ if (!isset($_SESSION['settings_lastshow'])) {
   $_SESSION['settings_lastshow'] = "account";
 }
 
-// Default-Wert falls kein Menüpunkt gewählt ist
+// Default-Wert falls kein Menï¿½punkt gewÃ¤hlt ist
 if (!isset($show)) {
   $show = $_SESSION['settings_lastshow'];
 }
@@ -418,7 +418,7 @@ switch($show) {
    $showfunction();
    break;
  default:
-   // Kein gültiger Menüpunkt
+   // Kein gÃ¼ltiger Menï¿½punkt
    show_wrong();
    $_SESSION['settings_lastshow'] = $show="account";
    echo "<p>\n";
@@ -440,12 +440,12 @@ end_page();
 function show_settings_menu($show) {
   $hints = array("account" => "Einstellungen zum Account - Emailadresse, Passwort, Urlaubsmodus, Multi-Exceptions etc.",
                  "game" => "Einstellungen zur Spielfigur - Beschreibung, Nachrichten-Signatur und Avatar",
-                 "grapa" => "Grafikpack einrichten und Hauptmenü konfigurieren",
+                 "grapa" => "Grafikpack einrichten und Hauptmenï¿½ konfigurieren",
                  "sms" => "SMS-Absenderkennung oder Empfangsnummer einrichten, SMS-Kontingent verwalten oder freischalten ",
                  "premium" => "Premium-Account: Einstellungen einrichten und einsehen. Adressbuch einsehen.",
                  "ads" => "F&ouml;rdere HW2: HW2 Banner, Forensignatur" );
 ?>
-<!-- Menü -->
+<!-- Menï¿½ -->
 <table id="settings_menu" name="settings_menu" cellspacing = "1" cellpadding="0">
   <tr>
     <td onMouseOver="setClickHint('<? echo $hints['account']; ?>')" nowrap width="20%" <? if ($show=="account") echo 'class="active"';?>>
@@ -513,10 +513,10 @@ function show_settings_menu($show) {
 
 
 
-// Falsche Menüoption
+// Falsche Menï¿½option
 function show_wrong() { ?>
 <p>
-Diese Menüoption existiert nicht. 
+Diese Menï¿½option existiert nicht. 
 <? 
 } // show_wrong() 
 
@@ -529,7 +529,7 @@ function show_sms_acceptrules() {
 <tr class="tblbody">
  <td colspan="2" align="center">
    <table width="400"><tr><td>
-   <b>Zur Nutzung des SMS-Services von Holy-Wars 2 müssen Sie die 
+   <b>Zur Nutzung des SMS-Services von Holy-Wars 2 mÃ¼ssen Sie die 
    Nutzungsbedinungen akzeptieren.</b><br>
    Erst dann wird Ihnen der Zugang zu den Services freigeschaltet.<p>
    <hr>
@@ -556,24 +556,24 @@ function show_sms () {
 ?>
 
 <table id="settings">
-<tr class="tblhead_22"><td colspan="2"><h2><a name="sms_getnr">SMS Empfangsnummer ändern</a></h2></td></tr>
+<tr class="tblhead_22"><td colspan="2"><h2><a name="sms_getnr">SMS Empfangsnummer Ã¤ndern</a></h2></td></tr>
 <tr class="tblbody">
   <td colspan="2" align="center">
 <!-- SMS Conf Table -->
 <table width="468"><tr><td colspan="2">
-<b>Geben Sie hier Ihre Mobilfunknummer an, auf der Sie SMS empfangen können. 
-Andere Spieler können Ihnen dann SMSe senden. </b>
+<b>Geben Sie hier Ihre Mobilfunknummer an, auf der Sie SMS empfangen kÃ¶nnen. 
+Andere Spieler kÃ¶nnen Ihnen dann SMSe senden. </b>
 </td></tr>
 <tr><td>
 Die Nummer wird jedoch keinem Spieler
-angezeigt, ein Versand ist nur aus Holy-Wars 2 heraus möglich! Dies dient Ihrer
-Privatsphäre.<p>
+angezeigt, ein Versand ist nur aus Holy-Wars 2 heraus mÃ¶glich! Dies dient Ihrer
+Privatsphï¿½re.<p>
 <form name="theSMSForm" action="settings.php" method="post" target="main">
 <input type="text" name="sms" value="<? echo $_SESSION['player']->getSMS(); ?>">&nbsp;&nbsp;
-<input type="submit" name="changesms" value=" Ändern ">
+<input type="submit" name="changesms" value=" Ã¤ndern ">
 </form>
 <p>
-Zur Zeit können wir nur <b>Rufnummern aus Deutschland</b> annehmen.<br>
+Zur Zeit kÃ¶nnen wir nur <b>Rufnummern aus Deutschland</b> annehmen.<br>
 Geben Sie Ihre Nummer in der Form <b>0172 12345678</b> ein! 
 Das System bringt die Nummer dann automatisch in ein internationales
 Format mit +49 am Anfang (also nicht wundern).
@@ -593,12 +593,12 @@ Format mit +49 am Anfang (also nicht wundern).
 </tr>
 <tr><td colspan="2" align="center">
 <table width="468"><tr><td colspan="2">
-<b>Sie können an dieser Stelle eine
-Absenderkennung für den SMS-Versand einstellen.</b>
+<b>Sie kÃ¶nnen an dieser Stelle eine
+Absenderkennung fÃ¼r den SMS-Versand einstellen.</b>
 <br>
-Beim Empfänger einer HW2SMS
+Beim Empfï¿½nger einer HW2SMS
 wird dann Ihre Nummer anstelle der Nummer von Holy-Wars 2  angezeigt. Der
-Empfänger kann Ihnen dann direkt antworten.<P>
+Empfï¿½nger kann Ihnen dann direkt antworten.<P>
 <?
   if (is_premium_set_sms_sender()) {
 ?>
@@ -608,28 +608,28 @@ if ($_SESSION['player']->getSMSSenderNumber() == null) {
   echo "Geben Sie hier die Nummer ein.<br>\n";
 }
 else if ($_SESSION['player']->isValidSMSSenderNumber()) {
-  echo "Die eingestellte Nummer ist gültig und überprüft.<br>\n";
+  echo "Die eingestellte Nummer ist gÃ¼ltig und Ã¼berprï¿½ft.<br>\n";
 }
 else {
-  echo "<b class=\"error\">Die Nummer wurde noch nicht auf Gültigkeit überprüft</b>.".
+  echo "<b class=\"error\">Die Nummer wurde noch nicht auf GÃ¼ltigkeit Ã¼berprï¿½ft</b>.".
   " Wenden Sie sich an einen Administrator.<br>\n";
 }
 ?>
 <input type="text" name="sms_sender_number" value="<? echo $_SESSION['player']->getSMSSenderNumber(); ?>">
 &nbsp;&nbsp;
-<input type="submit" name="changesms_sender_nr" value=" Ändern "><br>
+<input type="submit" name="changesms_sender_nr" value=" Ã¤ndern "><br>
 <input <? if($_SESSION['player']->showSMSSenderNumber()) echo "checked"; ?>
  type="checkbox" name="show_sender_nr" value="1"> Nummer beim Versand anzeigen
 </form>
 <p>
-Zur Zeit können wir nur <b>Rufnummern aus Deutschland</b> annehmen.<br>
+Zur Zeit kÃ¶nnen wir nur <b>Rufnummern aus Deutschland</b> annehmen.<br>
 Geben Sie Ihre Nummer in der Form <b>0172 12345678</b> ein! 
 Das System bringt die Nummer dann automatisch in ein internationales
 Format mit +49 am Anfang (also nicht wundern).
 <?  
   }
   else {
-    echo '<h2 class="error">Sie dürfen leider keine Absenderkennung einstellen.</h2> Weiter Informationen '.
+    echo '<h2 class="error">Sie dÃ¼rfen leider keine Absenderkennung einstellen.</h2> Weiter Informationen '.
       'auf der <a href="premium.php">Premium-Account Informationsseite</a>.';
   } 
 ?>
@@ -648,11 +648,11 @@ Format mit +49 am Anfang (also nicht wundern).
 </td></tr>
 <tr class="tblbody">
 <td colspan="2" align="center">
-<b>Um einem Mitspieler eine SMS auf sein Empfangsgerät zu senden, müssen
+<b>Um einem Mitspieler eine SMS auf sein Empfangsgerï¿½t zu senden, mÃ¼ssen
 Sie Ihr Kontingent aufladen.</b><p>
-Beim Versand einer SMS über das Holy-Wars 2 SMS-System wird dann eine
+Beim Versand einer SMS Ã¼ber das Holy-Wars 2 SMS-System wird dann eine
 SMS von Ihrem Kontingent abgezogen.<br>
-Dies geschieht ähnlich einer Prepayd-Karte eines Mobilfunk-Anbieters.<p>
+Dies geschieht ï¿½hnlich einer Prepayd-Karte eines Mobilfunk-Anbieters.<p>
 Um Ihr SMS-Kontingent aufzuladen, nehmen Sie Kontakt mit einem<br>
 <a target="_blank" href="impressum.php">Holy-Wars 2 Administrator</a> auf.
 </td>
@@ -663,9 +663,9 @@ Um Ihr SMS-Kontingent aufzuladen, nehmen Sie Kontakt mit einem<br>
 <tr class="tblhead_22"><td colspan="2"><h2><a name="sms_get">SMS Empfang</a></h2></td></tr>
 <tr class="tblbody">
   <td colspan="2" align="center">
-<b>Sie können SMS auf Ihren Holy-Wars 2 Account empfangen.</b><p>
-Dazu muß ein Mitspieler eine kostenpflichtige SMS an Holy-Wars 2 senden, 
-Sie zahlen dafür nichts. 
+<b>Sie kÃ¶nnen SMS auf Ihren Holy-Wars 2 Account empfangen.</b><p>
+Dazu muï¿½ ein Mitspieler eine kostenpflichtige SMS an Holy-Wars 2 senden, 
+Sie zahlen dafÃ¼r nichts. 
   </td>
 </tr>
 <tr height="10"><td></td></tr>
@@ -717,17 +717,17 @@ function show_grapa()
 Den aktuellen Grafikpack Version <b><? echo GFX_VERSION; ?></b> finden Sie <a target="_new" href="grafikpaket/hw_grafik_v<? echo GFX_VERSION; ?>.zip">hier</a>.
 <? $gp_update = "grafikpaket/hw_grafik_update_v".GFX_VERSION.".zip";
  if (file_exists($gp_update)) { 
-   echo '<br>Falls Sie nur einige neue Grafiken benötigen, dann finden Sie ein Update <a href="'.$gp_update.'">hier</a>.';
+   echo '<br>Falls Sie nur einige neue Grafiken benï¿½tigen, dann finden Sie ein Update <a href="'.$gp_update.'">hier</a>.';
  }
 ?>
     <h3>2. Entpacken</h3>
 Entpacken Sie den Grafikpfad auf Ihre Festplatte.<br>
-Unter Windows XP können Sie
+Unter Windows XP kÃ¶nnen Sie
 die Datei im Explorer entpacken, indem Sie mit der rechten Maustaste darauf
-klicken und dann &quot;Alle Extrahieren&quot; auswählen.
+klicken und dann &quot;Alle Extrahieren&quot; auswï¿½hlen.
     <h3>3. Grafikpfad einstellen</h3>
-      Klicken Sie auf das Feld &quot;Durchsuchen&quot; (oder &quot;Browse&quot;) und wählen Sie die Datei <b>gfx_version.gif</b> an der Stelle aus,
-    wo Sie den Grafikpack (Schritt 2.) ausgepackt haben. Benutzen Sie den Button &quot;Testen&quot; zum Überprüfen, ob alles in Ordnung ist.
+      Klicken Sie auf das Feld &quot;Durchsuchen&quot; (oder &quot;Browse&quot;) und wï¿½hlen Sie die Datei <b>gfx_version.gif</b> an der Stelle aus,
+    wo Sie den Grafikpack (Schritt 2.) ausgepackt haben. Benutzen Sie den Button &quot;Testen&quot; zum Ã¼berprÃ¼fen, ob alles in Ordnung ist.
     <hr>
     Der aktuelle Grafikpfad lautet: 
  <? 
@@ -744,7 +744,7 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
       
       echo '<br>Lokale Version: <img src="'.$version.'">';
       echo '&nbsp;&nbsp;Server Version: <img src="gfx_version.gif">';
-      echo "<p>Beide Grafiken sollten übereinstimmen.";
+      echo "<p>Beide Grafiken sollten Ã¼bereinstimmen.";
     }
     else 
       echo "<b>&lt;bisher kein Pfad gesetzt&gt;</b>";
@@ -758,7 +758,7 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
     <select class="input" name="gfx_path_select" 
             onchange="document.theGFXForm.gfx_path_value.value=document.theFileForm.gfx_path_select.value"
     >
-      <option value="">Oder hier auswählen</option>
+      <option value="">Oder hier auswï¿½hlen</option>
 <!--  <option value="SERVER4">Server Version 4 (Standard)</option> -->
       <option value="SERVER3">Server Version 3</option>
       <option value="HOWLY4">Version 4 by Howly</option>
@@ -770,13 +770,13 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
     <input type="hidden" name="changegfx">
     <input type="button" onClick="testGfxPath(document.theGFXForm.gfx_path_value.value)" name="testgfx"   value=" Testen ">
     <input type="submit" 
-    onClick="if(document.theGFXForm.gfx_path_value.value=='') { alert('Sie müssen zuerst einen Pfad auswählen oder eingeben!'); return false;}" 
+    onClick="if(document.theGFXForm.gfx_path_value.value=='') { alert('Sie mÃ¼ssen zuerst einen Pfad auswï¿½hlen oder eingeben!'); return false;}" 
     name="changegfx" 
-    value=" Ändern ">
+    value=" Ã¤ndern ">
     </form>
     <p>
     Falls es zu Darstellungsfehlern kommt erst einmal aus- und neu einloggen!<br>
-    <b>ACHTUNG:</b> FireFox ab 1.0 und Mozilla ab 1.8a5 müssen zur Verwendung umkonfiguriert werden. 
+    <b>ACHTUNG:</b> FireFox ab 1.0 und Mozilla ab 1.8a5 mÃ¼ssen zur Verwendung umkonfiguriert werden. 
     Wie das funktioniert ist beschrieben, wenn man den Button &quot;Testen&quot; klickt.
     </td></tr>
     </table>
@@ -785,7 +785,7 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
 
 
 <tr class="tblhead_22">
-  <td colspan="2"><h2><a name="grapa_menu">Menü und sonstige Einstellungen</a></h2></td>
+  <td colspan="2"><h2><a name="grapa_menu">Menï¿½ und sonstige Einstellungen</a></h2></td>
 </tr>
   <tr class="tblbody">    
    <td colspan="2">
@@ -794,15 +794,15 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
 <div style="width:400px; border: 1px solid black; text-align: left; margin: 4px; ">
 <?php
   {
-    settings_check_button_br("forum_own",                     "Forum in einem extra Fenster öffnen.");    
-    settings_check_button_br("map_own",                       "Karte in einem extra Fenster öffnen.");
-    settings_check_button_br("library_own",                   "Bibliothek in einem extra Fenster öffnen.");
+    settings_check_button_br("forum_own",                     "Forum in einem extra Fenster ï¿½ffnen.");    
+    settings_check_button_br("map_own",                       "Karte in einem extra Fenster ï¿½ffnen.");
+    settings_check_button_br("library_own",                   "Bibliothek in einem extra Fenster ï¿½ffnen.");
     settings_check_button_br("hide_banner",                   "Werbe-Banner nicht anzeigen (Premium-Account).");    
     settings_check_button_br("disable_login_counter",         "Login-Ticker ausblenden.");
-    settings_check_button_br("disable_toplist_bonuspoints",   "Auftauchen in der Toplist Bonuspunkte unterdrücken.");
+    settings_check_button_br("disable_toplist_bonuspoints",   "Auftauchen in der Toplist Bonuspunkte unterdrÃ¼cken.");
 
     if ($_SESSION['player']->isAdmin()) {
-      $setts = do_mysql_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$_SESSION['player']->getID());
+      $setts = do_mysqli_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$_SESSION['player']->getID());
       echo "<pre>";
       printf("%x\n", $setts['settings']);
       var_dump($_SESSION['settings']);
@@ -817,12 +817,12 @@ onClick="<?
 if ($_SESSION['premium_flags'] > 0) 
   echo "return confirm('Wollen Sie die Einstellungen wirklich abspeichern?')";
 else
-  echo "alert('Dies funktioniert nur für Besitzer eines Premium-Accounts.'); return false;";
+  echo "alert('Dies funktioniert nur fÃ¼r Besitzer eines Premium-Accounts.'); return false;";
 ?>
 ">&nbsp;
         <input type="submit" name="loadsettings" value=" Letze Version laden "><p>
 Bei &quot;Dauerhaft Speichern&quot; werden die Einstellungen 
-auf dem Server gespeichert und sind nach jedem Login wieder verfügbar.
+auf dem Server gespeichert und sind nach jedem Login wieder verfï¿½gbar.
     </center>
     </form><!-- theMenuForm -->
    </td>   
@@ -856,24 +856,24 @@ function show_game() { ?>
 insertBBForm(2);
 ?>
 <tr class="tblbody">
- <td colspan="2" align="center"><input type="submit" name="change_desc" value=" Beschreibung Ändern "></td><br>
+ <td colspan="2" align="center"><input type="submit" name="change_desc" value=" Beschreibung Ã¤ndern "></td><br>
 </tr>
 
 
 <tr class="tblhead_22">
- <td colspan="2"><h2><a name="game_sig">Signatur ändern</a></h2></td>
+ <td colspan="2"><h2><a name="game_sig">Signatur Ã¤ndern</a></h2></td>
 </tr>
 <tr class="tblbody">
 <td colspan="2" align="center">
 <? 
    if (is_premium_signature()) {
-     echo 'Euer <a href="premium.php">Premium-Account</a> erlaubt Euch die Änderung der Nachrichten-Signatur<p>';
+     echo 'Euer <a href="premium.php">Premium-Account</a> erlaubt Euch die ï¿½nderung der Nachrichten-Signatur<p>';
      echo '<textarea id="msgsignature" rows="4" cols="45" name="msgsignature">'.$_SESSION['player']->getMsgSignature(true).'</textarea><p>';
-     echo '<input type="submit" name="changesignature" value=" Signatur Ändern ">';
+     echo '<input type="submit" name="changesignature" value=" Signatur Ã¤ndern ">';
      echo '</td>';     
    }
    else {
-     echo 'Um eine Signatur setzen zu dürfen müssen Sie einen <a href="premium.php">Premium-Account</a> besitzen!</td>';
+     echo 'Um eine Signatur setzen zu dÃ¼rfen mÃ¼ssen Sie einen <a href="premium.php">Premium-Account</a> besitzen!</td>';
    }
   ?>
    
@@ -893,9 +893,9 @@ insertBBForm(2);
     $avatar_top_points = "1000000";    
   }
 
-  $res=do_mysql_query("SELECT toplist FROM player WHERE toplist <= '100' AND toplist > '0' AND points >='".$avatar_top_points."' AND id='".$_SESSION['player']->id."'");
+  $res=do_mysqli_query("SELECT toplist FROM player WHERE toplist <= '100' AND toplist > '0' AND points >='".$avatar_top_points."' AND id='".$_SESSION['player']->id."'");
   
-  if(mysql_num_rows($res)>0 || is_premium_avatar() ) {
+  if(mysqli_num_rows($res)>0 || is_premium_avatar() ) {
     if(!is_file( AVATAR_DIR.$_SESSION['player']->id.".jpg")) {
       echo "Hier k&ouml;nnt ihr einen Avatar auf den Server laden.<br />";
       echo "Bei dem Bild muss es sich um ein JPEG Bild handel!";
@@ -906,8 +906,8 @@ insertBBForm(2);
     else {
       echo "<div style=\"float:left; margin-right:20px;\"><img src=\"avatar.php?id=".$_SESSION['player']->id."\"></div>";
       echo "Dein Avatar wurde hochgeladen";
-      $res=do_mysql_query("SELECT avatar FROM player WHERE id = '".$_SESSION['player']->id."'");
-      $img=mysql_fetch_assoc($res);
+      $res=do_mysqli_query("SELECT avatar FROM player WHERE id = '".$_SESSION['player']->id."'");
+      $img=mysqli_fetch_assoc($res);
       if($img['avatar']==1) {
         echo ".<p><b class=\"error\">Dein Avatar muss erst von einem Namehunter freigeschalten werden!</b><p>";
         echo "<a href=\"".$PHP_SELF."?delete=avatar\">Avatar l&ouml;schen</a>\n";
@@ -917,13 +917,13 @@ insertBBForm(2);
         echo "<a href=\"".$PHP_SELF."?delete=avatar\">Avatar l&ouml;schen</a><p>\n";
       } 
       else {
-        do_mysql_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
+        do_mysqli_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
       }
     }
   }
 
   {
-    echo '<p>Um einen Avatar setzen zu dürfen müssen Sie einen '.
+    echo '<p>Um einen Avatar setzen zu dÃ¼rfen mÃ¼ssen Sie einen '.
     '<a href="premium.php">Premium-Account</a> besitzen '.
     'oder in der Top-100 mit mindestens '.prettyNumber($avatar_top_points).' Punkten auftauchen!';
   }
@@ -961,7 +961,7 @@ function show_premium() { ?>
 <? if($GLOBALS['premium_flags'] & PREMIUM_NOADS) {
      echo " Ja</b>"; 
      if(! $_SESSION['settings']['hide_banner'])
-       echo ', Ihnen wird aber Werbung eingeblendet. Dies können Sie im Reiter <a href="settings.php?show=grapa">Grafik/Menü</a> ändern. ';
+       echo ', Ihnen wird aber Werbung eingeblendet. Dies kÃ¶nnen Sie im Reiter <a href="settings.php?show=grapa">Grafik/Menï¿½</a> Ã¤ndern. ';
      else
        echo ', die Werbung ist abgeschaltet.';
 }
@@ -999,8 +999,8 @@ function show_premium() { ?>
  <td><h2><a name="premium_banner">Werbebanner ein/ausschalten</a></h2></td>
 </tr>
 <tr><td colspan="2" align="center">
-Unter <a href="settings.php?show=grapa">&quot;Grafik / Menü&quot;</a> können Sie Banner ein- und ausschalten, sofern
-Ihr Premium-Account das zulässt.
+Unter <a href="settings.php?show=grapa">&quot;Grafik / Menï¿½&quot;</a> kÃ¶nnen Sie Banner ein- und ausschalten, sofern
+Ihr Premium-Account das zulÃ¤sst.
 </td></tr>
 
 
@@ -1009,7 +1009,8 @@ Ihr Premium-Account das zulässt.
 }
 
 function show_ads() {
-  $url = "http://".$_SERVER['HTTP_HOST']."/register.php?recruiter=".$_SESSION['player']->getID();
+  return; // deactivate ads
+  $url = "https://".$_SERVER['HTTP_HOST']."/register.php?recruiter=".$_SESSION['player']->getID();
 ?>
 
   <table id="settings">
@@ -1019,27 +1020,27 @@ function show_ads() {
   </tr>
   <tr class="tblbody">
     <td colspan="2" style="padding:10px;"><center><span style="font-weight: bold; background-color: white; padding: 4px; margin-top: 4px;"><? echo $url; ?></span></center>
-<p>Langfristig erhältst Du für jeden geworbenen Spieler <u>Bonuspunkte</u>!
-Es gibt jeweils 1000 Punkte für Dich, sobald der geworbene Spieler eine
-dieser drei Forschungen abschließt: <i>Höhere Bildung</i>, <i>Fachrichtungen</i> und <i>Konstitutionelle Monarchie</i>.
+<p>Langfristig erhÃ¤ltst Du fÃ¼r jeden geworbenen Spieler <u>Bonuspunkte</u>!
+Es gibt jeweils 1000 Punkte fÃ¼r Dich, sobald der geworbene Spieler eine
+dieser drei Forschungen abschlieÃŸt: <i>Hï¿½here Bildung</i>, <i>Fachrichtungen</i> und <i>Konstitutionelle Monarchie</i>.
 <p>
 Wer aktive Spieler wirbt hat also klare Vorteile, da er bis 
-zu 3000 Bonuspunkte pro geworbenem Spieler erhält.
+zu 3000 Bonuspunkte pro geworbenem Spieler erhÃ¤lt.
 <p>
-<b>Tipp</b>: Platziere den Link auf einer Homepage, in Diskussionsforen als Signatur oder sende Ihn per Email an Deine Freunde. Der Link ist nicht dazu gedacht, ihn wild in Foren, Gästebüchern oder Chats zu posten oder damit zu spammen.<p>
+<b>Tipp</b>: Platziere den Link auf einer Homepage, in Diskussionsforen als Signatur oder sende Ihn per Email an Deine Freunde. Der Link ist nicht dazu gedacht, ihn wild in Foren, GÃ¤stebÃ¼chern oder Chats zu posten oder damit zu spammen.<p>
 <center>
-<b>HTML-Code für die Homepage:</b><br>
+<b>HTML-Code fÃ¼r die Homepage:</b><br>
 <div style="width: 530px; font-size: 9px; background-color: white; padding: 4px; margin-top: 4px;">
 <? {
-  $code = '<a href="'.$url.'" target="_blank" title="Hier klicken und kostenlos bei Holy-Wars 2 anmelden"><img border="0" alt="Holy-Wars 2 Banner" src="http://www.holy-wars2.de/hw2_banner.php/1.gif" width="468" height="60"></a>';
+  $code = '<a href="'.$url.'" target="_blank" title="Hier klicken und kostenlos bei Holy-Wars 2 anmelden"><img border="0" alt="Holy-Wars 2 Banner" src="images/logo/hw2_anibanner1.gif" width="468" height="60"></a>';
   echo htmlentities($code);
 }
 ?>
 </div>
-<b>Code für PHPBB-Foren, z.B. in der Signatur:</b><br>
+<b>Code fÃ¼r PHPBB-Foren, z.B. in der Signatur:</b><br>
 <div style="width: 530px; font-size: 9px; background-color: white; padding: 4px; margin-top: 4px;">
 <?
-  $Rbbcode = '[url='.$url.'][img]http://www.holy-wars2.de/hw2_banner.php/1.gif[/img][/url]';
+  $Rbbcode = "";
   echo htmlentities($Rbbcode);
 ?>
 </div>
@@ -1053,7 +1054,7 @@ zu 3000 Bonuspunkte pro geworbenem Spieler erhält.
 }
 
 function show_account() { 
-  $url = "http://".$_SERVER['HTTP_HOST']."/register.php?recruiter=".$_SESSION['player']->getID();
+  $url = "https://".$_SERVER['HTTP_HOST']."/register.php?recruiter=".$_SESSION['player']->getID();
 ?>
 
 <table id="settings">
@@ -1109,8 +1110,8 @@ function show_account() {
           <i>Wie bekomme ich Bonuspunkte?</i><br>
           durch...
           <ul style="margin: 0px; padding-left: 15px">
-	     <li>Werben neuer Mitspieler (siehe <a href="settings.php?show=ads">&quot;Fördere HW2&quot;</a>)
-	     <li>&quot;Klick-Bonuspunkte&quot;: regelmässiges Einloggen bzw. Klicken (einmal pro Stunde einen Punkt)
+	     <li>Werben neuer Mitspieler (siehe <a href="settings.php?show=ads">&quot;FÃ¼rdere HW2&quot;</a>)
+	     <li>&quot;Klick-Bonuspunkte&quot;: regelmÃ¤ÃŸiges Einloggen bzw. Klicken (einmal pro Stunde einen Punkt)
 	     <li>Veranstalten von <a href="tournament.php">Ritterturnieren</a>.
           </ul>
           </td>
@@ -1118,36 +1119,36 @@ function show_account() {
 
 
 <tr class="tblhead_22">
- <td colspan="2"><h2><a name="acc_email">Emailadresse ändern</a></h2></td>
+ <td colspan="2"><h2><a name="acc_email">Emailadresse Ã¤ndern</a></h2></td>
 </tr>
   <tr class="tblbody">
     <td colspan="2" align="center">
       <input type="text" name="email" value="<? echo $_SESSION['player']->getEMail(); ?>">&nbsp;&nbsp;
-      <input type="submit" name="change_email" value=" Emailadresse Ändern ">
+      <input type="submit" name="change_email" value=" Emailadresse Ã¤ndern ">
     </td>
   </tr>
 
 
 
   <tr height="10"><td></td></tr><tr class="tblhead_22">
-    <td colspan="2"><h2><a name="acc_pass">Passwort ändern</a></h2></td>
+    <td colspan="2"><h2><a name="acc_pass">Passwort Ã¤ndern</a></h2></td>
   </tr>
   <tr class="tblbody"><td align="right"><input type="password" name="oldpw"> </td><td> (altes Passwort)</td></tr>
   <tr class="tblbody"><td align="right"><input type="password" name="newpw1"></td><td> (neues Passwort)</td></tr>
   <tr class="tblbody"><td align="right"><input type="password" name="newpw2"></td><td> (Passwort wiederholen)</td></tr>
   <tr class="tblbody">
-    <td colspan="2" align="center"><input type="submit" name="change_passwd" value=" Passwort Ändern "></td>
+    <td colspan="2" align="center"><input type="submit" name="change_passwd" value=" Passwort Ã¤ndern "></td>
   </tr>
 
 
   <tr height="10"><td></td></tr><tr class="tblhead_22">
   <?php   
-   // in der ersten 24 Spielstunde kann man den Account direkt löschen  
+   // in der ersten 24 Spielstunde kann man den Account direkt lÃ¶schen  
    if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE ) { 
   ?>
-    <td colspan="2"><h2><a name="acc_accdel">Account zum Löschen vormerken</a></h2></td>
+    <td colspan="2"><h2><a name="acc_accdel">Account zum LÃ¶schen vormerken</a></h2></td>
   <?php } else { ?>
-    <td colspan="2"><h2><a name="acc_accdel">Account SOFORT löschen</a></h2></td>
+    <td colspan="2"><h2><a name="acc_accdel">Account SOFORT lÃ¶schen</a></h2></td>
   <?php }?>
   </tr>
   <tr class="tbldanger">
@@ -1162,10 +1163,10 @@ function show_account() {
 	<tr>
   <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) { ?>
 	  <td colspan="3" align="center">
-	       <input type="submit" name="acc_delete_process" value="ACCOUNT ZUM LÖSCHEN VORMERKEN">
+	       <input type="submit" name="acc_delete_process" value="ACCOUNT ZUM Lï¿½SCHEN VORMERKEN">
 	  </td>
   <?php } else { ?>
-      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT SOFORT LÖSCHEN"></td>
+      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT SOFORT Lï¿½SCHEN"></td>
   <?php }?>
 	</tr>
       </table>
@@ -1174,11 +1175,11 @@ function show_account() {
   <tr class="tbldanger">
     <td colspan="2" align="center" style="color: white;">
     <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) { ?>
-       Ihr Account wird zum Löschen lediglich <b>&quot;markiert&quot;</b>. Die wirkliche Löschung
-       des Accounts erfolgt etwa 24 Stunden später. Alle Städte werden dabei als <b>Herrenlose Städte</b> freigegeben.
-       Sie können diese Vormerkung jederzeit revidieren, indem Sie sich innerhalb der 24 Stunden einloggen.
+       Ihr Account wird zum LÃ¶schen lediglich <b>&quot;markiert&quot;</b>. Die wirkliche LÃ¶schung
+       des Accounts erfolgt etwa 24 Stunden spï¿½ter. Alle StÃ¤dte werden dabei als <b>Herrenlose StÃ¤dte</b> freigegeben.
+       Sie kÃ¶nnen diese Vormerkung jederzeit revidieren, indem Sie sich innerhalb der 24 Stunden einloggen.
     <?php } else { ?> 
-    Achtung: Eine Accountlöschung kann nicht rückgängig gemacht werden!
+    Achtung: Eine AccountlÃ¶schung kann nicht rÃ¼ckgÃ¤ngig gemacht werden!
     <?php } ?>
     </td>    
   </tr>
@@ -1187,24 +1188,24 @@ function show_account() {
   </tr>
 <? if (!defined("SPEED") || !SPEED) { ?>
   <tr><td class="tblbody" style="padding:10px;" colspan="2">
-   <b>Falls Ihr für längere Zeit nicht in Euren Account schauen könnt, dann
-   könnt Ihr hier in den Urlaubsmodus wechseln.</b><p>
+   <b>Falls Ihr fÃ¼r lÃ¤ngere Zeit nicht in Euren Account schauen kÃ¶nnt, dann
+   kÃ¶nnt Ihr hier in den Urlaubsmodus wechseln.</b><p>
    Folgendes tritt ein, wenn ein Spieler im Urlaubsmodus ist
    <ul>
-    <li>Keine neuen Angriffe auf den Spieler sind möglich. Bestehende Angriffe laufen weiter.
+    <li>Keine neuen Angriffe auf den Spieler sind mÃ¶glich. Bestehende Angriffe laufen weiter.
     <li>Der Spieler hat nur noch 50% Truppenkosten.
-    <li>Der Spieler erhält keine Ressourcen- und keine Ausrüstungs-Produktion.
-    <li>Der Spieler erhält 50% weniger Steuern und Forschungspunkte.
-    <li>Alle Einnahmen aus Gebäuden sind 0. Bei Ausgaben werden diese weiterhin gezahlt.
+    <li>Der Spieler erhÃ¤lt keine Ressourcen- und keine Ausrï¿½stungs-Produktion.
+    <li>Der Spieler erhÃ¤lt 50% weniger Steuern und Forschungspunkte.
+    <li>Alle Einnahmen aus GebÃ¤uden sind 0. Bei Ausgaben werden diese weiterhin gezahlt.
     <li>Der Spieler kann sich erst wieder nach Ablauf des Urlaubsmodus einloggen.
-    <li>Zwischen 10 bis 35 Tagen kann der Urlaubsmodus gewählt werden.
-    <li>Nach Ablauf des Urlaubsmodus ist 14 Tage lang kein neuer Urlaubsmodus möglich.
-    <li>Während und noch 7 Tage lang nach Ablauf des Urlaubsmodus ist der Spieler vor dem Inaktivitäts-Skript sicher und wird nicht wegen Inaktivität gelöscht.
+    <li>Zwischen 10 bis 35 Tagen kann der Urlaubsmodus gewÃ¤hlt werden.
+    <li>Nach Ablauf des Urlaubsmodus ist 14 Tage lang kein neuer Urlaubsmodus mÃ¶glich.
+    <li>Wï¿½hrend und noch 7 Tage lang nach Ablauf des Urlaubsmodus ist der Spieler vor dem InaktivitÃ¤ts-Skript sicher und wird nicht wegen InaktivitÃ¤t gelÃ¶scht.
    </ul>
-   Folgende Vorbedingungen müssen erfüllt sein:                                  
+   Folgende Vorbedingungen mÃ¼ssen erfï¿½llt sein:                                  
    <ul>
-    <li>Der Spieler darf keine Truppen in fremden Städten stationiert haben.
-    <li>Keine eigenen Truppenbewegungen (ausser Rückkehr) dürfen aktiv sein.
+    <li>Der Spieler darf keine Truppen in fremden StÃ¤dten stationiert haben.
+    <li>Keine eigenen Truppenbewegungen (ausser RÃ¼ckkehr) dÃ¼rfen aktiv sein.
    </ul>
    <p>
    <center>
@@ -1219,7 +1220,7 @@ function show_account() {
   } // !SPEED
   else {
 ?>
-  <tr><td class="tblbody" style="padding:10px;" colspan="2">Urlaubsmodus in dieser Runde nicht verfügbar.</td></tr>
+  <tr><td class="tblbody" style="padding:10px;" colspan="2">Urlaubsmodus in dieser Runde nicht verfï¿½gbar.</td></tr>
 <?  
   }
 ?>
@@ -1229,13 +1230,13 @@ function show_account() {
     <td colspan="2"><h2><a name="acc_mulexc">Multi-Exceptions</a></h2></td>
   </tr>
   <tr class="tblbody">
-    <td colspan="2" style="padding:10px;">Hier kann man eine sogenannte Multi-Exception beantragen. Die ist eine Ausnahmeregelung für Spieler,
-die sich über eine gemeinsame Internet-Leitung (z.B. einen DSL-Router oder am Netzwerk auf der Arbeit) in Holy-Wars 2
-einloggen. Die Exception verhindert, dass man gesperrt wird, wenn man über die gleiche IP-Adresse verbunden wird.<p>
+    <td colspan="2" style="padding:10px;">Hier kann man eine sogenannte Multi-Exception beantragen. Die ist eine Ausnahmeregelung fÃ¼r Spieler,
+die sich Ã¼ber eine gemeinsame Internet-Leitung (z.B. einen DSL-Router oder am Netzwerk auf der Arbeit) in Holy-Wars 2
+einloggen. Die Exception verhindert, dass man gesperrt wird, wenn man Ã¼ber die gleiche IP-Adresse verbunden wird.<p>
 Die Exception verhindert jedoch nicht, dass man aufgrund von Sitting oder Multiaccounting gesperrt werden kann. 
-Zwischen Spielern, für die eine Exception akzeptiert wurde, <b>dürfen keine Resourcen transferiert werden</b> 
-(weder per Versenden noch über Angebote akzeptieren, auch nicht über Dritte).<p>
-Exceptions werden nachträglich nicht wieder aufgehoben!
+Zwischen Spielern, fÃ¼r die eine Exception akzeptiert wurde, <b>dÃ¼rfen keine Resourcen transferiert werden</b> 
+(weder per Versenden noch Ã¼ber Angebote akzeptieren, auch nicht Ã¼ber Dritte).<p>
+Exceptions werden nachtrÃ¤glich nicht wieder aufgehoben!
 <hr>
 </td></tr>
 <tr class="tblbody">
@@ -1247,7 +1248,7 @@ Exceptions werden nachträglich nicht wieder aufgehoben!
 		    <tr><td colspan="2"><b>Multiexception beantragen:</b><br>
 		    Betroffene Spieler (ohne Dich) durch , (Komma) separieren. Beispiel: User1, User2, User3
                     </td></tr>
-		    <tr><td>Spieler</td><td>Begründung</td></tr>
+		    <tr><td>Spieler</td><td>BegrÃ¼ndung</td></tr>
        		    <tr><td><input type="text" name="multi_players" size="20"></td><td><input type="text" name="multi_note" size="40"></td></tr>
 		    <tr><td colspan="2"><input type="submit" name="change" value="Beantragen"></td></tr>
 		  </table>

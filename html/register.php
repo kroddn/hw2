@@ -54,90 +54,90 @@ require_once("start_header.php");
 		<td class="tblhead" colspan="2" align="center" style="font-size: 14px;"><b>Allgemeine Nutzungsbedingungen von Holy-Wars 2</b><br></td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 1</b></td>
-		<td class="tblbody" >Um an Holy-Wars 2 teilnehmen zu können ist es notwendig den Nutzungsbedingungen
+		<td class="tblhead" valign="top" nowrap><b>Â§ 1</b></td>
+		<td class="tblbody" >Um an Holy-Wars 2 teilnehmen zu kÃ¶nnen ist es notwendig den Nutzungsbedingungen
                              zustimmen. Diese beziehen sich auf das gesamte Angebot von Holy-Wars 2.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 2</b></td>
-		<td class="tblbody" >Die Teilnahme am Spielgeschehen kann jederzeit mit Löschung des Accounts beendet werden.</td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 2</b></td>
+		<td class="tblbody" >Die Teilnahme am Spielgeschehen kann jederzeit mit LÃ¶schung des Accounts beendet werden.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 3</b></td>
-        <td class="tblbody" >Holy-Wars 2 stellt nur eine Plattform bereit, über die sich Mitglieder 
-                             untereinander verständigen können. Für den Inhalt dieser Kommunikation sind
+		<td class="tblhead" valign="top" nowrap><b>Â§ 3</b></td>
+        <td class="tblbody" >Holy-Wars 2 stellt nur eine Plattform bereit, Ã¼ber die sich Mitglieder 
+                             untereinander verstÃ¤ndigen kÃ¶nnen. FÃ¼r den Inhalt dieser Kommunikation sind
                              die Mitglieder selbst verantwortlich. Die Betreiber behalten sich vor, die 
                              Mitgliedschaft bei der Verbreitung pornographischer, rassistischer, beleidigender
                              oder gegen geltendes Recht verstossender Inhalte zu beenden.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 4</b></td>
-		<td class="tblbody" >Holy-Wars 2 übernimmt keine Haftung für Schäden, die durch die Benutzung des 
+		<td class="tblhead" valign="top" nowrap><b>Â§ 4</b></td>
+		<td class="tblbody" >Holy-Wars 2 Ã¼bernimmt keine Haftung fÃ¼r SchÃ¤den, die durch die Benutzung des 
                              Angebots entstehen oder entstanden sind. Schadensersatz ist in jedem Falle ausgeschlossen.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 5</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 5</b></td>
 		<td class="tblbody" >Es ist untersagt, Seiten dieses Angebots mit einem anderen Programm ausser einem 
-                             gängigen Browser oder einem von Holy-Wars 2 explizit zur Verfügung gestelltem 
+                             gÃ¤ngigen Browser oder einem von Holy-Wars 2 explizit zur Verfï¿½gung gestelltem 
                              Programm abzurufen. Dies bezieht sich besonders auf sogenannte Bots, Skripte 
                              oder auch andere Programme, die das Webinterface ersetzen sollen.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 6</b></td>
-		<td class="tblbody" >Der Spielaccount inkl. aller dazugehörigen Daten ist Eigentum und verbleibt 
-                             im Eigentum der Betreiber von Holy-Wars 2. Jede Veräußerung ist untersagt.</td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 6</b></td>
+		<td class="tblbody" >Der Spielaccount inkl. aller dazugehï¿½rigen Daten ist Eigentum und verbleibt 
+                             im Eigentum der Betreiber von Holy-Wars 2. Jede Verï¿½uï¿½erung ist untersagt.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 7</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 7</b></td>
         <td class="tblbody" >Die Betreiber behalten sich vor, Accounts, mit welchen auf dem Server Daten 
-                             verändert wurden, oder auf andere Weise vorsätzlich oder fahrlässig der 
-                             reibungslose Betrieb von Holy-Wars 2 behindert wurde, zu löschen und rechtliche 
+                             verÃ¤ndert wurden, oder auf andere Weise vorsÃ¤tzlich oder fahrlï¿½ssig der 
+                             reibungslose Betrieb von Holy-Wars 2 behindert wurde, zu lÃ¶schen und rechtliche 
                              Schritte einzuleiten.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 8</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 8</b></td>
 		<td class="tblbody" >Es besteht kein Anspruch auf die Teilnahme an Holy-Wars 2. Die Betreiber behalten 
-                             sich das Recht vor, ohne Angabe von Gründen Accounts zu sperren oder löschen.</td>
+                             sich das Recht vor, ohne Angabe von Grï¿½nden Accounts zu sperren oder lÃ¶schen.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 9.1</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 9.1</b></td>
 		<td class="tblbody" >Jedes Mitglied verpflichtet sich nur <b>einen Account</b> zu erstellen und zu nutzen.</td>
 	</tr>
     <tr>
-        <td class="tblhead" valign="top" nowrap><b>§ 9.2</b></td>
+        <td class="tblhead" valign="top" nowrap><b>Â§ 9.2</b></td>
         <td class="tblbody" >Die Regeln &quot;<i>Sitting, Pushing, Multiaccounting und Multi-Exceptions</i>&quot; sind verpflichtend (siehe unten).</td>
     </tr>	
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 10</b></td>
-        <td class="tblbody" >Das Mitglied willigt in die Speicherung aller Daten ein, die für die Erkennung und 
+		<td class="tblhead" valign="top" nowrap><b>Â§ 10</b></td>
+        <td class="tblbody" >Das Mitglied willigt in die Speicherung aller Daten ein, die fÃ¼r die Erkennung und 
                              Verfolgung von Zuwiderhandlungen gegen diese Nutzungsbestimmungen dienlich sind.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 11</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 11</b></td>
 		<td class="tblbody" >Nutzerdaten werden entsprechend der Vorschriften des
                              Datenschutzgesetzes der Bundesrepublik Deutschland gespeichert und behandelt. 
-                             An die angegebene Email-Adresse werden ausschließlich Informationen gesendet, 
-                             die für das Spiel von Belang sind.</td>
+                             An die angegebene Email-Adresse werden ausschlieÃŸlich Informationen gesendet, 
+                             die fÃ¼r das Spiel von Belang sind.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 12</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 12</b></td>
 		<td class="tblbody" >Holy-Wars 2 spielt im Mittelalter. Dementsprechend sollte auch die Namenswahl, 
                              etc. erfolgen. Schwere Zuwiederhandlungen werden ggf. geahndet.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 13</b></td>
-		<td class="tblbody" >Die grundsätzliche Teilnahme an Holy-Wars 2 ist kostenlos. Gegen Spenden 
-                             sind <a href="premium.php">Premium-Accounts</a> möglich</td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 13</b></td>
+		<td class="tblbody" >Die grundsÃ¤tzliche Teilnahme an Holy-Wars 2 ist kostenlos. Gegen Spenden 
+                             sind <a href="premium.php">Premium-Accounts</a> mÃ¶glich</td>
 	</tr>	
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 14</b></td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 14</b></td>
         <td class="tblbody" >Die Betreiber behalten sich vor, die Nutzungsbedingungen jederzeit 
-                             und ohne Ankündigung zu ändern.</td>
+                             und ohne Ankï¿½ndigung zu Ã¤ndern.</td>
 	</tr>	
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>§ 15</b></td>
-		<td class="tblbody" >Ist einer dieser Paragraphen ungültig, so bleibt die Wirksamkeit 
-                             der anderen davon unberührt.</td>
+		<td class="tblhead" valign="top" nowrap><b>Â§ 15</b></td>
+		<td class="tblbody" >Ist einer dieser Paragraphen ungÃ¼ltig, so bleibt die Wirksamkeit 
+                             der anderen davon unberï¿½hrt.</td>
 	</tr>
 </table>
 
@@ -146,26 +146,26 @@ require_once("start_header.php");
 		<td class="tblhead" colspan="2" align="center" style="font-size: 14px;"><b>Anmerkungen und Verhaltenskodex</b><br></td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>zu § 3</b></td>
+		<td class="tblhead" valign="top" nowrap><b>zu Â§ 3</b></td>
         <td class="tblbody" >Von allen teilnehmenden Personen wird erwartet, dass sie einen 
-                             &quot;guten Umgang&quot; miteinander pflegen. Dies beschränkt sich 
+                             &quot;guten Umgang&quot; miteinander pflegen. Dies beschrÃ¤nkt sich 
                              nicht nur auf das Spiel selbst, sondern auch auf alle damit 
                              verbundenen Kommunikationsplattformen wie Forum, IRC, ICQ oder Email, 
                              selbst dann wenn eine der betreffenden Personen keinen Account im Spiel betreibt.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>zu § 3</b></td>
-        <td class="tblbody" >Von der Führung der Orden im Spiel wird erwartet, dass sie Verstöße 
+		<td class="tblhead" valign="top" nowrap><b>zu Â§ 3</b></td>
+        <td class="tblbody" >Von der Fï¿½hrung der Orden im Spiel wird erwartet, dass sie VerstÃ¶ÃŸe 
                              ihrer Mitglieder gegen die Nutzungsbedingungen dem Betreiber melden, 
                              und selbst mit Tadel oder Kritik reagieren. Bei wissentlicher 
                              Nichtbeachtung dieser Bedingung kann vom Betreiber gegen den Orden 
-                             und dessen Führung vorgegangen werden.</td>
+                             und dessen Fï¿½hrung vorgegangen werden.</td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>zu § 12</b></td>
-        <td class="tblbody" >Es existieren sogenannte <i>NameHunter</i>, die ständig und regelmäßig 
+		<td class="tblhead" valign="top" nowrap><b>zu Â§ 12</b></td>
+        <td class="tblbody" >Es existieren sogenannte <i>NameHunter</i>, die stÃ¤ndig und regelmÃ¤ÃŸig 
                              die Namensgebung im Spiel beobachten. Diese leiten entsprechende 
-                             Schritte für eine Ahndung ein.</td>
+                             Schritte fÃ¼r eine Ahndung ein.</td>
 	</tr>
 
 </table>
@@ -175,26 +175,26 @@ require_once("start_header.php");
 		<td class="tblhead" colspan="2" align="center" style="font-size: 14px;"><b>Sitting, Pushing, Multiaccounting und Multi-Exceptions</b><br></td>
 	</tr>
 	<tr>
-		<td class="tblhead" valign="top" nowrap><b>zu § 9.1 und §9.2</b></td>
-        <td class="tblbody" >Automatische Testroutinen überprüfen, ob ein Spieler mehrere Accounts betreibt.
-                             In Verdachtsfällen werden die betroffenen Accounts gesperrt und nach einiger Zeit 
-                             vollständig gelöscht.</td>
+		<td class="tblhead" valign="top" nowrap><b>zu Â§ 9.1 und Â§ 9.2</b></td>
+        <td class="tblbody" >Automatische Testroutinen Ã¼berprÃ¼fen, ob ein Spieler mehrere Accounts betreibt.
+                             In Verdachtsfï¿½llen werden die betroffenen Accounts gesperrt und nach einiger Zeit 
+                             vollstÃ¤ndig gelÃ¶scht.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>Pushing</b></td>
-        <td class="tblbody" >Das Versenden von Rohstoffen an kleinere Spieler zur Aufbaustütze ist erlaubt. 
+        <td class="tblbody" >Das Versenden von Rohstoffen an kleinere Spieler zur AufbaustÃ¼tze ist erlaubt. 
                              Der umgekehrte Weg jedoch wird als Pushing angesehen und ist verboten. Die 
-                             Anwendung dieser Regel wird situationsabhängig von einem Multihunter entschieden.</td>
+                             Anwendung dieser Regel wird situationsabhï¿½ngig von einem Multihunter entschieden.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>Sitting</b></td>
-        <td class="tblbody" >Sitting, also das eingreifen in einen nicht eigenen Account, ist grundsätzlich verboten.</td>
+        <td class="tblbody" >Sitting, also das eingreifen in einen nicht eigenen Account, ist grundsÃ¤tzlich verboten.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>Exceptions</b></td>
-                <td class="tblbody" >Spielen mehrere Spieler über einen Router oder über denselben Computer (gleiche IP-Adresse), 
+                <td class="tblbody" >Spielen mehrere Spieler Ã¼ber einen Router oder Ã¼ber denselben Computer (gleiche IP-Adresse), 
 dann <b>muss</b> eine sogenannte Multi-Exception in den Einstellungen beantragt werden. Jeglicher Fluss von Resourcen zwischen den betroffenen
-Spielern ist ausnahmslos untersagt, auch wenn die Ressourcen über Dritte weitergeleitet werden. In solchen Fällen wird auch das Weiterleiten
+Spielern ist ausnahmslos untersagt, auch wenn die Ressourcen Ã¼ber Dritte weitergeleitet werden. In solchen FÃ¼llen wird auch das Weiterleiten
 der Resourcen geahndet. Ebenso sind Truppenbewegungen untersagt.
 </td>
 	</tr>

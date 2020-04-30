@@ -36,13 +36,13 @@ function barracks_disarm_table($from)
   
   echo "\n<!-- $sql -->\n";
   
-  $cityunit_res = do_mysql_query($sql);
+  $cityunit_res = do_mysqli_query($sql);
 ?>                       
 <table cellspacing="1" cellpadding="0" border="0" style="width: 660px">
   <tr><td colspan="4" class="tblhead"><strong>Einheiten entlassen</strong></td></tr>
 <?php
   // Einheiten entlassen
-  if (mysql_num_rows($cityunit_res) > 0) {
+  if (mysqli_num_rows($cityunit_res) > 0) {
     echo "<form action=".$GLOBALS['PHP_SELF'].' method="POST">';
     echo '<input type="hidden" name="from" value="'.$from.'">';
     echo '<tr class="tblhead">';
@@ -53,7 +53,7 @@ function barracks_disarm_table($from)
     echo '</tr>';
     $sumcount = 0;
     $sumcost = 0;
-    while ($data1 = mysql_fetch_assoc($cityunit_res)) {
+    while ($data1 = mysqli_fetch_assoc($cityunit_res)) {
       echo "<tr class='tblbody'>\n";
       $href = getUnitLibLink($data1);
       $img  = getUnitImage($data1);

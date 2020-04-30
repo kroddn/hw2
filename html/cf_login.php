@@ -64,8 +64,8 @@ else
 
 
 	$id=$_SESSION['player']->id;
-	$res1=mysql_query("SELECT username, user_password as password FROM clanf_users WHERE user_id='".$id."'");
-	$data1=mysql_fetch_assoc($res1);
+	$res1=mysqli_query($GLOBALS['con'], "SELECT username, user_password as password FROM clanf_users WHERE user_id='".$id."'");
+	$data1=mysqli_fetch_assoc($res1);
 	$password=$data1['password'];
 	$username=$data1['username'];
 	$HTTP_POST_VARS['login']="true";
@@ -75,7 +75,7 @@ else
 
 		$sql = "SELECT user_id, username, user_password, user_active, user_level
 			FROM " . USERS_TABLE . "
-			WHERE username = '" . mysql_escape_string($username) . "'";
+			WHERE username = '" . mysqli_escape_string($GLOBALS['con'], $username) . "'";
 		if ( !($result = $db->sql_query($sql)) )
 		{
 			message_die(GENERAL_ERROR, 'Error in obtaining userdata', '', __LINE__, __FILE__, $sql);
@@ -104,7 +104,7 @@ exit;*/
 						$url = ( !empty($HTTP_POST_VARS['redirect']) ) ? str_replace('&amp;', '&', htmlspecialchars($HTTP_POST_VARS['redirect'])) : "cf_index.$phpEx";
 						//redirect(append_sid($url, true));
 						$location=append_sid("cf_index.php");
-						header("Location: ".$location);
+						header_redirect("".$location);
 					}
 					else
 					{
@@ -164,7 +164,7 @@ if( isset($HTTP_POST_VARS['login']) || isset($HTTP_GET_VARS['login']) || isset($
 
 		$sql = "SELECT user_id, username, user_password, user_active, user_level
 			FROM " . USERS_TABLE . "
-			WHERE username = '" . mysql_escape_string($username) . "'";
+			WHERE username = '" . mysqli_escape_string($GLOBALS['con'], $username) . "'";
 		if ( !($result = $db->sql_query($sql)) )
 		{
 			message_die(GENERAL_ERROR, 'Error in obtaining userdata', '', __LINE__, __FILE__, $sql);
@@ -287,7 +287,7 @@ else
 
 					for($i = 1; $i < count($forward_match); $i++)
 					{
-						if( !ereg("sid=", $forward_match[$i]) )
+						if( !preg_match("/sid=/", $forward_match[$i]) )
 						{
 							if( $forward_page != '' )
 							{

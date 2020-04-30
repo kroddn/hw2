@@ -30,14 +30,14 @@ require_once("start_header.php");
 
 <tr valign="top" style="padding: 0px; margin: 0px;">
 	<td width="24%" valign="top" style="padding: 0px; margin: 0px;"><?php
-	$res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
+	$res1=do_mysqli_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
 	echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
 	echo "<tr class=\"tblhead\"><td height=\"20\" valign=\"middle\" colspan=\"3\"><b>Spieler online</b></td></tr>\n";
 	echo "<tr class=\"tblbody\"><td height=\"30\" valign=\"middle\" colspan=\"3\">";
-	if(mysql_num_rows($res1) == 1)
+	if(mysqli_num_rows($res1) == 1)
 		echo "Momentan ist <b>ein Spieler</b> online!";
-	elseif(mysql_num_rows($res1) > 1)
-		echo "Momentan sind <b>".mysql_num_rows($res1)."</b> Spieler online!";
+	elseif(mysqli_num_rows($res1) > 1)
+		echo "Momentan sind <b>".mysqli_num_rows($res1)."</b> Spieler online!";
 	else
 		echo "Momentan sind <b>keine</b> Spieler online!";
 	echo "</td></tr></table>";
@@ -72,22 +72,22 @@ if($_REQUEST['message']) {
 else {
 ?>					
 					<font style="font-family: Tahoma; font-size: 11px;"><b><i>Vorbei
-					geht Ihr an den Bogen- und Armbrustschützen, die Euren
-					heimkehrenden Reitern den Rückzug decken. Doch kein Gegner wagt
+					geht Ihr an den Bogen- und ArmbrustschÃ¼tzen, die Euren
+					heimkehrenden Reitern den RÃ¼ckzug decken. Doch kein Gegner wagt
 					sich in die Reichweite der Pfeile. Noch nicht. Weniger als die
-					Hälfte eurer Männer ist zurückgekommen. Der Ausbruch war
+					HÃ¤lfte eurer MÃ¤nner ist zurÃ¼ckgekommen. Der Ausbruch war
 					fehlgeschlagen. Nun war die Stadt eingekreist. Ihr geht die
-					Doppelmauer entlang, klopft hier eine Schulter, reißt dort einen
-					Scherz. Und die Männer schöpfen für den Augenblick Mut.
-					Verzweifelte Hoffnung erfüllt ihre Augen und doch verschwindet sie,
-					sobald Ihr euch wegdreht. Immer noch eilen Männer auf die Mauern,
+					Doppelmauer entlang, klopft hier eine Schulter, reiÃŸt dort einen
+					Scherz. Und die MÃ¤nner schÃ¶pfen fÃ¼r den Augenblick Mut.
+					Verzweifelte Hoffnung erfï¿½llt ihre Augen und doch verschwindet sie,
+					sobald Ihr euch wegdreht. Immer noch eilen Mï¿½nner auf die Mauern,
 					Speertruppen, Panzerpieken, aber auch Leute der Stadtmiliz eilen
 					hin und her und leisten ihren Dienst. Ihr blickt in die Stadt und
 					Eure Augen wandern an den Mauern Eurer Festung hinauf. Der letzte
-					Rückzugspunkt, scheinbar uneinnehmbar. Und doch schien es
-					hoffnungslos. Endlos erstreckte sich das Heer der Ungläubigen. Dann
+					RÃ¼ckzugspunkt, scheinbar uneinnehmbar. Und doch schien es
+					hoffnungslos. Endlos erstreckte sich das Heer der UnglÃ¤ubigen. Dann
 					unvermittelt, setzen die Trommeln ein. Ihr kniet nieder und sprecht
-					ein Gebet. Überall auf der Mauer tun es die Männer Euch gleich,
+					ein Gebet. Ã¼berall auf der Mauer tun es die Mï¿½nner Euch gleich,
 					knien nieder und beten. Und dann beginnt es....</i></b></font>
 <?php } ?>
 					</td>
@@ -95,7 +95,7 @@ else {
 					<td width="88" valign="top" align="right">
                     <?php
 					   define("VOTE_VERTICAL", 1);
-					   include ("includes/vote.inc.php");
+					   //include ("includes/vote.inc.php");
 					?>
 					</td>
 				</tr>
@@ -104,18 +104,18 @@ else {
 				src="<? echo $imagepath; ?>/logo_80x80.gif" alt="HW2 Logo Schild"
 				align="left" border="0"></a> <font
 				style="font-family: Tahoma; font-size: 11px;"> Wir schreiben
-			tiefstes Mittelalter. Papst Urban II. hat zu den Kreuzzügen
-			aufgerufen und der heilige Krieg beginnt. Wählet zwischen dem
-			christlichen oder dem islamischen Glauben und übernehmet die
-			Herrschaft über Euer eigenes Reich. Gebietet Ihr am Anfang nur über
+			tiefstes Mittelalter. Papst Urban II. hat zu den Kreuzzï¿½gen
+			aufgerufen und der heilige Krieg beginnt. Wï¿½hlet zwischen dem
+			christlichen oder dem islamischen Glauben und Ã¼bernehmet die
+			Herrschaft Ã¼ber Euer eigenes Reich. Gebietet Ihr am Anfang nur Ã¼ber
 			ein einfaches Dorf, werdet Ihr mit der Zeit ein <b>gewaltiges Reich</b>
-			Euer Eigen nennen. Gründet neue Städte oder erobert bereits
-			bestehende. Seht Eure Dörfer zu prunkvollen Städten heranwachsen und
-			gewaltige Heere werden auf Euer Wort hören. Führet die Einwohner zum
-			rechten Glauben und zerschmettert die Ungläubigen. Doch Ihr seid
-			nicht alleine. Erbittet Aufnahme in einem der mächtigen Orden Eures
-			Glaubens und erklimmt die Hierarchie! Oder gründet Euren eigenen
-			Orden und führet ihn zu Macht, Ruhm und Ansehen. Es liegt allein in
+			Euer Eigen nennen. Grï¿½ndet neue StÃ¤dte oder erobert bereits
+			bestehende. Seht Eure Dï¿½rfer zu prunkvollen StÃ¤dten heranwachsen und
+			gewaltige Heere werden auf Euer Wort hï¿½ren. Fï¿½hret die Einwohner zum
+			rechten Glauben und zerschmettert die Unglï¿½ubigen. Doch Ihr seid
+			nicht alleine. Erbittet Aufnahme in einem der mï¿½chtigen Orden Eures
+			Glaubens und erklimmt die Hierarchie! Oder grÃ¼ndet Euren eigenen
+			Orden und fÃ¼hret ihn zu Macht, Ruhm und Ansehen. Es liegt allein in
 			Eurer Hand....</font>
 			
 			

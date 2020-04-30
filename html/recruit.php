@@ -43,13 +43,13 @@ include_once("includes/session.inc.php");
 <div align="center">
 <table width="600"><tr><td height="250" valign="center">
 <hr>
-<div align="center"><h1 class="error">Reichtum? Stärke? Ruhm!!</h1></div>
+<div align="center"><h1 class="error">Reichtum? Stï¿½rke? Ruhm!!</h1></div>
 <font size="+1">
 <b>Hast Du bereits weitere Spieler geworben?</b> Wenn ja, hast Du das auch mit deinem <a href="settings.php?show=account">
-Werbe-Link unter dem Menüpunkt Einstellungen</a> getan? Dafür gibt es nämlich eine Belohnung: <b>Bonuspunkte</b>!
+Werbe-Link unter dem Menï¿½punkt Einstellungen</a> getan? DafÃ¼r gibt es nï¿½mlich eine Belohnung: <b>Bonuspunkte</b>!
 <p>
 <center>Dein Link lautet: 
-<input type="text" size="50" value="http://<? echo $_SERVER['HTTP_HOST'];?>/register.php?ref=<? echo $player->getID(); ?>"></center>
+<input type="text" size="50" value="https://<? echo $_SERVER['HTTP_HOST'];?>/register.php?ref=<? echo $player->getID(); ?>"></center>
 <p>
 Sobald sich ein Bekannter, Freund oder sonstwer unter dieser Adresse anmeldet, bekommt Ihr Bohnunspunkte gutgeschrieben.
 </font>
@@ -63,13 +63,13 @@ Sobald sich ein Bekannter, Freund oder sonstwer unter dieser Adresse anmeldet, b
 <? show_banner(0); ?>
 </center>
 <p>
-Holy-Wars II ist zwar ein kostenloses Browserspiel, aber für uns Betreiber keinesfalls kostenfrei! 
-Die technische Ausstattung in Form von Servern verursacht regelmäßige Kosten, 
-welche wir zum Großteil <b>aus Werbung finanzieren</b>.</font><p>
+Holy-Wars II ist zwar ein kostenloses Browserspiel, aber fÃ¼r uns Betreiber keinesfalls kostenfrei! 
+Die technische Ausstattung in Form von Servern verursacht regelmÃ¤ÃŸige Kosten, 
+welche wir zum GroÃŸteil <b>aus Werbung finanzieren</b>.</font><p>
 <hr>
 <p>
-<center>Vergesst bitte nicht, <b>regelmäßig</b> für uns zu voten:<p>
-<? include ("includes/vote.inc.php");?>
+<center>Vergesst bitte nicht, <b>regelmÃ¤ÃŸig</b> fÃ¼r uns zu voten:<p>
+<? //include ("includes/vote.inc.php");?>
 
 </font>
 <p>
@@ -81,6 +81,5 @@ welche wir zum Großteil <b>aus Werbung finanzieren</b>.</font><p>
 
 </table>
 </div>
-<? include("ads/sponsorads-framelayer.php"); ?>
 </body>
 </html>

@@ -31,7 +31,7 @@ start_body();
 <table border="0" cellpadding="0" cellspacing="0">
 <tr><td style="border: solid black 2px;">
 <?php
-include_once("include/banner.inc.php");
+include_once("includes/banner.inc.php");
 
 if (isset($bannerpage)) 
      printBanner($bannerpage);    

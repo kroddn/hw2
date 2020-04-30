@@ -12,28 +12,28 @@ include_once("includes/player.class.php");
 include_once("includes/session.inc.php");
 
 if (!isset($topic) and isset($input)) {
-	$err = "Topic fehlt! Bitte erg‰nzen und dann nochmal abschicken!";
+	$err = "Topic fehlt! Bitte erg√§nzen und dann nochmal abschicken!";
 }
 
 if (!isset($text) and isset($input)) {
-	$err = "Text fehlt! Bitte erg‰nzen und dann nochmal abschicken!";
+	$err = "Text fehlt! Bitte erg√§nzen und dann nochmal abschicken!";
 }
 
 if (!isset($topic) and !isset($text) and isset($input)) {
-	$err = "Topic und Text fehlen! Bitte erg‰nzen und dann nochmal abschicken!";
+	$err = "Topic und Text fehlen! Bitte erg√§nzen und dann nochmal abschicken!";
 }
 
 if (isset($topic) and isset($text) and isset($input)) {
 	if(!$_POST['change']) {
-		do_mysql_query("INSERT INTO news (time, topic, text) VALUES (".time().", '".$topic."','".$text."')") or die(mysql_error());
+		do_mysqli_query("INSERT INTO news (time, topic, text) VALUES (".time().", '".$topic."','".$text."')") or die(mysqli_error($GLOBALS['con']));
 		$err = "Die News wurde erfolgreich in die Datenbank eingetragen!";
 	} else {
-		do_mysql_query("UPDATE news SET topic='".$topic."', text='".$text."' WHERE id='".$_POST['change']."'") or die(mysql_error());
+		do_mysqli_query("UPDATE news SET topic='".$topic."', text='".$text."' WHERE id='".$_POST['change']."'") or die(mysqli_error($GLOBALS['con']));
 		$err = "Die News wurde erfolgreich ge&auml;ndert!";
 	}
 }
 if($_GET['delete']) {
-	do_mysql_query("DELETE FROM news WHERE id='".$_GET['delete']."'") or die(mysql_error());
+	do_mysqli_query("DELETE FROM news WHERE id='".$_GET['delete']."'") or die(mysqli_error($GLOBALS['con']));
 	$err = "Die Nachricht wurde erfolgreich gel&ouml;scht!";
 }
 ?>
@@ -64,8 +64,8 @@ if(!$_GET['edit']) {
 	echo "</table>\n";
 	echo "</form>\n";
 } else {
-	$edit=do_mysql_query("SELECT topic,text FROM news WHERE id='".$_GET['edit']."'");
-	$edit=mysql_fetch_assoc($edit);
+	$edit=do_mysqli_query("SELECT topic,text FROM news WHERE id='".$_GET['edit']."'");
+	$edit=mysqli_fetch_assoc($edit);
 	echo "<form action=\"".$PHP_SELF."\" method=\"POST\">\n";
 	echo "<table width=\"300\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n";
 	echo "<tr><td class=\"error\">\n";
@@ -86,7 +86,7 @@ if(!$_GET['edit']) {
 }
 //news darstellen
 	echo "<table width=\"790\">";
-	echo "<tr class=\"tblhead\" width=\"100%\"><td colspan=\"8\"><b>News (die letzten 10 Eintr‰ge)</td></tr>\n";
+	echo "<tr class=\"tblhead\" width=\"100%\"><td colspan=\"8\"><b>News (die letzten 10 Eintr√§ge)</td></tr>\n";
 	echo "<tr class=\"tblhead\" width=\"100%\" style=\"font-weight:bold;\">\n";
 	echo "<td colspan=\"2\">&nbsp;</td>\n";
 	echo "<td>ID</td>\n";
@@ -94,8 +94,8 @@ if(!$_GET['edit']) {
 	echo "<td>Topic</td>\n";
 	echo "<td>Text</td>\n";
 	echo "</tr>";
-	$news=do_mysql_query("SELECT * FROM news WHERE 1 order by id desc limit 0,10");
-	while($get_news=mysql_fetch_assoc($news)) {
+	$news=do_mysqli_query("SELECT * FROM news WHERE 1 order by id desc limit 0,10");
+	while($get_news=mysqli_fetch_assoc($news)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
 		echo "<td width=\"16\"><a href=\"".$PHP_SELF."?delete=".$get_news['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
 		echo "<td width=\"16\"><a href=\"".$PHP_SELF."?edit=".$get_news['id']."\"><img src=\"".$imagepath."/ad_fixed.png\" border=\"0\" alt=\"Bearbeiten\"></a></td>\n";
@@ -114,5 +114,5 @@ if(!$_GET['edit']) {
 // Insert Into DB the execution time of this script
 list($START_MICRO, $START_SEC) = explode(" ",$START_TIME);
 list($END_MICRO, $END_SEC) = explode(" ",microtime());
-do_mysql_query("INSERT INTO log_cputime (file,start,time) VALUES ('".__FILE__."', ".$START_SEC.",".round(($END_MICRO+$END_SEC-$START_MICRO-$START_SEC)*1000).")");
+do_mysqli_query("INSERT INTO log_cputime (file,start,time) VALUES ('".__FILE__."', ".$START_SEC.",".round(($END_MICRO+$END_SEC-$START_MICRO-$START_SEC)*1000).")");
 ?>

@@ -44,7 +44,7 @@ else {
 
 define("HTML", 1);
 
-// Für jede Adresse ein eigenes Email versenden?
+// FÃ¼r jede Adresse ein eigenes Email versenden?
 define("SPAWN", 1);
 
 
@@ -78,10 +78,10 @@ body\r
 if(!isset($_SESSION) || !isset($_SESSION['player']) || !$_SESSION['player']->isAdmin() || isset($_REQUEST['showall'])) {
   // Zeige Newsletter an
   echo $pre_body;
-  $res = do_mysql_query("SELECT * FROM global.newsletter WHERE published IS NOT NULL ORDER BY id DESC");
+  $res = do_mysqli_query("SELECT * FROM global.newsletter WHERE published IS NOT NULL ORDER BY id DESC");
   
   echo "<table align=\"center\">";
-  while($n = mysql_fetch_object($res)) {
+  while($n = mysqli_fetch_object($res)) {
     echo "<tr><td style=\"padding: 10px;\">\n";
 
     if($_REQUEST['text'] == 1) {
@@ -133,11 +133,11 @@ tr { vertical-align: top; }
   if(isset($_REQUEST['topic']) && strlen($_REQUEST['topic']) && isset($_REQUEST['body']) && strlen($_REQUEST['body']) ) {
     if(isset($_REQUEST['btnsave'])) {
       $sql = sprintf("INSERT INTO global.newsletter (topic, body, time, author) VALUES ('%s', '%s', UNIX_TIMESTAMP(), %d) ",
-      mysql_escape_string(stripslashes($_REQUEST['topic'])),
-      mysql_escape_string(stripslashes($_REQUEST['body'])),
+      mysqli_escape_string($GLOBALS['con'], stripslashes($_REQUEST['topic'])),
+      mysqli_escape_string($GLOBALS['con'], stripslashes($_REQUEST['body'])),
       $_SESSION['player']->getID()
       );
-      do_mysql_query($sql);
+      do_mysqli_query($sql);
     }
     else if(isset($_REQUEST['btnpreview'])) {
       print_preview( stripslashes($topic), stripslashes($body) );
@@ -168,8 +168,8 @@ function getMailAdresses() {
   flush();
   
   $emails = array();
-  $res = do_mysql_query("SELECT email.email FROM global.email LEFT JOIN global.mailfail USING(email) WHERE active = 1 AND mailfail.type IS NULL");
-  while($next = mysql_fetch_array($res)) {
+  $res = do_mysqli_query("SELECT email.email FROM global.email LEFT JOIN global.mailfail USING(email) WHERE active = 1 AND mailfail.type IS NULL");
+  while($next = mysqli_fetch_array($res)) {
     array_push($emails, $next[0]);
   }
   return $emails;
@@ -316,26 +316,26 @@ function syncEmailAddresses() {
   foreach($dbtables AS $db => $tables) {
     foreach($tables AS $table) {
       echo "DB: $db  Table: $table<br>\n";
-      $resE = do_mysql_query("SELECT * FROM ".$db.".".$table);
+      $resE = do_mysqli_query("SELECT * FROM ".$db.".".$table);
 
-      while($row = mysql_fetch_array($resE)) {
+      while($row = mysqli_fetch_array($resE)) {
         foreach($row AS $field) {
           if(strpos($field, "@")) {
             preg_match_all($preg, $field, $regs);
             if(sizeof($regs) > 0) {
               for($i=0;$i<sizeof($regs[0]);$i++) {
                 $mail = trim($regs[0][$i]);
-                $res = do_mysql_query("SELECT * FROM global.email WHERE email = '".mysql_escape_string($mail)."'");
-                if($res && mysql_num_rows($res) == 0) {
+                $res = do_mysqli_query("SELECT * FROM global.email WHERE email = '".mysqli_escape_string($GLOBALS['con'], $mail)."'");
+                if($res && mysqli_num_rows($res) == 0) {
                   $code = uniqid("");
                   $from = $db.".".$table;
                   echo "Sync: $mail from $from<br>\n";
                   $sql = sprintf("INSERT INTO global.email (source, email, time, code) VALUES ('%s', '%s', UNIX_TIMESTAMP(), '%s')",
-                                 mysql_escape_string($from),
-                                 mysql_escape_string($mail),
-                                 mysql_escape_string($code)
+                                 mysqli_escape_string($GLOBALS['con'], $from),
+                                 mysqli_escape_string($GLOBALS['con'], $mail),
+                                 mysqli_escape_string($GLOBALS['con'], $code)
                                  );
-                  do_mysql_query($sql);
+                  do_mysqli_query($sql);
                 }
               } // for
             } // if(sizeof($regs) > 0)
@@ -351,8 +351,8 @@ function print_mail_info() {
   $sql = "SELECT count(*) AS cnt, TRIM( REPLACE(SUBSTRING(email, INSTR(email, '@') + 1), '\n', '') ) AS domain FROM global.email GROUP BY domain HAVING cnt > 40 ORDER BY cnt DESC";
 
   printf("<table><tr><td>Domain</td><td>Vorkommnis</td></tr>\n");
-  $res = do_mysql_query($sql);
-  while($d = mysql_fetch_assoc($res)) {
+  $res = do_mysqli_query($sql);
+  while($d = mysqli_fetch_assoc($res)) {
     printf("<tr><td>%s</td><td>%s</td></tr>\n", $d['domain'], $d['cnt']);
   }
   echo "</table>\n";
@@ -363,7 +363,7 @@ function print_input_form() {
   $lastid = 0;
 
   if(!isset($_REQUEST['topic']) && !isset($_REQUEST['body'])) {
-    $last = do_mysql_query_fetch_assoc("SELECT * FROM global.newsletter WHERE author = ".$_SESSION['player']->getID()." ORDER BY time DESC LIMIT 1");
+    $last = do_mysqli_query_fetch_assoc("SELECT * FROM global.newsletter WHERE author = ".$_SESSION['player']->getID()." ORDER BY time DESC LIMIT 1");
     if($last != null && $last['topic'] && $last['body']) {
       $body  = $last['body'];
       $topic = $last['topic'];
@@ -395,7 +395,7 @@ function print_input_form() {
      <input type="submit" name="btnpreview"  value=" Vorschau "/>&nbsp;&nbsp;&nbsp;
      <input type="submit" name="btntestsend" value=" Testversand "/>&nbsp;&nbsp;&nbsp;
      <input type="submit" name="btnsave" value=" Speichern "/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-     <input type="submit" name="btnrealsend"  value=" Raus damit! "/>&nbsp;Bestätigen:&nbsp;
+     <input type="submit" name="btnrealsend"  value=" Raus damit! "/>&nbsp;BestÃ¤tigen:&nbsp;
      <input type="checkbox" name="confirm" value="1" /> 
    </td>
 </tr>
@@ -512,7 +512,7 @@ function real_send_mail($topic, $body, $recipients = null) {
       
       if($cnt%100 == 99) {
         echo "$cnt Emails raus<br>";
-        flush(); // dem Browser die möglichkeit zum aktualisieren geben
+        flush(); // dem Browser die mÃ¶glichkeit zum aktualisieren geben
       }
     }
   } // foreach
@@ -522,7 +522,7 @@ function real_send_mail($topic, $body, $recipients = null) {
       echo "<h1>Insgesamt $cnt Emails raus (SPAWN).</h1>";
     }
     else {
-      echo "<h1>$cnt Emailempfänder generiert.</h1>";
+      echo "<h1>$cnt Emailempfï¿½nder generiert.</h1>";
     }
   }
 
@@ -536,7 +536,7 @@ function real_send_mail($topic, $body, $recipients = null) {
       }
     }
     else {
-      echo "Keine Empfänger bzw. Simulationsmodus.";
+      echo "Keine Empfï¿½nger bzw. Simulationsmodus.";
     }
   }
 

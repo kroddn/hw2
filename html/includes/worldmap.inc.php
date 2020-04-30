@@ -31,22 +31,22 @@
  ***************************************************/
 
 //edit by obligaron:
-//paramter für das include
-//$what  Abfrage für mögliches WHERE, GROUP BY, SORT BY oder sonstwas (Beispiel: $what = "WHERE player.id = ".$_GET['uid'].";)
-//$takecoloursby  Nach welchen kriterien er die Farbe vergeben soll. Dies geschieht per Modu, also muss es ein int Wert sein, der hochgezählt wird (Beispiel: $takecoloursby = "religion";)
+//paramter fÃ¼r das include
+//$what  Abfrage fÃ¼r mÃ¶gliches WHERE, GROUP BY, SORT BY oder sonstwas (Beispiel: $what = "WHERE player.id = ".$_GET['uid'].";)
+//$takecoloursby  Nach welchen kriterien er die Farbe vergeben soll. Dies geschieht per Modu, also muss es ein int Wert sein, der hochgezÃ¤hlt wird (Beispiel: $takecoloursby = "religion";)
 
 include_once("includes/banner.inc.php");
 
 start_page();
 start_body(false);
 
-// Die eigene ID wird öfter benötigt, besser lesbar
+// Die eigene ID wird ï¿½fter benï¿½tigt, besser lesbar
 $my_pid = $_SESSION['player']->getID();
 
 
 /*** HERE START ***/
 if (!isset($what)) {
-  echo "<b>Haha, ihr seid vielleicht ein Held! Welche Karte möchtet ihr denn gerne betrachten? Gebt gefälligst Infos an!<b></body></html>";
+  echo "<b>Haha, ihr seid vielleicht ein Held! Welche Karte mï¿½chtet ihr denn gerne betrachten? Gebt gefï¿½lligst Infos an!<b></body></html>";
   die();
 }
 include_once("includes/util.inc.php");
@@ -70,13 +70,13 @@ if(!is_premium_noads()) {
 }
 echo "</div>";
 
-$worldcities = do_mysql_query($sql);
+$worldcities = do_mysqli_query($sql);
 
 //  echo "\n<!-- ".$sql."-->\n";
-// SQL-String für Clan-Diplomatie-Karte
+// SQL-String fÃ¼r Clan-Diplomatie-Karte
 echo "\n<!-- ".$clan_sql."-->\n";
 if(!isset($_REQUEST['clan_sql']) && isset($GLOBALS['clan_sql'])) {
-  $clancities = do_mysql_query($GLOBALS['clan_sql']);
+  $clancities = do_mysqli_query($GLOBALS['clan_sql']);
 }
 else {
   $clancities = null;
@@ -192,21 +192,21 @@ if (!isset($takecoloursby))
 }
 
 /**
- * Zunächst wird das Standard-SQL-Result durchiteriert.
- * Danach folgen eventuell zusätzliche "clancities".
+ * ZunÃ¤chst wird das Standard-SQL-Result durchiteriert.
+ * Danach folgen eventuell zusÃ¤tzliche "clancities".
  * 
  * $takecoloursby kann auf einen Wert gesetzt werden, der dann die
  * Wahl der Farbe bestimmt. Sinnvolle Werte sind 'id' oder 'rel',
  * falls es sich um eine Beziehungskarte handelt.
  *
- * $city benötigt die Assoc-Indizes:
+ * $city benï¿½tigt die Assoc-Indizes:
  * - id
  * - name
  * - ownerid
  * - owner (name)
  * - x und y
  */
-while( null != ($city = mysql_fetch_assoc($worldcities)) || $clancities != null && null != ($city =  mysql_fetch_assoc($clancities))  ) {  
+while( null != ($city = mysqli_fetch_assoc($worldcities)) || $clancities != null && null != ($city =  mysqli_fetch_assoc($clancities))  ) {  
   if($city[$takecoloursby] == null) {
     $i = 10;
   }
@@ -214,13 +214,13 @@ while( null != ($city = mysql_fetch_assoc($worldcities)) || $clancities != null 
     $i=$city[$takecoloursby] % sizeof($acolor);
   }
   
-  // Das DIV um die Grafik herum sorgt für die Anzeige der Tooltips
+  // Das DIV um die Grafik herum sorgt fÃ¼r die Anzeige der Tooltips
   echo "<div onmouseover=\"document.getElementById('a".$city['id']."').style.display = 'inline';document.getElementById('b".$city['id']."').style.display = 'inline';\" onmouseout=\"document.getElementById('a".$city['id']."').style.display = 'none';document.getElementById('b".$city['id']."').style.display = 'none';\" style='position:absolute; display:block; z-index:501; height:5px; top:".($city['y']-5)."; left:".($city['x']-5)."'>";
 
   
   echo " <a href='map.php?gox=".$city['x']."&goy=".$city['y']."' target=\"main\" onmouseup=\"\">";
 
-  // Die eigentliche 'Grafik' für die Stadt wird aus Border und BGColor zusammengebaut
+  // Die eigentliche 'Grafik' fÃ¼r die Stadt wird aus Border und BGColor zusammengebaut
   $bg = $city['ownerid'] == $my_pid ? "#FFFFFF" : $acolor[$i];
   $border = $acolor[($i+3)%sizeof($acolor) ];
   printf('<img border="0" style="border: 2px solid %s; background-color: %s" width="4" height="4" src="%s/dummy.gif">', 
@@ -238,16 +238,6 @@ while( null != ($city = mysql_fetch_assoc($worldcities)) || $clancities != null 
   echo "<strong>".$city['name']."</strong> im Besitz von <strong>".$city['owner']."</strong>";
   echo "</div>\n";
 } // while
-
-// Werbung nicht immer anzeigen, nur 2 von 12 Minuten
-if (!is_premium_noads() ) {
-  $timemod = time() % 12;
-
-  switch($timemod) {
-    case 1: include("ads/openinventory_layer.php"); break;
-    case 2: include("ads/sponsorads-framelayer.php"); break;
-  }
-}
 
 end_page();
 ?>

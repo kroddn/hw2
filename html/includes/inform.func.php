@@ -31,16 +31,16 @@ if( isset($_REQUEST['accept_inform']) )
                    " WHERE inform_player.player IS NULL AND inform.infid = %d",
                    $_SESSION['player']->getID(), $_REQUEST['infid']);
     
-    $res = do_mysql_query($sql);
-    if(mysql_num_rows($res) > 0) {
+    $res = do_mysqli_query($sql);
+    if(mysqli_num_rows($res) > 0) {
       $sql = sprintf("INSERT INTO inform_player (infid, player, time) VALUES(%d, %d, UNIX_TIMESTAMP())",
                      $_REQUEST['infid'], $_SESSION['player']->getID() );
-      do_mysql_query($sql);
+      do_mysqli_query($sql);
     }
     unset($error);
   }
   else {
-    $error = "Setzen Sie ein Häkchen!";
+    $error = "Setzen Sie ein Hï¿½kchen!";
   }
 }
 
@@ -50,9 +50,9 @@ $sql = sprintf("SELECT inform.* FROM inform LEFT JOIN inform_player ".
                       "  AND (expire IS NULL OR NOT expire < UNIX_TIMESTAMP())".
                       " ORDER BY inform.time",
                $_SESSION['player']->getID() );
-$res = do_mysql_query($sql);
-if(mysql_num_rows($res) > 0 ) {
-  $inform = mysql_fetch_assoc($res);
+$res = do_mysqli_query($sql);
+if(mysqli_num_rows($res) > 0 ) {
+  $inform = mysqli_fetch_assoc($res);
  
   show_inform($inform);
   exit();
@@ -63,9 +63,9 @@ function show_inform($inf) {
   start_body();
 ?>
 <h1>Wichtige Information</h1>
-Bitte lesen Sie nachfolgende Informationen durch und bestätigen
-Sie die Kenntnisnahme durch Setzen eines Häkchens bzw. Ankreuzen
-der entsprechenden Schaltfläche.
+Bitte lesen Sie nachfolgende Informationen durch und bestÃ¤tigen
+Sie die Kenntnisnahme durch Setzen eines Hï¿½kchens bzw. Ankreuzen
+der entsprechenden Schaltflï¿½che.
 <p>
 <hr>
 <?

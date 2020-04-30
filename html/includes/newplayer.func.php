@@ -37,7 +37,7 @@ function insert_new_player(&$p) {
       $pos = "NULL";
     }
     else {
-      return "Weder 'religion' noch 'pos' wurden als Parameter übergeben!";
+      return "Weder 'religion' noch 'pos' wurden als Parameter Ã¼bergeben!";
     }
   }
   */
@@ -61,13 +61,13 @@ function insert_new_player(&$p) {
   }
   
   $religion = "NULL";
-  $mainres = do_mysql_query("INSERT INTO player (login,password,email,register_email,sms,lastseen,religion,status,statusdescription,activationkey,regtime,recruiter,pos,bonuspoints,cc_messages) VALUES ('".trim($p['login'])."','".$md5pw."','".trim($p['email'])."', '".trim($p['email'])."', ".$sms.", UNIX_TIMESTAMP(), ".$religion.", 1,'Noch nicht aktiviert','".$key."', UNIX_TIMESTAMP(), ".( !isset($p['ref']) || $p['ref'] == 0 ? "NULL" : $p['ref']).", NULL, $bonuspoints, 1)");
+  $mainres = do_mysqli_query("INSERT INTO player (login,password,email,register_email,sms,lastseen,religion,status,statusdescription,activationkey,regtime,recruiter,pos,bonuspoints,cc_messages) VALUES ('".trim($p['login'])."','".$md5pw."','".trim($p['email'])."', '".trim($p['email'])."', ".$sms.", UNIX_TIMESTAMP(), ".$religion.", 1,'Noch nicht aktiviert','".$key."', UNIX_TIMESTAMP(), ".( !isset($p['ref']) || $p['ref'] == 0 ? "NULL" : $p['ref']).", NULL, $bonuspoints, 1)");
 
   if (!$mainres) {
     return "Fehler. Konnte Spieler nicht anlegen";
   }
 
-  $playerid = mysql_insert_id($GLOBALS['con']);
+  $playerid = mysqli_insert_id($GLOBALS['con']);
   $p['pid'] = $playerid;
   
   if(isset($_SESSION) && isset($_SESSION['player']) && $_SESSION['player']->isAdmin()) {
@@ -92,43 +92,43 @@ Login: $login
 Passwort: sollte bekannt sein
 Aktivierungscode: $key
 
-Nach Ihrem ersten Login können Sie einen Spielernamen wählen!
+Nach Ihrem ersten Login kÃ¶nnen Sie einen Spielernamen wï¿½hlen!
 
 "
   .( 
   (defined("NEW_ACTIVATION") && NEW_ACTIVATION)
   // *********************** Neue Aktivierung *******************************
-  ? "Um Ihren Account vollständig zu aktivieren, klicken Sie einfach auf
-\"Antworten\" und senden diese komplette Email an uns zurück. 
-Wichtig ist, dass die Absender-Emailadresse mit der während der Registrierung
-angegebenen Adresse übereinstimmmt und dass die folgende Zeile bei uns ankommt:  
+  ? "Um Ihren Account vollstÃ¤ndig zu aktivieren, klicken Sie einfach auf
+\"Antworten\" und senden diese komplette Email an uns zurÃ¼ck. 
+Wichtig ist, dass die Absender-Emailadresse mit der wï¿½hrend der Registrierung
+angegebenen Adresse Ã¼bereinstimmmt und dass die folgende Zeile bei uns ankommt:  
 Aktivierungscode: $key"
   // *********************** alte Aktivierung *******************************
-  : "Der Account lässt sich über diesen Link aktivieren.
+  : "Der Account lÃ¤sst sich Ã¼ber diesen Link aktivieren.
 $hw2_base_url/activate.php?activationcode=$key&loginname=$nameencode&activate=1
 
-Falls dieser Link nicht funktioniert, können Sie auch auf der Login-Seite
+Falls dieser Link nicht funktioniert, kÃ¶nnen Sie auch auf der Login-Seite
 die Aktivierung aufrufen, und den Aktivierungscode eingeben."
   
 )."
 
 Vergessen Sie nicht, nach dem ersten Login Ihre Ausgangsstadt umzubenennen und
-weitere Informationen unter dem Menüpunkt MyHW2 zu hinterlegen!
+weitere Informationen unter dem Menï¿½punkt MyHW2 zu hinterlegen!
 
 Bitte installieren Sie auch gleich den Grafik-Pack, um unseren Server zu
-schonen und die Spielgeschwindigkeit zu erhöhen. Download unter:
+schonen und die Spielgeschwindigkeit zu erhÃ¶hen. Download unter:
 ".(defined("URL_BASE") ? URL_BASE : "http://www.holy-wars2.de" )."/grafikpaket/hw_grafik_v".(defined("GFX_VERSION") ? GFX_VERSION : "2.03").".zip
 
 Diese eMail wurde automatisch generiert.
 		
-Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de");
+Viel SpaÃŸ wï¿½nscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de");
   
 
   if ($p['ref'] != null) {
-    $res7=do_mysql_query("SELECT id FROM player WHERE id = ".$p['ref']);
-    if(mysql_num_rows($res7)>0 && $p['ref'] != $playerid) {
+    $res7=do_mysqli_query("SELECT id FROM player WHERE id = ".$p['ref']);
+    if(mysqli_num_rows($res7)>0 && $p['ref'] != $playerid) {
       $bonus = RECRUIT_BONUSPOINTS;
-      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints+".$bonus  ." WHERE id = ".$p['ref']);
+      do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints+".$bonus  ." WHERE id = ".$p['ref']);
     }
   }
 
@@ -140,17 +140,17 @@ Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de");
                  
                  "Herzlich Willkommen zu Holy-Wars 2.\n\n".
                  "Bevor Ihr sofort loslegt, bitte beachtet unbedingt folgende Punkte:\n".
-                 "1. Baut NICHT gleich alle bzw. zu viele Gebäude. Das treibt Euch in den Ruin!\n".
+                 "1. Baut NICHT gleich alle bzw. zu viele GebÃ¤ude. Das treibt Euch in den Ruin!\n".
                  "2. Lest Euch unbedingt das Tutorial durch (siehe Bibliothek).\n".
-                 "3. Gründet 2 neue Städte, nicht mehr (wird im Tutorial erklärt).\n".
-		         "   Städte gründen könnt Ihr im Rathaus (Menüpunkt).\n".
+                 "3. Grï¿½ndet 2 neue StÃ¤dte, nicht mehr (wird im Tutorial erklï¿½rt).\n".
+		         "   StÃ¤dte grÃ¼nden kÃ¶nnt Ihr im Rathaus (Menï¿½punkt).\n".
 		         "4. Verdient Euch etwas Gold, indem Ihr an Ritterturnieren teilnehmt\n\n".
-                 "zu 1.: ein Sägewerk und zwei Holzfäller reichen anfangs vollkommen aus\n\n".
-                 "Und nun viel Spaß beim Spiel!"                 
+                 "zu 1.: ein Sï¿½gewerk und zwei HolzfÃ¤ller reichen anfangs vollkommen aus\n\n".
+                 "Und nun viel SpaÃŸ beim Spiel!"                 
                  );
 
 
-  do_mysql_query($sql);
+  do_mysqli_query($sql);
   
   return null;
 }

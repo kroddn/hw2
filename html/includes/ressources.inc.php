@@ -23,8 +23,8 @@
  **************************************************************************/
 
 function get_adm_level($id) {
-  $res=do_mysql_query("SELECT max(research.management) FROM research, playerresearch WHERE research.id = playerresearch.research AND playerresearch.player = ".intval($id) );
-  $data=mysql_fetch_row($res);
+  $res=do_mysqli_query("SELECT max(research.management) FROM research, playerresearch WHERE research.id = playerresearch.research AND playerresearch.player = ".intval($id) );
+  $data=mysqli_fetch_row($res);
   return $data[0];
 }
 
@@ -40,7 +40,7 @@ function get_eff($citycount, $level) {
 }
 
 function get_inc_res($raw, $capacity, $consum, $storage, $prodfactor) {
-  //raw enthält die gelagerten Res UND die aktuelle Produktion
+  //raw enthÃ¤lt die gelagerten Res UND die aktuelle Produktion
   if ($raw<0) {
     $res['res'] = 0;
     $res['raw'] = $raw;
@@ -59,7 +59,7 @@ function get_inc_res($raw, $capacity, $consum, $storage, $prodfactor) {
 
 function get_inc_wep($raw, $capacity, $consum, $storage, $reserve_storage, $stock, $prodfactor, $limit) {
   $max = floor(min($capacity*$prodfactor, max(0, $limit-$stock-$reserve_storage)));  
-  //raw enthält die gelagerten Res UND die aktuelle Produktion
+  //raw enthÃ¤lt die gelagerten Res UND die aktuelle Produktion
   if ($max + $stock > $storage) {
     $max = $storage - $stock;
   }
@@ -88,32 +88,32 @@ function get_inc_wep($raw, $capacity, $consum, $storage, $reserve_storage, $stoc
 
 function get_city_ucost($city, $pid) {
   $pid = intval($pid);
-  $res = do_mysql_query("SELECT round(sum(count*cost), 2) FROM city LEFT JOIN cityunit ON city.id=cityunit.city LEFT JOIN unit ON cityunit.unit=unit.id WHERE city.id=".$city." AND cityunit.owner=".$pid);
-  $data = mysql_fetch_row($res);
+  $res = do_mysqli_query("SELECT round(sum(count*cost), 2) FROM city LEFT JOIN cityunit ON city.id=cityunit.city LEFT JOIN unit ON cityunit.unit=unit.id WHERE city.id=".$city." AND cityunit.owner=".$pid);
+  $data = mysqli_fetch_row($res);
   return $data[0];
 }
 
 function get_external_cucost($pid) {
   $pid = intval($pid);
-  $res = do_mysql_query("SELECT round(sum( count * cost ), 2) FROM city LEFT JOIN cityunit ON city.id = cityunit.city LEFT JOIN unit ON cityunit.unit = unit.id WHERE city.owner != ".$pid." AND cityunit.owner = ".$pid);
-  $data = mysql_fetch_row($res);
+  $res = do_mysqli_query("SELECT round(sum( count * cost ), 2) FROM city LEFT JOIN cityunit ON city.id = cityunit.city LEFT JOIN unit ON cityunit.unit = unit.id WHERE city.owner != ".$pid." AND cityunit.owner = ".$pid);
+  $data = mysqli_fetch_row($res);
   return $data[0];
 }
 
 
 /**
- * Armeekosten, laufende Männer.
+ * Armeekosten, laufende Mï¿½nner.
  * Armeen, die bereits belagern, kosten nichts.
  */
 function get_army_cost($pid) {
   $pid = intval($pid);
   $no_cost_siege = defined("SIEGE_ARMIES_NO_COST") && SIEGE_ARMIES_NO_COST;
 	
-  $army_res = do_mysql_query("SELECT round(sum(count * u.cost), 2) ".
+  $army_res = do_mysqli_query("SELECT round(sum(count * u.cost), 2) ".
                              " FROM armyunit au LEFT JOIN army a ON a.aid = au.aid LEFT JOIN unit u ON u.id = au.unit ".
                              ($no_cost_siege ? " WHERE NOT(a.mission = 'siege' AND a.endtime < UNIX_TIMESTAMP() ) " : "").
                              " AND a.owner=".intval($pid) );
-  $army = mysql_fetch_row($army_res);
+  $army = mysqli_fetch_row($army_res);
 
 
   return $army[0];
@@ -127,11 +127,11 @@ function get_army_cost($pid) {
  */
 function get_army_cost_siege($pid) {
   $pid = intval($pid);
-  $army_res = do_mysql_query("SELECT round(sum(count * u.cost), 2) ".
+  $army_res = do_mysqli_query("SELECT round(sum(count * u.cost), 2) ".
                              " FROM armyunit au LEFT JOIN army a ON a.aid = au.aid LEFT JOIN unit u ON u.id = au.unit ".
                              " WHERE a.mission = 'siege' AND a.endtime < UNIX_TIMESTAMP() ".
                              "       AND a.owner=".$pid);
-  $army = mysql_fetch_row($army_res);
+  $army = mysqli_fetch_row($army_res);
 
 
   return $army[0];
@@ -140,12 +140,12 @@ function get_army_cost_siege($pid) {
 
 
 /**
- * Truppenkosten, stehende Männer
+ * Truppenkosten, stehende Mï¿½nner
  */
 function get_ucost($pid) {
   $pid = intval($pid);
-  $city_res = do_mysql_query("SELECT round(sum(count*cost)) FROM city LEFT JOIN cityunit ON city.id=cityunit.city LEFT JOIN unit ON cityunit.unit=unit.id WHERE cityunit.owner=".$pid);
-  $city = mysql_fetch_row($city_res);
+  $city_res = do_mysqli_query("SELECT round(sum(count*cost)) FROM city LEFT JOIN cityunit ON city.id=cityunit.city LEFT JOIN unit ON cityunit.unit=unit.id WHERE cityunit.owner=".$pid);
+  $city = mysqli_fetch_row($city_res);
 
   $army = get_army_cost($pid);
 
@@ -162,8 +162,8 @@ function get_clan_tax($clan, $gold, &$tax) {
   $taxrate = 0;
 
   if ($clan) {
-    $res=do_mysql_query("SELECT tax FROM clan WHERE id=".$clan);
-    if ($data = mysql_fetch_row($res)) {
+    $res=do_mysqli_query("SELECT tax FROM clan WHERE id=".$clan);
+    if ($data = mysqli_fetch_row($res)) {
       if($data[0] > 0) {
          $taxrate = $data[0]*100;     
 
@@ -181,11 +181,11 @@ function get_clan_tax($clan, $gold, &$tax) {
 function log_clan_tax($pid, $clan, $gold) {
   $pid = intval($pid);
   
-  $clanlogdata1 = do_mysql_query("SELECT * from clanlog where playerid=".$pid." and clan=".$clan);
-  if ($get_clanlogdata1 = mysql_fetch_assoc($clanlogdata1)) {
-    do_mysql_query("UPDATE clanlog SET tax=tax+".$gold.", time_tax=UNIX_TIMESTAMP() WHERE playerid=".$pid." AND clan=".$clan);
+  $clanlogdata1 = do_mysqli_query("SELECT * from clanlog where playerid=".$pid." and clan=".$clan);
+  if ($get_clanlogdata1 = mysqli_fetch_assoc($clanlogdata1)) {
+    do_mysqli_query("UPDATE clanlog SET tax=tax+".$gold.", time_tax=UNIX_TIMESTAMP() WHERE playerid=".$pid." AND clan=".$clan);
   } else {
-    do_mysql_query("INSERT INTO `clanlog` (`playerid`,`clan`, `tax`, `time_tax`) VALUES (".$pid.",".$clan.",".$gold.", UNIX_TIMESTAMP() )");
+    do_mysqli_query("INSERT INTO `clanlog` (`playerid`,`clan`, `tax`, `time_tax`) VALUES (".$pid.",".$clan.",".$gold.", UNIX_TIMESTAMP() )");
   }
 }
 

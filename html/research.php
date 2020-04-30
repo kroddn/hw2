@@ -40,17 +40,19 @@ include_once("includes/banner.inc.php");
 
 $player->setActivePage(basename(__FILE__));
 
+$research = $_SESSION['research'];
+
 if (isset($rid)) {
   $error = $research->startResearch($rid);
   if($error === null) {
-    header("location: research.php?started=1");
+    header_redirect("research.php?started=1");
     exit;
   }
 }
 
 if (isset($abort)) {
   $research->abortResearching();
-  header("location: research.php?aborted=1");
+  header_redirect("research.php?aborted=1");
   exit;
 }
 
@@ -85,30 +87,30 @@ if( defined("RESEARCH_BIGSCHOOL") && defined("RESEARCH_LIBRARY") ) {
     " WHERE research IN (".RESEARCH_BIGSCHOOL.",".RESEARCH_LIBRARY.") ".
     " AND player = ".$_SESSION['player']->id;
 
-  $schools = do_mysql_query_fetch_assoc($sql);
+  $schools = do_mysqli_query_fetch_assoc($sql);
 }
 else {
   $schools['cnt'] = 2;
 }
 if($schools['cnt'] < 2) { ?>
-Ihr könnt <b><? echo $schools['cnt']+1;?> Forschung<? if($schools['cnt']>0) echo "en"; ?> gleichzeitig</b> durchführen.<br>
-Durch Erforschung von <? if($schools['cnt'] == 0) echo "Klassensystem und "?> Bibliotheken erhöht sich dieses Limit <? if($schools['cnt'] == 0) echo"<b>jeweils</b>"; ?> um 1.
+Ihr kÃ¶nnt <b><? echo $schools['cnt']+1;?> Forschung<? if($schools['cnt']>0) echo "en"; ?> gleichzeitig</b> durchfÃ¼hren.<br>
+Durch Erforschung von <? if($schools['cnt'] == 0) echo "Klassensystem und "?> Bibliotheken erhÃ¶ht sich dieses Limit <? if($schools['cnt'] == 0) echo"<b>jeweils</b>"; ?> um 1.
 <? 
 }
 echo "<p>";
 
 
-$res0 = do_mysql_query("SELECT rid FROM researching WHERE player = ".$_SESSION['player']->getID());
-$countResearching = mysql_num_rows($res0);
+$res0 = do_mysqli_query("SELECT rid FROM researching WHERE player = ".$_SESSION['player']->getID());
+$countResearching = mysqli_num_rows($res0);
 
 if($countResearching >= $schools['cnt']+1) {
   $maxResearches = 1;
 
   echo "<table style=\"margin:1px;\" width=\"498\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-  echo "<tr><td class=\"tblhead\">Während Ihr darauf wartet, dass die Forschung abgeschlossen ist, könntet Ihr für Holy-Wars 2 voten.</td></tr>";
+  echo "<tr><td class=\"tblhead\">Wï¿½hrend Ihr darauf wartet, dass die Forschung abgeschlossen ist, kÃ¶nntet Ihr fÃ¼r Holy-Wars 2 voten.</td></tr>";
 
   echo "<tr><td class=\"tblhead\">";
-  include("includes/vote.inc.php");
+  //include("includes/vote.inc.php");
   echo "</td></tr><tr><td colspan=\"2\" height=\"5\"></td></tr></table>";
 } 
 else {
@@ -134,28 +136,28 @@ for ($i=0;$i<sizeof($rs);$i++) {
       $starttime = getRoundStartTime();
       $noobtime = defined("SPEED") && SPEED ? (7*24*60*60) : (3*7*24*60*60);
 
-      echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Beim Erforschen einer höheren Stufe der Reichsverwaltung verliert Ihr Euren Neulingsschutz!<br>Der Neulingsschutz wirkt bis ".
-        (date("d.m.Y H:i:s", ($starttime > $player->getActivationTime() ? $starttime : $player->getActivationTime()) + $noobtime) ).", danach verfällt er automatisch.</font></td></tr>\n";
+      echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Beim Erforschen einer hÃ¶heren Stufe der Reichsverwaltung verliert Ihr Euren Neulingsschutz!<br>Der Neulingsschutz wirkt bis ".
+        (date("d.m.Y H:i:s", ($starttime > $player->getActivationTime() ? $starttime : $player->getActivationTime()) + $noobtime) ).", danach verfï¿½llt er automatisch.</font></td></tr>\n";
     }
 
     //$player->getNoobLevel() > 0 &&
     if ($rs[$i]['content']['category'] == 1) {
       getMapSize($fx, $fy);
 
-      if(round($fy/2) < $cities->city_y) {
-        $direction ="südlich";
+      if(round($fy/2) < $_SESSION['cities']->city_y) {
+        $direction ="sï¿½dlich";
         $hintsearch="Lehmgewinnung";
         $hintnotsearch="Steinabbau";
         $hintwhen = "Norden";
       }
       else {
-        $direction ="nördlich";
+        $direction ="nï¿½rdlich";
         $hintsearch="Steinabbau";
         $hintnotsearch="Lehmgewinnung";
-        $hintwhen = "Süden";
+        $hintwhen = "Sï¿½den";
       }
 
-      echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Eure aktuelle Stadt ist <b>$direction</b> des Holy-Wars-Äquators gelegen. Daher solltet Ihr <b>$hintsearch</b> forschen. $hintnotsearch solltet Ihr erst erforschen, wenn Ihr eine Stadt im $hintwhen gegründet oder erobert habt.</font></td></tr>\n";
+      echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Eure aktuelle Stadt ist <b>$direction</b> des Holy-Wars-ï¿½quators gelegen. Daher solltet Ihr <b>$hintsearch</b> forschen. $hintnotsearch solltet Ihr erst erforschen, wenn Ihr eine Stadt im $hintwhen gegrÃ¼ndet oder erobert habt.</font></td></tr>\n";
     }
 
 
@@ -173,17 +175,17 @@ for ($i=0;$i<sizeof($rs);$i++) {
   echo "<td width=\"15%\" style=\"text-align:right; padding-right:10px;\">".formatTime(max(MIN_RESEARCH_TIME, $rs[$i]['content']['time']/RESEARCHSPEED))." <img src=\"".$imagepath."/time.gif\"></td>";
   
   
-  $res1 = do_mysql_query("SELECT rid,starttime,endtime FROM researching WHERE player = '".$_SESSION['player']->id."' AND rid = '".$rs[$i]['content']['id']."'");
-  $count1 = mysql_num_rows($res1);
-  $data1 = mysql_fetch_assoc($res1);
+  $res1 = do_mysqli_query("SELECT rid,starttime,endtime FROM researching WHERE player = '".$_SESSION['player']->id."' AND rid = '".$rs[$i]['content']['id']."'");
+  $count1 = mysqli_num_rows($res1);
+  $data1 = mysqli_fetch_assoc($res1);
   
   if($count1) {
     $remaining=$data1['endtime'] - time();
     echo "<td width=\"15%\" class=\"tblhead\"><span class=\"noerror\" id=\"".$rs[$i]['content']['id']."\"><script type=\"text/javascript\">addTimer('".$remaining."',".$rs[$i]['content']['id'].");</script></span></td>";
   }
   else {		
-    $res2 = do_mysql_query("SELECT research FROM playerresearch WHERE player = '".$_SESSION['player']->id."' AND research = '".$rs[$i]['content']['id']."'");
-    $data2 = mysql_fetch_assoc($res2);
+    $res2 = do_mysqli_query("SELECT research FROM playerresearch WHERE player = '".$_SESSION['player']->id."' AND research = '".$rs[$i]['content']['id']."'");
+    $data2 = mysqli_fetch_assoc($res2);
     
     if($data2['research'] == $rs[$i]['content']['id']) {
       echo "<td width=\"15\" class=\"tblhead\" align=\"center\">";
@@ -200,7 +202,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
       if($maxResearches == 0) {
 	if($_SESSION['player']->rp >= $rs[$i]['content']['rp']) {
 	  $areabuilding = false;
-	  echo "<td width=\"15\" class=\"tblhead\" align=\"center\"><a href=\"research.php?rid=".$rs[$i]['content']['id']."\"".($areabuilding ? 'onClick="return confirm(\'Diese Forschung führt zu gebietsabhändigen Gebäuden. Seid Ihr sicher, dass Ihr forschen wollt?\')"' : "")."><img src=\"".$imagepath."/arrow.gif\" border=\"0\"></a></td>";
+	  echo "<td width=\"15\" class=\"tblhead\" align=\"center\"><a href=\"research.php?rid=".$rs[$i]['content']['id']."\"".($areabuilding ? 'onClick="return confirm(\'Diese Forschung fÃ¼hrt zu gebietsabhï¿½ndigen GebÃ¤uden. Seid Ihr sicher, dass Ihr forschen wollt?\')"' : "")."><img src=\"".$imagepath."/arrow.gif\" border=\"0\"></a></td>";
 	} 
 	else {
 	  echo "<td width=\"15\" class=\"tblhead\" align=\"center\"><img src=\"".$imagepath."/arrowred.gif\" border=\"0\"></td>";
@@ -220,9 +222,6 @@ echo "</table>\n\n</td></tr>\n</table>\n\n";
 <p>
 <?php 
 $research->globalstatus = false; 
-if((isset($started) || isset($aborted)) && !is_premium_noads() ) {
-  include("ads/openinventory_layer.php");
-}
 
 end_page();
 ?>

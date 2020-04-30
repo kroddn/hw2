@@ -32,6 +32,8 @@
 include ("includes/db.inc.php");
 include ("includes/config.inc.php");
 include ("includes/util.inc.php");
+//error_reporting(E_WARNING);
+// register_globals off migrated!
 
 
 // Verbotene Emailadressen. KLEIN schreiben!!!
@@ -54,56 +56,62 @@ $forbidden_emails[14]= "lordsquall@fastem.com"; // http://forum.holy-wars2.de/vi
 $forbidden_emails[15]= "onur_1987@hotmail.com"; // Email am 24.08. um 09:41
 $forbidden_emails[16]= "respeckt52@hotmail.de"; // Email am 20.09. um 10:10
 
-$res0=do_mysql_query("SELECT id FROM player");
-$erg0=mysql_num_rows($res0);
+$res0=do_mysqli_query("SELECT id FROM player");
+$erg0=mysqli_num_rows($res0);
 
-$mapsize = do_mysql_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
+$mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
 $fx = $mapsize['x'];
 $fy = $mapsize['y'];
 
-$qry_startlocations = do_mysql_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
+$qry_startlocations = do_mysqli_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
 
 $locsum = 0;
-while ($res_sl=mysql_fetch_assoc($qry_startlocations)) {
+while ($res_sl=mysqli_fetch_assoc($qry_startlocations)) {
   $loc[$res_sl['pos']]=$res_sl['c'];
   $locsum+=$res_sl['c'];
 }
 
-if ($register) {
+if (isset($_POST['register'])) {
+	$name = $_POST['name'];
+	$email = $_POST['email'];
+	$pw1 = $_POST['pw1'];
+	$pw2 = $_POST['pw2'];
+	$recruiter = $_POST['recruiter'];
+
 	$registration=true;
 	if(defined("MAX_PLAYER")) {
           if( MAX_PLAYER == 0 ) { $registration=false; $errmsg="Die Registrierung neuer Accounts ist eingestellt.";}
-          else if  (MAX_PLAYER <= $erg0) { $registration=false; $errmsg="Momentan sind keine freien Plätze mehr verfügbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";}
+          else if  (MAX_PLAYER <= $erg0) { $registration=false; $errmsg="Momentan sind keine freien Plï¿½tze mehr verfï¿½gbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";}
         }
 
-	if (!checkBez($name, 3, 40)) {$registration=false; $errmsg="Das gewählte Login ist zu kurz, zu lang oder verstößt gegen die Namenskonventionen.";}
+	if (!checkBez($name, 3, 40)) {$registration=false; $errmsg="Das gewÃ¤hlte Login ist zu kurz, zu lang oder verstÃ¶ÃŸt gegen die Namenskonventionen.";}
 	if ($registration) {
-		$res1=do_mysql_query("SELECT id FROM player WHERE login LIKE '".trim($name)."'");
-                // 48 Stunden Anmeldesperre für den gleichen Namen
+		$res1=do_mysqli_query("SELECT id FROM player WHERE login LIKE '".trim($name)."'");
+                // 48 Stunden Anmeldesperre fÃ¼r den gleichen Namen
                 $del_lock_time = 48*3600;
-		$del =do_mysql_query("SELECT FROM_UNIXTIME( 28800 + deltime - deltime%28800 +".$del_lock_time.") FROM log_player_deleted ".
+		$del =do_mysqli_query("SELECT FROM_UNIXTIME( 28800 + deltime - deltime%28800 +".$del_lock_time.") FROM log_player_deleted ".
                                      " WHERE login LIKE '".trim($name)."' AND deltime + ".$del_lock_time." > UNIX_TIMESTAMP()");
-		if (mysql_num_rows($res1)>0) {$registration=false; $errmsg="Es gibt schon einen Spieler mit diesem Login";}
-                if (mysql_num_rows($del)>0) {
-                  $time = mysql_fetch_array($del);
+		if (mysqli_num_rows($res1)>0) {$registration=false; $errmsg="Es gibt schon einen Spieler mit diesem Login";}
+                if (mysqli_num_rows($del)>0) {
+                  $time = mysqli_fetch_array($del);
                   $registration=false;
-                  $errmsg="Die Anmeldung dieses Logins ist bis ca. ".$time[0]." nicht möglich, weil vor kurzem ein Spieler mit diesem Login existierte.";
+                  $errmsg="Die Anmeldung dieses Logins ist bis ca. ".$time[0]." nicht mÃ¶glich, weil vor kurzem ein Spieler mit diesem Login existierte.";
                 }
-                if (strspn($name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜßäöü ") < strlen($name))
+                if (strspn($name, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ") < strlen($name))
 		{
-			$errmsg="Die Anmeldung dieses Logins ist nicht möglich. Es sind nur Buchstaben [a-z,A-Z] und Leerzeichen erlaubt.";
+			$errmsg="Die Anmeldung dieses Logins ist nicht mÃ¶glich. Es sind nur Buchstaben [a-z,A-Z] und Leerzeichen erlaubt.";
 			$registration=false;
 		}
 	}
 	if ($registration) {
-		if (!checkPassword($pw1)) {$registration=false; $errmsg="Das gewählte Passwort ist zu kurz.";}
-		elseif (!($pw1==$pw2)) {$registration=false; $errmsg="Die Passwörter stimmen nicht überein.";}
+		if (!checkPassword($pw1)) {$registration=false; $errmsg="Das gewÃ¤hlte Passwort ist zu kurz.";}
+		elseif (!($pw1==$pw2)) {$registration=false; $errmsg="Die Passwï¿½rter stimmen nicht Ã¼berein.";}
 		elseif (!checkEmail($email)) {$registration=false; $errmsg="Sie haben keine oder eine falsche eMail-Adresse angegeben.";}
 	}
 
 	/*
 	if ($registration) {
-		if (($pos<1) || ($pos>6)) {$registration=false; $errmsg="Sie haben keine Ausgangslage gewählt";}
+		if (($pos<1) || ($pos>6)) {$registration=false; $errmsg="Sie haben keine Ausgangslage gewÃ¤hlt";}
 	}
 	*/
 	
@@ -123,7 +131,7 @@ if ($register) {
           $result = insert_new_player($p);
 
           if($result == null) {
-            header("Location:register3.php?name=".urlencode($name) );
+            header_redirect("register3.php?name=".urlencode($name) );
           }
           else {
             $registration = false;
@@ -155,7 +163,7 @@ if(defined("MAX_PLAYER")) {
   }
   else if  (MAX_PLAYER <= $erg0) { 
     echo "<div class='error'><b>";
-    echo "Momentan sind keine freien Plätze mehr verfügbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";
+    echo "Momentan sind keine freien Plï¿½tze mehr verfï¿½gbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";
     echo "</b></div><br></div>\n</body>\n</html>";
     exit;
   }
@@ -174,8 +182,8 @@ if(defined("MAX_PLAYER")) {
 		<td colspan="2" class="tblhead" align="center">
 		<br>
 		<h2 style="color:red;">Login bedeutet nicht Spielername</h2>
-		Spielername und Login sind zwei getrennt zu wählende Namen! Beim ersten Login
-		kann man den Spielernamen und Startposition sowie die Religion auswählen.
+		Spielername und Login sind zwei getrennt zu wï¿½hlende Namen! Beim ersten Login
+		kann man den Spielernamen und Startposition sowie die Religion auswï¿½hlen.
 		<br>
 		&nbsp;
 		</td>
@@ -186,7 +194,7 @@ if(defined("MAX_PLAYER")) {
 	</tr>
 	<tr>
 		<td colspan="2" class="tblbody" align="center">
-		<i>Hinweis: Mindestlänge 4 Zeichen, generell sind nur folgende Zeichen erlaubt: a-z,A-Z,Leerzeichen<br>Achtung: zur <b>Erhöhung der Sicherheit</b> sollte das Login nicht mit dem Spielernamen übereinstimmen!</i><p>
+		<i>Hinweis: MindestlÃ¤nge 4 Zeichen, generell sind nur folgende Zeichen erlaubt: a-z,A-Z,Leerzeichen<br>Achtung: zur <b>ErhÃ¶hung der Sicherheit</b> sollte das Login nicht mit dem Spielernamen Ã¼bereinstimmen!</i><p>
 		
 		</td>
 	</tr>
@@ -206,7 +214,7 @@ if(defined("MAX_PLAYER")) {
 		<td class="tblbody"><input type="text" name="email"></td>
 	</tr>
 		<td colspan="2" class="tblbody" align="center">
-		<font color="#FF0000"><b>ACHTUNG:</b></font> Derzeit haben wir <font color="#FF0000"><b>Probleme bei der Zustellung von Emails an GMX und Web.de</b></font>. In solchen Fällen bitte im IRC melden oder eine Email schreiben.
+		<font color="#FF0000"><b>ACHTUNG:</b></font> Derzeit haben wir <font color="#FF0000"><b>Probleme bei der Zustellung von Emails an GMX und Web.de</b></font>. In solchen FÃ¼llen bitte im IRC melden oder eine Email schreiben.
 		<p>Hinweis: manche Email-Provider (wie Yahoo, Gmail) sortieren die Aktivierungs-Emails in den Spam-Ordner!</td>
 	<tr>
 	</tr>
@@ -215,8 +223,8 @@ if(defined("MAX_PLAYER")) {
 	</tr>
 
 	<tr>
-		<td colspan="2" class="tblbody">Wichtiger Hinweis: Zur Erkennung von sogenannten "Multis" (Spieler, die sich unfaire Vorteile durch Nutzen mehrerer Accounts verschaffen wollen) führen wir unter anderem eine Prüfung ihrer Adresse (IP) durch. Wir sperren generell alle Spieler mit gleicher Adresse.
-<br>Sollten sich in Ihrem Haushalt schon Holy-Wars 2 Spieler befinden, so melden Sie sich nach der Registrierung bei einem Multihunter oder besuchen Sie unseren Chatraum im <a target="_blank" href="http://www.holy-wars2.de/cgiirc">IRC</a> und schildern Sie uns Ihre Situation inklusive der Angabe aller betroffenen Spieler. Eine Genehmigung für öffentliche Einrichtungen wie Schulen, Internet-Cafe oder andere öffentlich zugänglichen Orten erteilen wir nur in Ausnahmefällen</td>
+		<td colspan="2" class="tblbody">Wichtiger Hinweis: Zur Erkennung von sogenannten "Multis" (Spieler, die sich unfaire Vorteile durch Nutzen mehrerer Accounts verschaffen wollen) fÃ¼hren wir unter anderem eine Prï¿½fung ihrer Adresse (IP) durch. Wir sperren generell alle Spieler mit gleicher Adresse.
+<br>Sollten sich in Ihrem Haushalt schon Holy-Wars 2 Spieler befinden, so melden Sie sich nach der Registrierung bei einem Multihunter oder besuchen Sie unseren Chatraum im <a target="_blank" href="http://www.holy-wars2.de/cgiirc">IRC</a> und schildern Sie uns Ihre Situation inklusive der Angabe aller betroffenen Spieler. Eine Genehmigung fÃ¼r ï¿½ffentliche Einrichtungen wie Schulen, Internet-Cafe oder andere ï¿½ffentlich zugÃ¤nglichen Orten erteilen wir nur in Ausnahmefï¿½llen</td>
 	</tr>
 <tr><td  colspan="2" align="center">
 <? if (isset($recruiter)) echo '<input type="hidden" name="recruiter" value="'.$recruiter.'">'; ?>

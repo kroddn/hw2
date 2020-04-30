@@ -1,0 +1,10 @@
+<?php
+// Daten live auf dem Server editieren!
+
+// Datenbankdaten
+define("DBHOST",   "your_mysql_host");
+define("DBUSER",   "your_mysql_user");
+define("DBPASSWD", "your_mysql_password");
+define("DBSELECT", "your_mysql_db");
+
+?>

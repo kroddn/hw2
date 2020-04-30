@@ -317,7 +317,7 @@ span.fat_u {
       <a target="_blank" href="http://forum.holy-wars2.de/">
         <img src="forum01.gif" alt="Bild Forum"
          onMouseout="chgfx(this, 'forum01.gif'); tooltip(0);"
-         onMouseover="chgfx(this, 'forum02.gif'); tooltip('Nehmt an Diskussionen zum Spiel teil und lest Verlautbarungen der Spielführung.');"
+         onMouseover="chgfx(this, 'forum02.gif'); tooltip('Nehmt an Diskussionen zum Spiel teil und lest Verlautbarungen der SpielfÃ¼hrung.');"
         >
       </a><br>
       <a target="_blank" href="http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi"
@@ -349,14 +349,14 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
       <a target="_blank" href="http://game1.holy-wars2.de/screenshots.php">
         <img src="screenshots01.gif" alt="Bild Screenshots"
          onMouseout="chgfx(this, 'screenshots01.gif'); tooltip(0);"
-         onMouseover="chgfx(this, 'screenshots02.gif'); tooltip('Für einen ersten Eindruck über das Spiel wählt dies hier.');"
+         onMouseover="chgfx(this, 'screenshots02.gif'); tooltip('FÃ¼r einen ersten Eindruck ï¿½ber das Spiel wï¿½hlt dies hier.');"
         >
       </a>
     </DIV>
 
-
+    
     <DIV id="vote" 
-         onMouseover="tooltip('Stimmt für Holy-Wars 2 ab, falls Euch das Spiel gefällt.');" 
+         onMouseover="tooltip('Stimmt fÃ¼r Holy-Wars 2 ab, falls Euch das Spiel gefï¿½llt.');" 
          onMouseout="tooltip(0);"
     >
       <span style="font-size: 14px;">Vote for HW2</span><br><hr><br>
@@ -425,7 +425,7 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
     <DIV id="framelayer" style="visibility: hidden; ">
       <DIV id="framelayerclose" onClick="hideFrameLayer()">X</DIV>
       <IFRAME id="layeriframe" src="opening.php">
-      Ihr Browser unterstützt keine Frames.
+      Ihr Browser unterstÃ¼tzt keine Frames.
       </IFRAME>
     </DIV>
 

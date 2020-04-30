@@ -64,7 +64,7 @@ else {
 
 
 
-// Der Code war hässlich, also hab ich ihn noch ein bisschen hässlicher gemacht (co2)
+// Der Code war hï¿½sslich, also hab ich ihn noch ein bisschen hï¿½sslicher gemacht (co2)
 function typeNr($col) {
   $type = NULL;
 
@@ -114,21 +114,21 @@ function typeNr($col) {
 function imgToDB($startrow) {
   $errors = 0;
 
-  // Neuer Import gestartet -> alte Karte löschen
+  // Neuer Import gestartet -> alte Karte lÃ¶schen
   if ($startrow==0) {
     echo "Tabelle leeren\n";
-    mysql_query("TRUNCATE map");
+    mysqli_query($GLOBALS['con']"TRUNCATE map");
 
-    echo "Indizes löschen\n";
-    mysql_query("ALTER TABLE `map` DROP PRIMARY KEY");
-    mysql_query("ALTER TABLE `map` DROP INDEX xy");
-    mysql_query("ALTER TABLE `map` DROP INDEX type");
-    mysql_query("ALTER TABLE `map` DROP INDEX special");
+    echo "Indizes lÃ¶schen\n";
+    mysqli_query($GLOBALS['con']"ALTER TABLE `map` DROP PRIMARY KEY");
+    mysqli_query($GLOBALS['con']"ALTER TABLE `map` DROP INDEX xy");
+    mysqli_query($GLOBALS['con']"ALTER TABLE `map` DROP INDEX type");
+    mysqli_query($GLOBALS['con']"ALTER TABLE `map` DROP INDEX special");
 
-    //mysql_query("ALTER TABLE map AUTO_INCREMENT=0");
+    //mysqli_query($GLOBALS['con']"ALTER TABLE map AUTO_INCREMENT=0");
 
-    echo "Lösche Startpos\n";
-    mysql_query("TRUNCATE startpositions");
+    echo "Lï¿½sche Startpos\n";
+    mysqli_query($GLOBALS['con']"TRUNCATE startpositions");
   }
 
   // Bilder laden
@@ -140,9 +140,9 @@ function imgToDB($startrow) {
   if(!defined("MAP_SIZE_X")) define("MAP_SIZE_X", $sx);
   if(!defined("MAP_SIZE_Y")) define("MAP_SIZE_Y", $sy);
     
-  echo "Größe: ".MAP_SIZE_X."x".MAP_SIZE_Y."\n";
+  echo "GrÃ¶ÃŸe: ".MAP_SIZE_X."x".MAP_SIZE_Y."\n";
   
-  //  Zähler erstellen
+  //  Zï¿½hler erstellen
   $row=$startrow;
   $id_counter = 0;
 
@@ -221,16 +221,16 @@ function imgToDB($startrow) {
       	  ($special == 8)
           ) {
         $sql = "INSERT INTO map(id,x,y,type,special,pic) VALUES (".$id_counter.",".$i.",".$row.",".$type.",".$special.",'".$pic."')";
-        if(!mysql_query($sql)) {
-          echo "\nSQL:\n'$sql'\nFehler: ".mysql_error()."\n";
+        if(!mysqli_query($GLOBALS['con']$sql)) {
+          echo "\nSQL:\n'$sql'\nFehler: ".mysqli_error($GLOBALS['con'])."\n";
           $errors++;
         }
       }
       else
         {
           $sql = "INSERT INTO map(id,x,y,type,pic) VALUES (".$id_counter.",".$i.",".$row.",".$type.",'".$pic."')";
-          if(!mysql_query($sql)) {
-            echo "\nSQL:\n'$sql'\nFehler: ".mysql_error()."\n";
+          if(!mysqli_query($GLOBALS['con']$sql)) {
+            echo "\nSQL:\n'$sql'\nFehler: ".mysqli_error($GLOBALS['con'])."\n";
             $errors++;
           }
         }
@@ -241,13 +241,13 @@ function imgToDB($startrow) {
     if ($row== MAP_SIZE_Y) break;
   }
   echo "\nIndizes erstellen";
-  if (!mysql_query("ALTER TABLE `map` ADD PRIMARY KEY ( id )"))
-    echo "Fehler: ".mysql_error()."\n";
-  mysql_query("ALTER TABLE `map` ADD UNIQUE xy (x, y)");
-  mysql_query("ALTER TABLE `map` ADD INDEX x (x)");
-  mysql_query("ALTER TABLE `map` ADD INDEX y (y)");
-  mysql_query("ALTER TABLE `map` ADD INDEX type (type)");
-  mysql_query("ALTER TABLE `map` ADD INDEX special (special)");
+  if (!mysqli_query($GLOBALS['con']"ALTER TABLE `map` ADD PRIMARY KEY ( id )"))
+    echo "Fehler: ".mysqli_error($GLOBALS['con'])."\n";
+  mysqli_query($GLOBALS['con']"ALTER TABLE `map` ADD UNIQUE xy (x, y)");
+  mysqli_query($GLOBALS['con']"ALTER TABLE `map` ADD INDEX x (x)");
+  mysqli_query($GLOBALS['con']"ALTER TABLE `map` ADD INDEX y (y)");
+  mysqli_query($GLOBALS['con']"ALTER TABLE `map` ADD INDEX type (type)");
+  mysqli_query($GLOBALS['con']"ALTER TABLE `map` ADD INDEX special (special)");
 
   echo "\nKarte erfolgreich importiert! $errors Fehler.\n";
   echo "ACHTUNG: startpos neu generieren!!!\n";

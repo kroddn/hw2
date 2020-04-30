@@ -34,8 +34,8 @@ function message_read($id)
 	// SQL-Query zusatz von den Settings
 	$sql_settings_add =""; 
 	
-	$result_settings = do_mysql_query($sql_settings);
-	$get_settings = mysql_fetch_assoc($result_settings);
+	$result_settings = do_mysqli_query($sql_settings);
+	$get_settings = mysqli_fetch_assoc($result_settings);
 	
 	if($get_settings['ignore_read']==1) $sql_settings_add = $sql_settings_add."AND status NOT LIKE '1' ";
 	if($get_settings['show_archive']==0) $sql_settings_add = $sql_settings_add."AND status NOT LIKE '2' ";
@@ -59,7 +59,7 @@ function message_read($id)
 	$sql = $sql_base.$sql_settings_add.$sql_end;
 
 	// SQL-Query ausführen
-	$result = do_mysql_query($sql);
+	$result = do_mysqli_query($sql);
 
 	// Vorbereitung der Seiten Anzeige
 	if($get_settings['rows_per_page']>0)
@@ -71,10 +71,10 @@ function message_read($id)
 		$daten_pro_seite = 25;	
 	}
 	// Nachrichten Pro Seite
-	$menge = mysql_num_rows($result);	// Anzahl der Datensätze
+	$menge = mysqli_num_rows($result);	// Anzahl der Datensätze
 	$seitenanzahl = ceil($menge/$daten_pro_seite); 	// Wie viele Seiten gibt es/werden benötigt
 
-	$aktuelle_seite = isset($_GET["seite"]) ? mysql_real_escape_string($_GET["seite"]) : 1; // Aktuelle Seite
+	$aktuelle_seite = isset($_GET["seite"]) ? mysqli_real_escape_string($_GET["seite"]) : 1; // Aktuelle Seite
 	$start = $aktuelle_seite * $daten_pro_seite - $daten_pro_seite; // Start berechnen
 
 	// Start Table
@@ -85,13 +85,13 @@ function message_read($id)
 	echo '<form name="set_mess_manage" action="'.$PHP_SELF.'" method="post">';
 	
 	// Den Inhalt jeder Spalte der Tabelle anzeigen
-	$datensaetze = do_mysql_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
+	$datensaetze = do_mysqli_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
 
 	// Select Counter für IDs der Checkboxen
 	$select_counter = 0;
 	
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
-	while ($datensatz = mysql_fetch_assoc($datensaetze)) 
+	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
 	{
 		echo "<tr>";
 		
@@ -156,7 +156,7 @@ function message_manage($todo, $checked)
 		foreach ($checked as $do)
 		{
 			// echo "mark as read: ".$do."</br>"; Testzwecke!
-			if(!do_mysql_query($sql.$do)) echo "ERROR!!!";
+			if(!do_mysqli_query($sql.$do)) echo "ERROR!!!";
 		}
 	} 
 	else if ($todo == "archive")
@@ -165,7 +165,7 @@ function message_manage($todo, $checked)
 		foreach ($checked as $do)
 		{
 			//echo "mark as archive: ".$do."</br>";
-			if(!do_mysql_query($sql.$do)) echo "ERROR!!!";
+			if(!do_mysqli_query($sql.$do)) echo "ERROR!!!";
 		}
 	}
 	else if ($todo == "delete")
@@ -174,7 +174,7 @@ function message_manage($todo, $checked)
 		foreach ($checked as $do)
 		{
 			//echo "mark as delete: ".$do."</br>";
-			if(!do_mysql_query($sql.$do)) echo "ERROR!!!";
+			if(!do_mysqli_query($sql.$do)) echo "ERROR!!!";
 		}
 	} 
 	else if ($todo == "favorite")
@@ -183,7 +183,7 @@ function message_manage($todo, $checked)
 		foreach ($checked as $do)
 		{
 			//echo "mark as favorite: ".$do."</br>";
-			if(!do_mysql_query($sql.$do)) echo "ERROR!!!";
+			if(!do_mysqli_query($sql.$do)) echo "ERROR!!!";
 		}
 	} 
 	else die("Sie haben keine Option ausgewählt");
@@ -191,7 +191,7 @@ function message_manage($todo, $checked)
 
 if (isset($_POST['message_manage'])) 
 {
-	do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());
+	do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());
 	
 	
 	$checks = array();
@@ -212,8 +212,8 @@ function get_user_id($name)
 			FROM player
 			WHERE player.name = '$name'";
 			
-	$result = do_mysql_query($sql);
-	$getid = mysql_fetch_assoc($result);
+	$result = do_mysqli_query($sql);
+	$getid = mysqli_fetch_assoc($result);
 	
 	// echo "PLayerID: ".$getid['playerid']; Testzwecke
 	
@@ -229,8 +229,8 @@ function get_user_name($id)
 			WHERE player.id = '$id'";
 			
 			
-	$result = do_mysql_query($sql);
-	$getname = mysql_fetch_assoc($result);
+	$result = do_mysqli_query($sql);
+	$getname = mysqli_fetch_assoc($result);
 	
 	return $getname['playername'];
 }
@@ -238,9 +238,9 @@ function get_user_name($id)
 //Wenn der Send Button gedrückt wurde
 if (isset($_POST['messagesend']))
 {
-	$message 		= mysql_real_escape_string(trim($_POST['message']));
-	$subject      	= mysql_real_escape_string(trim($_POST['subject']));
-	$recipient      = mysql_real_escape_string(trim($_POST['recipient']));
+	$message 		= mysqli_real_escape_string(trim($_POST['message']));
+	$subject      	= mysqli_real_escape_string(trim($_POST['subject']));
+	$recipient      = mysqli_real_escape_string(trim($_POST['recipient']));
 	$recipient_id	= get_user_id($recipient);
 	$sender  		= $player->getID();
 	$sql       		= "INSERT 
@@ -256,7 +256,7 @@ if (isset($_POST['messagesend']))
 		else
 		{						
 			//Wenn es nicht geschrieben werden konnte
-			if (!do_mysql_query($sql)) {
+			if (!do_mysqli_query($sql)) {
 				die("Konnte nicht eingetragen werden");
 			}   
 			//Wenn es drinnsteht             
@@ -265,7 +265,7 @@ if (isset($_POST['messagesend']))
 			}
 		}
 	}
-	do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$recipient_id);
+	do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$recipient_id);
 }
 
 function message_write($id)
@@ -302,8 +302,8 @@ function message_archiv($id)
 					FROM config_message
 					WHERE playerid =".$id);
 	
-	$result_settings = do_mysql_query($sql_settings);
-	$get_settings = mysql_fetch_assoc($result_settings);
+	$result_settings = do_mysqli_query($sql_settings);
+	$get_settings = mysqli_fetch_assoc($result_settings);
 	
 	// SQL-Query Base
 	$sql=("SELECT 
@@ -320,7 +320,7 @@ function message_archiv($id)
 			GROUP BY id DESC");
 
 	// SQL-Query ausführen
-	$result = do_mysql_query($sql);
+	$result = do_mysqli_query($sql);
 
 	// Vorbereitung der Seiten Anzeige
 	if($get_settings['rows_per_page']>0)
@@ -331,10 +331,10 @@ function message_archiv($id)
 	{
 		$daten_pro_seite = 25;	
 	}
-	$menge = mysql_num_rows($result);	// Anzahl der Datensätze
+	$menge = mysqli_num_rows($result);	// Anzahl der Datensätze
 	$seitenanzahl = ceil($menge/$daten_pro_seite); 	// Wie viele Seiten gibt es/werden benötigt
 
-	$aktuelle_seite = isset($_GET["seite"]) ? mysql_real_escape_string($_GET["seite"]) : 1; // Aktuelle Seite
+	$aktuelle_seite = isset($_GET["seite"]) ? mysqli_real_escape_string($_GET["seite"]) : 1; // Aktuelle Seite
 	$start = $aktuelle_seite * $daten_pro_seite - $daten_pro_seite; // Start berechnen
 
 	// Start Table
@@ -345,13 +345,13 @@ function message_archiv($id)
 	echo '<form name="set_mess_manage" action="'.$PHP_SELF.'" method="post">';
 	
 	// Den Inhalt jeder Spalte der Tabelle anzeigen
-	$datensaetze = do_mysql_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
+	$datensaetze = do_mysqli_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
 
 	// Select Counter für IDs der Checkboxen
 	$select_counter = 0;
 	
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
-	while ($datensatz = mysql_fetch_assoc($datensaetze)) 
+	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
 	{
 		echo "<tr class='tblbody'>";
 		
@@ -422,8 +422,8 @@ function get_show_fights($id)
 		FROM config_message
 		WHERE playerid =".$id);
 		
-	$result = do_mysql_query($sql);
-	$get_settings = mysql_fetch_assoc($result);
+	$result = do_mysqli_query($sql);
+	$get_settings = mysqli_fetch_assoc($result);
 	
 	return $get_settings['show_fights'];
 }
@@ -446,7 +446,7 @@ function message_show_fights($id)
 			GROUP BY id DESC");
 
 	// SQL-Query ausführen
-	$result = do_mysql_query($sql);
+	$result = do_mysqli_query($sql);
 
 	// Vorbereitung der Seiten Anzeige
 	if($get_settings['rows_per_page']>0)
@@ -457,10 +457,10 @@ function message_show_fights($id)
 	{
 		$daten_pro_seite = 25;	
 	}
-	$menge = mysql_num_rows($result);	// Anzahl der Datensätze
+	$menge = mysqli_num_rows($result);	// Anzahl der Datensätze
 	$seitenanzahl = ceil($menge/$daten_pro_seite); 	// Wie viele Seiten gibt es/werden benötigt
 
-	$aktuelle_seite = isset($_GET["seite"]) ? mysql_real_escape_string($_GET["seite"]) : 1; // Aktuelle Seite
+	$aktuelle_seite = isset($_GET["seite"]) ? mysqli_real_escape_string($_GET["seite"]) : 1; // Aktuelle Seite
 	$start = $aktuelle_seite * $daten_pro_seite - $daten_pro_seite; // Start berechnen
 
 	// Start Table
@@ -471,13 +471,13 @@ function message_show_fights($id)
 	echo '<form name="set_mess_manage" action="'.$PHP_SELF.'" method="post">';
 	
 	// Den Inhalt jeder Spalte der Tabelle anzeigen
-	$datensaetze = do_mysql_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
+	$datensaetze = do_mysqli_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
 
 	// Select Counter für IDs der Checkboxen
 	$select_counter = 0;
 	
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
-	while ($datensatz = mysql_fetch_assoc($datensaetze)) 
+	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
 	{
 		echo "<tr class='tblbody'>";
 		
@@ -547,8 +547,8 @@ function message_settings($id)
 		FROM config_message
 		WHERE playerid =".$id);
 		
-	$result = do_mysql_query($sql);
-	$get_settings = mysql_fetch_assoc($result);
+	$result = do_mysqli_query($sql);
+	$get_settings = mysqli_fetch_assoc($result);
 	
 	//if($get_settings['show_fights']==1) message_show_fights($id);
 	
@@ -662,13 +662,13 @@ if (isset($_POST['mess_setting_set']))
 	echo "playerid: ".$player_id;
 	
 	// Wenn der User noch keine Settings geschrieben hat dann INSERT else UPDATE
-	if(mysql_num_rows(do_mysql_query("SELECT playerid FROM config_message WHERE playerid =".$player_id))==0)
+	if(mysqli_num_rows(do_mysqli_query("SELECT playerid FROM config_message WHERE playerid =".$player_id))==0)
 	{
 		$sql = "INSERT 
 				INTO config_message (playerid, rows_per_page, ignore_read, show_archive, ignore_build, show_fights) 
 				VALUES ('".$player_id."', '".$setting_mess_per_page."', '".$setting_show_read."', '".$setting_show_archive."', '".$setting_ignore_build."', '".$setting_show_fights."')";
 	
-		do_mysql_query($sql);
+		do_mysqli_query($sql);
 	}
 	else
 	{
@@ -676,7 +676,7 @@ if (isset($_POST['mess_setting_set']))
 			SET rows_per_page='".$setting_mess_per_page."', ignore_read='".$setting_show_read."', show_archive='".$setting_show_archive."', ignore_build='".$setting_ignore_build."', show_fights='".$setting_show_fights."'
 			WHERE playerid=".$player_id;
 		
-		do_mysql_query($sql);
+		do_mysqli_query($sql);
 	}
 }	
 ?>

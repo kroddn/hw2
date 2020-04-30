@@ -51,6 +51,7 @@ if(defined("HISPEED") && HISPEED) {
 }
 
 $player = $_SESSION['player'];
+$market = $_SESSION['market'];
 $player->setActivePage(basename(__FILE__));
 
 
@@ -105,7 +106,7 @@ if(isset($sort)) {
   $market->setSort($sort);
 }
 
-// Vor/Rückblättern
+// Vor/RÃ¼ckblï¿½ttern
 if (isset($prev)) {
   $market->show_prev();
 }
@@ -145,10 +146,10 @@ if ($error != null) {
 </tr>
 
 <tr>
-<td nowrap class="tblbody">Empfänger eingeben: <input type='text' name='recipient' <?if (isset($sendto)) echo 'value="'.$sendto.'" '; ?> size='17'>
+<td nowrap class="tblbody">Empfï¿½nger eingeben: <input type='text' name='recipient' <?if (isset($sendto)) echo 'value="'.$sendto.'" '; ?> size='17'>
 <?
 echo "&nbsp;<select onChange=\"if(this.value != '') document.marketform.recipient.value=this.value\" name=\"addressbook\" size=\"1\" style=\"width:100px;\">";
-echo "<option value=\"\">Empfänger wählen</option>\n";
+echo "<option value=\"\">Empfï¿½nger wï¿½hlen</option>\n";
 
 if (is_premium_adressbook()) {
   echo "<option value=\"\">  -- Adressbuch --</option>\n";
@@ -165,7 +166,7 @@ if (is_premium_adressbook()) {
 }
 else {
   echo "<option value=\"\">Adressbuch nur</option>\n";  
-  echo "<option value=\"\">für Besitzer eines</option>\n";  
+  echo "<option value=\"\">fÃ¼r Besitzer eines</option>\n";  
   echo "<option value=\"\">Premium-Accounts.</option>\n";  
 }
 ?>
@@ -197,7 +198,7 @@ Sucht:&nbsp;
 			<option <?php if ($market->getHasType() == "stone") {echo "selected";} ?>   value='stone'>Stein</option>
 			<option <?php if ($market->getHasType() == "shortrange") {echo "selected";} ?>   value='shortrange'>Nahkampfwaffen</option>
 			<option <?php if ($market->getHasType() == "longrange") {echo "selected";} ?>   value='longrange'>Fernkampfwaffen</option>
-			<option <?php if ($market->getHasType() == "armor") {echo "selected";} ?>   value='armor'>Rüstungen</option>
+			<option <?php if ($market->getHasType() == "armor") {echo "selected";} ?>   value='armor'>RÃ¼stungen</option>
 			<option <?php if ($market->getHasType() == "horse") {echo "selected";} ?>   value='horse'>Pferde</option>
 			<option  <?php if ($market->getHasType() == "all") {echo "selected";} ?>   value='all'>*</option>
 		</select>
@@ -211,7 +212,7 @@ Bietet:&nbsp;
 			<option <?php if ($market->getWantsType() == "stone") {echo "selected";} ?>   value='stone'>Stein</option>
 			<option <?php if ($market->getWantsType() == "shortrange") {echo "selected";} ?>   value='shortrange'>Nahkampfwaffen</option>
 			<option <?php if ($market->getWantsType() == "longrange") {echo "selected";} ?>   value='longrange'>Fernkampfwaffen</option>
-			<option <?php if ($market->getWantsType() == "armor") {echo "selected";} ?>   value='armor'>Rüstungen</option>
+			<option <?php if ($market->getWantsType() == "armor") {echo "selected";} ?>   value='armor'>RÃ¼stungen</option>
 			<option <?php if ($market->getWantsType() == "horse") {echo "selected";} ?>   value='horse'>Pferde</option>
 			<option <?php if ($market->getWantsType() == "all") {echo "selected";} ?>   value='all'>*</option>
 		</select>
@@ -258,7 +259,7 @@ else {
 echo "</tr>";
 
 if ($market->getOwn() == 1) {
-  $res1 = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,market.id AS id,ratio,player,city.name AS cname".
+  $res1 = do_mysqli_query("SELECT wantsType,wantsQuant,hasType,hasQuant,market.id AS id,ratio,player,city.name AS cname".
 			 " FROM market LEFT JOIN player ON market.player=player.id LEFT JOIN city ON city.id=market.city".
 			 " WHERE player=".$player->getID()." LIMIT ".$market->getStart().",".$market->getNum());
 }
@@ -275,10 +276,10 @@ else {
     $qry .= "WHERE hasType='".$market->getWantsType()."'";
   }
   $qry .= " ORDER BY ratio ".$market->getSort()." LIMIT ".$market->getStart().",".$market->getNum();
-  $res1 = do_mysql_query($qry);
+  $res1 = do_mysqli_query($qry);
 }
 
-while ($data1=mysql_fetch_array($res1)) {
+while ($data1=mysqli_fetch_array($res1)) {
   echo "\n<tr class=\"marketline\"  ";
   if($data1['player']==$player->getID() && $data1['cname']) {
     echo ' title="nach '.$data1['cname'].'"';    
@@ -297,11 +298,11 @@ while ($data1=mysql_fetch_array($res1)) {
   echo "  </td>\n";
   echo "  <td>";
   echo "<a href='marketplace.php?id=".$data1['id'].(isset($own) ? "&own=1'" : "'").
-        ' title="'.($data1['player']==$player->getID() ? "Zurücknehmen".($data1['cname'] ? ' nach '.$data1['cname'] : "") : "Annehmen").'">';
+        ' title="'.($data1['player']==$player->getID() ? "ZurÃ¼cknehmen".($data1['cname'] ? ' nach '.$data1['cname'] : "") : "Annehmen").'">';
 
     // Aktionsbuttons
   if ($data1['player'] == $player->getID()) {
-    printf('<img src="%s/%s" alt="Zurücknehmen" border="0">', $GLOBALS['imagepath'], 'delete.png' );
+    printf('<img src="%s/%s" alt="ZurÃ¼cknehmen" border="0">', $GLOBALS['imagepath'], 'delete.png' );
   } 
   else {  
     //echo "Annehmen";
@@ -310,8 +311,8 @@ while ($data1=mysql_fetch_array($res1)) {
 
   echo "</a></td>";
   if ($player->isMarketmod()) {
-    echo "  <td><a href='marketplace.php?sendback=".$data1['id']."'>Zurückschicken</a></td>";
-    echo "  <td><a href='marketplace.php?del=".$data1['id']."'>Löschen</a></td>";
+    echo "  <td><a href='marketplace.php?sendback=".$data1['id']."'>ZurÃ¼ckschicken</a></td>";
+    echo "  <td><a href='marketplace.php?del=".$data1['id']."'>LÃ¶schen</a></td>";
     echo "  <td><a onClick=\"return confirm('Wirklich bestrafen?')\" href='marketplace.php?punish=".$data1['id']."'>Bestrafen</a></td>";
   }
   echo "</tr>";
@@ -337,7 +338,7 @@ if ($market->getStart() == 0) {
 printf("></td><td colspan=\"3\" class=\"tblbody\">Seite %d</td>", $market->getPage() );
 
 echo "<td class=\"tblbody\" align=\"left\"><input accesskey=\".\" type=\"submit\" name=\"next\" value=\"(ALT+.) >>\"";
-if (mysql_num_rows($res1) < $market->getNum()) {echo " disabled ";}
+if (mysqli_num_rows($res1) < $market->getNum()) {echo " disabled ";}
 echo "></td></tr>";
 ?>
 <input type="hidden" name="sort" value="<?php echo $sort; ?>">
@@ -360,7 +361,7 @@ echo "></td></tr>";
 			<option <?php if ($market->getHasType() == "stone") {echo "selected";} ?>   value='stone'>Stein</option>
 			<option <?php if ($market->getHasType() == "shortrange") {echo "selected";} ?>   value='shortrange'>Nahkampfwaffen</option>
 			<option <?php if ($market->getHasType() == "longrange") {echo "selected";} ?>   value='longrange'>Fernkampfwaffen</option>
-			<option <?php if ($market->getHasType() == "armor") {echo "selected";} ?>   value='armor'>Rüstungen</option>
+			<option <?php if ($market->getHasType() == "armor") {echo "selected";} ?>   value='armor'>RÃ¼stungen</option>
 			<option <?php if ($market->getHasType() == "horse") {echo "selected";} ?>   value='horse'>Pferde</option>
 		</select>
 		</td>
@@ -370,7 +371,7 @@ echo "></td></tr>";
 <?
             if ($aufgeben) {
               echo '<input accesskey="n" style="margin-top: 4px; width: 100px; " type="button" value=" Nochmal (Alt+N)" onClick="'.
-              ($GLOBALS['premium_flags'] >= PREMIUM_LITE ? "window.location.reload()" : "alert('Nur für Premium-Account')").'">';
+              ($GLOBALS['premium_flags'] >= PREMIUM_LITE ? "window.location.reload()" : "alert('Nur fÃ¼r Premium-Account')").'">';
             }            
 ?>
         </td>
@@ -386,7 +387,7 @@ echo "></td></tr>";
 			<option <?php if ($market->getWantsType() == "stone") {echo "selected";} ?>   value='stone'>Stein</option>
 			<option <?php if ($market->getWantsType() == "shortrange") {echo "selected";} ?>   value='shortrange'>Nahkampfwaffen</option>
 			<option <?php if ($market->getWantsType() == "longrange") {echo "selected";} ?>   value='longrange'>Fernkampfwaffen</option>
-			<option <?php if ($market->getWantsType() == "armor") {echo "selected";} ?>   value='armor'>Rüstungen</option>
+			<option <?php if ($market->getWantsType() == "armor") {echo "selected";} ?>   value='armor'>RÃ¼stungen</option>
 			<option <?php if ($market->getWantsType() == "horse") {echo "selected";} ?>   value='horse'>Pferde</option>
 		</select>
 		</td>
@@ -397,8 +398,8 @@ echo "></td></tr>";
 <div class="little_space"></div>
 <table width="520" cellspacing="1" cellpadding="0" border="0">
  <tr>
-  <td align="center" class="tblhead"><strong>Unsinnige Angebote oder Überflutung des Marktes werden bestraft!.</strong><p>
-<? if (!is_premium_noads()) { ?>
+  <td align="center" class="tblhead"><strong>Unsinnige Angebote oder Ã¼berflutung des Marktes werden bestraft!.</strong><p>
+<? if (!is_premium_noads() and false) { ?>
 <hr>
 <!-- BEGIN PARTNER PROGRAM - DO NOT CHANGE THE PARAMETERS OF THE HYPERLINK -->
 <A style="color: blue;" HREF="http://partners.webmasterplan.com/click.asp?ref=249139&site=3175&type=text&tnb=1" TARGET="_new">Auktionsideen.de<br></a>Verdienen Sie Geld mit Auktionen! Die besten Tipps f&uuml;r Ebay & Co. finden Sie auf Auktionsideen.de<br><A HREF="http://partners.webmasterplan.com/click.asp?ref=249139&site=3175&type=text&tnb=1" TARGET="_new" style="color: blue;">Jeden Monat neu!<br></a><IMG SRC="http://banners.webmasterplan.com/view.asp?site=3175&ref=249139&b=0&type=text&tnb=1" BORDER="0" WIDTH="1" HEIGHT="1">

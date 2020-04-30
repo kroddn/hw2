@@ -22,6 +22,7 @@
     Former copyrights see below.
  **************************************************************************/
 
+ob_start();
 
 include_once("includes/player.class.php");
 
@@ -30,8 +31,8 @@ function request_exception($notes, $players) {
   show_error($players."  XX  ".join(";", $plist));
   foreach ($plist as $p) {
     if (checkBez($p, 4, 40)) {
-      $pid_res = do_mysql_query("SELECT id FROM player WHERE name='".trim($p)."'");
-      $pid = mysql_fetch_assoc($pid_res);
+      $pid_res = do_mysqli_query("SELECT id FROM player WHERE name='".trim($p)."'");
+      $pid = mysqli_fetch_assoc($pid_res);
       if ($pid['id'] > 0)
 	$ids[] = $pid['id'];
       else {
@@ -45,23 +46,23 @@ function request_exception($notes, $players) {
     }
   }
 
-  //TODO: überprüfen, ob schon eine gleichartige exception existiert, wenn ja, einfach notes hinzufügen
+  //TODO: Ã¼berprÃ¼fen, ob schon eine gleichartige exception existiert, wenn ja, einfach notes hinzufï¿½gen
 
-  do_mysql_query("INSERT INTO multi_exceptions (type, time, valid, comment) VALUES (0, ".time().", 0,'".mysql_escape_string($notes)."')");
-  $exid = mysql_insert_id();
+  do_mysqli_query("INSERT INTO multi_exceptions (type, time, valid, comment) VALUES (0, ".time().", 0,'".mysqli_escape_string($GLOBALS['con'], $notes)."')");
+  $exid = mysqli_insert_id($GLOBALS['con']);
 
   $notes = strip_tags($notes);
-  do_mysql_query("INSERT INTO multi_exceptions_players (eid,player,time,valid) VALUES (".$exid.",".$_SESSION['player']->getID().",".time().",0)");
+  do_mysqli_query("INSERT INTO multi_exceptions_players (eid,player,time,valid) VALUES (".$exid.",".$_SESSION['player']->getID().",".time().",0)");
   foreach ($ids as $id) {
-    do_mysql_query("INSERT INTO multi_exceptions_players (eid,player,time,valid) VALUES (".$exid.",".$id.",".time().",0)");
+    do_mysqli_query("INSERT INTO multi_exceptions_players (eid,player,time,valid) VALUES (".$exid.",".$id.",".time().",0)");
   }
 }
 
 
 function exception_exists($id) {
   $id = intval($id);
-  $res = do_mysql_query("SELECT id FROM multi_exceptions WHERE id = ".$id);
-  if (mysql_num_rows($res)) 
+  $res = do_mysqli_query("SELECT id FROM multi_exceptions WHERE id = ".$id);
+  if (mysqli_num_rows($res)) 
     return 1;
   else
     show_error("Keine Exception unter der id '".$id."' vorhanden.");
@@ -73,7 +74,7 @@ function exception_exists($id) {
 function add_comment($id, $comment) {
   if (exception_exists($id)) {
     $comment = strip_tags($comment);
-    do_mysql_query("UPDATE multi_exceptions SET comment='".mysql_escape_string($comment)."' WHERE id=".intval($id) );
+    do_mysqli_query("UPDATE multi_exceptions SET comment='".mysqli_escape_string($GLOBALS['con'], $comment)."' WHERE id=".intval($id) );
   }
 }
 
@@ -81,8 +82,8 @@ function add_comment($id, $comment) {
 function player_exception_exists($id) {
   $id = intval($id);
 
-  $ex_res = do_mysql_query("SELECT id FROM multi_exceptions_players WHERE id=".$id);
-  if (mysql_num_rows($ex_res))
+  $ex_res = do_mysqli_query("SELECT id FROM multi_exceptions_players WHERE id=".$id);
+  if (mysqli_num_rows($ex_res))
     return 1;
   else
     show_error("Keine Spielerexception unter der id ".$id);
@@ -93,7 +94,7 @@ function player_exception_exists($id) {
 function add_player_comment($id, $comment) {
   if (player_exception_exists($id, $pid, $time)) {
       $comment = strip_tags($comment);
-      do_mysql_query("UPDATE multi_exceptions_player SET comment='".mysql_escape_string($comment)."' WHERE id=".$id);
+      do_mysqli_query("UPDATE multi_exceptions_player SET comment='".mysqli_escape_string($GLOBALS['con'], $comment)."' WHERE id=".$id);
   }
 }
 
@@ -103,7 +104,7 @@ function validate_exception($id, $comment="Kein Kommentar angegeben") {
   if (exception_exists($id)) {
     if( $player->isAdmin() ) {
       $comment = strip_tags($comment);
-      do_mysql_query("UPDATE multi_exceptions SET valid=1,mh=".$_SESSION['player']->getID().",validatetime=".time()." WHERE id=".$id);
+      do_mysqli_query("UPDATE multi_exceptions SET valid=1,mh=".$_SESSION['player']->getID().",validatetime=".time()." WHERE id=".$id);
     }
     else {
       show_fatal_error("Ihr seid kein Spielleiter, daher dazu nicht berechtigt!");
@@ -118,7 +119,7 @@ function validate_player_exception($id) {
   if (player_exception_exists($id)) {
     if($player->isAdmin()) {
       $comment = strip_tags($comment);
-      do_mysql_query("UPDATE multi_exceptions_players SET valid=1,comment='".mysql_escape_string($comment)."',mh=".$_SESSION['player']->getID().",validatetime=".time()." WHERE id=".$id);
+      do_mysqli_query("UPDATE multi_exceptions_players SET valid=1,comment='".mysqli_escape_string($GLOBALS['con'], $comment)."',mh=".$_SESSION['player']->getID().",validatetime=".time()." WHERE id=".$id);
     }
     else {
       show_fatal_error("Ihr seid kein Spielleiter, daher dazu nicht berechtigt!");
@@ -128,11 +129,11 @@ function validate_player_exception($id) {
 
 
 function show_own_exceptions() {
-  $ex_res = do_mysql_query("SELECT multi_exceptions.id,multi_exceptions.valid FROM multi_exceptions,multi_exceptions_players WHERE multi_exceptions.id=multi_exceptions_players.eid AND multi_exceptions_players.player=".$_SESSION['player']->getID());
-  if (!mysql_num_rows($ex_res))
+  $ex_res = do_mysqli_query("SELECT multi_exceptions.id,multi_exceptions.valid FROM multi_exceptions,multi_exceptions_players WHERE multi_exceptions.id=multi_exceptions_players.eid AND multi_exceptions_players.player=".$_SESSION['player']->getID());
+  if (!mysqli_num_rows($ex_res))
     return NULL;
-  while ($ex = mysql_fetch_assoc($ex_res)) {
-    $p_res = do_mysql_query("SELECT player.name,multi_exceptions_players.valid FROM player,multi_exceptions_players WHERE player.id=multi_exceptions_players.player AND multi_exceptions_players.eid=".$ex['id']);
+  while ($ex = mysqli_fetch_assoc($ex_res)) {
+    $p_res = do_mysqli_query("SELECT player.name,multi_exceptions_players.valid FROM player,multi_exceptions_players WHERE player.id=multi_exceptions_players.player AND multi_exceptions_players.eid=".$ex['id']);
     echo "<table><tr><td><b>Exception ".$ex['id']."</b>";
     if (!$ex['valid']) {
       echo " &nbsp;&nbsp;<i><font color='red'>nicht freigeschaltet</font></i>\n";
@@ -143,7 +144,7 @@ function show_own_exceptions() {
     echo "<br>\n".$ex['comment']."\n";
     
     echo "</td></tr>";
-    while ($p = mysql_fetch_assoc($p_res)) {
+    while ($p = mysqli_fetch_assoc($p_res)) {
       echo "<tr><td>&nbsp;&nbsp;".$p['name'];
       if (!$p['valid']) {
         echo " &nbsp;&nbsp;<i><font color='red'>nicht freigeschaltet</font></i>\n";
@@ -160,11 +161,11 @@ function show_own_exceptions() {
 
 //file ist die aufrufende Datei, clean
 function show_mh_exceptions($file, $id=null) {
-  $ex_res = do_mysql_query("SELECT DISTINCT multi_exceptions.id,multi_exceptions.valid,multi_exceptions.comment FROM multi_exceptions, multi_exceptions_players WHERE multi_exceptions.id=multi_exceptions_players.eid".($id ? " AND multi_exceptions_players.player=$id": "") );
-  if (!mysql_num_rows($ex_res))
+  $ex_res = do_mysqli_query("SELECT DISTINCT multi_exceptions.id,multi_exceptions.valid,multi_exceptions.comment FROM multi_exceptions, multi_exceptions_players WHERE multi_exceptions.id=multi_exceptions_players.eid".($id ? " AND multi_exceptions_players.player=$id": "") );
+  if (!mysqli_num_rows($ex_res))
     return NULL;
-  while ($ex = mysql_fetch_assoc($ex_res)) {
-    $p_res = do_mysql_query("SELECT player.name,multi_exceptions_players.valid,multi_exceptions_players.comment,multi_exceptions_players.note,multi_exceptions_players.id FROM player,multi_exceptions_players WHERE player.id=multi_exceptions_players.player AND multi_exceptions_players.eid=".$ex['id']);
+  while ($ex = mysqli_fetch_assoc($ex_res)) {
+    $p_res = do_mysqli_query("SELECT player.name,multi_exceptions_players.valid,multi_exceptions_players.comment,multi_exceptions_players.note,multi_exceptions_players.id FROM player,multi_exceptions_players WHERE player.id=multi_exceptions_players.player AND multi_exceptions_players.eid=".$ex['id']);
     echo "<table><tr><td>Exception ".$ex['id'];
     if ($ex['comment']) {
       echo " (".$ex['comment'].")";
@@ -173,16 +174,16 @@ function show_mh_exceptions($file, $id=null) {
       echo " (kein Kommentar angegeben)";
     }
     if (!$ex['valid']) {
-      echo " <b> (<a href='".$file."?evalidate=".$ex['id']."'>zustimmen/bestätigen</a>)</b>";
+      echo " <b> (<a href='".$file."?evalidate=".$ex['id']."'>zustimmen/bestÃ¤tigen</a>)</b>";
     }
     else {
       echo " &nbsp;&nbsp;<b><font color='green'>genehmigt</font></b>";
     }
     echo "</td></tr>";
-    while ($p = mysql_fetch_assoc($p_res)) {
+    while ($p = mysqli_fetch_assoc($p_res)) {
       echo "<tr><td>&nbsp;&nbsp;".$p['name'];
       if (!$p['valid']) {
-	      echo " <b> (<a href='".$file."?pvalidate=".$p['id']."'>zustimmen/bestätigen</a>)</b>";
+	      echo " <b> (<a href='".$file."?pvalidate=".$p['id']."'>zustimmen/bestÃ¤tigen</a>)</b>";
         }
       else {
         echo " &nbsp;&nbsp;<b><font color='green'>genehmigt</font></b>";
@@ -204,33 +205,33 @@ function adminprintf() {
  * 
  * 
  * 
- * @param $p  Klasse Player des zu ködernden Multis 
+ * @param $p  Klasse Player des zu kï¿½dernden Multis 
  */
-define(MULTI_TRAP_COOKIE_NAME, "hw2_localdata");
-define(MULTI_TRAP_COOKIE_EXPIRE, 28*24*60*60);
+define("MULTI_TRAP_COOKIE_NAME", "hw2_localdata");
+define("MULTI_TRAP_COOKIE_EXPIRE", 28*24*60*60);
 
 function multi_trap($p) {
   $mh_url = URL_BASE."/multihunter.php?showid=";
 
-  // Wird ein Cookie übermittelt?
+  // Wird ein Cookie Ã¼bermittelt?
   if(isset($_COOKIE[MULTI_TRAP_COOKIE_NAME])) {
     $code = $_COOKIE[MULTI_TRAP_COOKIE_NAME];
     
-    $res = do_mysql_query("SELECT multi_trap.*,name FROM multi_trap ".
+    $res = do_mysqli_query("SELECT multi_trap.*,name FROM multi_trap ".
                           " LEFT JOIN player ON player.id = multi_trap.player ".
                           " WHERE (expired IS NULL OR expired > UNIX_TIMESTAMP()) ".
-                          "  AND code = '".mysql_escape_string($code)."'");
+                          "  AND code = '".mysqli_escape_string($GLOBALS['con'], $code)."'");
     
     // Es kann nur einen Eintrag geben (weil code UNIQUE ist)
-    if(mysql_num_rows($res) == 1) {
-      $dbcookie = mysql_fetch_assoc($res);
+    if(mysqli_num_rows($res) == 1) {
+      $dbcookie = mysqli_fetch_assoc($res);
       // Cookie gibts zumindest mal...
 
-      // Hochzählen
-      do_mysql_query("UPDATE multi_trap SET used = used + 1 WHERE mid = ".$dbcookie['mid']);
+      // HochzÃ¤hlen
+      do_mysqli_query("UPDATE multi_trap SET used = used + 1 WHERE mid = ".$dbcookie['mid']);
       
       if($dbcookie['player'] == $p->getID()) {
-        // Cookie gehört dem Spieler, also nur upcount
+        // Cookie gehï¿½rt dem Spieler, also nur upcount
       }
       else {
         // oO ... hier ist ein Multi entlarvt.
@@ -239,7 +240,7 @@ function multi_trap($p) {
         multi_trap_log($p->getID(), $dbcookie['player'], $code);
                 
         // Message an MultiHunter, aber nur bei den ersten beiden Malen und jedes 10te Mal.
-        // sonst wird man überschüttet
+        // sonst wird man Ã¼berschÃ¼ttet
         if($dbcookie['used'] < 2 || $dbcookie['used'] % 10 == 0) {
           $body = sprintf("Der Spieler [url=%s%d]%s (%d)[/url] wurde als Multi von Spieler [url=%s%d]%s (%d)[/url] entlarvt. Er ist zum %dten mal in die Cookie-Falle getappt.\nDer Multicode war: [ %s ].",
                           $mh_url, $p->getID(), $p->getName(), $p->getID(), $mh_url, $dbcookie['player'], $dbcookie['name'], $dbcookie['player'], $dbcookie['used'], $code);
@@ -254,20 +255,20 @@ function multi_trap($p) {
       // Cookie gibts nicht... komisch, hat der Spieler manipuliert?
       multi_trap_gen_new($p);
       
-      $body = sprintf("Ungültiges MultiCookie '%s' des Spielers [url=%s%d]%s (%d)[/url]. ".
+      $body = sprintf("UngÃ¼ltiges MultiCookie '%s' des Spielers [url=%s%d]%s (%d)[/url]. ".
                       "Dieses Cookie wurde nie ausgeliefert.",
                       $code, $mh_url, $p->getID(), $p->getName(), $p->getID(), $count['cnt']);
 
-      $topic = sprintf("Ungültiges MultiCookie: %s", $p->getName());
+      $topic = sprintf("UngÃ¼ltiges MultiCookie: %s", $p->getName());
       message_to_multihunter($topic, $body);      
     }
   }
   else {
-    // Cookie gibts (noch) nicht oder wurde vom Spieler gelöscht
+    // Cookie gibts (noch) nicht oder wurde vom Spieler gelÃ¶scht
 
-    // Cookies zählen, die der Spieler bereits hat
+    // Cookies zÃ¤hlen, die der Spieler bereits hat
     $sql = sprintf("SELECT count(*) AS cnt FROM multi_trap WHERE player = %d", $p->getID());
-    $count = do_mysql_query_fetch_assoc($sql);
+    $count = do_mysqli_query_fetch_assoc($sql);
     
     // Neues Multicookie setzen
     multi_trap_gen_new($p);
@@ -282,12 +283,12 @@ function multi_trap($p) {
 
     
     $inform_mh = true; // An Multihunter melden?
-    $tolerance = 5;    // Ab 5 ungültigen Logins loggen, 
+    $tolerance = 5;    // Ab 5 ungÃ¼ltigen Logins loggen, 
     $interval  = 20;   // alle 20te Male loggen
     if($count['cnt'] >= $tolerance && $count['cnt']%$interval == $tolerance && $inform_mh) {      
       $body = sprintf("Der Spieler [url=%s%d]%s (%d)[/url] hat beim Login kein MultiCookie ".
                       "geliefert, obwohl er %d MultiCookies in der Datenbank hat.".
-                      " Hat er das gelöscht? Skandal!",
+                      " Hat er das gelÃ¶scht? Skandal!",
                       $mh_url, $p->getID(), $p->getName(), $p->getID(), $count['cnt']);
 
       $topic = sprintf("Kein MultiCookie %dx: %s", $count['cnt'], $p->getName());
@@ -301,8 +302,8 @@ function multi_trap_gen_new($p) {
   $code = md5( ($p->getName()).($p->getID()).(time()) );
 
   $sql = sprintf("INSERT INTO multi_trap (code, player, createtime) VALUES ('%s', %d, UNIX_TIMESTAMP())",
-                   mysql_escape_string($code), $p->getID());
-  do_mysql_query($sql);
+                   mysqli_escape_string($GLOBALS['con'], $code), $p->getID());
+  do_mysqli_query($sql);
   multi_trap_set_cookie($code);
 }
 
@@ -318,12 +319,12 @@ function multi_trap_set_cookie($code) {
  * Eine Nachricht an alle Multihunter senden.
  */
 function message_to_multihunter($header, $body) {
-  $res = do_mysql_query("SELECT * FROM player WHERE hwstatus & 2");
-  while($to = mysql_fetch_array($res)) {
+  $res = do_mysqli_query("SELECT * FROM player WHERE hwstatus & 2");
+  while($to = mysqli_fetch_array($res)) {
     $sql = sprintf("INSERT INTO message (sender, recipient, header, body, date, category) VALUES ('MULTITRAP', %d, '%s', '%s', UNIX_TIMESTAMP(), 9)",
-                   $to['id'], mysql_escape_string($header), mysql_escape_string($body)); 
-    do_mysql_query($sql);
-    do_mysql_query("UPDATE player SET cc_messages = 1 WHERE id = ".$to['id']);
+                   $to['id'], mysqli_escape_string($GLOBALS['con'], $header), mysqli_escape_string($GLOBALS['con'], $body)); 
+    do_mysqli_query($sql);
+    do_mysqli_query("UPDATE player SET cc_messages = 1 WHERE id = ".$to['id']);
   }
 }
 
@@ -333,19 +334,19 @@ function message_to_multihunter($header, $body) {
  */
 function multi_trap_log($multi, $cookieowner, $code = "") {
   $sql = sprintf("INSERT INTO multi_trap_caught (multi, cookieowner, time, code) VALUES (%d, %d, UNIX_TIMESTAMP(), '%s')",
-                 $multi, $cookieowner, mysql_escape_string($code));
-  do_mysql_query($sql);
+                 $multi, $cookieowner, mysqli_escape_string($GLOBALS['con'], $code));
+  do_mysqli_query($sql);
 }
 
 
 /**
- * Loggen, wenn ein Spieler ein Cookie haben müßte,  aber keines hat. 
- * Eventuell löscht sein Browser nach einem Neustart alle Cookies,
+ * Loggen, wenn ein Spieler ein Cookie haben mÃ¼sste,  aber keines hat. 
+ * Eventuell lÃ¶scht sein Browser nach einem Neustart alle Cookies,
  * aber trotzdem loggen.
  */
 function multi_trap_log_nocookie($player, $count) {
   $sql = sprintf("INSERT INTO multi_trap_nocookie (player, count, time) VALUES (%d, %d, UNIX_TIMESTAMP())", $player, $count);
-  do_mysql_query($sql);
+  do_mysqli_query($sql);
 }
 
 
@@ -355,7 +356,7 @@ function send_multi_warn() {
 $warn = "
 Hallo,
 
-hiermit erhältst Du eine Verwarnung. Resourcen-Transfers zwischen Spieler, die über die gleiche IP / gleiche Internetleitung oder gar über denselben PC einloggen, dürfen keinerlei Resourcen untereinander tauschen.
+hiermit erhÃ¤ltst Du eine Verwarnung. Resourcen-Transfers zwischen Spieler, die Ã¼ber die gleiche IP / gleiche Internetleitung oder gar Ã¼ber denselben PC einloggen, dÃ¼rfen keinerlei Resourcen untereinander tauschen.
 
 Lies dazu die Informationen unter MyHW2->Account ganz unten unter Multi-Exception durch.
 
@@ -366,5 +367,6 @@ Ein Multihunter
 ";
 
 }
+ob_end_flush();
 
 ?>

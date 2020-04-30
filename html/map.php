@@ -45,7 +45,7 @@ start_page();
 
 <script language="JavaScript">
 <!--
-// JavaScript-Funktion öffnet Kindfenster für die Suche nach einer Städten
+// JavaScript-Funktion ï¿½ffnet Kindfenster fÃ¼r die Suche nach einer StÃ¤dten
 function popUp(sel) {
   if(sel=="world")
     var win = window.open("usermap.php","Weltkarte","width=820,height=800,left=0,scrollbars=yes,top=0,dependent=yes");
@@ -111,21 +111,21 @@ function hideCity(id) {
 		document.getElementById("c"+id).style.display = "none";
 	}
 }
-// Nur für IE 5+ und NN 6+
+// Nur fÃ¼r IE 5+ und NN 6+
 ie5=(document.getElementById && document.all && document.styleSheets)?1:0;
 nn6=(document.getElementById && !document.all)?1:0;
 
-// Kontextmenü initialisieren
+// Kontextmenï¿½ initialisieren
 if (ie5 || nn6) {
   menuWidth=122, menuHeight=183;
   menuStatus=0;
 
-  // Rechter Mausklick: Menü anzeigen, linker Mausklick: Menü verstecken
+  // Rechter Mausklick: Menï¿½ anzeigen, linker Mausklick: Menï¿½ verstecken
   document.oncontextmenu=showMenu; //oncontextmenu geht nicht bei NN 6.01
   document.onmouseup=hideMenu;
 }
 
-// Kontextmenü anzeigen
+// Kontextmenï¿½ anzeigen
 function showMenu(e) {
   if(ie5) {
     if(event.clientX>menuWidth) xPos=event.clientX-menuWidth+document.body.scrollLeft;
@@ -145,7 +145,7 @@ function showMenu(e) {
   return false;
 }
 
-// Kontextmenü verstecken
+// Kontextmenï¿½ verstecken
 function hideMenu(e) {
   if (menuStatus==1 && ((ie5 && event.button==1) || (nn6 && e.which==1))) {
     setTimeout("document.getElementById('menu').style.top=-250",250);
@@ -215,9 +215,9 @@ if (isset($gox) && isset($goy) && $gox != null && $goy != null) {
   $coy = $goy;
 }
 else {
-  $cd = $cities->getCityData();
-  $res1=do_mysql_query("SELECT x,y FROM map WHERE id = '".$cd['id']."'");
-  $data1 = mysql_fetch_assoc($res1);  
+  $cd = $_SESSION['cities']->getCityData();
+  $res1=do_mysqli_query("SELECT x,y FROM map WHERE id = '".$cd['id']."'");
+  $data1 = mysqli_fetch_assoc($res1);  
   $coy = $data1['y'];
   $cox = $data1['x'];
 }
@@ -250,9 +250,9 @@ elseif (isset($gox) && isset($goy) && $gox != null && $goy != null) {
   $map->moveXY($gox,$goy);
 }
 else {
-  $cd=$cities->getCityData();
-  $res1=do_mysql_query("SELECT x,y FROM map WHERE id = '".$cd['id']."'");
-  $data1 = mysql_fetch_assoc($res1);  
+  $cd=$_SESSION['cities']->getCityData();
+  $res1=do_mysqli_query("SELECT x,y FROM map WHERE id = '".$cd['id']."'");
+  $data1 = mysqli_fetch_assoc($res1);  
   $map->moveXY($data1['x'],$data1['y']);
 }
 

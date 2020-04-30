@@ -36,7 +36,7 @@
 unset($selectPlayerName);
 
 // $login muss gesetzt sein, damit in session.inc.php kein redirect
-// auf die Login-Seite durchgeführt wird
+// auf die Login-Seite durchgefÃ¼hrt wird
 $login = true;
 
 require_once("includes/db.inc.php");
@@ -51,7 +51,7 @@ include_once("includes/research.class.php");
 include_once("includes/map.class.php");
 include_once("includes/cities.class.php");
 include_once("includes/session.inc.php");
-include_once("include/db.class.php");
+include_once("includes/db.class.php");
 include_once("includes/banner.inc.php"); 
 //include_once("includes/browser.inc.php");
 include_once("includes/premium.inc.php");
@@ -78,7 +78,7 @@ if (isset($_COOKIE['hw2_recruiter'])) {
   }
 }
 else if (isset($recruiter)) {
-  // Referer gesetzt. Ein Cookie anlegen. Läuft nach 28 Tagen ab
+  // Referer gesetzt. Ein Cookie anlegen. LÃ¤uft nach 28 Tagen ab
   $cookieref = false;
   if (is_numeric($recruiter))
     $ref = intval($recruiter);
@@ -90,54 +90,54 @@ if (isset($recruiter)) {
   $serverhost = $_SERVER['HTTP_HOST'];
   if (strcasecmp($serverhost, "www.holy-wars2.de") == 0) $serverhost = "holy-wars2.de";
 
-  $recruiter_res = do_mysql_query("SELECT name FROM player WHERE id = ".mysql_escape_string($recruiter) );
-  if (mysql_num_rows($recruiter_res)) {
-    $recruiter_name = mysql_fetch_assoc($recruiter_res);
+  $recruiter_res = do_mysqli_query("SELECT name FROM player WHERE id = ".mysqli_escape_string($GLOBALS['con'], $recruiter) );
+  if (mysqli_num_rows($recruiter_res)) {
+    $recruiter_name = mysqli_fetch_assoc($recruiter_res);
     $recruiter_name = $recruiter_name['name'];
     setcookie ("hw2_recruiter", $recruiter, time() + 28*24*60*60, "/", $serverhost, false );   
   }
   else {
     unset($recruiter);
     unset($ref);
-    // Cookie löschen
+    // Cookie lÃ¶schen
     setcookie ("hw2_recruiter", "", 1, "/", $serverhost, false );
   }
 }
 
-if(isset($login) && strlen($loginstr) > 0 && strlen($loginpass) > 0) {
+if(isset($_POST['loginprocess']) && strlen($_POST['loginname']) > 0 && strlen($_POST['loginpassword']) > 0) {
   $loginprocess = 1;
-  $loginname = $loginstr;
-  $loginpassword = $loginpass;
+  $loginname = $_POST['loginname'];
+  $loginpassword = $_POST['loginpassword'];
 }
 
 
 if ($loginprocess) {
   if(!defined("ROUND_FINISHED")) {
     include("includes/login.func.php");
-    $loginerror = hw2_login($loginname, $loginpassword, $sec_code);
+    $_SESSION['loginerror'] = hw2_login($loginname, $loginpassword, $sec_code);
   }
   else {
-    $loginerror = "Diese Runde ist beendet.";
+    $_SESSION['loginerror'] = "Diese Runde ist beendet.";
   }
 }
 
 
 
 
-// status = 3 bedeutet verdächtige Spieler, die aber nicht gesperrt sind.
-$res = do_mysql_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
+// status = 3 bedeutet verdÃ¤chtige Spieler, die aber nicht gesperrt sind.
+$res = do_mysqli_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
 
-if(mysql_num_rows($res) < 2) {
+if(mysqli_num_rows($res) < 2) {
   $nr[0] = $nr[1] = -1;
 }
 else {
-  $nr[0] = mysql_fetch_array($res);
-  $nr[1] = mysql_fetch_array($res);
+  $nr[0] = mysqli_fetch_array($res);
+  $nr[1] = mysqli_fetch_array($res);
 }
 
 if (defined("BOOKING_ALLOWED") && BOOKING_ALLOWED) {
-  $book_res = do_mysql_query("SELECT count(*) FROM booking WHERE status = 0");
-  $book = mysql_fetch_array($book_res);
+  $book_res = do_mysqli_query("SELECT count(*) FROM booking WHERE status = 0");
+  $book = mysqli_fetch_array($book_res);
 }
 
 
@@ -147,7 +147,7 @@ if (defined("BOOKING_ALLOWED") && BOOKING_ALLOWED) {
 <title><? echo $pagetitle; if(isset($title)) echo " - ".$title; ?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <LINK rel="SHORTCUT ICON" href="favicon.ico" type="image/ico">
-<script language="JavaScript" src="js/infopopup_v01.js" type="text/javascript"></script>
+<script language="JavaScript" src="js/infopopup.js" type="text/javascript"></script>
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
 </head>
 
@@ -218,7 +218,7 @@ if ($cookieref) echo "<!-- CookieRef true -->\n";
 							onmouseout="this.style.backgroundColor='#F0F0AA';"
 							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
 							style="display: block; width: 100%;"
-							href="http://forum.holy-wars2.de">Forum</a></td>
+							href="">Forum</a></td>
 
 						<td width="10%" valign="middle" align="center" class="tblhead"
 							onmouseout="this.style.backgroundColor='#F0F0AA';"
@@ -229,7 +229,7 @@ if ($cookieref) echo "<!-- CookieRef true -->\n";
 							onmouseout="this.style.backgroundColor='#F0F0AA';"
 							onmouseover="this.style.backgroundColor='#FFFFC8';"><a
 							style="display: block; width: 100%;"
-							href="http://www.holy-wars2.de/wiki/index.php/Zeitung">Zeitung</a></td>
+							href="">Zeitung</a></td>
 
 						<td width="10%" valign="middle" align="center" class="tblhead"
 							onmouseout="this.style.backgroundColor='#F0F0AA';"
@@ -275,7 +275,7 @@ if(isset($selectPlayerName)) {
 			<tr>
 				<td width="22%" valign="top"></td>
 				<td width="53%" valign="top" align="center" class="tblbody">
-				<h1>Spielernamen und Startposition wählen</h1>
+				<h1>Spielernamen und Startposition wï¿½hlen</h1>
 				<form method="post" action="choose_name.php"></form>
 				</td>
 				<td width="22%" valign="top"></td>
@@ -288,25 +288,25 @@ if(isset($selectPlayerName)) {
 
 function print_news_table() {
   if($_GET['news'])
-    $resnews=do_mysql_query("SELECT topic,text FROM news WHERE id=".intval($_GET['news']));
+    $resnews=do_mysqli_query("SELECT topic,text FROM news WHERE id=".intval($_GET['news']));
   else
-    $resnews=do_mysql_query("SELECT topic,text FROM news ORDER BY time DESC");
-  $dataNews=mysql_fetch_assoc($resnews);
+    $resnews=do_mysqli_query("SELECT topic,text FROM news ORDER BY time DESC");
+  $dataNews=mysqli_fetch_assoc($resnews);
 
-  $resN=do_mysql_query("SELECT id, time, topic FROM news ORDER BY id DESC");
+  $resN=do_mysqli_query("SELECT id, time, topic FROM news ORDER BY id DESC");
   
   echo "<table width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">\n";
 
   echo "<tr class=\"tblhead\"><td height=\"25\">\n";
-  if(mysql_num_rows($resN)==0) {
+  if(mysqli_num_rows($resN)==0) {
     echo "<b>Keine Neuigkeiten</b></td></tr>\n";
   }
   else {
     echo "<b>Neuigkeiten</b></td></tr>\n";
     
-    if(mysql_num_rows($resN)>1) {
+    if(mysqli_num_rows($resN)>1) {
       echo "<tr class=\"tblbody\"><td valign=\"middle\" height=\"30\">\n";
-      while($dataN=mysql_fetch_assoc($resN)) {
+      while($dataN=mysqli_fetch_assoc($resN)) {
 	echo "<span style=\"float:left;\"><a href=\"".$PHP_SELF."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">(".date("d.m.Y",$dataN['time']).")</span><br>";
       }
       echo "</td></tr>";
@@ -321,14 +321,14 @@ function print_news_table() {
 }
 
 function playeronline_table() {
-  $res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
+  $res1=do_mysqli_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
   echo "<table width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\"><b>Spieler online</b></td></tr>\n";
   echo "<tr class=\"tblbody\"><td height=\"20\" valign=\"middle\" colspan=\"3\">";
-  if(mysql_num_rows($res1) == 1)
+  if(mysqli_num_rows($res1) == 1)
     echo "Momentan ist <b>ein Spieler</b> online!";
-  elseif(mysql_num_rows($res1) > 1)
-    echo "Momentan sind <b>".mysql_num_rows($res1)."</b> Spieler online!";
+  elseif(mysqli_num_rows($res1) > 1)
+    echo "Momentan sind <b>".mysqli_num_rows($res1)."</b> Spieler online!";
   else
     echo "Momentan sind <b>keine</b> Spieler online!";
     
@@ -337,10 +337,10 @@ function playeronline_table() {
 
 
 function bestplayer_table() {
-  $res2=do_mysql_query("SELECT name, religion FROM player WHERE toplist > 0 ORDER BY toplist ASC LIMIT 0,5");
+  $res2=do_mysqli_query("SELECT name, religion FROM player WHERE toplist > 0 ORDER BY toplist ASC LIMIT 0,5");
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\"><b>Top-5 Spieler</b>&nbsp;&nbsp;<a style=\"font-size:10px;\" href=\"toplist.php\">&gt;(Top 100 hier)&lt;</a></td></tr>\n";
-  while($data2=mysql_fetch_assoc($res2)) {
+  while($data2=mysqli_fetch_assoc($res2)) {
     echo "<tr class=\"tblbody\"><td height=\"20\" valign=\"middle\" width=\"98%\">";
     echo $data2['name']."</td><td width=\"15\" align=\"center\">";
     
@@ -351,10 +351,10 @@ function bestplayer_table() {
 }
 
 function bestclan_table() {
-  $res2=do_mysql_query("SELECT clan.name, player.religion AS religion FROM clan LEFT JOIN player ON player.clan = clan.id WHERE clan.toplist > 0 GROUP BY player.clan ORDER BY clan.toplist ASC LIMIT 0,5");
+  $res2=do_mysqli_query("SELECT clan.name, player.religion AS religion FROM clan LEFT JOIN player ON player.clan = clan.id WHERE clan.toplist > 0 GROUP BY player.clan ORDER BY clan.toplist ASC LIMIT 0,5");
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"25\" valign=\"middle\" colspan=\"3\"><b>Top-5 Orden</b>&nbsp;&nbsp;<a href=\"toplist.php?show=clan\" style=\"font-size:10px;\">&gt;(Top 100 hier)&lt;</a></td></tr>\n";
-  while($data2=mysql_fetch_assoc($res2)) {
+  while($data2=mysqli_fetch_assoc($res2)) {
     echo "<tr class=\"tblbody\"><td height=\"20\" valign=\"middle\" width=\"98%\">";
     echo $data2['name']."</td><td width=\"15\" align=\"center\">";
     
@@ -367,10 +367,10 @@ function bestclan_table() {
 
 function zitat_table() {
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
-  $zitat=do_mysql_query("SELECT player.name as player, text FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active='1' ORDER BY RAND() LIMIT 1");
+  $zitat=do_mysqli_query("SELECT player.name as player, text FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active='1' ORDER BY RAND() LIMIT 1");
 
-  if(mysql_num_rows($zitat) > 0) {
-    $zitat=mysql_fetch_assoc($zitat);
+  if(mysqli_num_rows($zitat) > 0) {
+    $zitat=mysqli_fetch_assoc($zitat);
     echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\">";
     
     if($zitat['player']) {
@@ -396,8 +396,8 @@ function zitat_table() {
 
 function print_you_know_table() {
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
-  $present=do_mysql_query("SELECT player.name as name, (player.points) AS points, sum(city.population) AS population, count(city.id) as citycount, clan.name as clan, player.clanstatus as clanstatus, player.toplist AS toplistplayer, player.religion AS religion FROM player LEFT JOIN clan ON player.clan=clan.id LEFT JOIN city ON city.owner=player.id WHERE player.toplist<='50' GROUP BY player.name ORDER BY RAND() LIMIT 1");
-  $present=mysql_fetch_assoc($present);
+  $present=do_mysqli_query("SELECT player.name as name, (player.points) AS points, sum(city.population) AS population, count(city.id) as citycount, clan.name as clan, player.clanstatus as clanstatus, player.toplist AS toplistplayer, player.religion AS religion FROM player LEFT JOIN clan ON player.clan=clan.id LEFT JOIN city ON city.owner=player.id WHERE player.toplist<='50' GROUP BY player.name ORDER BY RAND() LIMIT 1");
+  $present=mysqli_fetch_assoc($present);
   
   echo "<tr class=\"tblhead\"><td height=\"25\" valign=\"middle\" colspan=\"3\">";
   
@@ -464,7 +464,7 @@ function playing_div() {
          $nr[0] === -1 ? "?" : $nr[0][0]+$nr[1][0], $nr[0] === -1 ? "?" : $nr[0][0], $nr[1] === -1 ? "?" : $nr[1][0]);
   
   if (defined("BOOKING_ALLOWED") && BOOKING_ALLOWED) {
-    echo "\nFür die neue Runde sind <b>".$book[0]."</b> Spieler vorangemeldet.\n";
+    echo "\nFÃ¼r die neue Runde sind <b>".$book[0]."</b> Spieler vorangemeldet.\n";
   }
 
   echo "</div>\n";

@@ -32,10 +32,13 @@
  ****************************************************/
 include ("includes/db.inc.php");
 include ("includes/config.inc.php");
+
+// register_globals off migrated!
+
 ?>
 <html>
 <head>
-<title><? echo $pagetitle; ?> Registrierung durchgeführt</title>
+<title><? echo $pagetitle; ?> Registrierung durchgefÃ¼hrt</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
@@ -44,30 +47,30 @@ include ("includes/config.inc.php");
 <table width="480" cellspacing="1" cellpadding="0" border="0">
 	<tr>
 		<td align="center">
-		<h1>Registrierung durchgeführt</h1>
+		<h1>Registrierung durchgefÃ¼hrt</h1>
 		<br>
 		<br>
 		</td>
 	</tr>
 	<?
-if (isset($recruiter)) {
+if (isset($_POST['recruiter'])) {
 echo '<tr><td align="center">Sie wurden von Spieler '.$recruiter_name.' geworben</td></tr>';
 }
 ?>
 	<tr>
-		<td align="center">Herzlichen Glückwunsch, ihr Account wurde
+		<td align="center">Herzlichen GlÃ¼ckwunsch, ihr Account wurde
 		erfolgreich angelegt. In einigen Minuten sollten sie eine <b>Email mit
 		Ihrem Aktivierungskey erhalten</b>.	
 		<br>		
-        Der Account muss bis spätestens 48h nach Anmeldung aktiviert werden. Dies erreichen Sie, indem Sie
-        die Schritte in Ihrer Empfangenen Email durchführen, oder die Aktivierung nach Anleitung auf der
-        Hauptseite im Spiel durchführen. 
+        Der Account muss bis spÃ¤testens 48h nach Anmeldung aktiviert werden. Dies erreichen Sie, indem Sie
+        die Schritte in Ihrer Empfangenen Email durchfÃ¼hren, oder die Aktivierung nach Anleitung auf der
+        Hauptseite im Spiel durchfÃ¼hren. 
 		</td>
 	</tr>
     <tr>
         <td align="center">     
         <h1>Jetzt einloggen</h1>
-        Die Account-Aktivierung können Sie später durchführen.
+        Die Account-Aktivierung kÃ¶nnen Sie spÃ¤ter durchfÃ¼hren.
         <br>
         <a style="font-size: 13px;" href="login.php<?php if(isset($_REQUEST['name'])) echo "?name=".urlencode($_REQUEST['name']);  ?>"><b>Zum Login hier klicken</b></a>
         <br>
@@ -83,21 +86,21 @@ echo '<tr><td align="center">Sie wurden von Spieler '.$recruiter_name.' geworben
 	</tr>
 	<tr>
 		<td align="left">
-		<center><h1>Wußtet Ihr schon?</h1></center>
-		Für das Werben neuer Spieler erhaltet Ihr Bonuspunkte. Diese könnt ihr
-		nutzen für:
+		<center><h1>Wusstet Ihr schon?</h1></center>
+		FÃ¼r das Werben neuer Spieler erhaltet Ihr Bonuspunkte. Diese kÃ¶nnt ihr
+		nutzen fÃ¼r:
 		<ul>
 			<li>Kampfsimulator</li>
 			<li>Spielen von Turnieren, in denen Gold zu gewinnen ist</li>
-			<li>Einlösen von Premiumaccounts</li>
+			<li>EinlÃ¶sen von Premiumaccounts</li>
 		</ul>
-		Neben dem Werben neuer Spieler gibt es noch weiter Möglichkeiten, um
+		Neben dem Werben neuer Spieler gibt es noch weiter MÃ¶glichkeiten, um
 		an Bonuspunkte zu gelangen.
-		<p>Weiter Informationen dazu finden sich im Spiel unter dem Menüpunkt
+		<p>Weiter Informationen dazu finden sich im Spiel unter dem MenÃ¼punkt
 		&quot;MyHW2&quot; in der Rubrik &quot;Account-Einstellungen&quot;.
 		
 		
-		<p><center><img src="/hw2_banner.php/1.gif"></center>
+		<p><center><img src="images/logo/hw2_anibanner1.gif"></center>
 		
 		</td>
 	</tr>

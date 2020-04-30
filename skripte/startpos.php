@@ -51,7 +51,7 @@ if ((isset($x)) && (isset($y))) {
 }
 
 if ((isset($x)) && (isset($y))) {
-	echo "\r".($end['y']/MAP_SIZE_Y*100)."% ausgeführt";
+	echo "\r".($end['y']/MAP_SIZE_Y*100)."% ausgefÃ¼hrt";
 }
 else {
 	echo "<a href='startpos.php?x=0&y=0'>Berechnung der Startpositionen starten</a>";
@@ -69,9 +69,9 @@ function computeStartPositions($x,$y) {
 	$img=ImageCreateFromPNG("admintools/colors.png");
 	$grassland=imagecolorat($img,1,0);
 
-	// Neuer Import gestartet -> alte Karte löschen
+	// Neuer Import gestartet -> alte Karte lÃ¶schen
 	if (($x==0) && ($y==0)) {
-      mysql_query("TRUNCATE startpositions");      
+      mysqli_query($GLOBALS['con']"TRUNCATE startpositions");      
     }
 
 	// Zeit setzen
@@ -83,7 +83,7 @@ function computeStartPositions($x,$y) {
 	$xy['x']=$x;
 	$xy['y']=$y;
 
-	// Schleife 120 Sekunden lang ausführen
+	// Schleife 120 Sekunden lang ausfÃ¼hren
 	while ($starttime+120>time()) {
 		unset($arr);
 		$count=0;
@@ -98,7 +98,7 @@ function computeStartPositions($x,$y) {
 		}
 		if ($count>1) {
 			$field=mt_rand(0,$count-1);
-			mysql_query("INSERT INTO startpositions VALUES (".$arr[$field][0].",".$arr[$field][1].")");
+			mysqli_query($GLOBALS['con']"INSERT INTO startpositions VALUES (".$arr[$field][0].",".$arr[$field][1].")");
 		}
 		$xy['x']+=10;
 		if ($xy['x']==MAP_SIZE_X) {

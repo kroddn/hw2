@@ -54,18 +54,20 @@ if($f) {
 }
 
 // Den Referer nun noch in die DB eintragen
+/* Nicht sicher wofür gerade gut - eventuel anpassen
+TODO: Check -> Was hat es hiermit auf sich
 @mysql_pconnect("85.10.202.10", "hw2banner", "GkV9TlQw8");
 @mysql_select_db("banner");
 $sql = sprintf("INSERT INTO global.hw2banneraccess (time, banner, ip, referer, request)".
                " VALUES (UNIX_TIMESTAMP(), '%s', '%s', %s, '%s')",
-               mysql_escape_string($bannername),
-               mysql_escape_string($ip),
-               strlen($referer) > 0 ? "'".mysql_escape_string($referer)."'" : "NULL",
-               mysql_escape_string($request)
+               mysqli_escape_string($GLOBALS['con'], $bannername),
+               mysqli_escape_string($GLOBALS['con'], $ip),
+               strlen($referer) > 0 ? "'".mysqli_escape_string($GLOBALS['con'], $referer)."'" : "NULL",
+               mysqli_escape_string($GLOBALS['con'], $request)
              );
 
-@mysql_query($sql);
-               
+@mysqli_query($GLOBALS['con']$sql);
+*/               
 
 die();
 ?>

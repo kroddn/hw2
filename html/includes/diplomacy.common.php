@@ -26,15 +26,15 @@
 function delDBrel($table, $id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
-  do_mysql_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
-  return mysql_affected_rows();
+  do_mysqli_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
+  return mysqli_affected_rows($GLOBALS['con']);
 }
 
 function delDBreq_rel($table, $id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
-  do_mysql_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id2=".$id1." AND id1=".$id2.")");
-  return mysql_affected_rows();
+  do_mysqli_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id2=".$id1." AND id1=".$id2.")");
+  return mysqli_affected_rows($GLOBALS['con']);
 }
 
 function setDBrel($table, $id1, $id2, $type) {
@@ -43,8 +43,8 @@ function setDBrel($table, $id1, $id2, $type) {
   $type = intval($type);
   
   delDBrel($table, $id1, $id2);
-  do_mysql_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
-  return mysql_affected_rows();
+  do_mysqli_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
+  return mysqli_affected_rows($GLOBALS['con']);
 }
 
 function setDBreq_rel($table, $id1, $id2, $type) {
@@ -53,20 +53,20 @@ function setDBreq_rel($table, $id1, $id2, $type) {
   $type = intval($type);
   
   delDBreq_rel($table, $id1, $id2);
-  do_mysql_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
-  return mysql_affected_rows();
+  do_mysqli_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
+  return mysqli_affected_rows($GLOBALS['con']);
 }
 
 
 //0 == Feind
 //1 == Neutral
-//2 == Verbündet
+//2 == VerbÃ¼ndet
 function getRel($id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
   
-  $res = do_mysql_query("SELECT type FROM relation WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
-  if ($data = mysql_fetch_assoc($res))
+  $res = do_mysqli_query("SELECT type FROM relation WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
+  if ($data = mysqli_fetch_assoc($res))
     return $data['type'];
   else 
     return 1;
@@ -75,17 +75,17 @@ function getRel($id1, $id2) {
 //0 == Feind
 //1 == Neutral oder wenn einer der Spieler keinen Clan hat!
 //2 == NAP
-//3 == Verbündet
+//3 == VerbÃ¼ndet
 //player ID's
 function getClanRel($id1,$id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
   
   if ($id1 > 0 && $id2 > 0) {
-    $clans_res = do_mysql_query("SELECT clan FROM player WHERE id=".$id1." OR id=".$id2);
-    if (($clan1 = mysql_fetch_assoc($clans_res)) && ($clan2 = mysql_fetch_assoc($clans_res)) && $clan1['clan'] && $clan2['clan']) {
-      $res = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan1['clan']." AND id2=".$clan2['clan'].") OR (id1=".$clan2['clan']." AND id2=".$clan1['clan'].")");
-      if ($data = mysql_fetch_assoc($res))
+    $clans_res = do_mysqli_query("SELECT clan FROM player WHERE id=".$id1." OR id=".$id2);
+    if (($clan1 = mysqli_fetch_assoc($clans_res)) && ($clan2 = mysqli_fetch_assoc($clans_res)) && $clan1['clan'] && $clan2['clan']) {
+      $res = do_mysqli_query("SELECT type FROM clanrel WHERE (id1=".$clan1['clan']." AND id2=".$clan2['clan'].") OR (id1=".$clan2['clan']." AND id2=".$clan1['clan'].")");
+      if ($data = mysqli_fetch_assoc($res))
 	return $data['type'];
       else 
 	return 1;
@@ -97,14 +97,14 @@ function getClanRel($id1,$id2) {
 
 /**
  * 
- * Funktion die in service.inc.php benützt wird um herauszufinden ob gekämpft wird!
- * Sofern der Spieler mit dem anderen Spieler nicht verbündet ist, aber die Orden verbündet sind, wird neutral zurückgegeben.
+ * Funktion die in service.inc.php benï¿½tzt wird um herauszufinden ob gekï¿½mpft wird!
+ * Sofern der Spieler mit dem anderen Spieler nicht verbÃ¼ndet ist, aber die Orden verbÃ¼ndet sind, wird neutral zurÃ¼ckgegeben.
  * Return Wert:
  * 0 == Feind
  * 1 == Neutral
- * 2 == Verbündet
+ * 2 == VerbÃ¼ndet
  * 
- * Bei herrenlosen Städten wird hier immer 0 zurück gegeben
+ * Bei herrenlosen StÃ¤dten wird hier immer 0 zurÃ¼ck gegeben
  */
 function getWarRel($id1, $id2) {  
   if (!$id1) {
@@ -128,22 +128,22 @@ function getWarRel($id1, $id2) {
     //Beim Aufruf von getWarRel sollte es nicht vorkommen das $id1 gleich $id2 ist
     case 5:
       log_fatal_error("getWarRel() should not be run with same ids");
-    //Falls es ein Ordensbruder ist, dann ist man mit ihm verbündet
+    //Falls es ein Ordensbruder ist, dann ist man mit ihm verbÃ¼ndet
     case 4:
-    //Falls Orden verbündet oder normales Bündnis => verbündet
+    //Falls Orden verbÃ¼ndet oder normales BÃ¼ndnis => verbÃ¼ndet
     case 3:
       return 2;
     //NAP = neutral
     case 2:
       return 1;
-    //An sich nurnoch Krieg hier möglich ;)
+    //An sich nurnoch Krieg hier mÃ¶glich ;)
     default:
       return $rel;
   }
 }
 
 /* Spieler Beziehung ermitteln
- *  Wird  in map.v3.class.php und aufwerts eingesetzt um die Farben der Städte
+ *  Wird  in map.v3.class.php und aufwerts eingesetzt um die Farben der StÃ¤dte
  *  anzuzeigen
  *  param:  2 PlayerID's
  *  return: 0 = Krieg
@@ -161,7 +161,7 @@ function getPlayerRelation($id1, $id2) {
   //Spielerbeziehung heranziehen
   $rel = getRel($id1, $id2);
   
-  //Falls die Beziehung verbündet ist, dann auf 3 setzen
+  //Falls die Beziehung verbÃ¼ndet ist, dann auf 3 setzen
   if($rel == 2)
     return 3;
   
@@ -169,10 +169,10 @@ function getPlayerRelation($id1, $id2) {
   if($rel == 1)
   {
     // Orden der Spieler ermitteln
-    $ressameclan = do_mysql_query( 'SELECT player1.clan=player2.clan as type '.
+    $ressameclan = do_mysqli_query( 'SELECT player1.clan=player2.clan as type '.
            'FROM player as player1, player as player2 '.
            'WHERE player1.id ='.$id1.' AND player2.id='.$id2 );
-    $sameclan = mysql_fetch_assoc($ressameclan);    
+    $sameclan = mysqli_fetch_assoc($ressameclan);    
     //Sind die beiden im selben Orden?
     if($sameclan['type'] == 1)
       return 4;

@@ -39,8 +39,8 @@ if (stristr($run_path, "admintools")) {
 include_once("includes/db.inc.php");
 
 $hit = $miss = $corrected = $sum = 0;
-$map = do_mysql_query("SELECT id,type,pic FROM map ORDER BY pic");
-while($pic = mysql_fetch_assoc($map)) {
+$map = do_mysqli_query($GLOBALS['con']"SELECT id,type,pic FROM map ORDER BY pic");
+while($pic = mysqli_fetch_assoc($map)) {
   if(!file_exists("images/ingame/".$pic['pic'].".gif")) {
     //printf("%s.gif ", $pic['pic']);
     if($pic['type']==1) {
@@ -59,22 +59,22 @@ while($pic = mysql_fetch_assoc($map)) {
       }
       
       $sql = "UPDATE map set pic = '$new' where id =".$pic['id'];
-      do_mysql_query($sql);
+      do_mysqli_query($GLOBALS['con']$sql);
       echo "-> $new.gif\n";
       $corrected++;
     }
     if($pic['type']==2) {
-		  do_mysql_query("UPDATE map set pic = '22222' where id =".$pic['id']);
+		  do_mysqli_query($GLOBALS['con']"UPDATE map set pic = '22222' where id =".$pic['id']);
 		  echo "-> 22222.gif\n";
 		  $corrected++;
 		}
     if($pic['type']==3) {
-		  do_mysql_query("UPDATE map set pic = '22322' where id =".$pic['id']);
+		  do_mysqli_query($GLOBALS['con']"UPDATE map set pic = '22322' where id =".$pic['id']);
 		  echo "-> 22322.gif\n";
 		  $corrected++;
 		}
 		else if($pic['type']==4){
-		  do_mysql_query("UPDATE map set pic = '22422' where id =".$pic['id']);
+		  do_mysqli_query($GLOBALS['con']"UPDATE map set pic = '22422' where id =".$pic['id']);
 		  echo "-> 22422.gif\n";
 		  $corrected++;
 		}

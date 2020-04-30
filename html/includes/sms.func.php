@@ -31,16 +31,17 @@
  */
 
 // Include config mit Username/Passwort
-include_once("/etc/hw2/sms.config.php");
+//include_once("/etc/hw2/sms.config.php");
 
 define("SMS_MAX_LEN", 160);
-define("SMS_SEND_ACCEPT", 'Sie müssen zunächst den <a href="settings.php?show=sms">Bedingungen zum SMS-Versand</a> zustimmen. Erst dann ist der Versand freigeschalten.');
+define("SMS_SEND_ACCEPT", 'Sie mÃ¼ssen zunÃ¤chst den <a href="settings.php?show=sms">Bedingungen zum SMS-Versand</a> zustimmen. Erst dann ist der Versand freigeschalten.');
 
 define("SMS_TEXT_APPEND", " - holy-wars2.de");
 define("SMS_TEXT_APPEND_LONG", " - jetzt bei holy-wars2.de registrieren");
 
 // sms_settings options
 define("SMS_SETTINGS_OPTION_SEND_OWN_NUMBER", 1);
+define("SMS_SERVICE",  false);
 
 
 /***********
@@ -94,9 +95,9 @@ function get_prefix_array() {
 // darauf folgt 15x, 16x oder 17x
 // dann kommt eine 7-8 stellige Nummer
 function valid_sms_nr($nr) {
-  $smsRegEx = "^\+491[5-7][0-9][0-9]{7,8}$";
+  $smsRegEx = "/^\+491[5-7][0-9][0-9]{7,8}$/";
 
-  return ereg($smsRegEx, $nr);
+  return preg_match($smsRegEx, $nr);
 }
 
 
@@ -104,31 +105,31 @@ function valid_sms_nr($nr) {
  * SMS an eine Nummer senden.
  */
 function sms_send($nr, $text) {
-  // Prüfen, ob der Service überhaupt aktiviert wurde
+  // Prï¿½fen, ob der Service Ã¼berhaupt aktiviert wurde
   if( !defined("SMS_SERVICE") || !SMS_SERVICE ) {
     return "SMS_DEACTIVATED";
   }
 
   // Nur alle 10 Sekunden zulassen
   if (time() - $_SESSION['last_sent_sms'] < 10)
-    return "Zwischen dem Versand zweier SMS müssen Sie mindestens 10 Sekunden warten.";
+    return "Zwischen dem Versand zweier SMS mÃ¼ssen Sie mindestens 10 Sekunden warten.";
 
-  // Gültigkeit der Nummer überprüfen
+  // GÃ¼ltigkeit der Nummer Ã¼berprÃ¼fen
   if ( !valid_sms_nr($nr) ) {
-    return "Die Nummer des Empfängers ($nr) ist ungültig.";
+    return "Die Nummer des Empfï¿½ngers ($nr) ist ungÃ¼ltig.";
   }
 
 
   // Leerzeichen abschneiden
   $text = trim($text);
   
-  // Länge der Nachricht prüfen
+  // Lï¿½nge der Nachricht prÃ¼fen
   $len = strlen($text);
   if ($len > SMS_MAX_LEN ) {
-    return "Text ist länger als ".SMS_MAX_LEN." Zeichen";
+    return "Text ist lÃ¤nger als ".SMS_MAX_LEN." Zeichen";
   }
 
-  // Falls noch genug Platz ist, dann hängen wir Werbung an.
+  // Falls noch genug Platz ist, dann hï¿½ngen wir Werbung an.
   if (SMS_MAX_LEN - $len >= strlen(SMS_TEXT_APPEND_LONG) ) {
     $text .= SMS_TEXT_APPEND_LONG;
   }
@@ -148,7 +149,7 @@ function sms_send($nr, $text) {
   $sql = sprintf("INSERT INTO sms_send(nr, text, sender, sendernr, create_time) ".
                  " VALUES ('%s', '%s', %d, %s, UNIX_TIMESTAMP() )", 
                  $nr, 
-                 mysql_escape_string($text), 
+                 mysqli_escape_string($GLOBALS['con'], $text), 
                  $_SESSION['player']->getID(), 
                  $sender == null ? "NULL" : "'$sender'" );
 
@@ -158,22 +159,22 @@ function sms_send($nr, $text) {
   }
   
   // INSERT
-  $res = do_mysql_query($sql);
-  $sms_id = mysql_insert_id();
+  $res = do_mysqli_query($sql);
+  $sms_id = mysqli_insert_id($GLOBALS['con']);
   
   // An dieser Stelle nun wirklich die SMS versenden
-  do_mysql_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
+  do_mysqli_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
                  " contingent=contingent-1, contingent_used=contingent_used+1, ".
                  " contingent_freesms = contingent_freesms - 1 ".
                  "WHERE contingent > 0 AND player = ".$_SESSION['player']->getID());
-  if (mysql_affected_rows() > 0) {
-    // An dieser Stelle prüfen, ob der Spieler ne Absenderkennung
+  if (mysqli_affected_rows($GLOBALS['con']) > 0) {
+    // An dieser Stelle prÃ¼fen, ob der Spieler ne Absenderkennung
     // eingestellt hat. In diesem Falle wird die Absenderkennung
     // eingestellt.
     $result = real_send_text_sms($nr, $text, $sender);
 
     if (strlen($result) > 0) {
-      do_mysql_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
+      do_mysqli_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
                      " contingent=contingent+1, contingent_used=contingent_used-1, ".
                      " contingent_freesms = contingent_freesms + 1 ".
                      "WHERE contingent >= 0 AND player = ".$_SESSION['player']->getID());
@@ -181,7 +182,7 @@ function sms_send($nr, $text) {
       return $result;
     }
     
-    do_mysql_query("UPDATE sms_send SET sent_time = UNIX_TIMESTAMP() WHERE sms_id = ".$sms_id);
+    do_mysqli_query("UPDATE sms_send SET sent_time = UNIX_TIMESTAMP() WHERE sms_id = ".$sms_id);
     check_sms_settings();
     return null;
   }
@@ -216,7 +217,7 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
   //  $url = "http://login.mobile-marketing-system.de/xmlrpc/send_extern.php";
   $url = SMS_SERVER_URL;
 
-  // Route 2 ist billiger, es lässt sich aber kein absender einstellen
+  // Route 2 ist billiger, es lÃ¤sst sich aber kein absender einstellen
   if(1) {
     $route    = "route1";
     $absender = "HolyWars2de";
@@ -226,7 +227,7 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
   }
       
   // Bei Premium-Pro Usern ist die Absendernummer einstellbar,
-  // das nun hier durchführen. In diesem Fall MUSS route1 benutzt
+  // das nun hier durchfÃ¼hren. In diesem Fall MUSS route1 benutzt
   // werden, da nur dort der Absender frei konfigurierbar ist.
   if ($absender_nr != null) {
     $absender = $absender_nr;
@@ -280,7 +281,7 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
       fclose($fp);
     }
     else {
-      $result = "Fehler beim Öffnen";
+      $result = "Fehler beim ï¿½ffnen";
       log_fatal_error("SMS-Senden schlug fehl: '".$errormsg."'");
     }
   }
@@ -289,11 +290,11 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
     $result = null;
   }
   else {
-      // FIXME: hier könnte man die unter:
+      // FIXME: hier kÃ¶nnte man die unter:
       // http://www.mobile-marketing-system.de/faq/http-schnittstelle/#http-schnittstelle-meldet-fehler
       // zu findenden Resultcodes auswerten.
     if($result == "011") {
-      $result = "&quot;Ungültige Zeichen (Nicht GSM-Zeichen) im Nachrichtentext&quot;";
+      $result = "&quot;UngÃ¼ltige Zeichen (Nicht GSM-Zeichen) im Nachrichtentext&quot;";
     }   
   }
   
@@ -303,9 +304,9 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
 
 
 function check_sms_settings() {
-  $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$_SESSION['player']->getID());
-  if (mysql_num_rows($sms_res) == 1) {
-    $sms_settings = mysql_fetch_assoc($sms_res);
+  $sms_res = do_mysqli_query("SELECT * FROM sms_settings WHERE player = ".$_SESSION['player']->getID());
+  if (mysqli_num_rows($sms_res) == 1) {
+    $sms_settings = mysqli_fetch_assoc($sms_res);
     $_SESSION['sms_may_send']   = true;
     $_SESSION['sms_contingent'] = $sms_settings['contingent'];
     if ( $_SESSION['sms_contingent'] < 0 ) {
@@ -324,7 +325,7 @@ function send_contingent_warn () {
   $headers .= "FROM: sms@holy-wars2.de\n";
   $headers .= "Content-type: text/plain; charset=iso-8859-1\n";
   
-  $body = sprintf("Achtung. Der Spieler %s hat ein negatives SMS-Kontingent: %d.\nBitte Überprüfen.",
+  $body = sprintf("Achtung. Der Spieler %s hat ein negatives SMS-Kontingent: %d.\nBitte Ã¼berprÃ¼fen.",
                   $_SESSION['player']->getName(),
                   $_SESSION['sms_contingent']
                   );
@@ -344,6 +345,6 @@ function accept_sms_rules() {
                  $_SESSION['player']->getID(),
                  $default_contingent);
   
-  do_mysql_query($sql);
+  do_mysqli_query($sql);
 }
 ?>

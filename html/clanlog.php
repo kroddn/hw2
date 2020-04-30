@@ -70,18 +70,18 @@ if( $_GET['activity']==true) {
     echo "<tr>\n";
     echo "  <td class=\"tblhead\">Name</td>\n";
     // echo "  <td class=\"tblhead\">Registriert seit:</td>\n";
-    echo "  <td class=\"tblhead\" colspan=\"2\">Letzte Aktivität (Datum/aktueller Status):</td>\n";
+    echo "  <td class=\"tblhead\" colspan=\"2\">Letzte AktivitÃ¤t (Datum/aktueller Status):</td>\n";
     echo "  <td class=\"tblhead\">Punkte</td>\n";
     echo "  <td class=\"tblhead\">Durch.Punkte</td>\n";
     echo "  <td class=\"tblhead\">Ordensrang</td>\n";
     echo "  <td class=\"tblhead\">&nbsp;</td>\n";
     echo "</tr>\n";
 
-    $res1=do_mysql_query("SELECT id,name,clanstatus, regtime,lastseen,points,".
+    $res1=do_mysqli_query("SELECT id,name,clanstatus, regtime,lastseen,points,".
                          "       round(pointsavg/pointsupd) as avgpoints ".
                          " FROM player ".
                          " WHERE clan=".$_SESSION['player']->clan." ORDER BY name ASC");
-    while($data1=mysql_fetch_object($res1)) {
+    while($data1=mysqli_fetch_object($res1)) {
       //$p=&new player($data1['id'],0);
       $p = $data1;
       
@@ -89,7 +89,7 @@ if( $_GET['activity']==true) {
       echo "  <td class=\"tblbody\">".get_info_link($p->name,"player",1)."</td>\n";
       
       // echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$p->regtime)."</td>\n";      
-      $online = do_mysql_query_fetch_assoc("SELECT lastclick FROM player_online WHERE uid = ".$p->id);
+      $online = do_mysqli_query_fetch_assoc("SELECT lastclick FROM player_online WHERE uid = ".$p->id);
       
       if ( time() - $online['lastclick'] < 3*60 ) {
         echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$online['lastclick'])."</td>\n";
@@ -144,7 +144,7 @@ else {
   
   $under = ' style="text-decoration: underline;"';
 
-  echo "Zum Sortieren auf die Spaltenüberschrift klicken!<p>";
+  echo "Zum Sortieren auf die SpaltenÃ¼berschrift klicken!<p>";
   echo "<table cellspacing=\"1\" cellpadding=\"0\" border=\"0\">\n";
   echo "<tr>\n";
   echo "	<td class=\"tblhead\"><a href=\"?order=name\"".(!isset($_REQUEST['order']) || $_REQUEST['order'] == "name" ? $under : "").">Spielername</a></td>\n";
@@ -154,11 +154,11 @@ else {
   echo "</tr>\n";
 
   $deleted_players = 0;
-$playerids = do_mysql_query("SELECT player.name, player.id, player.clan, clanlog.tax, clanlog.amount, clanlog.tax+clanlog.amount AS sums".
+$playerids = do_mysqli_query("SELECT player.name, player.id, player.clan, clanlog.tax, clanlog.amount, clanlog.tax+clanlog.amount AS sums".
                             " FROM clanlog LEFT JOIN player ON playerid=player.id where clanlog.clan=".$clan->getID().
                             " ORDER BY ".$order);
 
-while( $get_playerids = mysql_fetch_assoc($playerids) ) {
+while( $get_playerids = mysqli_fetch_assoc($playerids) ) {
   if ( $get_playerids['name'] != null ) {
     echo "<tr class=\"tblbody\" align=\"right\"><td width=\"120\" align=\"left\">".$get_playerids['name'];
     if ($get_playerids['clan']!=$clan->getID()) { echo " *"; }
@@ -173,7 +173,7 @@ while( $get_playerids = mysql_fetch_assoc($playerids) ) {
     $gesamt+=$get_playerids['tax']+$get_playerids['amount'];
   }
   else {
-    // Spieler gelöscht
+    // Spieler gelÃ¶scht
     $amount_del+=$get_playerids['amount'];
     $tax_del+=$get_playerids['tax'];
     $gesamt_del+=$get_playerids['tax']+$get_playerids['amount'];
@@ -184,23 +184,23 @@ while( $get_playerids = mysql_fetch_assoc($playerids) ) {
 
  if ($deleted_players > 0) {
    echo "<tr class=\"tblhead\" align=\"right\">
-	<td align=\"left\"><b>Gelöschte Spieleraccounts</b></td>
+	<td align=\"left\"><b>GelÃ¶schte Spieleraccounts</b></td>
 	<td>".prettyNumber($amount_del)."</td>
 	<td>".prettyNumber($tax_del)."</td>
 	<td>".prettyNumber($gesamt_del)."</td>
 </tr>\n";
  }
 echo ("<tr class=\"tblhead\" align=\"right\">
-	<td align=\"left\"><b>Gesamt (inkl. gelöschte)</b></td>
+	<td align=\"left\"><b>Gesamt (inkl. gelÃ¶schte)</b></td>
 	<td><b>".prettyNumber($amount + $amount_del)."</b></td>
 	<td><b>".prettyNumber($tax + $tax_del)."</b></td>
 	<td><b>".prettyNumber($gesamt + $gesamt_del)."</b></td>
 </tr>\n");
 echo "<tr><td> &nbsp </td></tr>";
-echo "<tr><td><a href=\"clan.php\">zurück</a></td></tr>";
+echo "<tr><td><a href=\"clan.php\">zurÃ¼ck</a></td></tr>";
 echo "<tr><td> &nbsp </td></tr>";
 echo "<tr><td><b>Bemerkung:</b> </td></tr>";
-echo "<tr><td colspan=\"4\">Mit * gekennzeichnete Spieler gehören nicht mehr dem Orden an!</td></tr>";
+echo "<tr><td colspan=\"4\">Mit * gekennzeichnete Spieler gehï¿½ren nicht mehr dem Orden an!</td></tr>";
 echo "</table>\n";
 }
 

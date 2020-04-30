@@ -37,19 +37,19 @@ include_once("includes/session.inc.php");
  * WICHTIG!
  * 
  * Diese Datei wird von start_page aus page.func.php automatisch aufgerufen,
- * wenn eine Session aktiv ist. Das sorgt daf¸r, dass die Aktualisierung der
+ * wenn eine Session aktiv ist. Das sorgt daf√ºr, dass die Aktualisierung der
  * Top und Border Frames mit Resourcen und Forschungspunkten auch zum richtigen
  * Zeitpunkt aktualisiert wird.
  * 
  * Diese Datei also NICHT automatisch einbinden, ausser wenn start_page aus
- * irgendwelchen Gr¸nden nicht verwendet wird.
+ * irgendwelchen GrÔøΩnden nicht verwendet wird.
  */
 
-$res1=do_mysql_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coalesce(holiday, 0) > UNIX_TIMESTAMP() AS holidaymode, status ".
+$res1=do_mysqli_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coalesce(holiday, 0) > UNIX_TIMESTAMP() AS holidaymode, status ".
                      " FROM player WHERE id=".$_SESSION['player']->getID());
 
 
-if ($cc=mysql_fetch_assoc($res1)) {
+if ($cc=mysqli_fetch_assoc($res1)) {
   if ($cc['cc_towns']==1) {
     $_SESSION['cities']->updateCities();
     reloadBottom();
@@ -85,14 +85,14 @@ if ($cc=mysql_fetch_assoc($res1)) {
     goto_login();
   }
   
-  do_mysql_query("UPDATE player SET cc_resources=".$cc['cc_resources'].", cc_messages=".$cc['cc_messages'].", cc_towns=".$cc['cc_towns'].
+  do_mysqli_query("UPDATE player SET cc_resources=".$cc['cc_resources'].", cc_messages=".$cc['cc_messages'].", cc_towns=".$cc['cc_towns'].
                  " WHERE id=".$_SESSION['player']->getID());
 }
 
 
 // Bei nem Angriff die Topleiste aktualisieren
 // FIMXE: das wird JEDESMAL gemacht... muss das sein?
-// FIXME: wann wird die Variable zur¸ckgesetzt?
+// FIXME: wann wird die Variable zur√ºckgesetzt?
 $cit = $_SESSION['cities']->getCities();
 if ($cit) {
   foreach ($cit as $key=>$city) {
@@ -111,7 +111,7 @@ if ($cit) {
 
 
 /**
- * Bottom-Leiste mit St‰dten und Timer neu laden
+ * Bottom-Leiste mit St√§dten und Timer neu laden
  */
 function reloadBottom() {
   echo "<script type='text/javascript'>\n<!--\n";

@@ -30,7 +30,7 @@ include_once ("includes/fight.class.php");
 
 <html>
 <head>
-<title>Tool zum Simulieren von Kämpfen</title>
+<title>Tool zum Simulieren von Kï¿½mpfen</title>
 </head>
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
 <style>
@@ -46,11 +46,11 @@ $allowed = defined("FIGHTSIM_NEED_POINTS") && ($_SESSION['player']->getBonuspoin
 
 if (defined("HW2DEV") && HW2DEV && !$_SESSION['player'] ->isMaintainer() ) {
   $allowed = false;
-  echo "<h1 class=\"error\">Kampfsimulator in HW2DEV nur für Maintainer!</h1>";
+  echo "<h1 class=\"error\">Kampfsimulator in HW2DEV nur fÃ¼r Maintainer!</h1>";
 }
 else if (!$allowed) {
-    echo "<h1 class=\"error\">Ihr habt nicht genügend Bonuspunkte!</h1>";
-    echo "Ihr benötigt wenigstens ".FIGHTSIM_NEED_POINTS." Bonuspunkte. ";
+    echo "<h1 class=\"error\">Ihr habt nicht genï¿½gend Bonuspunkte!</h1>";
+    echo "Ihr benï¿½tigt wenigstens ".FIGHTSIM_NEED_POINTS." Bonuspunkte. ";
     echo "<a href='settings.php?show=account'>Weitere Infos (hier klicken).</a><p>";
 }
 if ($_SESSION['player']->isMaintainer()) {
@@ -96,12 +96,9 @@ if (isset ($fight) && ($allowed || $_SESSION['player']->isAdmin()) ) {
   if(count($defftotal) <= 0) {
   }
   else if (count($atttotal) <= 0) {
-    echo '<h1 class="error">Es muß mindestens eine Einheit angreifen!</h1>';        
+    echo '<h1 class="error">Es muï¿½ mindestens eine Einheit angreifen!</h1>';        
   }
   else {
-    // Werbung für Normale User
-    if( !is_premium_noads() )
-      include("ads/sponsorads-framelayer.php");    
 
     $fight->AddPlayerArmy(false, 1, "Verteidiger", $defftotal);
     $fight->cityowner['name'] = "Verteidiger";
@@ -146,8 +143,8 @@ else {
 </tr>
 <?
 
-$resUnits = do_mysql_query("SELECT id,name,religion,level,type FROM unit ORDER BY religion,id ASC");
-while ($Unit = mysql_fetch_assoc($resUnits)) {
+$resUnits = do_mysqli_query("SELECT id,name,religion,level,type FROM unit ORDER BY religion,id ASC");
+while ($Unit = mysqli_fetch_assoc($resUnits)) {
   echo "<tr>";
   $img = $Unit['religion'] == 1 || $Unit['religion'] == 2 ? '<img src="'.$GLOBALS['imagepath']."/".getUnitImage($Unit).'"> ' : "";
   printf('<td class="tblbody">%s%s</td>', 
@@ -188,13 +185,13 @@ while ($Unit = mysql_fetch_assoc($resUnits)) {
 <select name="tac">
 <option value="0" <? if($tac == 0) echo "selected"; ?>>Offensiv</option>
 <option value="1" <? if($tac == 1) echo "selected"; ?>>Defensiv</option>
-<option value="2" <? if($tac == 2) echo "selected"; ?>>Erstürmen</option>
+<option value="2" <? if($tac == 2) echo "selected"; ?>>Erstï¿½rmen</option>
 </select>
 </td>
 </tr>
 
 <tr>
-<td class='tblbody'>Stadtbevölkerung</td>
+<td class='tblbody'>Stadtbevï¿½lkerung</td>
 <td class='tblbody'><input type='text' name='citypop' value='<?echo $citypop?>' style=\"width:100%;\"></td>
 </tr>
 <tr>
@@ -208,22 +205,7 @@ Euch <b>bleiben <? echo $_SESSION['player']->getBonuspoints(); ?> Bonuspunkte</b
 </form>
 
 </td>
-<td valign="top">
-<div>
-<? if (!is_premium_noads()) { 
-  $timemod = time() % 3600;
-  
-  // In gewissen abständen rotieren
-  if ( $timemod < 2400) {
-    include("ads/ebay_160x600.php");
-  }   
-  else {
-    include("ads/sponsorads-skyscraper.php");
-  }
-} // if (!is_premium_noads()) 
-?>
-</div>
-</td>
+
 </tr>
 </table>
 </body>

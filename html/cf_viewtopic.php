@@ -28,38 +28,38 @@ include_once("./includes/banner.inc.php");
 include_once("./includes/session.inc.php");
 
 function checkRights($id) {
-	$res1=mysql_query("SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysql_fetch_assoc($res1);
+	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
+	$data1=mysqli_fetch_assoc($res1);
 	$clan_cat=$data1['cat_id'];
 	
 	if($_GET['p'])
-		$res2=mysql_query("SELECT clanf_posts.forum_id, clanf_forums.cat_id AS cat_id ".
+		$res2=mysqli_query($GLOBALS['con'], "SELECT clanf_posts.forum_id, clanf_forums.cat_id AS cat_id ".
 		                  " FROM `clanf_posts` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_posts.forum_id ".
-		                  " WHERE post_id ='".mysql_escape_string($_GET['p'])."'");
+		                  " WHERE post_id ='".mysqli_escape_string($GLOBALS['con'], $_GET['p'])."'");
 	else 
-		$res2=mysql_query("SELECT DISTINCT clanf_forums.cat_id AS cat_id ".
+		$res2=mysqli_query($GLOBALS['con'], "SELECT DISTINCT clanf_forums.cat_id AS cat_id ".
 		                  " FROM `clanf_topics` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_topics.forum_id ".
-		                  " WHERE clanf_topics.topic_id = '".mysql_escape_string($_GET['t'])."'");
+		                  " WHERE clanf_topics.topic_id = '".mysqli_escape_string($GLOBALS['con'], $_GET['t'])."'");
 
-	$data2=mysql_fetch_assoc($res2);
+	$data2=mysqli_fetch_assoc($res2);
 	
 	$forum_cat=$data2['cat_id'];
 	if($clan_cat != $forum_cat) {
-		header("Location: cf_index.php");
+		header_redirect("cf_index.php");
 		exit;
 	}
 
 	// intern forum hack
 	$viewf=false;
 	if($_GET['p'])
-		$res3=mysql_query("SELECT clanf_posts.forum_id, clanf_forums.cat_id AS cat_id, clanf_forums.forum_status AS forum_status ".
+		$res3=mysqli_query($GLOBALS['con'], "SELECT clanf_posts.forum_id, clanf_forums.cat_id AS cat_id, clanf_forums.forum_status AS forum_status ".
 		                  " FROM `clanf_posts` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_posts.forum_id ".
-		                  " WHERE post_id ='".mysql_escape_string($_GET['p'])."'");
+		                  " WHERE post_id ='".mysqli_escape_string($GLOBALS['con'], $_GET['p'])."'");
 	else 
-		$res3=mysql_query("SELECT DISTINCT clanf_forums.cat_id AS cat_id, clanf_forums.forum_status AS forum_status ".
+		$res3=mysqli_query($GLOBALS['con'], "SELECT DISTINCT clanf_forums.cat_id AS cat_id, clanf_forums.forum_status AS forum_status ".
 		                  " FROM `clanf_topics` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_topics.forum_id ".
-		                  " WHERE clanf_topics.topic_id = '".mysql_escape_string($_GET['t'])."'");
-	$data3=mysql_fetch_assoc($res3);
+		                  " WHERE clanf_topics.topic_id = '".mysqli_escape_string($GLOBALS['con'], $_GET['t'])."'");
+	$data3=mysqli_fetch_assoc($res3);
 
 	if($data3['forum_status']<2) {
 		$viewf=true;
@@ -69,7 +69,7 @@ function checkRights($id) {
 			$viewf=true;
 	}
 	if($viewf==false) {
-		header("Location: cf_index.php");
+		header_redirect("cf_index.php");
 		exit;
 	}
 }
@@ -619,8 +619,8 @@ if ( $userdata['session_logged_in'] )
 //
 // Load templates
 //
-$res1=mysql_query("SELECT clanstatus FROM player WHERE id = '".$_SESSION['player']->id."'");
-$data1=mysql_fetch_assoc($res1);
+$res1=mysqli_query($GLOBALS['con'], "SELECT clanstatus FROM player WHERE id = '".$_SESSION['player']->id."'");
+$data1=mysqli_fetch_assoc($res1);
 if($data1['clanstatus']==63 || $data1['clanstatus']==2 || $data1['clanstatus']==6 || $data1['clanstatus']==7) {
 	$template->set_filenames(array(
 		'body' => 'viewtopic_body.tpl')
@@ -1007,6 +1007,7 @@ for($i = 0; $i < $total_posts; $i++)
 		$www_img = ( $postrow[$i]['user_website'] ) ? '<a href="' . $postrow[$i]['user_website'] . '" target="_userwww"><img src="clanforum/' . $images['icon_www'] . '" alt="' . $lang['Visit_website'] . '" title="' . $lang['Visit_website'] . '" border="0" /></a>' : '';
 		$www = ( $postrow[$i]['user_website'] ) ? '<a href="' . $postrow[$i]['user_website'] . '" target="_userwww">' . $lang['Visit_website'] . '</a>' : '';
 
+		/* ignore this as link wont work anyways
 		if ( !empty($postrow[$i]['user_icq']) )
 		{
 			$icq_status_img = '<a href="http://wwp.icq.com/' . $postrow[$i]['user_icq'] . '#pager"><img src="http://web.icq.com/whitepages/online?icq=' . $postrow[$i]['user_icq'] . '&img=5" width="18" height="18" border="0" /></a>';
@@ -1019,6 +1020,7 @@ for($i = 0; $i < $total_posts; $i++)
 			$icq_img = '';
 			$icq = '';
 		}
+		*/
 
 		$aim_img = ( $postrow[$i]['user_aim'] ) ? '<a href="aim:goim?screenname=' . $postrow[$i]['user_aim'] . '&amp;message=Hello+Are+you+there?"><img src="clanforum/' . $images['icon_aim'] . '" alt="' . $lang['AIM'] . '" title="' . $lang['AIM'] . '" border="0" /></a>' : '';
 		$aim = ( $postrow[$i]['user_aim'] ) ? '<a href="aim:goim?screenname=' . $postrow[$i]['user_aim'] . '&amp;message=Hello+Are+you+there?">' . $lang['AIM'] . '</a>' : '';
@@ -1224,9 +1226,9 @@ for($i = 0; $i < $total_posts; $i++)
 	$row_color = ( !($i % 2) ) ? $theme['td_color1'] : $theme['td_color2'];
 	$row_class = ( !($i % 2) ) ? $theme['td_class1'] : $theme['td_class2'];
 
-	$res1=mysql_query("SELECT id, avatar, lastseen, points, pointsavg, clanstatus, clanapplication ".
+	$res1=mysqli_query($GLOBALS['con'], "SELECT id, avatar, lastseen, points, pointsavg, clanstatus, clanapplication ".
 	                  " FROM player WHERE name = '".$poster."'");
-	$data1=mysql_fetch_assoc($res1);
+	$data1=mysqli_fetch_assoc($res1);
 	$lastseen=date("d.m.Y H:i",$data1['lastseen']);
 	$points=$data1['points'];
 	$pointsavg=$data1['pointsavg'];
@@ -1237,8 +1239,8 @@ for($i = 0; $i < $total_posts; $i++)
 		$avatar="<img src=\"".$url."\">";
 	}
 
-	$res2=mysql_query("SELECT user_lastvisit FROM clanf_users WHERE username='".$poster."'");
-	$data2=mysql_fetch_assoc($res2);
+	$res2=mysqli_query($GLOBALS['con'], "SELECT user_lastvisit FROM clanf_users WHERE username='".$poster."'");
+	$data2=mysqli_fetch_assoc($res2);
 	$lastseen=date("d.m.Y H:i",$data2['user_lastvisit']);
 	$clanstatus=" Member ";
 	if ($data1['clanstatus'] == 63)

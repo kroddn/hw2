@@ -40,24 +40,21 @@ include_once("include/player.class.php");
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
 <body class="mainbody" background="<? echo $imagepath; ?>/bg.gif">
 <h1>Holy Wars 2 Werbepartner (Banner)</h1>
-<b>Sie möchten auch auf unseren Seiten für Ihre Produkte oder
+<b>Sie mÃ¶chten auch auf unseren Seiten fÃ¼r Ihre Produkte oder
 Dienstleistungen werben?</b><p>
 Wir binden Ihre Werbemittel direkt ein,
-ohne umständliche Ad-Server oder Banner-Provider. 
-Ausserdem führen wir für Ihre Werbemittel eine View und Clickstatistik.
+ohne umstÃ¤ndliche Ad-Server oder Banner-Provider. 
+Ausserdem fÃ¼hren wir fÃ¼r Ihre Werbemittel eine View und Clickstatistik.
 <p>
 Schreiben Sie uns an! Wir unterbreiten Ihnen gerne ein individuelles Angebot.<br>
 Kontaktdaten erfahren Sie im <a href="impressum.php" target="_blank">Impressum</a>.
 <p>
 <h1>Aktuelle Werbepartner</h1>
-Hinweis: das Klicken auf diese Banner über diese Seite ist <b>deaktiviert</b>, 
-um das Einhalten der allgemeinen Geschäftsbedigungen unserer Werbepartnern 
-zu gewährleisten.<p>
+Hinweis: das Klicken auf diese Banner Ã¼ber diese Seite ist <b>deaktiviert</b>, 
+um das Einhalten der allgemeinen Geschï¿½ftsbedigungen unserer Werbepartnern 
+zu gewÃ¤hrleisten.<p>
 
 <table><tr valign="top"><td valign="top">
-<hr>
-<? include("ads/openinventory_486x60.php"); ?>
-<hr>
 <?
 $db = new DB(DB_TYPE);
 session_start();
@@ -102,24 +99,8 @@ while($banner = $db->fetch_object($b)) {
 } // while
 ?>
 <hr>
-<script type="text/javascript" src="http://www.sponsorads.de/script.php?s=6865"></script>
 </td>
-<td valign="top">
-<? include("ads/openinventory_120x600.php");?>
-<p>
-<? include("ads/sponsorads-skyscraper.php");?>
-<p>
-<? include("ads/ebay_160x600.php");?>
-
-<p>
-</td></tr>
-<tr><td colspan="2">
-<hr>
-<? include("ads/ebay_728x90.php");?>
-<hr>
-<? include("ads/openinventory_728x90.php");?>
-<hr>
-</td></tr>
+</tr>
 </table>
 </body></html>
 

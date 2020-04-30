@@ -38,7 +38,7 @@ include_once("includes/session.inc.php");
 include_once("includes/banner.inc.php");
 include_once("includes/barracks.func.php");
 
-// Der Tick wird für die schöne Anzeige der Zeit gebraucht
+// Der Tick wird fÃ¼r die schÃ¶ne Anzeige der Zeit gebraucht
 define("TICK", getConfig("tick", 1800));
 
 
@@ -137,28 +137,28 @@ if($data['reserve_armor'] != 0)      { $marketarmor = "(*".$data['reserve_armor'
 if($data['reserve_horse'] != 0)      { $markethorse = "(*".$data['reserve_horse'].")"; }
 
 echo "<tr><td class='tblbody'><img src='".$imagepath."/sword.gif' alt='Schwert'></td><td align='right' class='tblbody'>".SHORTRANGE_COST." <img src='".$imagepath."/iron2.gif'></td><td class='tblbody' style=\"text-align:right; padding-right:8px;\"><b>".$data['shortrange']."</b></td><td class='tblbody'><input type='text' name='max_shortrange' value='".$data['max_shortrange']."' size='3' style=\"width:100%;\"></td><td align='left' class='tblbody'><b class='pos'><a style='color: blue;' onClick='res.max_shortrange.value=".$data['storagelimit']."; return false;'>".$data['storagelimit']."</a> ".$marketshortrange."</b></td><td align='center' class='tblbody'><b>".$data['resshort']."</b></td><td align='right' class='tblbody'>";
-if ($data['resshort']>0) 
+if ($data['resshort']>0 && is_numeric($data['shortrange'])) 
   echo "ca. ".max(0,ceil( (TICK/3600)*(($data['max_shortrange']-$data['reserve_shortrange'])-$data['shortrange'])/$data['resshort'])).":00"; 
 else 
   echo "-";
 echo " <img src='".$imagepath."/time.gif'></td></tr>";
 
 echo "<tr><td class='tblbody'><img src='".$imagepath."/bow.gif' alt='Bogen'></td><td align='right' class='tblbody'>".LONGRANGE_COST." <img src='".$imagepath."/wood2.gif'></td><td class='tblbody' style=\"text-align:right; padding-right:8px;\"><b>".$data['longrange']."</b></td><td class='tblbody'><input type='text' name='max_longrange' value='".$data['max_longrange']."' size='3' style=\"width:100%;\"></td><td align='left' class='tblbody'><b class='pos'><a style='color: blue;' onClick='res.max_longrange.value=".$data['storagelimit']."'; return false;>".$data['storagelimit']."</a> ".$marketlongrange."</b></td><td align='center' class='tblbody'><b>".$data['reslong']."</b></td><td align='right' class='tblbody'>";
-if ($data['reslong']>0) 
+if ($data['reslong']>0 && is_numeric($data['longrange'])) 
   echo "ca. ".max(0,ceil( (TICK/3600)*(($data['max_longrange']-$data['reserve_longrange'])-$data['longrange'])/$data['reslong'])).":00"; 
 else
   echo "-";
 echo " <img src='".$imagepath."/time.gif'></td></tr>";
 
-echo "<tr><td class='tblbody'><img src='".$imagepath."/armor.gif' alt='Rüstung'></td><td align='right' class='tblbody'>".ARMOR_COST." <img src='".$imagepath."/iron2.gif'></td><td class='tblbody' style=\"text-align:right; padding-right:8px;\"><b>".$data['armor']."</b></td><td class='tblbody'><input type='text' name='max_armor' value='".$data['max_armor']."' size='3' style=\"width:100%;\"></td><td align='left' class='tblbody'><b class='pos'><a style='color: blue;' onClick='res.max_armor.value=".$data['storagelimit']."; return false;'>".$data['storagelimit']."</a> ".$marketarmor."</b></td><td align='center' class='tblbody'><b>".$data['resarmor']."</b></td><td align='right' class='tblbody'>";
-if ($data['resarmor']>0) 
+echo "<tr><td class='tblbody'><img src='".$imagepath."/armor.gif' alt='RÃ¼stung'></td><td align='right' class='tblbody'>".ARMOR_COST." <img src='".$imagepath."/iron2.gif'></td><td class='tblbody' style=\"text-align:right; padding-right:8px;\"><b>".$data['armor']."</b></td><td class='tblbody'><input type='text' name='max_armor' value='".$data['max_armor']."' size='3' style=\"width:100%;\"></td><td align='left' class='tblbody'><b class='pos'><a style='color: blue;' onClick='res.max_armor.value=".$data['storagelimit']."; return false;'>".$data['storagelimit']."</a> ".$marketarmor."</b></td><td align='center' class='tblbody'><b>".$data['resarmor']."</b></td><td align='right' class='tblbody'>";
+if ($data['resarmor']>0 && is_numeric($data['armor'])) 
   echo "ca. ".max(0,ceil( (TICK/3600)*(($data['max_armor']-$data['reserve_armor'])-$data['armor'])/$data['resarmor'])).":00"; 
 else
   echo "-";
 echo " <img src='".$imagepath."/time.gif'></td></tr>";
 
 echo "<tr><td class='tblbody'><img src='".$imagepath."/horse.gif' alt='Pferd'></td><td align='right' class='tblbody'>".HORSE_COST." <img src='".$imagepath."/gold2.gif'></td><td class='tblbody' style=\"text-align:right; padding-right:8px;\"><b>".$data['horse']."</b></td><td class='tblbody'><input type='text' name='max_horse' value='".$data['max_horse']."' size='3' style=\"width:100%;\"></td><td align='left' class='tblbody'><b class='pos'><a style='color: blue;' onClick='res.max_horse.value=".$data['storagelimit']."; return false;'>".$data['storagelimit']."</a> ".$markethorse."</b></td><td align='center' class='tblbody'><b>".$data['reshorse']."</b></td><td align='right' class='tblbody'>";
-if ($data['reshorse']>0) 
+if ($data['reshorse']>0 && is_numeric($data['horse'])) 
   echo "ca. ".max(0,ceil( (TICK/3600)*(($data['max_horse']-$data['reserve_horse'])-$data['horse'])/$data['reshorse'])).":00"; 
 else 
   echo "-";
@@ -191,7 +191,7 @@ if(!(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY)) {
 
 $units=$_SESSION['cities']->getUnits();
 if (sizeof($units)==0) {
-  echo "<tr><td class=\"tblbody\" width=\"140\" colspan=\"12\">Keine Ausbildung möglich</td></tr>";
+  echo "<tr><td class=\"tblbody\" width=\"140\" colspan=\"12\">Keine Ausbildung mÃ¶glich</td></tr>";
 }
 
 $nobarracks = true;
@@ -200,7 +200,7 @@ for($i=0;$i<sizeof($units);++$i) {
   $possible = max(0, $units[$i]['possible']);
   
   // FIXME: Durch das max wird verhindert, dass dem Benutzer hier negative Werte angezeigt werden
-  // Dieser "Bug" müsste eigentlich in cities.class.php gefixt werden.
+  // Dieser "Bug" mï¿½sste eigentlich in cities.class.php gefixt werden.
   $maxpossible = max(0, $units[$i]['maxpossible']);
   
   if ($maxpossible>0) $nobarracks = false;
@@ -223,7 +223,7 @@ for($i=0;$i<sizeof($units);++$i) {
   for ($j=0;$j<$units[$i]['longrange'];++$j) echo "<img src='".$imagepath."/bow.gif' alt='Bogen'>";
   echo "</td>\n";
   echo "<td align='right'>";
-  for ($j=0;$j<$units[$i]['armor'];++$j) echo "<img src='".$imagepath."/armor.gif' alt='Rüstung'>";
+  for ($j=0;$j<$units[$i]['armor'];++$j) echo "<img src='".$imagepath."/armor.gif' alt='RÃ¼stung'>";
   echo "</td>\n";
   echo "<td align='right' width='10'>";
   for ($j=0;$j<$units[$i]['horse'];++$j) echo "<img src='".$imagepath."/horse.gif' alt='Pferd'>";
@@ -234,8 +234,8 @@ for($i=0;$i<sizeof($units);++$i) {
   echo "<a class='pos' onclick=\"javascript:document.getElementById('unit".$units[$i]['id']."').value = '".$possible."'; return true;\" >";
   echo $possible." (".$maxpossible.")</a></td>";
   
-  $res1 = do_mysql_query("SELECT count FROM cityunit WHERE unit=".$units[$i]['id']." AND city=".$_SESSION['cities']->getActiveCity()." AND owner=".$_SESSION['player']->getID());
-  $data1 = mysql_fetch_assoc($res1);
+  $res1 = do_mysqli_query("SELECT count FROM cityunit WHERE unit=".$units[$i]['id']." AND city=".$_SESSION['cities']->getActiveCity()." AND owner=".$_SESSION['player']->getID());
+  $data1 = mysqli_fetch_assoc($res1);
   echo "<td align='right' width='40'><b>";
   if ($data1['count']) {
     echo $data1['count'];
@@ -251,12 +251,12 @@ for($i=0;$i<sizeof($units);++$i) {
 }
 
 if ($nobarracks) {
-  echo '<tr><td class="tblbody" colspan="12" align="center" class="error"><b>Ihr müsst zuerst (weitere) Kasernen errichten!</b></td></tr>';
+  echo '<tr><td class="tblbody" colspan="12" align="center" class="error"><b>Ihr mï¿½sst zuerst (weitere) Kasernen errichten!</b></td></tr>';
 }
 
 $costFactor = getLoyalityCostFactor( round($_SESSION['cities']->getACLoyality()/100));
 if ( $costFactor > 1 ) {
-  printf('<tr><td class="tblhead" colspan="12" align="center" style="color: #992020; font-weight: bold; ">Diese Stadt ist <u>%s</u>! Die Kosten für Rekrutierungen betragen das <u>%d-fache</u>.<br>Die Mehrkosten bekommt Ihr nicht zurückerstattet, falls Ihr die Rekrutierung abbrecht.</td></tr>', 
+  printf('<tr><td class="tblhead" colspan="12" align="center" style="color: #992020; font-weight: bold; ">Diese Stadt ist <u>%s</u>! Die Kosten fÃ¼r Rekrutierungen betragen das <u>%d-fache</u>.<br>Die Mehrkosten bekommt Ihr nicht zurÃ¼ckerstattet, falls Ihr die Rekrutierung abbrecht.</td></tr>', 
          get_loyality_string( round($_SESSION['cities']->getACLoyality()/100) ), $costFactor);
 }
 
@@ -291,7 +291,7 @@ if(!is_premium_noads()) {
 <tr><td class="tblbody" colspan="4" align="center" heigth="">
 
 <!-- Textlink -->
-<script type="text/javascript" src="http://www.sponsorads.de/script.php?s=6869"></script>
+<?php //<script type="text/javascript" src="http://www.sponsorads.de/script.php?s=6869"></script> ?>
 </td></tr>
 <? 
 } // if(!is_premium_noads()) 
@@ -305,13 +305,13 @@ if(!is_premium_noads()) {
 <?php
 if($old_code) {
   // Code deaktiviert
-  $res1 = do_mysql_query("SELECT unit.id AS uid,unit.name AS uname,city.name AS cname, unit.cost as cost,count,type,unit.level AS level,unit.religion AS religion ".
+  $res1 = do_mysqli_query("SELECT unit.id AS uid,unit.name AS uname,city.name AS cname, unit.cost as cost,count,type,unit.level AS level,unit.religion AS religion ".
                        " FROM cityunit,unit,city ".
                        " WHERE unit.id=cityunit.unit AND city.id=cityunit.city AND cityunit.city=".$_SESSION['cities']->getActiveCity()." AND cityunit.owner=".$_SESSION['player']->getID().
                        " ORDER BY cityunit.unit");
 
-  if (mysql_num_rows($res1)>0) {
-    //mysql_data_seek($res1, 0);
+  if (mysqli_num_rows($res1)>0) {
+    //mysqli_data_seek($res1, 0);
     echo "<form action=".$PHP_SELF.' method="GET" name="disarmform">';
     echo '<table id="tbl4" cellspacing="1" cellpadding="0" border="0" width="550" style="margin-top:10px; display:none;">';
     echo "<tr class=\"tblhead\"><td colspan=\"4\"><strong>Einheiten entlassen</strong></td></tr>";
@@ -325,7 +325,7 @@ if($old_code) {
     $sumcount = 0;
     $sumcost = 0;
     $num = 1;
-    while ($data1 = mysql_fetch_assoc($res1)) {
+    while ($data1 = mysqli_fetch_assoc($res1)) {
       $img = getUnitImage($data1);
       $href= getUnitLibLink($data1);
 

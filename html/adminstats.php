@@ -16,11 +16,11 @@ function getBrowserStat_day($time) {
 	$day=date("d",time());
 	$year=date("Y",time());
 	$today = mktime(12, 0, 0, $month, $day, $year); 
-	$res=do_mysql_query("SELECT id FROM log_browser WHERE browser='".browser_detection( 'browser' )."' AND version='".browser_detection( 'number' )."' AND timestamp='".$today."'");
-	if(mysql_num_rows($res) > 0) {
-		do_mysql_query("UPDATE log_browser set logins=logins+1 WHERE browser='".browser_detection( 'browser' )."' AND version='".browser_detection( 'number' )."' AND timestamp='".$today."'");
+	$res=do_mysqli_query("SELECT id FROM log_browser WHERE browser='".browser_detection( 'browser' )."' AND version='".browser_detection( 'number' )."' AND timestamp='".$today."'");
+	if(mysqli_num_rows($res) > 0) {
+		do_mysqli_query("UPDATE log_browser set logins=logins+1 WHERE browser='".browser_detection( 'browser' )."' AND version='".browser_detection( 'number' )."' AND timestamp='".$today."'");
 	} else {
-		do_mysql_query("INSERT INTO log_browser (browser, version, timestamp, logins) VALUES ('".browser_detection( 'browser' )."','".browser_detection( 'number' )."','".$today."','1')") or die ("error");
+		do_mysqli_query("INSERT INTO log_browser (browser, version, timestamp, logins) VALUES ('".browser_detection( 'browser' )."','".browser_detection( 'number' )."','".$today."','1')") or die ("error");
 	}
 }
 function today() {
@@ -73,8 +73,8 @@ function getPercent($total,$obj) {
   return $result." %";
 }
 function hasLog($time) {
-  $res1=do_mysql_query("SELECT id FROM log_browser WHERE timestamp='".$time."'");
-  if(mysql_num_rows($res1) > 0)
+  $res1=do_mysqli_query("SELECT id FROM log_browser WHERE timestamp='".$time."'");
+  if(mysqli_num_rows($res1) > 0)
     return true;
   else
     return false;
@@ -164,11 +164,11 @@ if($player->isAdmin()) {
     unset($total);
     //detailed month
     echo "<table width=\"350\" style=\"margin-top:20px;\">\n";
-    $res1=do_mysql_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
-    $res2=do_mysql_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
-    while($data1=mysql_fetch_assoc($res1)) { $total+=$data1['logins']; }
+    $res1=do_mysqli_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
+    $res2=do_mysqli_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
+    while($data1=mysqli_fetch_assoc($res1)) { $total+=$data1['logins']; }
     echo "<tr class=\"tblhead\"><td colspan=\"4\"><b>Detaillierte Monats&uuml;bersicht</b></td></tr>";
-    while($data2=mysql_fetch_assoc($res2)) {
+    while($data2=mysqli_fetch_assoc($res2)) {
       echo "<tr>";
       echo "<td width=\"100\">".getBrowserName($data2['browser'])."</td>";
       echo "<td width=\"20\">".$data2['version']."</td>";
@@ -217,11 +217,11 @@ if($player->isAdmin()) {
 
     //grouped year
     echo "<table width=\"350\" style=\"margin-top:20px;\">\n";
-    $res1=do_mysql_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' GROUP BY browser ORDER BY logins DESC");
-    $res2=do_mysql_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' GROUP BY browser ORDER BY logins DESC");
-    while($data1=mysql_fetch_assoc($res1)) { $total+=$data1['logins']; }
+    $res1=do_mysqli_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' GROUP BY browser ORDER BY logins DESC");
+    $res2=do_mysqli_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' GROUP BY browser ORDER BY logins DESC");
+    while($data1=mysqli_fetch_assoc($res1)) { $total+=$data1['logins']; }
     echo "<tr class=\"tblhead\"><td colspan=\"3\"><b>Gruppierte Jahres&uuml;bersicht</b></td></tr>";
-    while($data2=mysql_fetch_assoc($res2)) {
+    while($data2=mysqli_fetch_assoc($res2)) {
       echo "<tr>";
       echo "<td width=\"100\">".getBrowserName($data2['browser'])."</td>";
       echo "<td width=\"170\"><div style=\"width:".getStatBar($total,$data2['logins'])."%; background-color:navy; height:7px;\"> </div></td>";
@@ -234,11 +234,11 @@ if($player->isAdmin()) {
     unset($total);
     //detailed year
     echo "<table width=\"350\" style=\"margin-top:20px;\">\n";
-    $res1=do_mysql_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
-    $res2=do_mysql_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
-    while($data1=mysql_fetch_assoc($res1)) { $total+=$data1['logins']; }
+    $res1=do_mysqli_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
+    $res2=do_mysqli_query("SELECT logins, browser, version FROM log_browser WHERE timestamp>='".$start."' AND timestamp <='".$stop."' ORDER BY logins DESC");
+    while($data1=mysqli_fetch_assoc($res1)) { $total+=$data1['logins']; }
     echo "<tr class=\"tblhead\"><td colspan=\"4\"><b>Detaillierte Jahres&uuml;bersicht</b></td></tr>";
-    while($data2=mysql_fetch_assoc($res2)) {
+    while($data2=mysqli_fetch_assoc($res2)) {
       echo "<tr>";
       echo "<td width=\"100\">".getBrowserName($data2['browser'])."</td>";
       echo "<td width=\"20\">".$data2['version']."</td>";
@@ -269,11 +269,11 @@ if($player->isAdmin()) {
   if(hasLog($timestamp)) {
     //grouped day
     echo "<table width=\"350\" style=\"margin-top:20px;\">\n";
-    $res1=do_mysql_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' GROUP BY browser ORDER BY logins DESC");
-    $res2=do_mysql_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' GROUP BY browser ORDER BY logins DESC");
-    while($data1=mysql_fetch_assoc($res1)) { $total+=$data1['logins']; }
+    $res1=do_mysqli_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' GROUP BY browser ORDER BY logins DESC");
+    $res2=do_mysqli_query("SELECT sum(logins) as logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' GROUP BY browser ORDER BY logins DESC");
+    while($data1=mysqli_fetch_assoc($res1)) { $total+=$data1['logins']; }
     echo "<tr class=\"tblhead\"><td colspan=\"3\"><b>Gruppierte Tages&uuml;bersicht</b></td></tr>";
-    while($data2=mysql_fetch_assoc($res2)) {
+    while($data2=mysqli_fetch_assoc($res2)) {
       echo "<tr>";
       echo "<td width=\"100\">".getBrowserName($data2['browser'])."</td>";
       echo "<td width=\"170\"><div style=\"width:".getStatBar($total,$data2['logins'])."%; background-color:navy; height:7px;\"> </div></td>";
@@ -286,11 +286,11 @@ if($player->isAdmin()) {
     unset($total);
     //detailed day
     echo "<table width=\"350\" style=\"margin-top:20px;\">\n";
-    $res1=do_mysql_query("SELECT logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' ORDER BY logins DESC");
-    $res2=do_mysql_query("SELECT logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' ORDER BY logins DESC");
-    while($data1=mysql_fetch_assoc($res1)) { $total+=$data1['logins']; }
+    $res1=do_mysqli_query("SELECT logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' ORDER BY logins DESC");
+    $res2=do_mysqli_query("SELECT logins, browser, version FROM log_browser WHERE timestamp='".$timestamp."' ORDER BY logins DESC");
+    while($data1=mysqli_fetch_assoc($res1)) { $total+=$data1['logins']; }
     echo "<tr class=\"tblhead\"><td colspan=\"4\"><b>Detaillierte Tages&uuml;bersicht</b></td></tr>";
-    while($data2=mysql_fetch_assoc($res2)) {
+    while($data2=mysqli_fetch_assoc($res2)) {
       echo "<tr>";
       echo "<td width=\"100\">".getBrowserName($data2['browser'])."</td>";
       echo "<td width=\"20\">".$data2['version']."</td>";
@@ -318,5 +318,5 @@ if($player->isAdmin()) {
 // Insert Into DB the execution time of this script
 list($START_MICRO, $START_SEC) = explode(" ",$START_TIME);
 list($END_MICRO, $END_SEC) = explode(" ",microtime());
-do_mysql_query("INSERT INTO log_cputime (file,start,time) VALUES ('".__FILE__."', ".$START_SEC.",".round(($END_MICRO+$END_SEC-$START_MICRO-$START_SEC)*1000).")");
+do_mysqli_query("INSERT INTO log_cputime (file,start,time) VALUES ('".__FILE__."', ".$START_SEC.",".round(($END_MICRO+$END_SEC-$START_MICRO-$START_SEC)*1000).")");
 ?>

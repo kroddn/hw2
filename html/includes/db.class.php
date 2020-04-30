@@ -109,10 +109,10 @@ class DB {
       echo $sql."<br>";
     
 
-    $res = mysql_query ($sql);
+    $res = mysqli_query ($GLOBALS['con'], $sql);
     $this->last_error = null;
     if (! $res) {
-      $this->last_error = mysql_error();
+      $this->last_error = mysqli_error($GLOBALS['con']);
     }
 
     return $res;
@@ -133,26 +133,26 @@ class DB {
    *
    */
   function fetch_array ($res) {
-    return mysql_fetch_array ($res);
+    return mysqli_fetch_array ($res);
   }
 
   function fetch_assoc ($res) {
-    return mysql_fetch_assoc ($res);
+    return mysqli_fetch_assoc ($res);
   }
 
   function fetch_object ($res) {
-    return mysql_fetch_object ($res);
+    return mysqli_fetch_object ($res);
   }
 
   function affected_rows ($res) {
     if (!$res) return null;
-    return mysql_affected_rows ($res);
+    return mysqli_affected_rows ($res);
   }
 
 
   function num_rows ($res) {
     if (!$res) return null;
-    return mysql_num_rows ($res);
+    return mysqli_num_rows ($res);
   }
 
   function get_db_type() {

@@ -49,21 +49,21 @@ Hier <b>sollte nun ein Werbebanner erscheinen</b> (zwischen den 2 Trennlinien di
 <hr>
 <br>
 Erscheint hier <b>KEIN Banner</b>, dann benutzt Ihr Browser wohl einen Banner-Blocker.
-Um Holy-Wars 2 wenigstens ein wenig zu Unterstützen sollten Sie sich bemühen, diese
-Banner-Blockade für Holy-Wars 2 aufzuheben.
+Um Holy-Wars 2 wenigstens ein wenig zu UnterstÃ¼tzen sollten Sie sich bemï¿½hen, diese
+Banner-Blockade fÃ¼r Holy-Wars 2 aufzuheben.
 <p>
-<b>Der Hintergrund:</b><br>Die technische Ausstattung in Form von Servern verursacht regelmäßige Kosten, 
-welche wir zum Großteil <b>aus Werbung finanzieren</b>. Mit dem regelmäßigen Besuch 
+<b>Der Hintergrund:</b><br>Die technische Ausstattung in Form von Servern verursacht regelmÃ¤ÃŸige Kosten, 
+welche wir zum GroÃŸteil <b>aus Werbung finanzieren</b>. Mit dem regelmÃ¤ÃŸigen Besuch 
 unserer Sponsoren sichert Ihr den kostenlosen Betrieb von Holy-Wars II.<p>
 <center>
-<b>Schaut bitte regelmäßig bei unseren Sponsoren vorbei!</b>
+<b>Schaut bitte regelmÃ¤ÃŸig bei unseren Sponsoren vorbei!</b>
 </center>
 <p>
 <hr>
 <p>
-Des weiteren habt Ihr die Möglichkeit, Holy-Wars II durch den <a href="premium.php">Erwerb eines Premium-Accounts</a> zu Unterstützen. 
-Ein solcher Account ist werbefrei und bietet - je nach Höhe der Spende - zusätzliche Vorteile. Unter anderem erscheint dann keine
-Werbung mehr <img src="http://www.holy-wars2.de/images/smiles/icon_lol.gif">.
+Des weiteren habt Ihr die Mï¿½glichkeit, Holy-Wars II durch den <a href="premium.php">Erwerb eines Premium-Accounts</a> zu UnterstÃ¼tzen. 
+Ein solcher Account ist werbefrei und bietet - je nach Hï¿½he der Spende - zusÃ¤tzliche Vorteile. Unter anderem erscheint dann keine
+Werbung mehr.
 <hr>
 </td></tr>
 

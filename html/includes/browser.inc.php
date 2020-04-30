@@ -204,7 +204,7 @@ function browser_detection( $which_test ) {
 		if ( !$b_success ) 
 		{
 			$s_browser = substr( $browser_user_agent, 0, strcspn( $browser_user_agent , '();') );
-			ereg('[^0-9][a-z]*-*\ *[a-z]*\ *[a-z]*', $s_browser, $r );
+			preg_match('/[^0-9][a-z]*-*\ *[a-z]*\ *[a-z]*/', $s_browser, $r );
 			$s_browser = $r[0];
 			$version_number = browser_version( $browser_user_agent, $s_browser );
 		}
@@ -214,7 +214,7 @@ function browser_detection( $which_test ) {
 		$b_repeat = true;
 
 		$m = array();
-		if ( ereg('[0-9]*\.*[0-9]*', $version_number, $m ) )
+		if ( preg_match('/[0-9]*\.*[0-9]*/i', $version_number, $m ) )
 		{
 			$math_version_number = $m[0]; 
 		}
@@ -441,20 +441,20 @@ function logBrowser() {
   $browser = browser_detection( 'browser' );
   $number  = browser_detection( 'number' );
 
-  $res=do_mysql_query("SELECT id FROM log_browser WHERE browser='".mysql_escape_string($browser)."' AND version='".mysql_escape_string($number)."' AND timestamp='".$today."'");
+  $res=do_mysqli_query("SELECT id FROM log_browser WHERE browser='".mysqli_escape_string($GLOBALS['con'], $browser)."' AND version='".mysqli_escape_string($GLOBALS['con'], $number)."' AND timestamp='".$today."'");
 
-  if(mysql_num_rows($res) > 0) {
-    do_mysql_query("UPDATE log_browser set logins=logins+1 WHERE browser='".mysql_escape_string($browser)."' AND version='".mysql_escape_string($number)."' AND timestamp='".$today."'");
+  if(mysqli_num_rows($res) > 0) {
+    do_mysqli_query("UPDATE log_browser set logins=logins+1 WHERE browser='".mysqli_escape_string($GLOBALS['con'], $browser)."' AND version='".mysqli_escape_string($GLOBALS['con'], $number)."' AND timestamp='".$today."'");
   } 
   else {
-    do_mysql_query("INSERT INTO log_browser (browser, version, timestamp, logins) VALUES ('".mysql_escape_string($browser).
-                   "', '".mysql_escape_string($number)."','".$today."','1')");
+    do_mysqli_query("INSERT INTO log_browser (browser, version, timestamp, logins) VALUES ('".mysqli_escape_string($GLOBALS['con'], $browser).
+                   "', '".mysqli_escape_string($GLOBALS['con'], $number)."','".$today."','1')");
     // or die ("error");
   }
 }
 
 
-// für debug
+// fÃ¼r debug
 //echo ( browser_detection( 'number' ) .'<br>'. 
 //browser_detection( 'browser' ) .'<br>'.  
 //browser_detection( 'os' ) .'<br>'.  

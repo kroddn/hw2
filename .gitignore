@@ -9,3 +9,4 @@ cron/points_hw_dev
 # Configs
 cron/hwha.h
 cron/hwroot.sh
+html/conf/db.conf.php

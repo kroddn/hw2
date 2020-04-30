@@ -52,7 +52,7 @@ if(isset($recipient)) $recipient = stripslashes(trim($recipient));
 
 
 if (isset($send) && isset($recipient)) {
-  // Der Versand </b>kostet momentan nichts<b>, allerdings kann es zu erheblichen Verzögerungen bei der Zustellung kommen, ebenso wird eine Zustellung </b>nicht<b> garantiert! </b><p>
+  // Der Versand </b>kostet momentan nichts<b>, allerdings kann es zu erheblichen Verzï¿½gerungen bei der Zustellung kommen, ebenso wird eine Zustellung </b>nicht<b> garantiert! </b><p>
   
   $inform = "";
 
@@ -63,12 +63,12 @@ if (isset($send) && isset($recipient)) {
     }
     else if (isset($ismsprefix) && !(FALSE === array_search($ismsprefix, $GLOBALS['smsprefixes'])) ) {
       $rec['id']  = null;
-      $rec['sms'] = ereg_replace("^0", "+49", $ismsprefix).$recipient;
+      $rec['sms'] = preg_replace("/^0/", "+49", $ismsprefix).$recipient;
     }
     else {
-      $rec_res = do_mysql_query("SELECT * FROM player WHERE name LIKE '".mysql_escape_string($recipient)."'");
-      if(mysql_num_rows($rec_res) == 1) {
-        $rec = mysql_fetch_assoc($rec_res);
+      $rec_res = do_mysqli_query("SELECT * FROM player WHERE name LIKE '".mysqli_escape_string($GLOBALS['con'], $recipient)."'");
+      if(mysqli_num_rows($rec_res) == 1) {
+        $rec = mysqli_fetch_assoc($rec_res);
       }
     }
   }
@@ -77,7 +77,7 @@ if (isset($send) && isset($recipient)) {
     if ($rec_res)
       $inform .= "Es existiert kein Spieler mit dem Namen <i>$recipient</i>.";
     else 
-      $inform .= "Ihr habt keinen Spieler oder keine gültige Nummer eingegeben.";
+      $inform .= "Ihr habt keinen Spieler oder keine gÃ¼ltige Nummer eingegeben.";
   }
   else {
     // Weitere Fehler behandeln
@@ -85,13 +85,13 @@ if (isset($send) && isset($recipient)) {
       $inform .= SMS_SEND_ACCEPT;
     }
     else if ($rec['sms'] == null) {
-      $inform .= 'Leider hat Spieler &quot;<i>'.$recipient.'</i>&quot; noch keine SMS-Nummer hinterlegt. Benutzen Sie eine <a href="messages2.php?msgrecipient='.$recipient.'">Standard-Nachrichten</a> und weisen Sie ggf. den Spieler darauf hin, dass er eine gültige Nummer hinterleft.';
+      $inform .= 'Leider hat Spieler &quot;<i>'.$recipient.'</i>&quot; noch keine SMS-Nummer hinterlegt. Benutzen Sie eine <a href="messages2.php?msgrecipient='.$recipient.'">Standard-Nachrichten</a> und weisen Sie ggf. den Spieler darauf hin, dass er eine gÃ¼ltige Nummer hinterleft.';
     }
     else if(!isset($smsbody)) {
       $inform .= "Sie haben keine Nachricht eingegeben.";
     }
     else if(strlen($smsbody) < 1 || strlen($smsbody) > SMS_MAX_LEN)  {
-      $inform .= "Entweder haben Sie eine zu kurze Nachricht eingegeben, oder die Nachricht ist länger als ".SMS_MAX_LEN." Zeichen.";      
+      $inform .= "Entweder haben Sie eine zu kurze Nachricht eingegeben, oder die Nachricht ist lÃ¤nger als ".SMS_MAX_LEN." Zeichen.";      
     }
     else if($_SESSION['player']->getSMSRemaining() < 1) {
       $inform .= "Ihr SMS-Kontingent ist leer! Laden Sie es auf.";
@@ -99,7 +99,7 @@ if (isset($send) && isset($recipient)) {
     else {
       $smsbody_send = $smsbody;
 
-      // Funktion liefern NULL zurück, falls es klappt!
+      // Funktion liefern NULL zurÃ¼ck, falls es klappt!
       $ret = sms_send($rec['sms'], $smsbody_send);
 
       if ( $ret != null ) {
@@ -185,7 +185,7 @@ if (isset($inform)) {
   </tr>
   <tr class="tblbody"><td width="160"><b>Verbleibende SMS:</b></td><td><font style="font-size:14px;"><b><? echo $_SESSION['player']->getSMSremaining(); ?></b></font>
 &nbsp;&nbsp;<a href="settings.php?show=sms#charge">(aufladen)</a></td></tr>
-  <tr class="tblbody"><td><b>Empfänger oder Nummer:</b><br>(Nummer beginnt mit +49)</td>
+  <tr class="tblbody"><td><b>Empfï¿½nger oder Nummer:</b><br>(Nummer beginnt mit +49)</td>
 <td valign="middle">
 
 <select name="ismsprefix">
@@ -206,7 +206,7 @@ if (isset($inform)) {
 <a style="font-size: 12px; color: red; float:right;" title="Anleitung zum SMS-Versand." onClick="return openhelp('sms.php?help=1')" href="sms.php?help=1">Anleitung</a><br>
 <!-- Adressbuch -->
 <select onChange="if(this.value!='') { document.smsform.recipient.value=this.value; document.smsform.ismsprefix='Intern.'; }" name="adrbook" size="1" stlye="width:140px;">
-<option value="">Adressbucheintrag wählen</option>
+<option value="">Adressbucheintrag wï¿½hlen</option>
 <?
   $adress = $player->getSMSAdressbook();
   foreach ($adress as $i=>$adr) {
@@ -239,13 +239,13 @@ if (is_premium_set_sms_sender() && $nr != null) {
   }
 }
 else {
-  echo 'Als <a href="settings.php?show=sms#sendernr">SMS-Absenderkennung</a> wird Holy-Wars 2 übermittelt. ';
+  echo 'Als <a href="settings.php?show=sms#sendernr">SMS-Absenderkennung</a> wird Holy-Wars 2 Ã¼bermittelt. ';
   if (is_premium_set_sms_sender()) {
-    echo '<br>Als Premium-Account-Besitzer dürft ihr diese Nummer in '.
+    echo '<br>Als Premium-Account-Besitzer dÃ¼rft ihr diese Nummer in '.
       '<a href="settings.php?show=sms#sendernr">MyHW2</a> konfigurieren.';
   }
   else {
-    echo '<br>Mit einem Premium-Pro-Account dürft Ihr diese Nummer selbst wählen.';
+    echo '<br>Mit einem Premium-Pro-Account dÃ¼rft Ihr diese Nummer selbst wï¿½hlen.';
   }
 }
 ?>
@@ -274,7 +274,7 @@ if ( $_SESSION['sms_may_send'] ) {
 ?>
 Sie haben den <a href="settings.php?show=sms#sms_rules">Bedingungen zum SMS-Versand</a> zugestimmt.<p>
 <input tabindex="3" type="submit" name="send" value=" SMS versenden ">
-<input onClick="return confirm('Nachricht wirklich zurücksetzen?')" type="reset" value=" Zurücksetzen ">
+<input onClick="return confirm('Nachricht wirklich zurÃ¼cksetzen?')" type="reset" value=" ZurÃ¼cksetzen ">
 <?
   }
 }
@@ -285,18 +285,18 @@ else {
 </td></tr>
   <tr height="5"></tr> <!-- Leerzeile -->
   <tr class="tblhead"><td colspan="3" align="center">SMS-Versand ist ein <a target="main" href="settings.php?show=sms#sms_rules">kostenpflichtiger Dienst</a>.<br>
-Ihr SMS-Kontingent (verbleibende SMS) können Sie durch Überweisung <a href="settings.php?show=sms#charge">aufladen</a>!</td></tr>
+Ihr SMS-Kontingent (verbleibende SMS) kÃ¶nnen Sie durch Ã¼berweisung <a href="settings.php?show=sms#charge">aufladen</a>!</td></tr>
  </table>
 </form>
 <div style="padding: 10px; visibility: hidden; border: 5px solid yellow; background-color: orange; position: absolute; top: 250; left: 100; width:300px; height: 180px;" id="waitmessage" name="waitmessage">
 <b>
-Bitte warten Sie, während das System ihre Eingaben prüft und die SMS versendet.<p>
+Bitte warten Sie, wï¿½hrend das System ihre Eingaben prï¿½ft und die SMS versendet.<p>
 Klicken Sie nicht auf Stop!
 </b>
 <p>
 <p>
-Sie können Bonuspunkte in SMS umwandeln. Um Bonuspunkte zu erhalten sollten
-Sie neue Spieler werben. Wie das geht können Sie unter dem Menüpunkt
+Sie kÃ¶nnen Bonuspunkte in SMS umwandeln. Um Bonuspunkte zu erhalten sollten
+Sie neue Spieler werben. Wie das geht kÃ¶nnen Sie unter dem Menï¿½punkt
 &quot;My HW2&quot; erfahren.
 </div>
 </div>

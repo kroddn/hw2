@@ -30,51 +30,51 @@
  */
 
 session_start();
+include_once ("includes/util.inc.php");
 
-// Sichergehen, dass diese Datei nur mit gültigen Parametern geöffnet wird.
+// Sichergehen, dass diese Datei nur mit gÃ¼ltigen Parametern geÃ¶ffnet wird.
 if(!isset($_SESSION['db_login'])) {
-  header("Location: login.php?login_error=nodblogin");
+  header_redirect("login.php?login_error=nodblogin");
   exit();
 }
 
 $error = null;
 $pos = intval($pos);
 
-if(isset($selectname)) {
-  include_once ("includes/util.inc.php");
-
-  // Führende und abschließende Leerzeichen weglassen
-  $playername = trim($_REQUEST['playername']);
+if(isset($_POST['selectname'])) {
+  // Fï¿½hrende und abschlieÃŸende Leerzeichen weglassen
+  $playername = trim($_POST['playername']);
+  $pos = $_POST['pos'];
   
   
   if(!checkBez($playername)) {
-    $error = "Der gewählte Name ist zu kurz, zu lang, verstößt gegen die Namenskonventionen oder enthält doppelte Leerzeichen.";
+    $error = "Der gewÃ¤hlte Name ist zu kurz, zu lang, verstÃ¶ÃŸt gegen die Namenskonventionen oder enthÃ¤lt doppelte Leerzeichen.";
   }
   else {      
     include_once ("includes/db.inc.php");
     
-    // Prüfen, ob der Name bereits vergeben ist
-    $check = do_mysql_query("SELECT * FROM player WHERE name = '".mysql_escape_string($playername)."'");
-    if(mysql_num_rows($check) > 0) {
+    // Prï¿½fen, ob der Name bereits vergeben ist
+    $check = do_mysqli_query("SELECT * FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'], $playername)."'");
+    if(mysqli_num_rows($check) > 0) {
       $error = "Der Spielername '$playername' ist bereits vergeben.";
       unset($playername);
     }
     else if($pos < 1 || $pos > 6 ) {
-      $error = "Ungültige Startposition.";
+      $error = "UngÃ¼ltige Startposition.";
     }
     else if($_SESSION['db_login']['name'] != null) {
-      $error = "Ihr habt bereits einen Namen gewählt. Schummler?";
+      $error = "Ihr habt bereits einen Namen gewÃ¤hlt. Schummler?";
     }
     else {
       $religion = ceil($pos / 3);
       
       $sql = sprintf("UPDATE player SET pos = %d, religion = %d, name = '%s', activationtime=UNIX_TIMESTAMP(), lastres=0 WHERE id = %d" , 
-                     $pos, $religion, mysql_escape_string($playername), $_SESSION['db_login']['id']);
-      do_mysql_query($sql);
+                     $pos, $religion, mysqli_escape_string($GLOBALS['con'], $playername), $_SESSION['db_login']['id']);
+      do_mysqli_query($sql);
      
       // Noobschutz bei 
       if(defined("HISPEED")) {
-        do_mysql_query("UPDATE player SET nooblevel = 0 WHERE id = ".$_SESSION['db_login']['id']);
+        do_mysqli_query("UPDATE player SET nooblevel = 0 WHERE id = ".$_SESSION['db_login']['id']);
       }
       
       $_SESSION['sec_key'] = "magic1234";
@@ -94,7 +94,7 @@ if(isset($selectname)) {
       
       /*
       session_destroy();
-      header("Location: login.php?name=".urlencode($loginname));
+      header_redirect("login.php?name=".urlencode($loginname));
       exit();
       */
     }
@@ -115,23 +115,23 @@ if(defined("START_POS_NEW") && START_POS_NEW) {
         echo $where."<br>";
       }
 
-      $count = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM startpositions WHERE ".$where);
+      $count = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM startpositions WHERE ".$where);
       $locsum = $count['c'];
       if($reli == 1) $loc[$p]   = intval($count['c']);
       else           $loc[5-$p] = intval($count['c']);
     }
   }
-  // Jetzt muß noch korrigiert werden für das alte Skript.
+  // Jetzt muï¿½ noch korrigiert werden fÃ¼r das alte Skript.
 }
 else {
-  $mapsize = do_mysql_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
+  $mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
   $fx = $mapsize['x'];
   $fy = $mapsize['y'];
 
-  $qry_startlocations = do_mysql_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
+  $qry_startlocations = do_mysqli_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
 
   $locsum = 0;
-  while ($res_sl=mysql_fetch_assoc($qry_startlocations)) {
+  while ($res_sl=mysqli_fetch_assoc($qry_startlocations)) {
     $loc[$res_sl['pos']]=$res_sl['c'];
     $locsum+=$res_sl['c'];
   }
@@ -147,12 +147,12 @@ if(!isset($christratio))
 <tr>
   <td width="22%" valign="top"></td>
   <td width="53%" valign="top" class="tblbody">
-<center><h1>Spielernamen und Startposition wählen</h1></center>
-Wählt nun den Namen, unter dem Ihr in der Welt bekannt sein
-wollt. Um die Sicherheit zu erhöhen wird empfohlen, dass Spielername
+<center><h1>Spielernamen und Startposition wÃ¤hlen</h1></center>
+WÃ¤hlt nun den Namen, unter dem Ihr in der Welt bekannt sein
+wollt. Um die Sicherheit zu erhÃ¤hen wird empfohlen, dass Spielername
 und Login nicht identisch sind.
 <p>
-<form method="get" action="choose_name.php">
+<form method="post" action="choose_name.php">
 <table width="500" cellspacing="1" cellpadding="0" border="0">
  <tr height="0">
   <td width="200"></td><td width="300"></td>
@@ -176,18 +176,18 @@ und Login nicht identisch sind.
 <?php
 if($christratio > 1.0 ) { ?>
  <tr>
-  <td colspan="2" class="tblbody" align="center"><font color="red" size="+2">Anhänger des Islam gesucht!</font><br>Zur Zeit sind die Christen auf dem Vormarsch. Darum überlegt Euch gut, ob Ihr nicht auf Seiten des Islam einsteigen wollt (dem Spielspaß kommt es zugute).
+  <td colspan="2" class="tblbody" align="center"><font color="red" size="+2">Anhï¿½nger des Islam gesucht!</font><br>Zur Zeit sind die Christen auf dem Vormarsch. Darum Ã¼berlegt Euch gut, ob Ihr nicht auf Seiten des Islam einsteigen wollt (dem SpielspaÃŸ kommt es zugute).
   </td>
  </tr>
 <? 
 } 
 ?>
  <tr height="40" class="tblbody"><td colspan="2" valign="middle" align="center">
-   Angemeldet: <? echo $registered[0][0]." Christen und ". $registered[1][0]. " Moslems. <b>Wählt ".($registered[0][0] >= $registered[1][0] ? "Islam" : "Christentum").",</b> um das Gleichgewicht zu wahren."; ?>
+   Angemeldet: <? echo $registered[0][0]." Christen und ". $registered[1][0]. " Moslems. <b>Wï¿½hlt ".($registered[0][0] >= $registered[1][0] ? "Islam" : "Christentum").",</b> um das Gleichgewicht zu wahren."; ?>
  </td></tr>
  
  <tr height="40" class="tblbody"><td colspan="2" valign="middle" align="center">
-   <b><font size="+1">Ausgangslage wählen</font> (<? echo $locsum; ?> offene Positionen)</b>
+   <b><font size="+1">Ausgangslage wï¿½hlen</font> (<? echo $locsum; ?> offene Positionen)</b>
  </td></tr>
  <tr class="tblbody">
  <td align="center">
@@ -195,12 +195,12 @@ if($christratio > 1.0 ) { ?>
      echo "Siedlungsradius: ".getSettleRadius();
    }
    else {
-     echo '<a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?p=107853#107853">Änderung nächste Runde!<br>(hier klicken)</a>';
+     echo '<a target="_blank" href="http://forum.holy-wars2.de/viewtopic.php?p=107853#107853">Ã„nderung nÃ¤chste Runde!<br>(hier klicken)</a>';
    }
    ?>
  </td>
  <td nowrap width="300" >
-Für Details auf die Karte klicken!
+FÃ¼r Details auf die Karte klicken!
 </td>
 </tr>
 <tr class="tblbody">
@@ -232,7 +232,7 @@ else echo "<div class='error'><input class='noborder' type='radio' name='pos' va
         </td>
 	</tr>
 	<tr>
-		<td colspan="2" class="tblbody" align="center">Hinweis: Im <i>Umkämpften Gebiet</i> ist die Wahrscheinlichkeit sehr hoch, dass man früh im Spiel angegriffen wird. Auch im <i>Hinterland</i> ist keine Sicherheit gewährleistet. Ihr könnt jederzeit von Gleichgläubigen überfallen werden.</td>
+		<td colspan="2" class="tblbody" align="center">Hinweis: Im <i>UmkÃ¤mpften Gebiet</i> ist die Wahrscheinlichkeit sehr hoch, dass man frÃ¼h im Spiel angegriffen wird. Auch im <i>Hinterland</i> ist keine Sicherheit gewÃ¤hrleistet. Ihr kÃ¶nnt jederzeit von GleichglÃ¤ubigen Ã¼berfallen werden.</td>
 	</tr>
 		<tr>
 		<td colspan="2" class="tblbody" align="center">&nbsp;</td>
@@ -241,7 +241,7 @@ else echo "<div class='error'><input class='noborder' type='radio' name='pos' va
   <td width="22%" valign="top"></td>
 </tr>
 <tr><td  colspan="2" align="center">
-<input type="submit" name="selectname" value=" durchführen ">
+<input type="submit" name="selectname" value=" durchfÃ¼hren ">
 <input type="button" onClick="window.location.href='index.php';" value=" abbrechen ">
 </td></tr>
 </table>

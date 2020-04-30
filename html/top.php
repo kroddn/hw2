@@ -29,7 +29,7 @@
 *
 ***************************************************/
 
-// Diese Seite nicht zu den Klicks hinzuz‰hlen
+// Diese Seite nicht zu den Klicks hinzuz√§hlen
 $GLOBALS['noclickcount'] = 1;
 
 include_once("includes/db.inc.php");
@@ -60,13 +60,13 @@ function updateframe(newpage) {
 <td width="25">&nbsp</td>
 <?
 
-$cit = $cities->getCities();
+$cit = $_SESSION['cities']->getCities();
 $underattack = false;
 $attnum = 0;
 
 if(ADVANCED_TOP)
 {
-  $statusarmys = $cities->getArmyTopView();
+  $statusarmys = $_SESSION['cities']->getArmyTopView();
   if ($statusarmys[0] > 0) {
     echo '<td nowrap title="Achtung: Feind im Anmarsch!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></td><td><font color="orange">'.$statusarmys[0].'</font></td>';
   }
@@ -74,7 +74,7 @@ if(ADVANCED_TOP)
     echo '<td nowrap title="Achtung: Es sind neutrale Truppen auf dem Weg zu uns!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/neutral.gif"></a></td><td><font color="green">'.$statusarmys[1].'</font></td>';
   }
   if ($statusarmys[2] > 0) {
-    echo '<td nowrap title="Hinweis: Verb¸ndete Truppen erreichen uns bald."><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/help.gif"></a></td><td><font color="grey">'.$statusarmys[2].'</font></td>';
+    echo '<td nowrap title="Hinweis: Verb√ºndete Truppen erreichen uns bald."><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/help.gif"></a></td><td><font color="grey">'.$statusarmys[2].'</font></td>';
   }
   else {
     $session_underattack = false;
@@ -84,10 +84,10 @@ else
 {
   if ($cit) {
     foreach ($cit as $key=>$city) {
-      $attnum += $cities->underAttack($city['id']);
+      $attnum += $_SESSION['cities']->underAttack($city['id']);
     }
   }
-  // Falls ein Angriff stattfindet dann dies anzeigen. Ansonsten ein marker f¸r sp‰ter setzen
+  // Falls ein Angriff stattfindet dann dies anzeigen. Ansonsten ein marker f√ºr spÔøΩter setzen
   if ($attnum > 0) {
     echo '<td nowrap title="Achtung: Angriff!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></td><td><font color="orange">'.$attnum.'</font></td>';
   }
@@ -103,9 +103,9 @@ else
 function getNewClanfTopics($pid) {
 	$string="<a href=\"cf_index.php\" target=\"main\" onclick=\"updateframe();\" class=\"statusline\">Keine neuen Forenbeitr&auml;ge</a>";
 	//get players last forum visit
-	$res2=mysql_query("SELECT user_lastvisit FROM clanf_users WHERE username='".$pid."'");
+	$res2=mysqli_query($GLOBALS['con'], "SELECT user_lastvisit FROM clanf_users WHERE username='".$pid."'");
         if ($res2) {
-          $data2=mysql_fetch_assoc($res2);
+          $data2=mysqli_fetch_assoc($res2);
           $lastseen=date("d.m.Y H:i",$data2['user_lastvisit']);
         }
         else {
@@ -113,16 +113,16 @@ function getNewClanfTopics($pid) {
         }
 
 	//get cat_id of players clan (put it in session next review)
-	$res1=mysql_query("SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
+	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
         if ($res1) {
-          $data1=mysql_fetch_assoc($res1);
+          $data1=mysqli_fetch_assoc($res1);
           $clan_cat=$data1['cat_id'];
         }
 
-	$res3=mysql_query("SELECT clanf_posts.post_time as lastpost FROM `clanf_posts` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_posts.forum_id WHERE clanf_forums.cat_id='".$clan_cat."' AND clanf_posts.post_time > '".$data2['user_lastvisit']."'");
+	$res3=mysqli_query($GLOBALS['con'], "SELECT clanf_posts.post_time as lastpost FROM `clanf_posts` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_posts.forum_id WHERE clanf_forums.cat_id='".$clan_cat."' AND clanf_posts.post_time > '".$data2['user_lastvisit']."'");
         if ($res3) {
-          $data3=mysql_fetch_assoc($res3);
-          if(mysql_num_rows($res3)>0)
+          $data3=mysqli_fetch_assoc($res3);
+          if(mysqli_num_rows($res3)>0)
             $string="<a href=\"cf_index.php\" onclick=\"updateframe();\" target=\"main\" class=\"statusline\">Neue Forenbeitr&auml;ge</a>";
         }
         return $string;
@@ -152,7 +152,7 @@ if( defined("SMS_SERVICE") && SMS_SERVICE && (!defined("HISPEED") || !HISPEED) )
 }
 else {
   $sql = "SELECT count(*) AS cnt FROM premiumacc WHERE player = ".$_SESSION['player']->getID();
-  $cnt = do_mysql_query_fetch_assoc($sql);
+  $cnt = do_mysqli_query_fetch_assoc($sql);
   
   $cantest = $cnt['cnt'] == 0 ? " Kostenlos testen!" : "";
   

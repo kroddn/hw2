@@ -48,7 +48,7 @@ if(!function_exists("show_fatal_error")) {
     //TODO: get $csspath and $imagepath from player
     echo '<link rel="stylesheet" href="/images/ingame/css/hw.css" type="text/css">';
     echo '<body marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" background="/images/ingame/bg.gif">';
-    echo '<b class="error"><i>Ihr wacht auf, reibt euch den Kopf und versucht euch zu erinnern, was passiert ist. Da hört ihr eine Stimme in eurem Kopf: </i>"Ihr wurdet soeben Zeugen eines aussergew&ouml;hnlichen Ereignisses, wendet euch mit folgenem Code an die Admins: <p>\''.$string.'\'."<p><i>Ihr reibt euch die Augen und '.$goback;
+    echo '<b class="error"><i>Ihr wacht auf, reibt euch den Kopf und versucht euch zu erinnern, was passiert ist. Da hï¿½rt ihr eine Stimme in eurem Kopf: </i>"Ihr wurdet soeben Zeugen eines aussergew&ouml;hnlichen Ereignisses, wendet euch mit folgenem Code an die Admins: <p>\''.$string.'\'."<p><i>Ihr reibt euch die Augen und '.$goback;
     echo "</body>";
     echo "</html>";
     if(defined("DEBUG_SERVICE")) {
@@ -66,8 +66,8 @@ if (!function_exists("show_log_fatal_error")) {
       $showstr = $logstr;
     }
 
-    do_mysql_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysql_escape_string($logstr)."',UNIX_TIMESTAMP(),'".mysql_escape_string($HTTP_SERVER_VARS['HTTP_REFERER'])."')");
-    $errid = mysql_insert_id();
+    do_mysqli_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysqli_escape_string($GLOBALS['con'], $logstr)."',UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $HTTP_SERVER_VARS['HTTP_REFERER'])."')");
+    $errid = mysqli_insert_id($GLOBALS['con']);
     $showstr .= ":".$errid;
     show_fatal_error($showstr);    
   }
@@ -76,7 +76,7 @@ if (!function_exists("show_log_fatal_error")) {
 if (!function_exists("log_fatal_error")) {
   function log_fatal_error($logstr) {
     global $HTTP_SERVER_VARS;
-    do_mysql_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysql_escape_string($logstr)."',UNIX_TIMESTAMP(),'".mysql_escape_string($HTTP_SERVER_VARS['HTTP_REFERER'])."')");
+    do_mysqli_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysqli_escape_string($GLOBALS['con'], $logstr)."',UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $HTTP_SERVER_VARS['HTTP_REFERER'])."')");
   }
  }
 

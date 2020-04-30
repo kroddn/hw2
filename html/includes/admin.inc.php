@@ -24,22 +24,22 @@
 
 
 function reset_clanforum_now() {
-  do_mysql_query("TRUNCATE clanf_forums");
-  do_mysql_query("TRUNCATE clanf_auth_access");
-  do_mysql_query("TRUNCATE clanf_posts");
-  do_mysql_query("TRUNCATE clanf_posts_text");
-  do_mysql_query("TRUNCATE clanf_topics");
-  do_mysql_query("TRUNCATE clanf_user_group");
-  do_mysql_query("TRUNCATE clanf_users");
-  do_mysql_query("TRUNCATE clanf_sessions");
-  do_mysql_query("TRUNCATE clanf_categories");
-  do_mysql_query("TRUNCATE clanf_search_wordlist");
-  do_mysql_query("TRUNCATE clanf_search_wordmatch");
-  do_mysql_query("TRUNCATE clanf_vote_desc");
-  do_mysql_query("TRUNCATE clanf_vote_results");
-  do_mysql_query("TRUNCATE clanf_vote_voters");
+  do_mysqli_query("TRUNCATE clanf_forums");
+  do_mysqli_query("TRUNCATE clanf_auth_access");
+  do_mysqli_query("TRUNCATE clanf_posts");
+  do_mysqli_query("TRUNCATE clanf_posts_text");
+  do_mysqli_query("TRUNCATE clanf_topics");
+  do_mysqli_query("TRUNCATE clanf_user_group");
+  do_mysqli_query("TRUNCATE clanf_users");
+  do_mysqli_query("TRUNCATE clanf_sessions");
+  do_mysqli_query("TRUNCATE clanf_categories");
+  do_mysqli_query("TRUNCATE clanf_search_wordlist");
+  do_mysqli_query("TRUNCATE clanf_search_wordmatch");
+  do_mysqli_query("TRUNCATE clanf_vote_desc");
+  do_mysqli_query("TRUNCATE clanf_vote_results");
+  do_mysqli_query("TRUNCATE clanf_vote_voters");
 
-  do_mysql_query("INSERT INTO `clanf_users` VALUES (-1, 1, 'Cheater', '', 0, 0, 0, 0, 0, 6302, 2.00, NULL, NULL, 'd.M.Y H:i', 0, 0, 0, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, 'Das hier solltest du nie sehen...\r\n\r\nACHTUNG!\r\nPostet dieser User liegt ein Bug vor!\r\nBitte melde diesen Beitrag einen Admin.\r\n(Zuständig: morlock)\r\nDanke!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)");
+  do_mysqli_query("INSERT INTO `clanf_users` VALUES (-1, 1, 'Cheater', '', 0, 0, 0, 0, 0, 6302, 2.00, NULL, NULL, 'd.M.Y H:i', 0, 0, 0, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, 'Das hier solltest du nie sehen...\r\n\r\nACHTUNG!\r\nPostet dieser User liegt ein Bug vor!\r\nBitte melde diesen Beitrag einen Admin.\r\n(ZustÃ¤ndig: morlock)\r\nDanke!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)");
 }
 
 
@@ -47,7 +47,7 @@ function list_player_not_activated () {
   
   echo "<h1>Noch nicht aktivierte Spieleraccounts</h1>\n";
   echo 'Die Spieler sind nach der Reihenfolge Ihrer Anmeldung sortiert. <a href="#last">Ganz unten</a> sollte man die zuletzt angemeldeten finden.<p>';
-  echo 'Grün markierte Spieler sind bereits seit mind. 2 Tagen erstellt und nicht aktiviert worden.<br>';
+  echo 'Grï¿½n markierte Spieler sind bereits seit mind. 2 Tagen erstellt und nicht aktiviert worden.<br>';
 
   $sql = "SELECT id, login, email, activationkey, status,
  unix_timestamp() - regtime AS inactive_seconds,
@@ -57,8 +57,8 @@ function list_player_not_activated () {
  lastseen                   AS lastseen_unixtime
 FROM player WHERE activationkey IS NOT NULL AND status = 1
 ORDER BY id";
-  $players = do_mysql_query($sql);
-  $num = mysql_numrows($players);
+  $players = do_mysqli_query($sql);
+  $num = mysqli_num_rows($players);
 
   $i = 0;
   echo "<pre>$sql</pre>\n";
@@ -66,7 +66,7 @@ ORDER BY id";
   echo "<p><table>\n";
   echo " <tr class=\"tblhead\"><td>[ID] Login</td><td>Act.Key</td><td>eMail</td><td>Regtime</td><td>Lastseen</td><td>Inaktiv<br>in Stunden</td><td>Aktion</td></tr>\n";
 
-  while ( $p = mysql_fetch_array($players) ) {
+  while ( $p = mysqli_fetch_array($players) ) {
     $i++;
     echo 
       ' <tr class="'.($p['regtime_unixtime'] != $p['lastseen_unixtime'] 
@@ -79,9 +79,9 @@ ORDER BY id";
       '<td align="right" title="regtime_unixtime: '.$p['regtime_unixtime'].'">'.$p['regtime_time']. "</td>\n".
       '<td align="right" title="lastseen_unixtime: '.$p['lastseen_unixtime'].'">'.$p['lastseen_time']."</td>\n".
       '<td align="right" title="Sekunden: '.$p['inactive_seconds'].'">'.formatTime($p['inactive_seconds'])." h</td>\n".
-      // Länger als xxx Tage nicht aktiviert...
+      // Lï¿½nger als xxx Tage nicht aktiviert...
       "<td>".
-      '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler löschen wollt?\')" href="?delete='.$p['id'].'">Löschen</a>&nbsp;&nbsp;'. 
+      '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler lÃ¶schen wollt?\')" href="?delete='.$p['id'].'">LÃ¶schen</a>&nbsp;&nbsp;'. 
       '<a onClick="return confirm(\'Spieler aktivieren?\')" href="activate.php?activate=1&activationcode='.$p['activationkey'].'&loginname='.$p['login'].'">Aktivieren</a>&nbsp;&nbsp;'.
       
       "</td>\n".      
@@ -102,7 +102,7 @@ function list_player_locked () {
   echo "<p><table>\n";
   echo " <tr class=\"tblhead\"><td>[ID] Spielername</td><td>Act.Key</td><td>eMail</td><td>Regtime</td><td>Lastseen</td><td>Inaktiv<br>in Stunden</td><td>Aktion</td></tr>\n";
 
-  $players = do_mysql_query("SELECT id, name, email, activationkey, status, ".
+  $players = do_mysqli_query("SELECT id, name, email, activationkey, status, ".
                             "  unix_timestamp() - lastseen AS inactive_seconds,".
                             "  from_unixtime(regtime)      AS regtime_time,".
                             "  from_unixtime(lastseen)     AS lastseen_time,".
@@ -110,10 +110,10 @@ function list_player_locked () {
                             "  lastseen                    AS lastseen_unixtime".
                             " FROM player WHERE activationkey IS NULL AND status IN (1,2) ".
                             " ORDER BY id");
-  $num = mysql_numrows($players);
+  $num = mysqli_num_rows($players);
   $i = 0;
 
-  while ( $p = mysql_fetch_array($players) ) {
+  while ( $p = mysqli_fetch_array($players) ) {
     $i++;
     echo 
       ' <tr class="tblbody">'.
@@ -124,9 +124,9 @@ function list_player_locked () {
       '<td align="right" title="regtime_unixtime: '.$p['regtime_unixtime'].'">'.$p['regtime_time']. "</td>\n".
       '<td align="right" title="lastseen_unixtime: '.$p['lastseen_unixtime'].'">'.$p['lastseen_time']."</td>\n".
       '<td align="right" title="Sekunden: '.$p['inactive_seconds'].'">'.formatTime($p['inactive_seconds'])." h</td>\n".
-      // Länger als xxx Tage nicht aktiviert...
+      // Lï¿½nger als xxx Tage nicht aktiviert...
       "<td>".
-      '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler löschen wollt?\')" href="?delete='.$p['id'].'">Löschen</a>&nbsp;&nbsp;'. 
+      '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler lÃ¶schen wollt?\')" href="?delete='.$p['id'].'">LÃ¶schen</a>&nbsp;&nbsp;'. 
       '<a onClick="return confirm(\'Sperre aufheben?\')" href="adminmaintain.php?reactivate=1&id='.$p['id'].'">Freigeben</a>&nbsp;&nbsp;'.
       
       "</td>\n".      
@@ -146,7 +146,7 @@ function list_player_new ($hours = 48) {
   echo "<p><table>\n";
   echo " <tr class=\"tblhead\"><td>[ID] Spielername</td><td>Act.Key</td><td>eMail</td><td>Regtime</td><td>Lastseen</td><td>Inaktiv<br>in Stunden</td><td>Aktion</td></tr>\n";
 
-  $players = do_mysql_query("SELECT id, name, email, activationkey, status, ".
+  $players = do_mysqli_query("SELECT id, name, email, activationkey, status, ".
                             "  unix_timestamp() - lastseen AS inactive_seconds,".
                             "  from_unixtime(regtime)      AS regtime_time,".
                             "  from_unixtime(lastseen)     AS lastseen_time,".
@@ -154,10 +154,10 @@ function list_player_new ($hours = 48) {
                             "  lastseen                    AS lastseen_unixtime".
                             " FROM player WHERE unix_timestamp()-regtime < 60*60*".intval($hours).
                             " ORDER BY id");
-  $num = mysql_numrows($players);
+  $num = mysqli_num_rows($players);
   $i = 0;
 
-  while ( $p = mysql_fetch_array($players) ) {
+  while ( $p = mysqli_fetch_array($players) ) {
     $i++;
     echo 
       ' <tr class="tblbody">'.
@@ -168,9 +168,9 @@ function list_player_new ($hours = 48) {
       '<td align="right" title="regtime_unixtime: '.$p['regtime_unixtime'].'">'.$p['regtime_time']. "</td>\n".
       '<td align="right" title="lastseen_unixtime: '.$p['lastseen_unixtime'].'">'.$p['lastseen_time']."</td>\n".
       '<td align="right" title="Sekunden: '.$p['inactive_seconds'].'">'.formatTime($p['inactive_seconds'])." h</td>\n".
-      // Länger als xxx Tage nicht aktiviert...
+      // Lï¿½nger als xxx Tage nicht aktiviert...
       "<td>".
-      '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler löschen wollt?\')" href="?delete='.$p['id'].'">Löschen</a>&nbsp;&nbsp;'. 
+      '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler lÃ¶schen wollt?\')" href="?delete='.$p['id'].'">LÃ¶schen</a>&nbsp;&nbsp;'. 
       '<a onClick="return confirm(\'Sperre aufheben?\')" href="adminmaintain.php?reactivate=1&id='.$p['id'].'">Freigeben</a>&nbsp;&nbsp;'.
       
       "</td>\n".      
@@ -186,7 +186,7 @@ function list_player_new ($hours = 48) {
 function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
   $con_old = mysql_connect( DBHOST_OLD, DBUSER_OLD, DBPASSWD_OLD);
   if(!$con_old) {
-    echo mysql_error();
+    echo mysqli_error($GLOBALS['con']);
     die();
   }
   mysql_select_db( DBSELECT_OLD, $con_old);
@@ -194,7 +194,7 @@ function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
   echo "Teste, ob er Premium-User war (".$oldpid."). ";
   $sql = 
     "SELECT pa.*,p.name ".
-    " FROM ".mysql_escape_string($oldtable)." pa LEFT JOIN player p ON p.id = pa.player".
+    " FROM ".mysqli_escape_string($GLOBALS['con'], $oldtable)." pa LEFT JOIN player p ON p.id = pa.player".
     " WHERE player = ".$oldpid.
     "  AND expire > UNIX_TIMESTAMP() AND payd IS NOT NULL ".
     " ORDER BY expire DESC";
@@ -202,38 +202,38 @@ function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
 
   echo "\n<!-- $sql -->\n";
   
-  $prem = mysql_query($sql, $con_old);
+  $prem = mysqli_query($GLOBALS['con'], $sql);
   if($prem) {
-    if (mysql_num_rows($prem) > 0) {
+    if (mysqli_num_rows($prem) > 0) {
       $num = 0;
-      while($premium = mysql_fetch_assoc($prem)) {
+      while($premium = mysqli_fetch_assoc($prem)) {
 	$sql = sprintf("INSERT INTO premiumacc ".
 		       " (player, type, expire, payd, paydtime,paytext) ".
 		       " VALUES (%d, %d, %d, 0, UNIX_TIMESTAMP(), '%s')",
 		       $pid, $premium['type'] ,$premium['expire'],                        
-		       "Premium-Account ".$premium['name']." aus alter Runde übernommen."
+		       "Premium-Account ".$premium['name']." aus alter Runde Ã¼bernommen."
 		       );
-	do_mysql_query($sql);
+	do_mysqli_query($sql);
 	$num++;
       }
-      echo "<b>Ja</b>. $num Stück übernommen<br>";
+      echo "<b>Ja</b>. $num Stï¿½ck Ã¼bernommen<br>";
     }
     else {
       echo "Nein. <br>";
     }      
   }
   else {
-    echo "<P>SQL Fehler: ".mysql_error($con_old);
+    echo "<P>SQL Fehler: ".mysqli_error($GLOBALS['con']);
   }  
 }
 
 
 function activate_from_booking($nr = 1) {
   $nr = intval($nr);
-  $bookdata = do_mysql_query("SELECT * FROM booking WHERE status = 0 ORDER BY bookid LIMIT $nr");
+  $bookdata = do_mysqli_query("SELECT * FROM booking WHERE status = 0 ORDER BY bookid LIMIT $nr");
 
   $i = 0;
-  while ($book = mysql_fetch_assoc($bookdata)) {
+  while ($book = mysqli_fetch_assoc($bookdata)) {
     echo "Lege Spieler <b>".$book['name']."</b> an. ";
     $p['pid']      = null;
     $p['pos']      = $book['zone'];
@@ -247,7 +247,7 @@ function activate_from_booking($nr = 1) {
     $result = insert_new_player($p);
     
     if ($result==null) {
-      do_mysql_query("UPDATE booking SET status=1 WHERE bookid = ".$book['bookid']);
+      do_mysqli_query("UPDATE booking SET status=1 WHERE bookid = ".$book['bookid']);
       echo "done. ";
       get_old_premiumacc($p['pid'], $book['oldpid']);
     }

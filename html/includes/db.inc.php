@@ -49,16 +49,21 @@ if (!isset($csspath )) {
     $csspath = $imagepath."/css";
 }
 
-$GLOBALS['con'] = mysql_pconnect( DBHOST, DBUSER, DBPASSWD);
-mysql_select_db( DBSELECT, $GLOBALS['con']);
+$GLOBALS['con'] = mysqli_connect( DBHOST, DBUSER, DBPASSWD, DBSELECT);
 
-function do_mysql_query_fetch_array($sql) {
-  return mysql_fetch_assoc(do_mysql_query($sql));
+if (!$GLOBALS['con']) {
+	    die('Connect Error (' . mysqli_connect_errno() . ') '
+		                . mysqli_connect_error());
+}
+mysqli_select_db( $GLOBALS['con'], DBSELECT );
+
+function do_mysqli_query_fetch_array($sql) {
+  return mysqli_fetch_assoc(do_mysqli_query($sql));
 }
 
 
-function do_mysql_query_fetch_assoc($sql) {
-  return mysql_fetch_assoc(do_mysql_query($sql));
+function do_mysqli_query_fetch_assoc($sql) {
+  return mysqli_fetch_assoc(do_mysqli_query($sql));
 }
 
 
@@ -69,11 +74,12 @@ function do_mysql_query_fetch_assoc($sql) {
  * @param $conn   Mysql-Connection, auf die das Query abgesetzt wird. NULL bedeuted Standard-Session Verbindung.
  * @param $abort  Falls TRUE wird nach dem Logging eine Fehlermeldung ausgegeben und die weitere Verarbeitung
  *                abgebrochen. Falls FALSE wird die Verarbeitung nach dem Fehler fortgesetzt (z.B. bei diversen
- *                queries, die abgearbeitet werden MÜSSEN, um keinen Fehler in der DB zu erzeugen)
- * @return Rückgabewert entspricht dem der Funktion mysql_query
+ *                queries, die abgearbeitet werden Mï¿½SSEN, um keinen Fehler in der DB zu erzeugen)
+ * @return RÃ¼ckgabewert entspricht dem der Funktion mysql_query
  */
-function do_mysql_query($string, $conn=null, $abort = true) {
+function do_mysqli_query($string, $conn=null, $abort = true) {
   global $HTTP_SERVER_VARS, $_GET, $_POST, $player;
+  $conn = $GLOBALS["con"];
 
   $get = $post = $pid = $scriptname = "NULL";
 
@@ -83,7 +89,7 @@ function do_mysql_query($string, $conn=null, $abort = true) {
       if ($get!="?") $get .= "&";
       $get .= $key."=".$value;
     }
-    $get = "'".mysql_escape_string($get)."'";
+    $get = "'".mysqli_escape_string($GLOBALS['con'], $get)."'";
   }
 
   if (sizeof($_POST)>0) {
@@ -92,7 +98,7 @@ function do_mysql_query($string, $conn=null, $abort = true) {
       if ($post != "?") $post .= "&";
       $post .= $key."=".$value;
     }
-    $post = "'".mysql_escape_string($post)."'";
+    $post = "'".mysqli_escape_string($GLOBALS['con'], $post)."'";
   }
 
   // Hm. Das hier ist noch problematisch...
@@ -101,39 +107,35 @@ function do_mysql_query($string, $conn=null, $abort = true) {
     $pid = $player->getID();
   }
 
-  // Speichern, welches Skript aufgerufen wurde. __FILE__ würde ja
-  // leider immer db.inc.php zurückliefern
+  // Speichern, welches Skript aufgerufen wurde. __FILE__ wï¿½rde ja
+  // leider immer db.inc.php zurÃ¼ckliefern
   $scriptname = $_SERVER['SCRIPT_FILENAME'];
 
   // AAAAlso. Ich stand eben hier davor und wusste nichtmehr was der Code macht :-)
   // so, mal kurz dokumentieren. Im Hintergrund schwallt Richi mal wieder wirres Zeug
-  // Die SQL Query ($string) wird ausgeführt. Falls das Result ($res) fehlerhaft ist,
+  // Die SQL Query ($string) wird ausgefÃ¼hrt. Falls das Result ($res) fehlerhaft ist,
   // dann wird der Fehler in der DB gespeichert. An dieser Stelle haben wir versucht,
-  // den gläsernen User gleich mitzuspeichern :-)
-  if($conn == NULL) {
-    $conn = $GLOBALS["con"];
-  } 
-  
-  if (! ($res = mysql_query($string, $conn)) ) {
+  // den glï¿½sernen User gleich mitzuspeichern :-)
+  if (! ($res = mysqli_query($conn, $string)) ) {
     ob_start();
     debug_print_backtrace();
     // jetzt wird der content ins log geschrieben.
     $trace = ob_get_contents();
     ob_end_clean();
     
-    $scripttrace = mysql_escape_string($scriptname."\n". $trace);
-    $sql = "INSERT INTO log_mysqlerr(qry,err,time,scriptname,referer, player, post_str, get_str) VALUES ('".mysql_escape_string($string)."',\n'".mysql_escape_string(mysql_error())."',\n".time().",\n'".$scripttrace."',\n'".mysql_escape_string($HTTP_SERVER_VARS['HTTP_REFERER'])."',\n $pid,\n $post,\n $get)";
+    $scripttrace = mysqli_escape_string($conn, $scriptname."\n". $trace);
+    $sql = "INSERT INTO log_mysqlerr(qry,err,time,scriptname,referer, player, post_str, get_str) VALUES ('".mysqli_escape_string($conn, $string)."',\n'".mysqli_escape_string($conn, mysqli_error($conn))."',\n".time().",\n'".$scripttrace."',\n'".mysqli_escape_string($conn, $HTTP_SERVER_VARS['HTTP_REFERER'])."',\n $pid,\n $post,\n $get)";
 
-    // Diese Query wird nun auf alle Fälle auf das Session-Objekt "con" ausgeführt,
-    // weil die Fehlermeldungen auf alle Fälle im Gameserver-Log landen sollen.
-    $res = mysql_query($sql, $GLOBALS["con"]);
+    // Diese Query wird nun auf alle FÃ¼lle auf das Session-Objekt "con" ausgefÃ¼hrt,
+    // weil die Fehlermeldungen auf alle FÃ¼lle im Gameserver-Log landen sollen.
+    $res = mysqli_query($conn, $sql);
 
     // Wenn das hier passiert dann is wohl was mti MySQL kaputt
     if (!$res) {
-      echo '<br>Ein SEHR schwerwiegender Fehler ist aufgetreten! Bitte sofort an die Admins wenden: <a href="admin@holy-wars2.de">admin@holy-wars2.de</a>:<br>'.mysql_error()."<br>";
+      echo '<br>Ein SEHR schwerwiegender Fehler ist aufgetreten! Bitte sofort an die Admins wenden: <a href="admin@holy-wars2.de">admin@holy-wars2.de</a>:<br>'.mysqli_error($conn)."<br>";
     }
 
-    $errid = mysql_insert_id();
+    $errid = mysqli_insert_id($conn);
 
     $errStr = (strtolower(get_class($player)) == "player" && $player->isAdmin() ? '<a href="adminlog.php">' : '<a href="mailto:admin@holy-wars2.de">') ."MYSQL:".$errid."</a>";
 

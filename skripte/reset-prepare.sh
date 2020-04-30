@@ -71,12 +71,12 @@ echo "SELECT count(*) FROM map"
 echo "SELECT count(*) FROM map" | mysql $DB
 echo
 echo "-- Standard .png files kopieren und umbenennen"
-echo "-- admintools/fillmapwithres.php ausführen!"
-echo "-- admintools/import.php ausführen!"
-echo "-- admintools/startpos.php ausführen!"
+echo "-- admintools/fillmapwithres.php ausfÃ¼hren!"
+echo "-- admintools/import.php ausfÃ¼hren!"
+echo "-- admintools/startpos.php ausfÃ¼hren!"
 
 echo
-echo "-- Alle gesperrten Spieler löschen"
+echo "-- Alle gesperrten Spieler lÃ¶schen"
 echo "--  DELETE FROM player WHERE status = 2 ;"
 echo
 echo "-- Tabelle player wird geupdated und auf Anfangswerte gesetzt"
@@ -89,21 +89,21 @@ echo "       holiday=0,nooblevel=5,lastres=unix_timestamp(),description=NULL ;"
 echo
 
 
-#echo "- Tabelle player manuell löschen, sobald alles okay."
+#echo "- Tabelle player manuell lÃ¶schen, sobald alles okay."
 #echo "   ID 1-3 sollten Adminaccounts sein (kroddn+morlock?)"
-#echo "   DELETE FROM player WHERE id > 3; -- alle löschen"
+#echo "   DELETE FROM player WHERE id > 3; -- alle lÃ¶schen"
 #echo "   ALTER TABLE player auto_increment = 4; -- Autoincrement resetten"
 
-echo "-- Adressbuch-Einträge löschen, die Spieler-bezogen sind"
+echo "-- Adressbuch-EintrÃ¤ge lÃ¶schen, die Spieler-bezogen sind"
 echo "  DELETE FROM addressbook WHERE player IS NOT NULL ;"
 echo
-echo "-- Logfiles löschen (Unterordner logs)"
-echo "-- Avatare löschen (Unterordner avatar)"
+echo "-- Logfiles lÃ¶schen (Unterordner logs)"
+echo "-- Avatare lÃ¶schen (Unterordner avatar)"
 echo "-- ClanForum resetten"
 echo "-- Services starten"
 echo "-- Turniere generieren"
 echo
 
-#echo "-- Tabelle bookings rüberkopieren"
+#echo "-- Tabelle bookings rï¿½berkopieren"
 #echo "-- MAX_PLAYER in includes/config.inc.php auf 0 setzen und Voranmeldungen aktivieren"
 

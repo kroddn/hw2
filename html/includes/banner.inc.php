@@ -58,12 +58,12 @@ else {
 
 
 /**
- * Erklärung:
+ * Erklï¿½rung:
  * show_banner(0) - Standartbanner
  * show_banner(1) - Skyscraper
  * show_banner(3) - PopUp
  * show_banner(2) - Halfsize Banner
- * show_banner(4) - Standardbanner für Startseite
+ * show_banner(4) - Standardbanner fÃ¼r Startseite
  **/
 function show_banner($bid, $force=false) {
   global $ad;
@@ -85,20 +85,9 @@ function show_banner($bid, $force=false) {
     }
     else {
       echo "<div valign='middle' width='478' height='100'>";
-      if ($timemod == 1 || $timemod == 5) {
+      /*if ($timemod == 1 || $timemod == 5) {
         include("includes/affilimatch.468.html");
-      }
-      else {
-        // Banner mit TKP Bezahlung
-          if ($bid == 4) { // bid4 = portal
-            //FIXME: Rausnehmen
-            include("ads/openinventory_486x60.php");
-        }
-        else {
-            //FIXME: Rausnehmen            
-            include("ads/openinventory_486x60.php");
-        }
-      }
+      }*/
       echo "</div>";
     }
     if (isset($_SESSION['player'])) {
@@ -117,8 +106,8 @@ function show_banner($bid, $force=false) {
 
 /**
  * Eigene Advertising Funktion. Damit keine Banner-Blocker aktiv werden
- * können wird diese Methode von der index.php aufgerufen zusammen mit
- * einem parameter $magic. Ist $magic auf den zufälligen Wert für ADS
+ * kÃ¶nnen wird diese Methode von der index.php aufgerufen zusammen mit
+ * einem parameter $magic. Ist $magic auf den zufï¿½lligen Wert fÃ¼r ADS
  * gesetzt, dann wird eine Werbeseite generiert, ansonsten wird ganz
  * normal die index.php weiterverarbeitet.
  */ 
@@ -127,9 +116,9 @@ function show_ads_page($magic) {
 <html><body style="margin:0px;  font-size: 11px; font-family: Arial,sans-serif;">
 <div style="width: 474; height:56; border: 2px solid white; ">
 <b>Sehen Sie an dieser Stelle normalerweise ein Werbe-Banner?</b><br>
-&nbsp;Wenn <b>ja</b>, dann ist das gut für Holy-Wars.<br>
+&nbsp;Wenn <b>ja</b>, dann ist das gut fÃ¼r Holy-Wars.<br>
 &nbsp;Wenn <b>nein</b>, dann boykottieren Sie (vielleicht unabsichtlich) die Weiterentwicklung von  Holy-Wars.<br>
-&nbsp;Für weiter Infos <a target="main" href="bannerblock.php">hier klicken</a>.
+&nbsp;FÃ¼r weiter Infos <a target="main" href="bannerblock.php">hier klicken</a>.
 </div>
 </body></html>
 <?

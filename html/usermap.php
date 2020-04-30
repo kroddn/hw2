@@ -35,11 +35,11 @@
  {
     start_page();
     start_body();
-    echo '<h1 class="error">Fehler: die Anzeige von Spielerdaten über deren ID wird aus Sicherheitsgründen nicht mehr unterstützt. Bitte melden Sie die Stelle, von wo aus dieser Aufruf stattgefunden hat, damit dieser Fehler behoben werden kann.</h1><p>';
+    echo '<h1 class="error">Fehler: die Anzeige von Spielerdaten Ã¼ber deren ID wird aus SicherheitsgrÃ¼nden nicht mehr unterstÃ¼tzt. Bitte melden Sie die Stelle, von wo aus dieser Aufruf stattgefunden hat, damit dieser Fehler behoben werden kann.</h1><p>';
     end_page();
  }
  else if(isset($_GET['name'])) {
-    $what = "WHERE player.name = '".mysql_escape_string($_GET['name'])."' OR player.id = ".$_SESSION['player']->id;
+    $what = "WHERE player.name = '".mysqli_escape_string($GLOBALS['con'], $_GET['name'])."' OR player.id = ".$_SESSION['player']->id;
     include_once("includes/worldmap.inc.php");
  }
  else {

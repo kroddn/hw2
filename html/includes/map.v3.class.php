@@ -69,7 +69,7 @@ class MapVersion3 {
   }
 
 
-  /* eagle 27.11.04: Gibt den Dateiname der entsprechenden Stadtgrafik zurück
+  /* eagle 27.11.04: Gibt den Dateiname der entsprechenden Stadtgrafik zurÃ¼ck
    * param:  Religion
    *         Einwohnerzahl
    * return: Dateiname der entsprechenden Stadtgrafik */
@@ -79,8 +79,8 @@ class MapVersion3 {
 
 
   /* eagle 27.11.04: Hilfsfunktion: gibt html Code mit Link zum Karteverschieben aus
-   *  param:  Richtung: left,right,up,down     für ganzen Sektor oder
-   *                    hleft,hright,hup,hdown für halben Sektor
+   *  param:  Richtung: left,right,up,down     fÃ¼r ganzen Sektor oder
+   *                    hleft,hright,hup,hdown fÃ¼r halben Sektor
    *  return: Ausgabestring mit Link zum verschieben der Karte, verwendet im Kontextmenue */
   function move_sektor($direction) {
     $tr_url  = array( 'left'    => '?moveleft=true',
@@ -107,7 +107,7 @@ class MapVersion3 {
 
 
   /**
-   * Ausgabe des HTML codes für den aktuellen Kartenausschnitt
+   * Ausgabe des HTML codes fÃ¼r den aktuellen Kartenausschnitt
    * 
    * @return unknown_type
    */
@@ -167,7 +167,7 @@ class MapVersion3 {
     $i = 1;
     $j = 1;
 
-    $fields = mysql_query( 'SELECT x, y, type, special, pic,'.
+    $fields = mysqli_query($GLOBALS['con'], 'SELECT x, y, type, special, pic,'.
 			   '       city.population as population,'.
 			   '       city.prosperity as prosperity,'.
 			   '       city.id as cityid,'.
@@ -189,8 +189,8 @@ class MapVersion3 {
 	  "\t".
 	  '<tr>'."\n" );
 
-    while ( $field = mysql_fetch_array($fields) ) {
-      // Wenn Grid an und Grasfläche dann Koordinaten ausgeben
+    while ( $field = mysqli_fetch_array($fields) ) {
+      // Wenn Grid an und Grasflï¿½che dann Koordinaten ausgeben
       if( $GLOBALS['gox'] == $field['x'] && $GLOBALS['goy'] == $field['y']){
         $kclass = "koord_hilight";
         $hilight = true;
@@ -226,7 +226,7 @@ class MapVersion3 {
           $field['x'].':'.$field['y'].
           '</a></span>';
       }
-      // Falls koordinaten gesucht wurden, einen weißen Rahmen um das Feld ziehen
+      // Falls koordinaten gesucht wurden, einen weiÃŸen Rahmen um das Feld ziehen
       else if ($hilight) {
         echo '<div style="position:absolute; border: 1px solid white; width: 40px; height: 40px; z-index:6; '.
           'top:'.(($j*40)-40).'; left:'.(($i*40)-40).
@@ -247,7 +247,7 @@ class MapVersion3 {
 
       // Stadt ausgeben
       if( $field['cityid'] > 0 ) {
-        // Roter Rahmen für aktuelle selektierte Stadt
+        // Roter Rahmen fÃ¼r aktuelle selektierte Stadt
         if ( $this->wantx == ($gox+$i-1) && $this->wanty == ($goy+$j-1) ) {
           $bordcol = "red";
         }
@@ -288,7 +288,7 @@ class MapVersion3 {
               $backColor = "green";
               break;
             case 3:
-              // Bündniss
+              // BÃ¼ndniss
               $backColor = "#6D9BFF";
               break;
             case 4:
@@ -314,10 +314,10 @@ class MapVersion3 {
 			'<a href=info.php?show=clan&id='.$field['clan'].'>Zur Ordensseite</a>' );
           }
           
-          // Spielernamen säubern
+          // Spielernamen sï¿½ubern
           $ownername = str_replace(" ", "%20", $field['ownername']);
           $ownerlink = 'Herrscher: <a class="hell" href="javascript:playerinfo(\''.urlencode($field['ownername']).'\')">'.$field['ownername'].'</a>';
-          // Spezielle konvertierung für den "Zurück" Button, der per JavaScript code HTML in ein div einfügt
+          // Spezielle konvertierung fÃ¼r den "ZurÃ¼ck" Button, der per JavaScript code HTML in ein div einfï¿½gt
           $js_ownerlink = htmlentities('Herrscher: <a class="hell" href="javascript:playerinfo(\\\''.urlencode($field['ownername']).'\\\')">'.$field['ownername'].'</a>', ENT_QUOTES);
         }
         
@@ -355,7 +355,7 @@ class MapVersion3 {
 	      'A'.
 	      '</div>'."\n" );
         
-        // Ordensinfo nur bei Spielern, herrenlose Städte nicht
+        // Ordensinfo nur bei Spielern, herrenlose StÃ¤dte nicht
         if($field['ownername']) {
           echo( '<div id="b'.$field['cityid'].'" style="cursor:pointer; border-top: 1px solid white;'.
 	           '     border-left: 1px solid white; position:absolute; background-color:#F0F0AA;'.
@@ -499,7 +499,7 @@ class MapVersion3 {
       $starty=-41;
     }
 
-    // Navigation große Karte
+    // Navigation groÃŸe Karte
     for ($j=0;$j<5;++$j) {
       for ($i=0;$i<5;++$i) {
         $mapstr .= ( '<area shape="rect" coords="'.
@@ -545,7 +545,7 @@ class MapVersion3 {
       }
     }
     
-    // Navigation große Karte
+    // Navigation groÃŸe Karte
     for ($j=0;$j<5;++$j) {
       for ($i=0;$i<5;++$i) {
         $map2str .= ( '<area shape="rect" coords="'.(42+$i*11).','.(42+$j*11).','.(53+$i*11).','.(53+$j*11).
@@ -640,11 +640,11 @@ class MapVersion3 {
 	
   // zentriert die Karte auf die Hauptstadt des angegebenen Spielers
   function centerOnCapital($ply) {
-    $res1=do_mysql_query("SELECT id FROM city WHERE capital=1 AND owner=".$this->activeplayer);
-    if (mysql_num_rows($res1)>0) {
-      $cityid=mysql_fetch_assoc($res1);
-      $res2=mysql_query("SELECT x, y FROM map WHERE id=".$cityid['id']) or die(mysql_error());
-      $mapxy=mysql_fetch_assoc($res2);
+    $res1=do_mysqli_query("SELECT id FROM city WHERE capital=1 AND owner=".$this->activeplayer);
+    if (mysqli_num_rows($res1)>0) {
+      $cityid=mysqli_fetch_assoc($res1);
+      $res2=mysqli_query($GLOBALS['con'], "SELECT x, y FROM map WHERE id=".$cityid['id']) or die(mysqli_error($GLOBALS['con']));
+      $mapxy=mysqli_fetch_assoc($res2);
       $this->actx=$mapxy['x'];
       $this->acty=$mapxy['y'];
     }
@@ -693,14 +693,14 @@ class MapVersion3 {
   }
 	
   function checkMapID($id) {
-    $res1 = do_mysql_query( 'SELECT map.id '.
+    $res1 = do_mysqli_query( 'SELECT map.id '.
 			 'FROM city,map '.
 			 'WHERE city.id=map.id AND map.x>='.($ax-4).' AND map.x<='.($ax+4).
 			 ' AND map.y>='.($ay-4).' AND map.y<='.($ay+4) );
-    $res2 = do_mysql_query( 'SELECT id '.
+    $res2 = do_mysqli_query( 'SELECT id '.
 			 'FROM map '.
 			 'WHERE x='.$ax.' AND y='.$ay." AND type='2'" );
-    if ( (mysql_num_rows($res1)>0) || (mysql_num_rows($res2)==0) ) {
+    if ( (mysqli_num_rows($res1)>0) || (mysqli_num_rows($res2)==0) ) {
       return false;
     } else {
       return true;

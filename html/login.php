@@ -22,10 +22,11 @@
     Former copyrights see below.
  **************************************************************************/
 
-
 $title = "Login";
 require_once("start_header.php");
 $login = true;
+
+// register_globals off migrated!
 
 ?>
 <tr>
@@ -74,11 +75,11 @@ function whatisseccode() {
 ?>
  </td>
 </tr>
-<? if ($loginerror) echo "<tr class=\"tblbody\" ><td height=\"30\" colspan=\"3\"><b><div class=\"error\">".$loginerror."</font></div></b></td></tr>"; ?>
+<? if ($_SESSION['loginerror']) echo "<tr class=\"tblbody\" ><td height=\"30\" colspan=\"3\"><b><div class=\"error\">".$_SESSION['loginerror']."</font></div></b></td></tr>"; ?>
 <tr class="tblbody">
   <td height="50"class="tblhead"><label for="loginname" style="font-weight:bold;">Login:</label></td>
   <td class="tblbody">
-    <input id="loginname" tabindex="1" type="text" name="loginname" <?if(isset($name)) echo 'value="'.$name.'"'; ?> >
+    <input id="loginname" tabindex="1" type="text" name="loginname" <?if(isset($_POST['loginname'])) echo 'value="'.$_POST['loginname'].'"'; ?> >
     <center><a href="register.php" style="font-size: 10px;">Anmelden/Registrieren</a></center>
   </td>
 <td rowspan="5" width="245">
@@ -163,9 +164,7 @@ print_you_know_table();
 <?
 }
 
-if($redirect==1) {
-  include("ads/openinventory_popup.php");
-}
+
 ?>
 
 </center>

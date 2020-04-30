@@ -33,14 +33,14 @@ function print_monuments ($gox, $goy) {
   $width  = 250;
   $height = 250;
 
-  $mons = do_mysql_query( 'SELECT * '.
+  $mons = do_mysqli_query( 'SELECT * '.
                           'FROM player_monument '.
                           'LEFT JOIN monument USING(m_id) '.
                           'LEFT JOIN player ON player.id = player_monument.player '.
                           'WHERE x >= '.$gox.' AND x <= '.($gox+39).' AND y >= '.$goy.' AND y <= '.($goy+39).' '.
                           'ORDER BY y,x');
     
-  while ( $mon = mysql_fetch_array($mons)) {
+  while ( $mon = mysqli_fetch_array($mons)) {
     echo '<div id="" style="position:absolute;left:'.($mon['x'] - $width/2).'; top:'.($mon['y']).'; z-index:400">';
     echo '<table border="0" width="'.$width.'" height="'.$height.'" background="'.$imagepath.'/monument/'.$mon['m_id'].'.gif">';
     echo '<tr><td width="65">&nbsp;</td><td width="125" align="center" valign="bottom"><font size="-1" color="grey" ><b>'.

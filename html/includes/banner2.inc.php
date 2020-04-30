@@ -4,7 +4,7 @@
 // "strength-and-honor-game.de"
 
 function printBanner($id = null, $height=60, $width=468) {
-  $magic = "magic22445";
+  /*$magic = "magic22445";
   $border = 1;
   
   echo "<div valign='middle' id='".$magic."' border='4' name='".$magic."'".
@@ -12,7 +12,8 @@ function printBanner($id = null, $height=60, $width=468) {
   
   echo "ADS IMPLEMENT ME";
   
-  echo "\n</div>\n";
+  echo "\n</div>\n";*/
+  echo "<div><p>Ich hoffe ihr habt spaß :) Ohne ads :D</p></div>";
 
 }
 

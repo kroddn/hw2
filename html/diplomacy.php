@@ -54,7 +54,7 @@ else if (isset($delbnd)) {
     $setrel_error = $diplomacy->changeRelation($friend, 1);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($peace)) {
@@ -62,7 +62,7 @@ else if (isset($peace)) {
     $setrel_error = $diplomacy->changeRelation($enemy, 1);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($accpeace)) {
@@ -70,7 +70,7 @@ else if (isset($accpeace)) {
     $setrel_error = $diplomacy->accReqRelation($neut);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($accbnd)) {
@@ -78,7 +78,7 @@ else if (isset($accbnd)) {
     $setrel_error = $diplomacy->accReqRelation($bnd);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($delpeace)) {
@@ -86,7 +86,7 @@ else if (isset($delpeace)) {
     $setrel_error = $diplomacy->delReqRelation($neut, 1);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($delreqbnd)) { 
@@ -94,7 +94,7 @@ else if (isset($delreqbnd)) {
     $setrel_error = $diplomacy->delReqRelation($bnd, 2);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($delownpeace)) {
@@ -102,7 +102,7 @@ else if (isset($delownpeace)) {
     $setrel_error = $diplomacy->delReqRelation($reqneut, -1);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 else if (isset($delownreqbnd)) {
@@ -110,7 +110,7 @@ else if (isset($delownreqbnd)) {
     $setrel_error = $diplomacy->delReqRelation($reqbnd, -2);
   }
   else {
-    $setrel_error = "Ihr habt keinen Spieler aus der Liste angewählt.";
+    $setrel_error = "Ihr habt keinen Spieler aus der Liste ausgewÃ¤hlt.";
   }
 }
 
@@ -132,7 +132,7 @@ if ($setrel_error != null) {
 <p>
 <img src="<? echo $imagepath;?>/windrose_klein.gif" onclick="minimap()";>
 <font color="#FF2020"><b>Neu: </b></font><a onclick="minimap(); return false;" href="diplomap.php">Diplomatie-Karte</a><br>
-Auf dieser Karte sehen Sie Freunde und Feinde im Überblick.
+Auf dieser Karte sehen Sie Freunde und Feinde im Ãœberblick.
 <p>
 <form action="<? echo $PHP_SELF; ?>" method="GET">
 <table>
@@ -145,7 +145,7 @@ Auf dieser Karte sehen Sie Freunde und Feinde im Überblick.
 <select size="5" name="enemy">
 <?php
 
-$res1 = do_mysql_query("(SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id1=player.id ".
+$res1 = do_mysqli_query("(SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id1=player.id ".
                        " WHERE relation.type=0 AND relation.id2=".$_SESSION['player']->getID().
                        ") UNION (".
                        "SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
@@ -153,18 +153,18 @@ $res1 = do_mysql_query("(SELECT player.name AS name FROM relation LEFT JOIN play
                        ") ORDER BY name"
                        );
 
-//$res2 = do_mysql_query("SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
+//$res2 = do_mysqli_query("SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
 //                       " WHERE relation.type=0 AND relation.id1=".$_SESSION['player']->getID());
 
-while ($data1 = mysql_fetch_assoc($res1))
+while ($data1 = mysqli_fetch_assoc($res1))
   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>\n";
-  //while ($data2 = mysql_fetch_assoc($res2))
+  //while ($data2 = mysqli_fetch_assoc($res2))
   //  echo '<option value="'.$data2['name'].'">'.$data2['name']."</option>";
 echo "</select>";
 echo "</td><td>";
 
 echo '<select size="5" name="friend">';
-$res1 = do_mysql_query("(SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id1=player.id ".
+$res1 = do_mysqli_query("(SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id1=player.id ".
                        " WHERE relation.type=2 AND relation.id2=".$_SESSION['player']->getID().
                        ") UNION (".
                        "SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
@@ -172,11 +172,11 @@ $res1 = do_mysql_query("(SELECT player.name AS name FROM relation LEFT JOIN play
                        ") ORDER BY name"
                        );
 
-//$res2 = do_mysql_query("SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
+//$res2 = do_mysqli_query("SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
 //" WHERE relation.type=2 AND relation.id1=".$_SESSION['player']->getID());
-while ($data1 = mysql_fetch_assoc($res1))
+while ($data1 = mysqli_fetch_assoc($res1))
   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>";
-//while ($data2 = mysql_fetch_assoc($res2))
+//while ($data2 = mysqli_fetch_assoc($res2))
 //  echo '<option value="'.$data2['name'].'">'.$data2['name']."</option>";
 echo "</select>";
 echo "</td></tr>";
@@ -187,13 +187,13 @@ echo '<tr></tr>';
 echo '<tr class="tblhead"><td>fremde Friedensangebote</td><td>fremde B&uuml;ndnisangebote</td>';
 echo '<tr class="tblbody"><td>';
 echo '<select size="5" name="neut">';
-$res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id1=player.id WHERE req_relation.type=1 AND req_relation.id2=".$_SESSION['player']->getID());
-while ($data3 = mysql_fetch_assoc($res3))
+$res3 = do_mysqli_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id1=player.id WHERE req_relation.type=1 AND req_relation.id2=".$_SESSION['player']->getID());
+while ($data3 = mysqli_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td><td>';
 echo '<select size="5" name="bnd">';
-$res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id1=player.id WHERE req_relation.type=2 AND req_relation.id2=".$_SESSION['player']->getID());
-while ($data3 = mysql_fetch_assoc($res3))
+$res3 = do_mysqli_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id1=player.id WHERE req_relation.type=2 AND req_relation.id2=".$_SESSION['player']->getID());
+while ($data3 = mysqli_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td></tr>';
 echo '<tr class="tblbody">';
@@ -205,13 +205,13 @@ echo '<td><input type="submit" name="delreqbnd" value=" B&uuml;ndnis ablehnen ">
 echo '<tr class="tblhead"><td>eigene Friedensangebote</td><td>eigene B&uuml;ndnisangebote</td>';
 echo '<tr class="tblbody"><td>';
 echo '<select size="5" name="reqneut">';
-$res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id2=player.id WHERE req_relation.type=1 AND req_relation.id1=".$_SESSION['player']->getID());
-while ($data3 = mysql_fetch_assoc($res3))
+$res3 = do_mysqli_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id2=player.id WHERE req_relation.type=1 AND req_relation.id1=".$_SESSION['player']->getID());
+while ($data3 = mysqli_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td><td>';
 echo '<select size="5" name="reqbnd">';
-$res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id2=player.id WHERE req_relation.type=2 AND req_relation.id1=".$_SESSION['player']->getID());
-while ($data3 = mysql_fetch_assoc($res3))
+$res3 = do_mysqli_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id2=player.id WHERE req_relation.type=2 AND req_relation.id1=".$_SESSION['player']->getID());
+while ($data3 = mysqli_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td></tr>';
 echo '<tr class="tblbody">';
@@ -219,7 +219,7 @@ echo '<td><input type="submit" name="delownpeace" value=" Frieden zur&uuml;ckzie
 echo '<td><input type="submit" name="delownreqbnd" value=" B&uuml;ndnis zur&uuml;ckziehen "></td></tr>';
 echo "</table></form>";
 echo "<br><table>";
-echo '<form action="'.$PHP_SELF.'" method="POST" '.($_SESSION['player']->getNoobLevel() > 0 ? ' onSubmit="if(this.type.value==0) return confirm(\'Wenn Sie Krieg erklären, dann verlieren sie Ihren Neulingsschutz!\')"' : '').'>';
+echo '<form action="'.$PHP_SELF.'" method="POST" '.($_SESSION['player']->getNoobLevel() > 0 ? ' onSubmit="if(this.type.value==0) return confirm(\'Wenn Sie Krieg erklï¿½ren, dann verlieren sie Ihren Neulingsschutz!\')"' : '').'>';
 echo '<tr class="tblhead"><td colspan="4">Neue diplomatische Beziehung</td></tr>';
 echo '<tr class="tblbody"><td>Spielername</td>';
 echo "<td><input type='text' name='playername' value='".$name."' NAOsize='12'></td>";
@@ -227,7 +227,7 @@ echo '<td><select name="type">';
 echo '<option value="2">B&uuml;ndnis</option>';
 echo '<option value="0">Krieg</option>';
 echo '<td><input type="submit" name="newRel" value=" Senden ">';
-if ($_SESSION['player']->getNoobLevel() > 0) echo '<tr class="tblhead"><td colspan="4">Durch eine Kriegserklärung verlieren Sie Ihren Neulingsschutz!</td></tr>';
+if ($_SESSION['player']->getNoobLevel() > 0) echo '<tr class="tblhead"><td colspan="4">Durch eine Kriegserklï¿½rung verlieren Sie Ihren Neulingsschutz!</td></tr>';
 echo "</select></td></tr>";
 
 ?>

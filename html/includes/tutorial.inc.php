@@ -55,7 +55,8 @@ function print_kakadu() {
     
     if($target_page['page']) {
       echo "\n<!-- Tutorial target: ".$target_page['page']." -->\n";
-      if (ereg($target_page['page'], $request_string)) {
+      $target_page_string = $target_page['page'];
+      if (preg_match("/$target_page_string/", $request_string)) {
         echo "\n<!-- Tutorial increase -->\n";
         $_SESSION['player']->tutorialInc($target_page['level']);
       }
@@ -67,7 +68,7 @@ function print_kakadu() {
     }
   }
   else {
-    echo "<!-- problem: ".mysql_error()." -->\n";
+    echo "<!-- problem: ".mysqli_error($GLOBALS['con'])." -->\n";
   }
 
   if (isset($popup)) return;
@@ -77,7 +78,7 @@ function print_kakadu() {
   Lvl.<? echo $_SESSION['player']->tutorialLevel();?>:<span name="sublevel" id="sublevel">0</span>
   </div>
   <div style="position:absolute; top:0; left: 225; width:35px; height:17px;  margin:0px; z-index:10;">
-<img onClick="rollinKakadu()" id="kakaduRollinImg" src="<? echo $imagepath; ?>/dialog_top.png" title="Kakadu einrollen"><img onClick="hideKakadu()" src="<? echo $imagepath; ?>/dialog_close.png" title="Kakadu wegschicken. Er erscheint dann auf der nächsten Seite wieder.">
+<img onClick="rollinKakadu()" id="kakaduRollinImg" src="<? echo $imagepath; ?>/dialog_top.png" title="Kakadu einrollen"><img onClick="hideKakadu()" src="<? echo $imagepath; ?>/dialog_close.png" title="Kakadu wegschicken. Er erscheint dann auf der nÃ¤chsten Seite wieder.">
   </div>
 
   <div name="kakaduframe" id="kakaduframe" style="visibility: hidden; position:absolute; top:0; left: 0; width:260px; height:260px;">
@@ -133,8 +134,8 @@ window.onmousemove  = executeOnmousemoveFunctions;
 
 function doDebug(param) {  
   for (i=0; i<debugFunctions.length; i++) {
-    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
-    // ein Befehlt enthält: sie ruft die im Array gespeicherte 
+    // Es wird eine Temporï¿½re Funktion erzeugt, die wiederum nur 
+    // ein Befehlt enthÃ¤lt: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("str", debugFunctions[i]+"(str)");
     tmp(param);                
@@ -143,8 +144,8 @@ function doDebug(param) {
 
 function executeOnmousedownFunctions(param) {
   for (i=0; i<onmousedownFunctions.length; i++) {
-    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
-    // ein Befehlt enthält: sie ruft die im Array gespeicherte 
+    // Es wird eine Temporï¿½re Funktion erzeugt, die wiederum nur 
+    // ein Befehlt enthÃ¤lt: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("ev", onmousedownFunctions[i]+"(ev)");
     tmp(param);
@@ -155,8 +156,8 @@ function executeOnmousedownFunctions(param) {
 
 function executeOnmouseupFunctions(param) {
   for (i=0; i<onmouseupFunctions.length; i++) {
-    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
-    // ein Befehlt enthält: sie ruft die im Array gespeicherte 
+    // Es wird eine Temporï¿½re Funktion erzeugt, die wiederum nur 
+    // ein Befehlt enthÃ¤lt: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("ev", onmouseupFunctions[i]+"(ev)");
     tmp(param);
@@ -166,8 +167,8 @@ function executeOnmouseupFunctions(param) {
 function executeOnmousemoveFunctions(param) {
   retFunc = true;
   for (i=0; i<onmousemoveFunctions.length; i++) {
-    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
-    // ein Befehlt enthält: sie ruft die im Array gespeicherte 
+    // Es wird eine Temporï¿½re Funktion erzeugt, die wiederum nur 
+    // ein Befehlt enthÃ¤lt: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("ev", onmousemoveFunctions[i]+"(ev)");
     ret = tmp(param);
@@ -316,7 +317,7 @@ function showKakadu() {
   document.getElementById("kakaduframe").style.visibility="visible";
 }
 
-// Anfangs ist das Teil natürlich eingerollt
+// Anfangs ist das Teil natï¿½rlich eingerollt
 var kakaduRolledIn;
 
 function rollinKakadu() {
@@ -406,17 +407,18 @@ function printTutorialTopics() {
     $found = false;
     while ($tut = $db->fetch_array($tut_res)) {
       $lasttut = $tut;
-      if (!$tut['page'] || ereg($tut['page'], $request_string)) {
+      $tut_string = $tut['page'];
+      if (!$tut['page'] || preg_match("/$tut_string/", $request_string)) {
         echo "topicStrings.push('&nbsp;".$tut['tut_text']."');\n";
         $found = true;
       }
     }
     if (!$found && $lasttut['page'] != null) {
-      echo "topicStrings.push('<br>Das Tutorial geht hier nicht weiter.\\n\\nDu mußt nun zu ".$lasttut['page'].", um weiterzumachen.');\n";
+      echo "topicStrings.push('<br>Das Tutorial geht hier nicht weiter.\\n\\nDu muï¿½t nun zu ".$lasttut['page'].", um weiterzumachen.');\n";
     }
   } 
   else if (!$tut['page']) {
-    echo "topicStrings.push('<br>Leider ist das Tutorial an dieser Stelle zuende. Solltest Du Vorschläge haben, wie man das Tutorial noch verbessern kann, dann kontaktiere uns doch! Kontaktinformationen kannst Du unter Nachrichten oder im Forum  finden.');\n";    
+    echo "topicStrings.push('<br>Leider ist das Tutorial an dieser Stelle zuende. Solltest Du Vorschlï¿½ge haben, wie man das Tutorial noch verbessern kann, dann kontaktiere uns doch! Kontaktinformationen kannst Du unter Nachrichten oder im Forum  finden.');\n";    
   }
 }
 

@@ -43,7 +43,6 @@ function start_page() {
  <![endif]-->
 
  <link rel="stylesheet" href="<? echo $GLOBALS['csspath']; ?>/hw.css?200912162" type="text/css">
- <link rel="stylesheet" href="<? echo $GLOBALS['layoutcsspath']; ?>/layout.css?20091204" type="text/css">
 </head>
 
 <script language="JavaScript" src="js/timer.js" type="text/javascript" ></script>
@@ -76,9 +75,9 @@ function start_body($banner = true) {
 } // start_body()
 
 /**
- * Seitenrumpf und Seite abschlieﬂen.
+ * Seitenrumpf und Seite abschlie√üen.
  *
- * Sorgt f¸r Einbindung der Tutorial-Themen.
+ * Sorgt f√ºr Einbindung der Tutorial-Themen.
  * 
  * @return unknown_type
  */
@@ -97,14 +96,14 @@ function redirect_to($href = null) {
 
   if ($href==null) {
     // Falls das redirekt vom index.php kommt dann portal zeigen. Ansonsten login.
-    if (strstr($PHP_SELF, "index.php")) {
-      $href = "portal.php?SELF=".$PHP_SELF;
+    if (strstr($_SERVER['PHP_SELF'], "index.php")) {
+      $href = "portal.php?SELF=".$_SERVER['PHP_SELF'];
       if(isset($_REQUEST['message'])) {
         $href .= "&message=".urlencode($_REQUEST['message']);
       }
     }
     else {
-      $href = "login.php?redirect=1&SELF=".$PHP_SELF."&error=".$error;
+      $href = "login.php?redirect=1&SELF=".$_SERVER['PHP_SELF']."&error=".$error;
     }
   }  
   

@@ -31,6 +31,7 @@
 ***************************************************/
 $GLOBALS['session.inc.php'] = true;
 
+include_once("register.globals.inc.php");
 require_once("includes/config.inc.php");
 require_once("includes/db.inc.php");
 require_once("includes/premium.inc.php");
@@ -41,10 +42,15 @@ require_once("includes/db.class.php");
 require_once("includes/banner.inc.php");
 include_once("includes/page.func.php");
 
-session_set_cookie_params (0); // Cookie nach Beenden des Browsers löschen
+session_set_cookie_params (0); // Cookie nach Beenden des Browsers lÃ¶schen
 session_start();
 
-// Bannerzähler hochsetzen
+if (isPlayerSet()) {
+  $player = $_SESSION['player'];
+}
+
+$click = new stdClass();
+// BannerzÃ¤hler hochsetzen
 if (isset($bannerplus)) {
   $ad->banner_id+=$bannerplus;
 }
@@ -69,12 +75,12 @@ if ( isset($banner) || isset($magic) && $ad->magic == $magic) {
 
 
 // FIXME: den kram dorthin, wo er gebraucht wird! Nicht jedesmal machen...
-// status = 3 bedeutet verdächtige Spieler, die aber nicht gesperrt sind.
-$res = do_mysql_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
+// status = 3 bedeutet verdÃ¤chtige Spieler, die aber nicht gesperrt sind.
+$res = do_mysqli_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
 
 // Ein Array mit den Anzahlen zusammenbauen
-$registered[0] = mysql_fetch_array($res);
-$registered[1] = mysql_fetch_array($res);
+$registered[0] = mysqli_fetch_array($res);
+$registered[1] = mysqli_fetch_array($res);
 
 // Die "Raten" erst ab mehr als 100 Spielern setzen
 if ($registered[0][0] + $registered[1][0] > 100) {
@@ -95,11 +101,11 @@ if($logout) {
   goto_login();
 }
 
-// Automatisch ausloggen wenn die Sessionzeit überschritten wurde
-if(isPlayerSet() && time() > $session_duration + $login_time) {
+// Automatisch ausloggen wenn die Sessionzeit Ã¼berschritten wurde
+if(isPlayerSet() && time() > $_SESSION['session_duration'] + $_SESSION['login_time']) {
   logout();
   session_destroy();
-  $GLOBALS['error'] = "session_duration_exceeded&limit=".$session_duration."&duration=".( time() -  $login_time);
+  $GLOBALS['error'] = "session_duration_exceeded&limit=".$_SESSION['session_duration']."&duration=".( time() -  $_SESSION['login_time']);
   goto_login();
 }
 
@@ -111,7 +117,7 @@ if(isset($_REQUEST['noclickcount'])) {
 }
 
 
-// Clickzählung, ausser bei Skripten mit dem entsprechenden Flag
+// ClickzÃ¤hlung, ausser bei Skripten mit dem entsprechenden Flag
 if (!$noclickcount) {
   $click->count++;
   $click->last = time();    
@@ -134,7 +140,7 @@ if(!$noclickcount && isPlayerSet()) {
 }
 
 
-// Alle 89 Clicks einen Hinweis fürs GP anzeigen
+// Alle 89 Clicks einen Hinweis fÃ¼rs GP anzeigen
 if(!$noclickcount && $click->count % 89 == 15 && !is_premium_no_click_hint() &&  ($hwathome != 1 || $player->getGFX_Path() == null) ) {
   if( !isset($_SESSION['first_login']) || !$_SESSION['first_login'] ) {
     include("grapa.php");
@@ -163,13 +169,18 @@ if(isset($GLOBALS['login']) || isset($GLOBALS['loginprocess']) || isset($GLOBALS
   
 }
 else if(!isset($_SESSION) || !isset($_SESSION['player']) ) {
-  $GLOBALS['error'] = "no_session";
+  if (!isset($_SESSION)) {
+    $GLOBALS['error'] = "no_session";
+  } else {
+    $GLOBALS['error'] = "no_player";
+  }
+  //$GLOBALS['error'] = "no_session";
   session_destroy();
   goto_login();
 }
 // Das hier geht klar, wenn der Spieler richtig eingeloggt ist.
 else if ( isPlayerSet() ) {
-  // Falls Grafikpack installiert ist, die Variablen überschreiben
+  // Falls Grafikpack installiert ist, die Variablen Ã¼berschreiben
   if( $player->getGFX_PATH() != null && $hwathome == 1) {    
     $_SESSION['imagepath'] = $player->getGFX_PATH();
   }

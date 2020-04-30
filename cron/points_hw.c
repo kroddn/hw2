@@ -45,7 +45,7 @@ void send_query(MYSQL *hw, const char *s, ...)
         va_start(args, s);
         vsprintf(dummy, s, args);
 
-//      mysql_escape_string(buf, dummy, strlen(dummy));
+//      mysqli_escape_string($GLOBALS['con'], buf, dummy, strlen(dummy));
 
         if((mysql_real_query(hw, dummy, strlen(dummy)+1)))
         {

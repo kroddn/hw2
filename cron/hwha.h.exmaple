@@ -1,0 +1,6 @@
+#define MYSQL_HOST "your_mysql_host"
+#define MYSQL_USER "your_mysql_user"
+#define MYSQL_PW "your_mysql_password"
+#define MYSQL_DATABASE "your_mysql_database"
+#define TICK 1
+

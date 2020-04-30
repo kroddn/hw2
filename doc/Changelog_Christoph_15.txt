@@ -1,0 +1,68 @@
+Old CHANGELOG: 
+TODO: Delete this if documentation is set
+
+/html ---> ALLE PHPs im Base Tree mit <?php geändert
+
+/html/includes/config.inc.php - Basic config
+- Define URL speed zu localhost
+- Image Pfad getauscht GFX_PATH images/ingame_speed zu images/ingame
+- Umbenennen config.inc.template.php zu config.inc.php
+- Speedbote und Advanced_TOP waren 2 mal definiert - 1 mal rausgelöscht.
+
+/html/includes/db.config.php - Hier tauscht man Tickzeiten Speed etc.
+- Umbenennen db.config.template.php zu db.config.php
+
+/html/conf/db.conf.php - Datenbankdaten ändern
+- Datenbankdaten geändert
+
+/html/includes/banner.inc.php
+- Ende der File fehlte das <?php
+
+/html/includes/page.func.php
+- Ende der File fehlte das <?php
+
+/html/includes/session.inc.php
+- // Clickzählung, ausser bei Skripten mit dem entsprechenden Flag fehlte:
+  $click = new stdClass();
+  wegen der neuen PHP version muss das dahin.
+- function goto_login() {
+  redirect_to("login.php"); -> header("login.php");
+  Falsche funktion in neuem PHP
+- Logout nicht definiert - jetzt definiert als False 
+- noclickcount nicht bewusst was ist - Alles mit noclickcount auskommentiert
+
+/html/index.php
+- Am ende fehlte ein <?php
+- Echo von adsmagic erstmal auskommentiert - was ist das?
+
+/html/register.php
+- <?php // playing_div(); ?> --> Auskommentiert - was ist das?
+
+/html/includes/db.inc.php
+- errstr auskommentiert
+
+/html/start_header.php
+- $PHP_SELF zu $_SERVER['PHP_SELF'] geändert
+- include zu includes
+
+/xampp/phpmyadmin/config.inc.php
+- $cfg['Servers'][$i]['auth_type'] = 'config';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+
+
+register2.php
+/ Uncomment weil SQL-File nicht existiert
+		//$del =do_mysql_query("SELECT FROM_UNIXTIME( 28800 + deltime - deltime%28800 +".$del_lock_time.") FROM log_player_deleted ".
+        //                             " WHERE login LIKE '".trim($name)."' AND deltime + ".$del_lock_time." > UNIX_TIMESTAMP()");
+		
+		
+choose_name
+   Angemeldet: <?php if($registered[0][0] < 1) echo "0"; else echo $registered[0][0]; echo " Christen und "; if($registered[1][0] < 1) echo "0"; else echo $registered[0][0]; echo " Moslems. <b>Wählt ".($registered[0][0] >= $registered[1][0] ? "Islam" : "Christentum").",</b> um das Gleichgewicht zu wahren."; ?>
+	wenn kein moslem angemeldet war wurde es nicht angezeigt!
+		
+		
+		
+SQL DATEIEN:::::
+register2.php - table log_player_deleted fehlt
+login.php - sid fehlt --> ALTER TABLE `log_login` ADD `sid` INT NOT NULL AFTER `id`;
+          - Unknown column 'markdelete' in 'field list' --> ALTER TABLE `player` ADD `markdelete` INT NOT NULL ;

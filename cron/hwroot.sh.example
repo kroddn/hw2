@@ -1,0 +1,3 @@
+# Your Path containing all HW files (cron, maps html ...)
+HWROOT=/var/www/html
+REMOTE_ROOT=0

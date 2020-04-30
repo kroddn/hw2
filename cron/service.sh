@@ -68,8 +68,8 @@ else
     NICE=""
 fi
 
-
-$NICE /usr/bin/php -c /etc/php4/apache2/ \
+# TODO: This has to be done via some kind of config
+$NICE /usr/local/bin/php -c /usr/local/etc/php/conf.d/ \
     $HWROOT/html/includes/service.inc.php >>$LOG &
 
 echo "Service '$HWROOT/html/includes/service.inc.php' gestartet"

@@ -29,7 +29,7 @@ extern void do_log(const char *msg, ...);
 */
 
 
-/* gebäudeupdates */
+/* gebï¿½udeupdates */
 void completeBuidings(void)
 {        
   static MYSQL hahw, hahw2;
@@ -38,7 +38,7 @@ void completeBuidings(void)
   con(&hahw);
   char tmp[8192];
       
-  /* alle Aufträge auswählen, die fertig sind */
+  /* alle AuftrÃ¤ge auswï¿½hlen, die fertig sind */
   send_query(&hahw, "SELECT "
              " building.name, city.name, citybuilding_ordered.time, owner, "
              " building, bid, city.id, type, typelevel, count, makescapital "
@@ -56,7 +56,7 @@ void completeBuidings(void)
       const char* moreText = "";
 
       con(&hahw2);
-      /* Auftrag öäschen, row[5] = bid */
+      /* Auftrag lÃ¶schen, row[5] = bid */
       send_query(&hahw2, "DELETE FROM citybuilding_ordered WHERE bid=%s", row[5]);
                 
       /* Wenn das Gebaeude ein Hauptstadtgebaeude war, dann alle 
@@ -64,12 +64,12 @@ void completeBuidings(void)
       if ( row[10] && atoi(row[10]) ) 
         {
 #ifdef DEBUG
-          do_log("Gebäude führt zu Hauptstadt. Lösche übrige Gebäude.");
+          do_log("GebÃ¤ude fÃ¼hrt zu Hauptstadt. Lï¿½sche ï¿½brige GebÃ¤ude.");
 #endif
           send_query(&hahw2, "UPDATE city SET capital = 0 WHERE owner = %s", row[3]);
           send_query(&hahw2, "UPDATE city SET capital = 1 WHERE id = %s", row[6]);
 
-          // Alle anderen Hauptstadtgebäude abreisen
+          // Alle anderen Hauptstadtgebï¿½ude abreisen
           send_query(&hahw2, "DELETE FROM citybuilding WHERE city IN "
                      "(SELECT id FROM city WHERE owner=%s AND id <> %s) "
                      "AND building IN "
@@ -80,16 +80,16 @@ void completeBuidings(void)
                      "AND building IN "
                      "(SELECT id FROM building WHERE makescapital=1)", row[3], row[6]);
           
-          moreText="\nSire, die Stadt wurde zu Eurer Hauptstadt. Beschützt Sie gut.";
+          moreText="\nSire, die Stadt wurde zu Eurer Hauptstadt. Beschï¿½tzt Sie gut.";
         }
 
 
-      /* Prüfen ob das Gebäude ein anderes ersetzen muss (ist der Fall wenn der Typlevel größer als 1 is */
+      /* Prï¿½fen ob das GebÃ¤ude ein anderes ersetzen muss (ist der Fall wenn der Typlevel grÃ¶ÃŸerer als 1 is */
       if (row[8] && atoi(row[8])>1)
         {       
           send_query(&hahw2, "SELECT building, count FROM citybuilding, building WHERE citybuilding.building=building.id AND city=%s AND type=%s AND typelevel=%d", row[6], row[7], atoi(row[8])-1);
 
-          /* falls ja, nachschauen ob man alle (Anzahl!) Gebäude des Vorlevels ersetzen muss oder nicht */
+          /* falls ja, nachschauen ob man alle (Anzahl!) GebÃ¤ude des Vorlevels ersetzen muss oder nicht */
           if(!(res2 = mysql_store_result(&hahw2)))
             {
 #ifdef DEBUG
@@ -106,8 +106,8 @@ void completeBuidings(void)
 	      }
 	    else 
 	      {
-		/* Wenn die Anzahl der bestehenden Gebäude größer ist als Ersetzungsanzahl... 
-		 * dann die bestehenden Gebäude updaten 
+		/* Wenn die Anzahl der bestehenden GebÃ¤ude grÃ¶ÃŸerer ist als Ersetzungsanzahl... 
+		 * dann die bestehenden GebÃ¤ude updaten 
 		 */
 		if (row2[1] && row[9] && atoi(row2[1])>atoi(row[9]))
 		  {
@@ -123,7 +123,7 @@ void completeBuidings(void)
 	  }
         }
 
-      /* Prüfen ob schon diese Art Gebäude existieren... */
+      /* Prï¿½fen ob schon diese Art GebÃ¤ude existieren... */
       send_query(&hahw2, "SELECT count FROM citybuilding WHERE building=%s AND city=%s", row[4], row[6]);
 
 
@@ -149,19 +149,19 @@ void completeBuidings(void)
         }
       
 
-      /* wenn die Stadt jemanden gehört */
+      /* wenn die Stadt jemanden gehï¿½rt */
       if(row[3]!=NULL)
         {
           if (atoi(row[9])>1) {
             send_query(&hahw2, 
                        "INSERT INTO message (sender,recipient,date,header,body,category) "
-                       "VALUES ('SERVER',%s,%s,'Fertigstellung: %s (%s)','Neue Gebäude wurde in %s fertiggestellt:\n\n<b>%s</b>\nAnzahl: %s\n%s',3)",
+                       "VALUES ('SERVER',%s,%s,'Fertigstellung: %s (%s)','Neue GebÃ¤ude wurde in %s fertiggestellt:\n\n<b>%s</b>\nAnzahl: %s\n%s',3)",
                        row[3], row[2], row[0], row[9], row[1], row[0], row[9], moreText);
           }
           else {
             send_query(&hahw2, 
                        "INSERT INTO message (sender,recipient,date,header,body,category) "
-                       "VALUES ('SERVER',%s,%s,'Fertigstellung: %s','Ein Gebäude wurde in %s fertiggestellt:\n\n<b>%s</b>\n%s',3)",
+                       "VALUES ('SERVER',%s,%s,'Fertigstellung: %s','Ein GebÃ¤ude wurde in %s fertiggestellt:\n\n<b>%s</b>\n%s',3)",
                        row[3], row[2], row[0], row[1], row[0], moreText);
 
           }
@@ -189,7 +189,7 @@ void completeResearches(void) {
 
   con(&hwha);
 
-  /* Alle Forschungen auswählen die fertig sind */
+  /* Alle Forschungen auswï¿½hlen die fertig sind */
 
   send_query(&hwha, "SELECT researching.player, researching.rid, researching.endtime, research.name, research.id, research.category, player.nooblevel, player.recruiter FROM researching LEFT JOIN research ON research.id=researching.rid LEFT JOIN player ON player.id = researching.player WHERE researching.endtime<= UNIX_TIMESTAMP() ORDER BY endtime");
 
@@ -198,7 +198,7 @@ void completeResearches(void) {
   while ((row = mysql_fetch_row(res)))
     {
       con(&hwha2);
-      /* Auftrag löschen row[1] = rid */
+      /* Auftrag lÃ¶schen row[1] = rid */
       //sprintf(logstring, "Forschung %s mit rid %s von Spieler %s ist fertig", row[3], row[1], row[0]);
       //do_log(logstring);
       //send_query(&hwha2, "DELETE FROM researching WHERE player=%s", row[0]);
@@ -210,7 +210,7 @@ void completeResearches(void) {
       // Set nooblevel to 0 if player finished verwaltung
       if ( atoi(row[5]) == 0 && atoi(row[6]) > 0 && atoi(row[1]) != 1 ) {
         do_log("Noobschutz weg");
-        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'Neulingsschutz abgelaufen', 'Durch die Erforschung von %s wurde Euer Neulingsschutz aufgehoben. Ihr seid nun der willkürlichen Gewalt der anderen Spieler ausgeliefert.\n\nIhr solltet als nächstes für die Verteidigung Eurer Städte sorgen, indem Ihr mehrere Kasernen in Euren Städten errichtet und Truppen aushebt!',4)", row[0], row[2], row[3]);
+        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'Neulingsschutz abgelaufen', 'Durch die Erforschung von %s wurde Euer Neulingsschutz aufgehoben. Ihr seid nun der willkï¿½rlichen Gewalt der anderen Spieler ausgeliefert.\n\nIhr solltet als nÃ¤chstes fÃ¼r die Verteidigung Eurer StÃ¤dte sorgen, indem Ihr mehrere Kasernen in Euren StÃ¤dten errichtet und Truppen aushebt!',4)", row[0], row[2], row[3]);
 
         send_query(&hwha2, "UPDATE player SET cc_messages=1, nooblevel=0 WHERE id=%s", row[0]);
       }
@@ -231,7 +231,7 @@ void completeResearches(void) {
       if(rid == 80 || rid == 81 || rid == 93) {
         do_log("Forschung %s fertig, Recruiter %s bekommt Bonuspunkte\n", row[1], row[7]);
         send_query(&hwha2, "UPDATE player SET cc_messages=1, cc_resources=1, bonuspoints = bonuspoints + %d WHERE id=%s", bonuspoints, row[7]);                  
-        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'%d Bonuspunkte', 'Ihr habt %d Bonuspunkte bekommen, weil ein geworbener Spieler eine höhere Entwicklungsstufe erreicht hat.', 3)", row[7], row[2], bonuspoints, bonuspoints);
+        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'%d Bonuspunkte', 'Ihr habt %d Bonuspunkte bekommen, weil ein geworbener Spieler eine hï¿½here Entwicklungsstufe erreicht hat.', 3)", row[7], row[2], bonuspoints, bonuspoints);
         do_log("Done\n");
       }
 

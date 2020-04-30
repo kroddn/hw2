@@ -1,6 +1,7 @@
 C      =gcc
 
-LIBS    = -I/usr/include/mysql -L/usr/lib -lmysqlclient
+# Use library depending on configuration
+LIBS    = -I/usr/include/mysql $(mysql_config --libs) -lmysqlclient
 
 all:
 	$(CC) -Wall -O2 -o hwha_dev hwha.c misc.c functions.c  $(LIBS)

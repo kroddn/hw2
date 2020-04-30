@@ -26,13 +26,13 @@
 /**
  * delete_old.php
  *
- * Inaktive Spieler löschen. Spieler im Urlaubsmodus werden
- * selbstverständlich ausgelassen.
+ * Inaktive Spieler lÃ¶schen. Spieler im Urlaubsmodus werden
+ * selbstverstÃ¤ndlich ausgelassen.
  *
  * 15. Mar 2006 written by Markus Sinner <kroddn@holy-wars2.de>
  */
 if(!file_exists("includes/db.inc.php")) {
-  echo "Wechseln Sie vor ausführung in das HTML-Verzeichnis\n";
+  echo "Wechseln Sie vor ausfÃ¼hrung in das HTML-Verzeichnis\n";
   echo "einer HW2-Installation!\n";
   die();
 }
@@ -66,10 +66,10 @@ else {
   echo "holiday tolerance: ".($holiday_tolerance/(24*3600))."\n";
 }
 
-echo "\nStarte. Lösche inaktive (länger als ".round($max_inactive/(3600*24), 2)." Tage)\n\n";
+echo "\nStarte. Lï¿½sche inaktive (lï¿½nger als ".round($max_inactive/(3600*24), 2)." Tage)\n\n";
 
-// Zunächst die ganz alten Spieler löschen
-$players = do_mysql_query(
+// ZunÃ¤chst die ganz alten Spieler lÃ¶schen
+$players = do_mysqli_query(
 "SELECT *,unix_timestamp()-lastseen AS inactive
  FROM player
  WHERE (
@@ -83,7 +83,7 @@ $players = do_mysql_query(
  ORDER BY lastseen");
 
 $deleted=0;
-while($p = mysql_fetch_assoc($players)) {
+while($p = mysqli_fetch_assoc($players)) {
   if(deleteResult($p)) {
     $deleted++;
   }
@@ -91,34 +91,34 @@ while($p = mysql_fetch_assoc($players)) {
 
 
 
-echo "\nInsgesamt gelöscht: $deleted\n";
+echo "\nInsgesamt gelÃ¶scht: $deleted\n";
 
 
 /**
- * Lösche Spieler wirklich jetzt.
+ * Lï¿½sche Spieler wirklich jetzt.
  * 
- * @param $p  Assoziativer Array, wie er von mysql_fetch_assoc kommt
+ * @param $p  Assoziativer Array, wie er von mysqli_fetch_assoc kommt
  * @return unknown_type
  */
 function deleteResult($p) {
   global $max_inactive;
   
   if($p['markdelete'] > 0) {
-    echo "Player '".$p['name']." [".$p['login']."]" ."' zum Löschen markiert ".date("d.m.y H:i", $p['markdelete'])."\n";
+    echo "Player '".$p['name']." [".$p['login']."]" ."' zum Lï¿½schen markiert ".date("d.m.y H:i", $p['markdelete'])."\n";
     RemovePlayerAbandoneCities($p['id']);
     return true;
   }
   else {
     echo "Player '".$p['name']." [".$p['login']."]"."' inaktiv ".round($p['inactive'] / (3600*24), 2)." Tagen\n";
-    $login = do_mysql_query("SELECT *,from_unixtime(time) AS zeit, unix_timestamp()-time AS inactive ".
+    $login = do_mysqli_query("SELECT *,from_unixtime(time) AS zeit, unix_timestamp()-time AS inactive ".
                           " FROM log_login ".
                           " WHERE id = ".$p['id']." AND inputpw = dbpw AND inputseccode = dbseccode".
                           " ORDER BY time DESC LIMIT 1");
-    if(mysql_num_rows($login) > 0) {
-      $l = mysql_fetch_assoc($login);
+    if(mysqli_num_rows($login) > 0) {
+      $l = mysqli_fetch_assoc($login);
       echo " LastLogin Versuch: ".$l['zeit']." (".round($l['inactive'] / (3600*24), 2)." Tage)\n";
       if ($l['inactive'] > $max_inactive) {
-        echo " lösche ".$p['id']." - ".$p['name']." jetzt\n";
+        echo " lÃ¶sche ".$p['id']." - ".$p['name']." jetzt\n";
         if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) {
           RemovePlayerAbandoneCities($p['id']);
         }
@@ -130,7 +130,7 @@ function deleteResult($p) {
     }
     else {
       echo " Bisher nie eingeloggt.\n";
-      echo " lösche ".$p['id']." - ".$p['login']." jetzt\n";
+      echo " lÃ¶sche ".$p['id']." - ".$p['login']." jetzt\n";
       if(defined("ABANDONE_CITIES") && ABANDONE_CITIES) {
         RemovePlayerAbandoneCities($p['id']);
       }

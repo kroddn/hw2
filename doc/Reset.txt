@@ -1,0 +1,39 @@
+TODO: Delete this if documentation is done
+Reset
+=====
+
+Zunächst "hwha" und "service" der Runde beenden, sofern nicht bereits
+automatisch geschehen.
+
+Backup durchführen
+==================
+Benennung der Backup-Tabelle in der Art: _hw2_speed_b4_20081230
+Achtung: Anlegen der Backuptabelle in "Kollation" latin1_german2_ci
+Dann kopieren (Beispiel):
+mysqldump hw2_speed |mysql _hw2_speed_b4_20081230
+
+Rundenzeiten
+============
+Fixer Rundenstart und fixes Rundenende sind über Einträge 
+"" respektive "" in der Tabelle config der jeweiligen Runde möglich.
+Gerade bei Speed werden diese immer benutzt.
+Normalerweise sind in Speed diese Inhalte bereits gesetzt, so dass
+man mit zwei/drei Updatebefehlen hinkommt:
+
+ update `config` set value=unix_timestamp('2009-11-28 13:15') 
+        WHERE name = 'starttime';
+ update `config` set value=unix_timestamp('2009-12-24 12:00') 
+        WHERE name = 'endtime';
+ update `config` set value='Speed 77' WHERE name = 'roundname';
+
+Der cronjob "hwha" sowie der "service.php" beenden sich nun automatisch,
+wenn ein fixes Rundenende eingestellt wurde. Ebenso startet der cron erst
+dann, wenn eine "starttime" in der Zukunft angelegt wurde.
+Diese beiden also nun starten ;-)
+Beispiel (NICHT als root ausführen!):
+ cd /home/hw2_speed/cron
+ ./hwha_speed
+ sudo ./service.sh
+
+Danach im Adminmenü unter "Wartung" den Reset durchführen.
+WICHTIG: Die Schritte, die dort aufgelistet sind, ebenfalls ausführen.

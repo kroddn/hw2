@@ -1,0 +1,12 @@
+TODO: Delete this if documentation is done
+
+add values to config for start round
+
+name=starttime, value=unix_timestamp('2015-06-10 01:00')
+name=endtime, value=unix_timestamp('2015-06-10 19:00')
+
+hwha_dev has to run
+service.sh has to run
+
+# Datenbank:
+set charset utf8;

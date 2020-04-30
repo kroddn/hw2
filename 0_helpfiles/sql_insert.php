@@ -35,9 +35,9 @@ $mysql_password = '';
 $mysql_database = 'hw2';
 
 // Connect to MySQL server
-mysql_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysql_error());
+mysqli_connect($mysql_host, $mysql_username, $mysql_password) or die('Error connecting to MySQL server: ' . mysqli_error($GLOBALS['con']));
 // Select database
-mysql_select_db($mysql_database) or die('Error selecting MySQL database: ' . mysql_error());
+mysqli_select_db($mysql_database) or die('Error selecting MySQL database: ' . mysqli_error($GLOBALS['con']));
 
 // Zähler von einzulesenen Files
 $fileDataCount = 0;
@@ -71,7 +71,7 @@ foreach ($fileData as $filename)
 		if (substr(trim($line), -1, 1) == ';')
 		{
 			// Abfrage ausführen
-			mysql_query($templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysql_error() . '<br /><br />');
+			mysqli_query($GLOBALS['con']$templine) or print('Error performing query \'<strong>' . $templine . '\': ' . mysqli_error($GLOBALS['con']) . '<br /><br />');
 			// Temporäre Variable zurücksetzen
 			$templine = '';
 		}

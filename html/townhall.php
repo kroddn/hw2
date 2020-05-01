@@ -210,7 +210,7 @@ $maySettle = false;
     echo "\n<tr><td colspan='2' class='tblbody' style='font-size: 9px; padding-left: 10px; '>Siedler verbrauchen <b>Nahrung</b>, genauso wie Bürger.<br>Bei Nahrungsmangel sterben erst Bürger und dann Siedler</td></tr>";
     echo "<tr><td colspan='2' class='tblhead'><b>Begleitschutz</b></td></tr>";
     $guards=$_SESSION['cities']->getCityUnits();
-    if (sizeof($guards)==0) {
+    if (!$guards || sizeof($guards)==0) {
       echo "<tr><td colspan='2' class='tblbody'>(kein Begleitschutz möglich)</td></tr>";
     }
     else {

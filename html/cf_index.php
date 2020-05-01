@@ -38,7 +38,7 @@ function checkRegistered($id) {
     $query="INSERT INTO clanf_users ".
            " (user_id,user_active,username,user_password,user_level,user_timezone,user_lang,user_dateformat,user_allowbbcode,user_allowsmile) ".
            " VALUES ('".$_SESSION['player']->id."','1','".$_SESSION['player']->name."','".$data2['password']."','0','0:00','0','d M Y h:i a','1','1')";
-    $res3=mysqli_query($GLOBALS['con']$query);
+    $res3=mysqli_query($GLOBALS['con'], $query);
   }
   else {
     // Ordensleiter

@@ -66,7 +66,7 @@ $sql = sprintf("INSERT INTO global.hw2banneraccess (time, banner, ip, referer, r
                mysqli_escape_string($GLOBALS['con'], $request)
              );
 
-@mysqli_query($GLOBALS['con']$sql);
+@mysqli_query($GLOBALS['con'], $sql);
 */               
 
 die();

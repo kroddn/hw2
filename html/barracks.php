@@ -270,10 +270,9 @@ echo "<p>";
 echo "<table id=\"tbl3\" width=\"550\" cellspacing='1' cellpadding='0' border='0' style=\"display:none; margin-top:10px;\">";
 echo "<tr><td class='tblhead' colspan='4'><b>Laufende Ausbildung in ".$_SESSION['cities']->activecityname.":</a></b></td></tr>";
 $ir=$_SESSION['cities']->getInRecruit();
-if (sizeof($ir)==0) {
+if (!$ir || sizeof($ir)==0) {
 	echo "<tr><td class='tblbody' colspan='4'>es werden derzeit keine Truppen ausgebildet</td></tr>";
-}
-else {
+} else {
   for($i=0;$i<sizeof($ir);++$i) {
     $remaining=$ir[$i]['time']-time();
     echo "<tr>";

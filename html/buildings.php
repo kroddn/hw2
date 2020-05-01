@@ -328,31 +328,31 @@ echo "<table cellspacing='1' cellpadding='0' border='0'>";
 echo "<tr><td width='300' class='tblhead' colspan='4'><b>Aktuelle Bauten in ".$_SESSION['cities']->activecityname.":</a></b></td></tr>";
 
 $ib=$_SESSION['cities']->getInBuild();
+$no_tasks = true;
 
-if (sizeof($ib)==0) {
+if (!$ib || sizeof($ib)==0) {
 
   echo "<tr><td class='tblbody' width='300'>es existieren derzeit keine Aufträge</td></tr>";
 
+} else {
+  for($i=0;$i<sizeof($ib);++$i) {
+
+    $remaining=$ib[$i]['time']-time();
+  
+    echo "<tr>";
+  
+    echo "<td class='tblbody' width='15' align='center'>".$ib[$i]['count']."</td>";
+  
+    echo "<td class='tblbody' width='175'>".$ib[$i]['name']."</td>";
+  
+    echo "<td class='tblbody' width='40' align='center'><span class='noerror' id='".$ib[$i]['bid']."'><script type=\"text/javascript\">addTimer(".$remaining.",".$ib[$i]['bid'].");</script></span></td>";
+  
+    echo "<td class='tblbody' width='70' align='center'><a target='main' href='buildings.php?stop=".$ib[$i]['bid']."'><b class='error'>abbrechen</b></a></td>";
+  
+    echo "</tr>";
+  
+  }
 }
-
-for($i=0;$i<sizeof($ib);++$i) {
-
-  $remaining=$ib[$i]['time']-time();
-
-  echo "<tr>";
-
-  echo "<td class='tblbody' width='15' align='center'>".$ib[$i]['count']."</td>";
-
-  echo "<td class='tblbody' width='175'>".$ib[$i]['name']."</td>";
-
-  echo "<td class='tblbody' width='40' align='center'><span class='noerror' id='".$ib[$i]['bid']."'><script type=\"text/javascript\">addTimer(".$remaining.",".$ib[$i]['bid'].");</script></span></td>";
-
-  echo "<td class='tblbody' width='70' align='center'><a target='main' href='buildings.php?stop=".$ib[$i]['bid']."'><b class='error'>abbrechen</b></a></td>";
-
-  echo "</tr>";
-
-}
-
 
 
 echo "</table>";

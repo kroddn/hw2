@@ -92,7 +92,7 @@ function arrivalSettle($end, $start, $endtime, $aid, $missiondata, $religion, $o
     do_mysqli_query("DELETE FROM army WHERE aid=".$aid);
     
 
-    // Armeedaten löschen und Bewachung hinzuf�gen
+    // Armeedaten löschen und Bewachung hinzufügen
     $res4 = do_mysqli_query("SELECT unit, count FROM armyunit WHERE armyunit.aid=".$aid);
     while ($data4 = mysqli_fetch_assoc($res4)) {
       do_mysqli_query("INSERT INTO cityunit (city, unit, count, owner) VAluES (".$end.", ".$data4['unit'].", ".$data4['count'].", ".$owner.")");
@@ -106,7 +106,7 @@ function arrivalSettle($end, $start, $endtime, $aid, $missiondata, $religion, $o
     do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$end.",1,1)");
     
     // Nachricht schreiben
-    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.",".$endtime.",'Gr�ndung: ".$newname."','Ein neue Siedlung wurde auf Euer Geheiß hin gegründet. ".$missiondata." Seelen sind in dieser neuen Siedlung beheimatet.',3)");
+    do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$owner.",".$endtime.",'Gründung: ".$newname."','Ein neue Siedlung wurde auf Euer Geheiß hin gegründet. ".$missiondata." Seelen sind in dieser neuen Siedlung beheimatet.',3)");
     // cc_towns aktualisieren
     do_mysqli_query("UPDATE player SET cc_towns=1,cc_messages=1 WHERE id=".$owner);
   }
@@ -128,7 +128,7 @@ function arrivalMove($end, $owner, $endtime, $missiondata, $aid, $missionstr) {
 
   //falls ein siedlertrupp zurückkommt, dann ew wieder erhöhen
   if ($missiondata != NULL) {
-    // Missionskosten werden NICHT erstattet, die Bev�lkerung aber schon
+    // Missionskosten werden NICHT erstattet, die Bevölkerung aber schon
     do_mysqli_query("UPDATE city SET population=population+".$missiondata." WHERE id=".$end);
   }
   $res2 = do_mysqli_query("SELECT unit, count FROM cityunit WHERE city=".$end." AND owner=".$owner);
@@ -185,7 +185,7 @@ function remove_settler($city_id) {
 
 /**
  * Testet, ob Siedlertrupps unterwegs sind, und behandelt sie entsprechend -> siehe Kommentare
- * Ausl�ser ist Eroberung oder Brandschatzung.
+ * Auslöser ist Eroberung oder Brandschatzung.
  * TODO @Morlock: Dokumentieren
  */
 function check_settler($city_id) {
@@ -216,7 +216,7 @@ function check_settler($city_id) {
 
 
 /**
- * F�hre den Stadtangriff durch
+ * Führe den Stadtangriff durch
  * 
  * @param $defenders  Array der Stadtverteidiger. Die ID des Stadtbesitzers ist da immer
  *                    mit drin
@@ -344,8 +344,8 @@ function attMSG($end, $endtime, $attowner, $defenders, $defowner, $erg, $attstr,
   }
 
   if ($playerkilled == true) {
-    $message['attacker'] .= "\n\n[b]Sie haben die letzte Stadt des Spielers ".$playerName." zerstört. Seine Streitkr�fte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...[/b]";
-    $message['defender'] .= "\n\n[b]Sire, welch Ungl�ck! Unsere letzte Stadt wurde zerstört! Eure Streitkr�fte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, w�hrend Ihr selbst aber fliehen konntet. [b][i]Ihr schw�rt Rache und baut Euer Imperium erneut auf...[/i][/b]";
+    $message['attacker'] .= "\n\n[b]Sie haben die letzte Stadt des Spielers ".$playerName." zerstört. Seine Streitkräfte wurden in alle vier Winde verstreut und stehen nichtmehr unter seinem Kommando. Doch ".$playerName." selbst wurde nicht gefasst und ist wohl in ferne Gebiete geflohen...[/b]";
+    $message['defender'] .= "\n\n[b]Sire, welch Unglück! Unsere letzte Stadt wurde zerstört! Eure Streitkräfte sind in alle vier Winde verstreut und entziehen sich Eurem Kommando, während Ihr selbst aber fliehen konntet. [b][i]Ihr schwört Rache und baut Euer Imperium erneut auf...[/i][/b]";
   }
   
   echo " Message an AttOwner $attowner\n"; 
@@ -515,7 +515,7 @@ function fightDraw($aid, $end, $endtime, $attowner, $defowner, $defenders) {
 //Reason:
 //0 == Es wird keine Nachricht verschickt
 //1 == Stadt nicht mehr vorhanden
-//2 == K�mpfe nicht gegen Neutralen Spieler
+//2 == Kämpfe nicht gegen Neutralen Spieler
 //3 == Ausgangsstadt existiert nicht mehr, neue Zielstadt suchen (Bei Missionstyp return)
 function goBack($armyid, $reason) {
   if (DEBUG_SERVICE)
@@ -580,7 +580,7 @@ function arrivalArmy() {
   if (DEBUG_SERVICE)
     echo " arrivalArmy() aufgerufen ";
 
-  // Alle Armeen ausw�hlen die jetzt auf "Bereit" stehen
+  // Alle Armeen auswählen die jetzt auf "Bereit" stehen
   $res1 = do_mysqli_query("SELECT aid, start, end, starttime, endtime, mission, missiondata, owner, tactic, player.religion AS religion FROM army,player WHERE army.owner=player.id AND endtime<=".time()." ORDER BY endtime, aid");
 
   echo " Datensätze: ".mysqli_num_rows($res1)."\n";
@@ -602,7 +602,7 @@ function arrivalArmy() {
         echo " Stadt vorhanden\n ";
 
       // Wenn wir selbst Besitzer der Zieltadt sind, dann kann es nur Heimkehr oder Verschiebung sein.
-      // FIXME: Das kann man zusammenk�rzen, zu viele ifs ohne else
+      // FIXME: Das kann man zusammenkürzen, zu viele ifs ohne else
       if ($data1['owner'] == $data7['owner']) {
         if (($data1['mission'] == "move") || ($data1['mission'] == 'return')) {
           if ($data1['mission'] == "move")
@@ -721,7 +721,7 @@ function getDefenderIDs($cityid, $cityowner) {
     
   // Nicht herrenlos
   if($cityowner) {
-    // Stadtverteidiger geh�rt auf alle Fülle dazu!
+    // Stadtverteidiger gehört auf alle Fülle dazu!
     array_push($def, $cityowner);
     
     $defenders_res = do_mysqli_query("SELECT DISTINCT owner FROM cityunit WHERE owner != ".$cityowner." AND city=".$cityid);
@@ -912,7 +912,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
     }
     //Brandschatzen
     elseif ($mission == "burndown") {
-      // Beim Brandschatzen wird zunächst gegen die Stadtbev�lkerung angetreten
+      // Beim Brandschatzen wird zunächst gegen die Stadtbevölkerung angetreten
       if (DEBUG_SERVICE)
         echo " BRAND \n";
 
@@ -936,7 +936,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
       // Angreifer hat gegen Dorfbewohner gewonnen
       if ($burnerg[0]['player'] == $armyowner) {
-        // Armee-Einheiten wieder einf�gen
+        // Armee-Einheiten wieder einfügen
         for ($i = 0; $i < sizeof($burnerg); $i ++) {
           do_mysqli_query("INSERT INTO armyunit VALUES  (".$armyid.", ".$burnerg[$i]['id'].", ".$burnerg[$i]['count'].")");
         }
@@ -964,7 +964,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
         $attstr = "\nEure treuen Untertanen hatten den Auftrag, bis auf den letzten Stein alles niederzubrennen. ";
         $defstr = "\nDie Bewohner wurden barbarisch niedergemetzelt, die Gebäude in Brand gesteckt und alles ".
-          "gepl�ndert, was den Feinden zwischen die Pranken geriet. über die Menge an Gold, welches die ".
+          "geplündert, was den Feinden zwischen die Pranken geriet. über die Menge an Gold, welches die ".
           "Feinde erbeutet haben, sind uns keine Informationen bekannt.";
         
         if ($price['gold'] > 0) {
@@ -974,11 +974,11 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
           if ($price['cgold'] > 0) {
             $attstr .= "\nEinige Eurer Truppen entdeckten in den Gebäuden des ehemaligen Herrschers einige ".
-              "Vorr�te an Gold und konnten ".$price['cgold']." Gold aus der Ordenskasse rauben.";
+              "Vorräte an Gold und konnten ".$price['cgold']." Gold aus der Ordenskasse rauben.";
           }
         }
         else {
-          $attstr .= "Noch bevor die letzten H�user in Brand gesteckt und die letzten Einwohner getätet ".
+          $attstr .= "Noch bevor die letzten Häuser in Brand gesteckt und die letzten Einwohner getätet ".
             "oder vertrieben waren, wurde Euren Truppen bereits klar, dass hier <b>nichts zu rauben war</b>.";
           if ($price['cgold'] > 0) {
             $attstr .= "\nZu ihrer Freude fanden einige wenige Truppen Gelder aus der Ordenskasse des ".
@@ -991,7 +991,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
       elseif ($burnerg == NULL || $erg == false) {
         do_mysqli_query("DELETE FROM army WHERE aid = ".$armyid);
         do_mysqli_query("UPDATE city SET population=1 WHERE id=".$cityid);
-        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erz�rnten Bev�lkerung in St�cke gerissen wurden.";
+        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erzörnten Bevölkerung in Stücke gerissen wurden.";
         $defstr = "\nDie Stadtverteidigung wurde besiegt, beherzte Stadtbewohner konnten die Stadt jedoch retten. Viele bezahlten ihren Mut mit ihrem Leben.";
         unset ($erg);
         $erg = $brunerg;
@@ -1000,7 +1000,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
       else {
         do_mysqli_query("DELETE FROM army WHERE aid = ".$armyid);
         do_mysqli_query("UPDATE city SET population=".$burnerg[0]['count']." WHERE id=".$cityid);
-        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erz�rnten Bev�lkerung in St�cke gerissen wurden.";
+        $attstr = "\nIhr konntet die Stadtverteidigung zwar besiegen, die Stadt jedoch konnte nicht gebrandschatzt werden, derweil eure Truppen von der erzörnten Bevölkerung in Stücke gerissen wurden.";
         $defstr = "\nDie Stadtverteidigung wurde besiegt, beherzte Stadtbewohner konnten die Stadt jedoch retten. Viele bezahlten ihren Mut mit ihrem Leben.";
         unset ($erg);
         $erg = $burnerg;
@@ -1012,7 +1012,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
     //Plündern
     elseif ($mission == "despoil") {
       if (DEBUG_SERVICE)
-        echo " PL�NDERN ";
+        echo " PLÄNDERN ";
 
       goBack($armyid, 0);
       for ($i = 0; $i < sizeof($erg); $i ++) {
@@ -1026,27 +1026,27 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 
       if (defined("NEW_DESPOIL") && NEW_DESPOIL) {
         if (DEBUG_SERVICE)
-          echo "NEUES PL�NDERN\n";
+          echo "NEUES PLÜNDERN\n";
 
         $price = compute_despoil_new($desp, $erg);
         var_dump($price);
         echo "price['settler'] 2 = ".$price['settler']."\n";
-        // Pl�nderung OK
+        // Plünderung OK
         if ($price['gold'] > 0) {
           $attstr = "\nNach der erfolgreichen überwindung der Stadtverteidigung habt Ihr die Stadt ".
-            "aufs �usserste ausgenommen und alles geraubt, was Eure Mannen tragen konnten.";
+            "aufs äusserste ausgenommen und alles geraubt, was Eure Mannen tragen konnten.";
           if($price['penalty'] > 0) {
-            $attstr .= " Ganze <b>".$price['penalty']." Mannen des P�bels</b> mu�ten mit ihrem Leben bezahlen.";
+            $attstr .= " Ganze <b>".$price['penalty']." Mannen des Pöbels</b> mussten mit ihrem Leben bezahlen.";
           }
           if($price['settler'] > 0) {
             $attstr .= " Ebenso haben <b>".$price['settler']." Siedler des Gegners</b> ihr Leben gelassen, da ihr einen Grossteil des Nahrungsnachschubs geraubt habt.";
           }
-          $attstr .= "\n<b>Ihr habt ".$price['gold']." Gold gepl�ndert</b>.";
+          $attstr .= "\n<b>Ihr habt ".$price['gold']." Gold geplündert</b>.";
 
-          $defstr = "\nDer Schurke hat Eure wehrlosen B�rger auf niederträchtigste Weise beraubt und ".
+          $defstr = "\nDer Schurke hat Eure wehrlosen Bürger auf niederträchtigste Weise beraubt und ".
             "um Ihr Hab und Gut gebracht. ";
           if($price['penalty'] > 0) {
-            $defstr .= "Dabei kamen <b>".$price['penalty']."</b> wehrlose <b>B�rger</b> ums Leben.";
+            $defstr .= "Dabei kamen <b>".$price['penalty']."</b> wehrlose <b>Bürger</b> ums Leben.";
           }
           if($price['settler'] > 0) {
             $defstr .= " <b>".$price['settler']."</b> eurer <b>Siedler mussten ihr Leben gelassen, da die plündernden Horden des Gegners einen Grossteil des Nahrungsnachschubs geraubt haben.";
@@ -1054,32 +1054,32 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
           $defstr .= "\n<b>Die Truppen raubten Güter im Wert von ".
             $price['gold']." Gold</b>.";    
         }
-        // Zu wenig Truppen �brig
+        // Zu wenig Truppen übrig
         else if ($price['gold'] < 0) {
           $attstr = "\nEure Truppen konnten zwar die Stadtverteidigung besiegen, doch blieb ".
-            "Ihnen nicht gen�gend Kraft, um die erz�rnten B�rger auszurauben. Sie traten die Flucht an.".
-            "\n<b>Ihr habt kein Gold gepl�ndert!</b>";          
+            "Ihnen nicht genügend Kraft, um die erzörnten Bürger auszurauben. Sie traten die Flucht an.".
+            "\n<b>Ihr habt kein Gold geplündert!</b>";          
           
-          $defstr = "\nDie Angreifer wichen vor den erz�rnten B�rgern zurück und traten die Flucht an. ".
+          $defstr = "\nDie Angreifer wichen vor den erzörnten Bürgern zurück und traten die Flucht an. ".
             "\n<b>Sie raubten keine Güter</b>.";    
         }
         else {
           $attstr = "\nNachdem Eure Truppen die Stadtverteidigung siegreich hinter sich gelassen ".
-            "hatten, fanden sie armseelige und k�mmerliche Behausungen vor. Elend und Hunger schwappten ".
+            "hatten, fanden sie armseelige und kümmerliche Behausungen vor. Elend und Hunger schwappten ".
             "ihnen entgegen. Nach kurzer Zeit gaben Eure Truppen die Suche nach Wertvollem auf und kehrten ".
-            "mit leeren H�nden nach Hause.".
-            "\n<b>Ihr habt kein Gold gepl�ndert</b>.";          
+            "mit leeren Händen nach Hause.".
+            "\n<b>Ihr habt kein Gold geplündert</b>.";          
           
-          $defstr = "\nDie vielen armen B�rger hatten nichts, was den Feinden h�tte in die H�nde fallen ".
+          $defstr = "\nDie vielen armen Bürger hatten nichts, was den Feinden hätte in die Hände fallen ".
             "können.\n<b>Die Truppen gingen leer aus</b>.";    
         }
 
         if ($price['cgold'] > 0) {
           $attstr .= "\nSire! In den Verwaltungsgebäuden der Stadt lagerten Mittel aus der Ordenskasse. ".
-            "Wir haben uns kr�ftig bedient und <b>zusätzliche ".$price['cgold']." Gold gestohlen</b>!";
+            "Wir haben uns kräftig bedient und <b>zusätzliche ".$price['cgold']." Gold gestohlen</b>!";
 
           $defstr .= "\nEin schlechter Tag für uns. <b>Aus der Ordenskasse wurden ".
-            $price['cgold']." Gold geraubt</b>. Was werden Eure Ordensbr�der dazu sagen?";         
+            $price['cgold']." Gold geraubt</b>. Was werden Eure Ordensbrüder dazu sagen?";         
         }
 
       }
@@ -1108,7 +1108,7 @@ function arrivalAttack($mission, $cityid, $cityowner, $cityname, $citypopulation
 function updateRes() {
   $tick = TICK;
 
-  // alle ausw�hlen deren Ressourcen (Einwohner,Gold,Städte etc.) aktualisiert werden müssen
+  // alle auswählen deren Ressourcen (Einwohner,Gold,Städte etc.) aktualisiert werden müssen
   $upt = time();
   $res1 = do_mysqli_query("SELECT id,name,lastres,religion,wood,iron,stone,gold,clan,points,avatar, ".
 			             " holiday>UNIX_TIMESTAMP() AS holiday".
@@ -1372,7 +1372,7 @@ SELECT
         //if (DEBUG_SERVICE) echo "Buerger_Siedler_alt = ".($data2['pop']+$settler_data['settler_sum']).", Buerger_Siedler_neu = ".$population_settler.", Buerger_neu = ".$population.", Siedler = ".$settler_data['settler_sum']."\n"; 
         
         
-        // Wenn Gesamtzahl Einwohner < Anzahl Siedler oder B�rger < 1
+        // Wenn Gesamtzahl Einwohner < Anzahl Siedler oder Bürger < 1
         if(($population_settler<$settler_data['settler_sum']) || ($population<1)) {
           $settler_sum_old = $settler_data['settler_sum'];
           $settler_sum_new = $settler_data['settler_sum'] - abs($population) - 1;
@@ -1391,13 +1391,13 @@ SELECT
             $settler_sum_new2 += $new_settler_amount;
             //$last_aid = $settler_data['aid'];
             //$last_amount = $new_settler_amount;
-            // ID's und Gr�sse der Siedlertrupps in einem Feld speichern
+            // ID's und Grösse der Siedlertrupps in einem Feld speichern
             $settler_array[$count_settler_units]['id'] = $settler_data['aid'];
             $settler_array[$count_settler_units]['count'] = $new_settler_amount;
             $count_settler_units++;
           }
           // Test, ob korrekte Anzahl Siedler gestorben ist
-          // wenn nicht zuf�lligen Trupp ausw�hlen und Differenz abziehen
+          // wenn nicht zufälligen Trupp auswählen und Differenz abziehen
           if($settler_sum_new2<$settler_sum_new) {
             //echo "Zu wenig Siedler gestorben -> gleiche aus: ".($settler_sum_new-$settler_sum_new2)." Siedler zusätzlich gestorben in army = ".$last_aid.", last_amount = ".$last_amount."\n";
             $choose_settler_array_id = mt_rand(0,$count_settler_units-1);
@@ -1436,7 +1436,7 @@ SELECT
 
 
           // Steuern und Forschung
-          // werden nur dann eingenommen, wenn die Stadt gen�gend Wohlstand hat
+          // werden nur dann eingenommen, wenn die Stadt genügend Wohlstand hat
           if ($data2['prosperity'] >= $attr) {
             $citytax   = floor($population/10) * GOLD_PRODFACTOR * $eff;
             $taxes+= $citytax;
@@ -1464,7 +1464,7 @@ SELECT
         }
 
         // Gold wird nur differentiell updated, weil sonst eine Race-Condition entstehen könnte
-        // (Wenn der Spieler w�hrend des Service-Laufs den Goldbetrag �ndert
+        // (Wenn der Spieler während des Service-Laufs den Goldbetrag ändert
         do_mysqli_query("UPDATE player SET gold=gold+".($gold-$data1['gold']).
                      ", rp=rp+".$research.
                      ", wood=wood+".(intval($totwood)-$data1['wood']).
@@ -1570,7 +1570,7 @@ while (1) {
   
   
   
-  // Falls der Thread mal länger als eine Minute gebraucht hat ($sleep w�re dann < 0)
+  // Falls der Thread mal länger als eine Minute gebraucht hat ($sleep äre dann < 0)
   if ($sleep < $sleepmin) {
     $sleep = $sleepmin;
 

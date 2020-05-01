@@ -98,7 +98,7 @@ class Cities {
       $stone = floor($data['stone'] * $data['count'] / 2);
       do_mysqli_query("DELETE FROM citybuilding_ordered WHERE bid=".$bid);
       do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) ".
-                     "VALUES ('SERVER',".$this->player.",UNIX_TIMESTAMP(),'Abbruch: ".mysqli_escape_string($GLOBALS['con'], $data['bname'])." (".$data['count'].")','Der Bauauftrag in ".mysqli_escape_string($GLOBALS['con'], $this->activecityname)." wurde auf Euer Geheiß hin abgebrochen.\n\n<b>".mysqli_escape_string($GLOBALS['con'], $data['bname'])."</b>\nAnzahl: ".$data['count']."\n\nAbz�glich der Unkosten erhaltet Ihr ".$gold." Gold, ".$wood." Holz und ".$stone." Stein zurück.', 3)");
+                     "VALUES ('SERVER',".$this->player.",UNIX_TIMESTAMP(),'Abbruch: ".mysqli_escape_string($GLOBALS['con'], $data['bname'])." (".$data['count'].")','Der Bauauftrag in ".mysqli_escape_string($GLOBALS['con'], $this->activecityname)." wurde auf Euer Geheiß hin abgebrochen.\n\n<b>".mysqli_escape_string($GLOBALS['con'], $data['bname'])."</b>\nAnzahl: ".$data['count']."\n\nAbzüglich der Unkosten erhaltet Ihr ".$gold." Gold, ".$wood." Holz und ".$stone." Stein zurück.', 3)");
       do_mysqli_query("UPDATE player SET gold=gold+".$gold.", wood=wood+".$wood.", stone=stone+".$stone.",cc_messages=1,cc_resources=1 ".
                      " WHERE id=".$this->player);
       // do_log("Buildingabort ordered: abortBuilding(".$bid.")");
@@ -115,7 +115,7 @@ class Cities {
   function abortUnit($uid) {
     $uid = intval($uid);
     // Die query ist so gestaltet, dass der Besitzer nur seine eigenen Truppen abbrechen kann.
-    // Eine zusätzliche Abfrage nach "owner" ist also nicht n�tig.
+    // Eine zusätzliche Abfrage nach "owner" ist also nicht nötig.
     $res1 = do_mysqli_query("SELECT gold,shortrange,longrange,armor,horse,count,name,city ".
                            " FROM cityunit_ordered co LEFT JOIN unit u ON co.unit=u.id ".
                            "WHERE city=".$this->activecity." AND uid=".$uid);
@@ -127,10 +127,10 @@ class Cities {
       $a = $data1['armor'] * $data1['count'];
       $h = $data1['horse'] * $data1['count'];
       
-      //FIXME: Race-Condition anf�llig. Besser: if affected rows == 1 
+      //FIXME: Race-Condition anfällig. Besser: if affected rows == 1 
       do_mysqli_query("DELETE FROM cityunit_ordered WHERE uid=".$uid);
       do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) ".
-                     " VALUES ('SERVER',".$this->player.",UNIX_TIMESTAMP(),'Abbruch: ".$data1['name']." (".$data1['count'].")','Die Ausbildung in ".$this->activecityname." wurde auf Euer Geheiß hin abgebrochen.\n\n<b>".$data1['name']."</b>\nAnzahl: ".$data1['count']."\n\nAbz�glich der Unkosten erhaltet Ihr ".$gold." Gold, ".$sr." Nahkampfwaffen, ".$lr." Fernkampfwaffen, ".$a." Rüstungen und ".$h." Pferde zurück.',4)");
+                     " VALUES ('SERVER',".$this->player.",UNIX_TIMESTAMP(),'Abbruch: ".$data1['name']." (".$data1['count'].")','Die Ausbildung in ".$this->activecityname." wurde auf Euer Geheiß hin abgebrochen.\n\n<b>".$data1['name']."</b>\nAnzahl: ".$data1['count']."\n\nAbzüglich der Unkosten erhaltet Ihr ".$gold." Gold, ".$sr." Nahkampfwaffen, ".$lr." Fernkampfwaffen, ".$a." Rüstungen und ".$h." Pferde zurück.',4)");
       do_mysqli_query("UPDATE city SET population=population+".$data1['count'].", shortrange=shortrange+".$sr.", longrange=longrange+".$lr.", armor=armor+".$a.", horse=horse+".$h." WHERE id=".$data1['city']);
       do_mysqli_query("UPDATE player SET gold=gold+".$gold.",cc_messages=1,cc_resources=1 WHERE id=".$this->player);
       
@@ -169,7 +169,7 @@ class Cities {
     // Darf das Gebäude theoretisch gebaut werden
     $pbld = $this->checkBuilding($building);
     if ($pbld >= $count) {
-      // Sind gen�gend Ressourcen da
+      // Sind genügend Ressourcen da
       $res1 = do_mysqli_query("SELECT gold, wood, stone FROM player WHERE id=".$this->player);
       $data1 = mysqli_fetch_assoc($res1);
       if ($data2) {
@@ -271,7 +271,7 @@ class Cities {
       //laufzeit eines botens ermitteln
       $walktime =  computeWalktime($data_city['x'], $data_city['y'], $nearestcity[2], $nearestcity[3], SPEED_BOTE);
       
-      //sofern 'n viertel der scouttime gr�sser ist als die laufzeit eines botens, dann die 4tel laufzeit nehmen
+      //sofern 'n viertel der scouttime grösser ist als die laufzeit eines botens, dann die 4tel laufzeit nehmen
       //ist zwar unrealistisch, aber 'n bestimmte minimum scouttime ist besser
       if($scouttime*0.25 > $walktime)
         $scouttime *= 0.25;
@@ -313,12 +313,12 @@ class Cities {
 
   function checkBuildingsDestroyable() {
     if ($this->underAttack($this->getActiveCity())) {
-      return "Es befinden sich Armeen im Anmarsch auf Eure Stadt, Sire. Alle M�nner treffen Kriegsvorbereitung!";
+      return "Es befinden sich Armeen im Anmarsch auf Eure Stadt, Sire. Alle Männer treffen Kriegsvorbereitung!";
     }
     
     $needloy = defined("DESTRUCT_LOYALITY") ? DESTRUCT_LOYALITY : 25;
     if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY && ($this->city_loyality < $needloy * 100) ) {
-      return "Die �ffentliche Ordnung ist noch nicht wiederhergestellt. Ihr könnt Gebäude erst ab einer Loyalität von ${needloy}% abreißen!";
+      return "Die öffentliche Ordnung ist noch nicht wiederhergestellt. Ihr könnt Gebäude erst ab einer Loyalität von ${needloy}% abreißen!";
     }
     
     // Gebäude können in der Tat abgerissen werden
@@ -345,7 +345,7 @@ class Cities {
           $dataX = mysqli_fetch_assoc($resX);
           // Lagergebäude
           if (($dataX['scndstorage'] - $data['storage']) < ($dataX['reslong'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshort'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['ressarmor'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshorse'] / $dataX['count'])) {
-            return "<b class=\"error\">Geb&auml;de wird ben�tigt!</b>";
+            return "<b class=\"error\">Geb&auml;de wird benötigt!</b>";
           }
         }
         
@@ -410,7 +410,7 @@ class Cities {
           $resX = do_mysqli_query("SELECT sum( citybuilding.count * building.res_storage )  AS scndstorage, count( citybuilding.count )  AS count, sum( city.reserve_shortrange )  AS resshort, sum( city.reserve_longrange )  AS reslong, sum( city.reserve_armor )  AS resarmor, sum( city.reserve_horse )  AS reshorse, city.id AS id FROM city LEFT  JOIN citybuilding ON city.id = citybuilding.city LEFT  JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP  BY id");
           $dataX = mysqli_fetch_assoc($resX);
           if (($dataX['scndstorage'] - $data['storage']) < ($dataX['reslong'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshort'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['ressarmor'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshorse'] / $dataX['count'])) {
-            return "<b class=\"error\">Geb&auml;de wird ben�tigt!</b>";
+            return "<b class=\"error\">Geb&auml;de wird benötigt!</b>";
           }
         }
         if ($data['count'] > 1) {
@@ -517,7 +517,7 @@ class Cities {
       // Darf Gebäude in diesem Gebiet gebaut werden?
       if($bld['maxy'] != NULL && 
 	      (
-	       // Wenn maxy größer 0 ist, dann mu� die koordinate größergleich maxy sein
+	       // Wenn maxy größer 0 ist, dann muss die koordinate größergleich maxy sein
 	       // andernfalls ist sie kleiner maxy.
 	       $bld['maxy'] > 0 && $this->city_y <  $bld['maxy']  ||
 	       $bld['maxy'] < 0 && $this->city_y >= -$bld['maxy']  
@@ -598,7 +598,7 @@ class Cities {
           }
         case "forest" :
           {
-            // Anz W�lder - Anzahl schon existierender Gebäude des Typs - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
+            // Anz Wälder - Anzahl schon existierender Gebäude des Typs - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
             if ($bld['typelevel'] == 1)
               $b[$count]['possible'] = $this->city_forest - $typ1[$bld['type']][0] - $typ2[$bld['type']][$bld['typelevel']];
             // Anzahl Vorgebäude (Stufe -1) - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
@@ -618,7 +618,7 @@ class Cities {
           }
         case "water" :
           {
-            // Anz Wasserfl�chen - Anzahl schon existierender Gebäude des Typs - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
+            // Anz Wasserflächen - Anzahl schon existierender Gebäude des Typs - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
             if ($bld['typelevel'] == 1)
               $b[$count]['possible'] = $this->city_water - $typ1[$bld['type']][0] - $typ2[$bld['type']][$bld['typelevel']];
             // Anzahl Vorgebäude (Stufe -1) - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
@@ -636,7 +636,7 @@ class Cities {
         case "s8" :
           {
             $nameres = "city_".$bld['req_fields'];
-            // Anz Wasserfl�chen - Anzahl schon existierender Gebäude des Typs - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
+            // Anz Wasserflächen - Anzahl schon existierender Gebäude des Typs - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
             if ($bld['typelevel'] == 1)
               $b[$count]['possible'] = $this-> $nameres - $typ1[$bld['type']][0] - $typ2[$bld['type']][$bld['typelevel']];
             // Anzahl Vorgebäude (Stufe -1) - Anzahl schon in Bau befindlicher Gebäude gleicher Stufe
@@ -798,7 +798,7 @@ class Cities {
     // Kapazität da ist...
 
     // maximal mögliche einheiten von level1,level2,level3
-    // Für Level1-Truppen ist die Rechnung leicht. Alle verf�gbaren Kapazitäten in Betracht ziehen
+    // Für Level1-Truppen ist die Rechnung leicht. Alle verfügbaren Kapazitäten in Betracht ziehen
     $level1 = $data2['t1'] + $data2['t2'] + $data2['t3'] - $lvl3 - $lvl2 - $lvl1 - $lvl0;
     $level0 = $level1; // level0 sind ja nur Bauern/Milizen, gleichbehandlet mit Lvl1
 
@@ -848,7 +848,7 @@ class Cities {
       else
         $pre4 = 1000000;        
         
-      //											    						  <level>              <gold>						<min-einwohner>      	  <waffen,r�stungen,pferde>
+      //											    						  <level>              <gold>						<min-einwohner>      	  <waffen,rüstungen,pferde>
 
       $u[$count]['maxpossible'] = $$lvl;
       
@@ -902,7 +902,7 @@ class Cities {
     $punit = $this->checkUnit($unit);
     
     if ($punit >= $count) {
-      // Sind gen�gend Ressourcen da
+      // Sind genügend Ressourcen da
       $res1 = do_mysqli_query("SELECT gold, shortrange, longrange, armor, horse, time FROM unit WHERE id=".$unit);
       if ($data1 = mysqli_fetch_assoc($res1)) {
         if ( defined("ENABLE_LOYALITY") && ENABLE_LOYALITY ) {
@@ -1014,7 +1014,7 @@ class Cities {
     }
 
     if ($this->player_religion != $this->city_religion)
-      return "Die Ungl�ubigen sind nicht bereit, für Euch zu siedeln. Konvertiert zuerst diese Stadt (im Rathaus).";
+      return "Die Ungläubigen sind nicht bereit, für Euch zu siedeln. Konvertiert zuerst diese Stadt (im Rathaus).";
       
     $this->setActiveCity($this->activecity);
       
@@ -1023,7 +1023,7 @@ class Cities {
 
       $min_settle_loy = 75;
       if ($this->city_loyality < $min_settle_loy * 100) {
-        return "Die Einwohner sind noch nicht loyal genug, um sich für Euch in solch ein geführliches Unterfangen zu st�rzen. Ihr ben�tigt mindestens ".$min_settle_loy."% Loyalität.";
+        return "Die Einwohner sind noch nicht loyal genug, um sich für Euch in solch ein geführliches Unterfangen zu stürzen. Ihr benötigt mindestens ".$min_settle_loy."% Loyalität.";
       }
     }
 
@@ -1041,9 +1041,9 @@ class Cities {
     $cd = $this->getCityData();
     $s = intval($s);
     if (($cd['apopulation'] < $s) || ($s < 50))
-      return "Nicht gen�gend Einwohner in der Stadt oder nicht gen�gend Siedler ausgewählt (mindestens 50).";
+      return "Nicht genügend Einwohner in der Stadt oder nicht genügend Siedler ausgewählt (mindestens 50).";
 
-    // Sind gen�gend Ressourcen da um einen Bauernhof zu bauen
+    // Sind genügend Ressourcen da um einen Bauernhof zu bauen
     //nur einen Bauernhof 'mitnehmen'
     $building = 1; // Bauernhof
     $bcount = 1;
@@ -1052,10 +1052,10 @@ class Cities {
     $data1 = mysqli_fetch_assoc($res1);
     if ($cost = mysqli_fetch_assoc($res2)) {
       if( $data1['gold'] >= $cost['gold'] * $bcount && $data1['wood'] >= $cost['wood'] * $bcount && $data1['stone'] >= $cost['stone'] * $bcount ) {
-        // Res werden sp�ter abgezogen
+        // Res werden später abgezogen
       }
       else
-        return "Ihnen fehlen die Mittel um die Siedler ausreichend auszustatten! Ihr ben�tigt genug Resourcen für ein Bauerngut (".($cost['gold'] * $bcount)." Gold, ".($cost['wood'] * $bcount)." Holz und ".($cost['stone'] * $bcount)." Stein).";
+        return "Ihnen fehlen die Mittel um die Siedler ausreichend auszustatten! Ihr benötigt genug Resourcen für ein Bauerngut (".($cost['gold'] * $bcount)." Gold, ".($cost['wood'] * $bcount)." Holz und ".($cost['stone'] * $bcount)." Stein).";
     }
 
     // FIXME: kann man das nicht durch $cities->getCityUnits() ersetzen?
@@ -1107,7 +1107,7 @@ class Cities {
       }
     }
 
-    // Unit-Speed mu�
+    // Unit-Speed muss
     $wt = computeWalktime($x, $y, $this->city_x, $this->city_y, $speed, $unitcount);
 
     do_mysqli_query("UPDATE player SET gold=gold-".$cost['gold'] * $bcount.", wood=wood-".$cost['wood'] * $bcount.", stone=stone-".$cost['stone'] * $bcount.",cc_resources=1 WHERE id=".$this->player);
@@ -1307,7 +1307,7 @@ class Cities {
     if ($data1['owner'] != $this->player) {
       //Sind Spieler verbündet?
       if (getWarRel($data1['owner'],$this->player) != 2) {
-        return "Diese Stadt geh�rt Euch nicht oder Ihr habt kein Bündnis mit dem Besitzer dieser Stadt.";
+        return "Diese Stadt gehört Euch nicht oder Ihr habt kein Bündnis mit dem Besitzer dieser Stadt.";
       }
     } // if ($data1['owner'] != $this->player)
 
@@ -1386,7 +1386,7 @@ class Cities {
     $rel = getWarRel($this->player, $data1['owner']);
     if ($rel == 2) {
       //Bündnisse müssen manuell entfernt werden
-      return "Ihr habt mit eurem Gegner ein Bündnis. Dies müsst Ihr vorher k�ndigen.";
+      return "Ihr habt mit eurem Gegner ein Bündnis. Dies müsst Ihr vorher kündigen.";
     }
     if($rel == 1) {
       $err = $_SESSION['diplomacy']->changeRelation(resolvePlayerName($data1['owner']), 0);
@@ -1597,12 +1597,12 @@ class Cities {
                      $this->player_religion, $amount, $this->activecity, $this->player_religion);
       do_mysqli_query($sql);
       if (mysqli_affected_rows($GLOBALS['con']) == 0) {
-        return "Stadt besitzt bereits Eure Religion oder geh�rt Euch nicht";
+        return "Stadt besitzt bereits Eure Religion oder gehört Euch nicht";
       }
       
 
       if($amount > 0) {
-        // Eine Level-5 Einheit für den Spieler ausw�hlen
+        // Eine Level-5 Einheit für den Spieler auswählen
         $sql = sprintf("SELECT u.id,count,name,religion,level,type ".
                        " FROM unit u LEFT JOIN cityunit cu ON (u.id=cu.unit AND cu.city=%d AND cu.owner=%d) ".
                        " WHERE religion = %d AND level=5 ORDER BY rand() LIMIT 1", 
@@ -1611,7 +1611,7 @@ class Cities {
         $uid = do_mysqli_query_fetch_assoc($sql);
 
 
-        // Level-5 Einheiten als Bonus einf�gen
+        // Level-5 Einheiten als Bonus einfügen
         if($uid['count'] && $uid['count']>0) {
           $sql = sprintf("UPDATE cityunit SET count=count+%d WHERE city=%d AND unit=%d AND owner=%d",
                          $amount, $this->activecity, $uid['id'], $this->player );
@@ -1627,7 +1627,7 @@ class Cities {
         $img = getUnitImage($uid);
         $message .= "\n\n";
         $message .= sprintf("Eurer Ruf eilt Euch vorraus, und die Kunde über Eure Taten im heiligen Land verbreiten sich geschwind. ".
-                            "Um Eure Mission gegen die Ungl�ubigen zur unterstützen, ".
+                            "Um Eure Mission gegen die Ungläubigen zur unterstützen, ".
                             "haben sich [b]%d %s[/b] Eurer Armee in dieser Stadt angeschlossen.", $amount, $uid['name']);       
       } // if($amount > 0) 
       
@@ -1757,7 +1757,7 @@ class Cities {
    */
   function sendBack($unit, $owner) {
     if (getSiegeTime($this->activecity) >= 0) {
-      return "Die Stadt steht unter Belagerung. Die Herz�ge weigern sich, die Stadt schutzlos zu lassen.";
+      return "Die Stadt steht unter Belagerung. Die Herzöge weigern sich, die Stadt schutzlos zu lassen.";
     }
     
     $owner = intval($owner);
@@ -1829,7 +1829,7 @@ class Cities {
     $from = intval($from);
 
     if (getSiegeTime($from) >= 0) {
-      return "Die Stadt steht unter Belagerung. Die Herz�ge weigern sich, die Stadt schutzlos zu lassen.";     
+      return "Die Stadt steht unter Belagerung. Die Herzöge weigern sich, die Stadt schutzlos zu lassen.";     
     }
 
     // Die stationieren Einheiten der Stadt holen

@@ -42,7 +42,7 @@ include_once("includes/session.inc.php");
  * Zeitpunkt aktualisiert wird.
  * 
  * Diese Datei also NICHT automatisch einbinden, ausser wenn start_page aus
- * irgendwelchen Gr�nden nicht verwendet wird.
+ * irgendwelchen Gründen nicht verwendet wird.
  */
 
 $res1=do_mysqli_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coalesce(holiday, 0) > UNIX_TIMESTAMP() AS holidaymode, status ".

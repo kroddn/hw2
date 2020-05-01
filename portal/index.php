@@ -349,14 +349,14 @@ onClick="return framelayer('http://www.holy-wars2.de/cgi-bin/cgiirc/irc.cgi')">
       <a target="_blank" href="http://game1.holy-wars2.de/screenshots.php">
         <img src="screenshots01.gif" alt="Bild Screenshots"
          onMouseout="chgfx(this, 'screenshots01.gif'); tooltip(0);"
-         onMouseover="chgfx(this, 'screenshots02.gif'); tooltip('Für einen ersten Eindruck �ber das Spiel w�hlt dies hier.');"
+         onMouseover="chgfx(this, 'screenshots02.gif'); tooltip('Für einen ersten Eindruck über das Spiel wählt dies hier.');"
         >
       </a>
     </DIV>
 
     
     <DIV id="vote" 
-         onMouseover="tooltip('Stimmt für Holy-Wars 2 ab, falls Euch das Spiel gef�llt.');" 
+         onMouseover="tooltip('Stimmt für Holy-Wars 2 ab, falls Euch das Spiel gefüllt.');" 
          onMouseout="tooltip(0);"
     >
       <span style="font-size: 14px;">Vote for HW2</span><br><hr><br>

@@ -166,7 +166,7 @@ function adr_new_entry_form() {
 </table>
 </form>
 <p><center>
-Hinweis: einen <b>Spieler</b> können Sie ganz einfach über die <a href="townhall.php">Spielerinfo/Spielersuche (hier klicken)</a> hinzuf�gen.
+Hinweis: einen <b>Spieler</b> können Sie ganz einfach über die <a href="townhall.php">Spielerinfo/Spielersuche (hier klicken)</a> hinzufügen.
 </center>
 <hr>
 </div>

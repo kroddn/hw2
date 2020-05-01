@@ -52,7 +52,7 @@ if(isset($recipient)) $recipient = stripslashes(trim($recipient));
 
 
 if (isset($send) && isset($recipient)) {
-  // Der Versand </b>kostet momentan nichts<b>, allerdings kann es zu erheblichen Verz�gerungen bei der Zustellung kommen, ebenso wird eine Zustellung </b>nicht<b> garantiert! </b><p>
+  // Der Versand </b>kostet momentan nichts<b>, allerdings kann es zu erheblichen Verzögerungen bei der Zustellung kommen, ebenso wird eine Zustellung </b>nicht<b> garantiert! </b><p>
   
   $inform = "";
 
@@ -185,7 +185,7 @@ if (isset($inform)) {
   </tr>
   <tr class="tblbody"><td width="160"><b>Verbleibende SMS:</b></td><td><font style="font-size:14px;"><b><? echo $_SESSION['player']->getSMSremaining(); ?></b></font>
 &nbsp;&nbsp;<a href="settings.php?show=sms#charge">(aufladen)</a></td></tr>
-  <tr class="tblbody"><td><b>Empf�nger oder Nummer:</b><br>(Nummer beginnt mit +49)</td>
+  <tr class="tblbody"><td><b>Empfänger oder Nummer:</b><br>(Nummer beginnt mit +49)</td>
 <td valign="middle">
 
 <select name="ismsprefix">
@@ -206,7 +206,7 @@ if (isset($inform)) {
 <a style="font-size: 12px; color: red; float:right;" title="Anleitung zum SMS-Versand." onClick="return openhelp('sms.php?help=1')" href="sms.php?help=1">Anleitung</a><br>
 <!-- Adressbuch -->
 <select onChange="if(this.value!='') { document.smsform.recipient.value=this.value; document.smsform.ismsprefix='Intern.'; }" name="adrbook" size="1" stlye="width:140px;">
-<option value="">Adressbucheintrag w�hlen</option>
+<option value="">Adressbucheintrag wählen</option>
 <?
   $adress = $player->getSMSAdressbook();
   foreach ($adress as $i=>$adr) {
@@ -245,7 +245,7 @@ else {
       '<a href="settings.php?show=sms#sendernr">MyHW2</a> konfigurieren.';
   }
   else {
-    echo '<br>Mit einem Premium-Pro-Account dürft Ihr diese Nummer selbst w�hlen.';
+    echo '<br>Mit einem Premium-Pro-Account dürft Ihr diese Nummer selbst wählen.';
   }
 }
 ?>
@@ -290,13 +290,13 @@ Ihr SMS-Kontingent (verbleibende SMS) können Sie durch überweisung <a href="se
 </form>
 <div style="padding: 10px; visibility: hidden; border: 5px solid yellow; background-color: orange; position: absolute; top: 250; left: 100; width:300px; height: 180px;" id="waitmessage" name="waitmessage">
 <b>
-Bitte warten Sie, w�hrend das System ihre Eingaben pr�ft und die SMS versendet.<p>
+Bitte warten Sie, während das System ihre Eingaben prüft und die SMS versendet.<p>
 Klicken Sie nicht auf Stop!
 </b>
 <p>
 <p>
 Sie können Bonuspunkte in SMS umwandeln. Um Bonuspunkte zu erhalten sollten
-Sie neue Spieler werben. Wie das geht können Sie unter dem Men�punkt
+Sie neue Spieler werben. Wie das geht können Sie unter dem Menüpunkt
 &quot;My HW2&quot; erfahren.
 </div>
 </div>

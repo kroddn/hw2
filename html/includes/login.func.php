@@ -94,7 +94,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 do_mysqli_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
               }
               
-              // Pr�fen, ob der Account schon 'name' gesetzt hat.
+              // Prüfen, ob der Account schon 'name' gesetzt hat.
               // falls nicht, dann den Auswahlbildschirm hierfür anzeigen
               if($db_login['name'] == null) {
                 // Weiter unten wird die Variable wieder ausgewertet
@@ -122,7 +122,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                   multi_trap($player);
                 }
                 
-                // Abh�ngig von Spielereinstellung Map instanziieren
+                // Abhängig von Spielereinstellung Map instanziieren
                 $map = MapFactory($player);
                 $map->centerOnCapital($player->getID());
                 $_SESSION['map'] = $map;
@@ -203,11 +203,11 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
       } // Security
       else {
         if (!isset($_SESSION['sec_key']) || strlen($_SESSION['sec_key']) < 1) {
-          $loginerror = "Cookie Fehler: der Security Code konnte nicht überpr�ft werden.<br> ".
+          $loginerror = "Cookie Fehler: der Security Code konnte nicht überprüft werden.<br> ".
             "Ihr Browser sendet offensichtlich kein gültiges Cookie. überprüfen Sie die Einstellungen und löschen Sie gegebenenfalls Ihre Cookies.";
         }
         else {
-          $loginerror = "Security Code falsch oder gar nicht eingegeben! Falls dieser Fehler �fter auftritt ".
+          $loginerror = "Security Code falsch oder gar nicht eingegeben! Falls dieser Fehler öfter auftritt ".
             "<a target=\"_new\" href=\"http://forum.holy-wars2.de/viewtopic.php?t=6876\">_HIER_</a> klicken.<br>".
             "Premium-Pro-User können OHNE Security-Code einloggen!";
         }

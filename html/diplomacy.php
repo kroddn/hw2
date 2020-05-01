@@ -219,7 +219,7 @@ echo '<td><input type="submit" name="delownpeace" value=" Frieden zur&uuml;ckzie
 echo '<td><input type="submit" name="delownreqbnd" value=" B&uuml;ndnis zur&uuml;ckziehen "></td></tr>';
 echo "</table></form>";
 echo "<br><table>";
-echo '<form action="'.$PHP_SELF.'" method="POST" '.($_SESSION['player']->getNoobLevel() > 0 ? ' onSubmit="if(this.type.value==0) return confirm(\'Wenn Sie Krieg erkl�ren, dann verlieren sie Ihren Neulingsschutz!\')"' : '').'>';
+echo '<form action="'.$PHP_SELF.'" method="POST" '.($_SESSION['player']->getNoobLevel() > 0 ? ' onSubmit="if(this.type.value==0) return confirm(\'Wenn Sie Krieg erklären, dann verlieren sie Ihren Neulingsschutz!\')"' : '').'>';
 echo '<tr class="tblhead"><td colspan="4">Neue diplomatische Beziehung</td></tr>';
 echo '<tr class="tblbody"><td>Spielername</td>';
 echo "<td><input type='text' name='playername' value='".$name."' NAOsize='12'></td>";
@@ -227,7 +227,7 @@ echo '<td><select name="type">';
 echo '<option value="2">B&uuml;ndnis</option>';
 echo '<option value="0">Krieg</option>';
 echo '<td><input type="submit" name="newRel" value=" Senden ">';
-if ($_SESSION['player']->getNoobLevel() > 0) echo '<tr class="tblhead"><td colspan="4">Durch eine Kriegserkl�rung verlieren Sie Ihren Neulingsschutz!</td></tr>';
+if ($_SESSION['player']->getNoobLevel() > 0) echo '<tr class="tblhead"><td colspan="4">Durch eine Kriegserklärung verlieren Sie Ihren Neulingsschutz!</td></tr>';
 echo "</select></td></tr>";
 
 ?>

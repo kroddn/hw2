@@ -78,26 +78,26 @@ require_once("start_header.php");
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 5</b></td>
 		<td class="tblbody" >Es ist untersagt, Seiten dieses Angebots mit einem anderen Programm ausser einem 
-                             gängigen Browser oder einem von Holy-Wars 2 explizit zur Verf�gung gestelltem 
+                             gängigen Browser oder einem von Holy-Wars 2 explizit zur Verfügung gestelltem 
                              Programm abzurufen. Dies bezieht sich besonders auf sogenannte Bots, Skripte 
                              oder auch andere Programme, die das Webinterface ersetzen sollen.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 6</b></td>
-		<td class="tblbody" >Der Spielaccount inkl. aller dazugeh�rigen Daten ist Eigentum und verbleibt 
-                             im Eigentum der Betreiber von Holy-Wars 2. Jede Ver�u�erung ist untersagt.</td>
+		<td class="tblbody" >Der Spielaccount inkl. aller dazugehörigen Daten ist Eigentum und verbleibt 
+                             im Eigentum der Betreiber von Holy-Wars 2. Jede Veräußerung ist untersagt.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 7</b></td>
         <td class="tblbody" >Die Betreiber behalten sich vor, Accounts, mit welchen auf dem Server Daten 
-                             verändert wurden, oder auf andere Weise vorsätzlich oder fahrl�ssig der 
+                             verändert wurden, oder auf andere Weise vorsätzlich oder fahrlässig der 
                              reibungslose Betrieb von Holy-Wars 2 behindert wurde, zu löschen und rechtliche 
                              Schritte einzuleiten.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 8</b></td>
 		<td class="tblbody" >Es besteht kein Anspruch auf die Teilnahme an Holy-Wars 2. Die Betreiber behalten 
-                             sich das Recht vor, ohne Angabe von Gr�nden Accounts zu sperren oder löschen.</td>
+                             sich das Recht vor, ohne Angabe von Gründen Accounts zu sperren oder löschen.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 9.1</b></td>
@@ -132,12 +132,12 @@ require_once("start_header.php");
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 14</b></td>
         <td class="tblbody" >Die Betreiber behalten sich vor, die Nutzungsbedingungen jederzeit 
-                             und ohne Ank�ndigung zu ändern.</td>
+                             und ohne Ankündigung zu ändern.</td>
 	</tr>	
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>§ 15</b></td>
 		<td class="tblbody" >Ist einer dieser Paragraphen ungültig, so bleibt die Wirksamkeit 
-                             der anderen davon unber�hrt.</td>
+                             der anderen davon unberührt.</td>
 	</tr>
 </table>
 
@@ -155,11 +155,11 @@ require_once("start_header.php");
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>zu § 3</b></td>
-        <td class="tblbody" >Von der F�hrung der Orden im Spiel wird erwartet, dass sie Verstöße 
+        <td class="tblbody" >Von der Führung der Orden im Spiel wird erwartet, dass sie Verstöße 
                              ihrer Mitglieder gegen die Nutzungsbedingungen dem Betreiber melden, 
                              und selbst mit Tadel oder Kritik reagieren. Bei wissentlicher 
                              Nichtbeachtung dieser Bedingung kann vom Betreiber gegen den Orden 
-                             und dessen F�hrung vorgegangen werden.</td>
+                             und dessen Führung vorgegangen werden.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>zu § 12</b></td>
@@ -177,14 +177,14 @@ require_once("start_header.php");
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>zu § 9.1 und § 9.2</b></td>
         <td class="tblbody" >Automatische Testroutinen überprüfen, ob ein Spieler mehrere Accounts betreibt.
-                             In Verdachtsf�llen werden die betroffenen Accounts gesperrt und nach einiger Zeit 
+                             In Verdachtsfällen werden die betroffenen Accounts gesperrt und nach einiger Zeit 
                              vollständig gelöscht.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>Pushing</b></td>
         <td class="tblbody" >Das Versenden von Rohstoffen an kleinere Spieler zur Aufbaustütze ist erlaubt. 
                              Der umgekehrte Weg jedoch wird als Pushing angesehen und ist verboten. Die 
-                             Anwendung dieser Regel wird situationsabh�ngig von einem Multihunter entschieden.</td>
+                             Anwendung dieser Regel wird situationsabhängig von einem Multihunter entschieden.</td>
 	</tr>
 	<tr>
 		<td class="tblhead" valign="top" nowrap><b>Sitting</b></td>

@@ -290,7 +290,7 @@ if ($error_string != null)
 	if ($_SESSION['clan']->getStatus()&2)
 	  echo "<div class=\"tblhead\" style=\"margin-left:1px; width:125px;float:left;text-align:center;\"><a href=\"#\" onclick=\"showhide(2)\">Bewerbungen</a></div>\n";
 	if ($_SESSION['clan']->getStatus()&4)
-	  echo "<div class=\"tblhead\" style=\"margin-left:1px; width:125px;float:left;text-align:center;\"><a href=\"#\" onclick=\"showhide(3)\">Au�enministerium</a></div>";
+	  echo "<div class=\"tblhead\" style=\"margin-left:1px; width:125px;float:left;text-align:center;\"><a href=\"#\" onclick=\"showhide(3)\">Außenministerium</a></div>";
 	if ($_SESSION['clan']->getStatus()&63)
 	  echo "<div class=\"tblhead\" style=\"margin-left:1px; width:125px;float:left;text-align:center;\"><a href=\"#\" onclick=\"showhide(4)\">Ordensbeschreibung</a></div>\n";
 	echo "</div><br />\n";
@@ -427,7 +427,7 @@ if ($error_string != null)
 	echo "</form>";
 
 		echo '<form action="'.$PHP_SELF.'" method="POST">';	
-	// AU�ENMINISTERIUM
+	// AUßENMINISTERIUM
 	if ($clan->getStatus() & 4) {	
 		echo "<table id=\"lay3\" style=\"margin-top:4px; display:none; width:500px;\">";
 		echo '<tr class="tblhead"><td colspan="6">Aussenministerium</td></tr>';
@@ -474,7 +474,7 @@ if ($error_string != null)
 	 echo "</td></tr>";
 	 echo '<tr class="tblbody" id="misub1">';
 	 echo '<td colspan="2"><input type="submit" style="width:100%;" name="peace" value=" Frieden anbieten "></td>';
-	 echo '<td colspan="2"><input type="submit" style="width:100%;" name="delnap" value=" NAP k�ndigen "></td>';
+	 echo '<td colspan="2"><input type="submit" style="width:100%;" name="delnap" value=" NAP kündigen "></td>';
 	 echo '<td colspan="2"><input type="submit" style="width:100%;" name="delbnd" value=" B&uuml;ndnis k&uuml;ndigen "></td></tr>';
 	 echo '<tr></tr>';
 	 // Angebote - Fremde
@@ -633,7 +633,7 @@ if ($error_string != null)
 	   if (isset($applText)) echo $applText;
 	   echo "</textarea></td></tr>";
 	   echo "</table>";
-	   echo '<input '.($player->getNoobLevel() > 0 ? 'onClick="return confirm(\'In einem Orden wirkt der Neulingsschutz nicht, falls der Orden Krieg führt. Seid Ihr also sicher, dass Ihr beitreten m�chtet?\')"': "").' type="submit" name="joinClan" value=" Beitreten ">';
+	   echo '<input '.($player->getNoobLevel() > 0 ? 'onClick="return confirm(\'In einem Orden wirkt der Neulingsschutz nicht, falls der Orden Krieg führt. Seid Ihr also sicher, dass Ihr beitreten möchtet?\')"': "").' type="submit" name="joinClan" value=" Beitreten ">';
 	 }
        echo "</form>";
      }

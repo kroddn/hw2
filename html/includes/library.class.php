@@ -289,14 +289,14 @@ class Library {
 	   $info['description'].=" <b>".$religions[$data1['religion']-1]."</b> (Religionsvorraussetzung)<p>";
 	}
 
-	if ($data1['maxy']==NULL) $info['description'].="keine Gebietsbeschr�nkungen<p>";
+	if ($data1['maxy']==NULL) $info['description'].="keine Gebietsbeschränkungen<p>";
 	else {
 	  $maxy = $fy * $data1['maxy'] / 1000;
           if ($maxy > 0) {
-            $info['description'].="Nur <b>s�dlich von Y = ".$maxy."</b> (Gebietsbeschr�nkung)<p>";
+            $info['description'].="Nur <b>südlich von Y = ".$maxy."</b> (Gebietsbeschränkung)<p>";
           }
           else {
-            $info['description'].="Nur <b>n�rdlich von Y = ".(-$maxy-1)."</b> (Gebietsbeschr�nkung)<p>";
+            $info['description'].="Nur <b>nördlich von Y = ".(-$maxy-1)."</b> (Gebietsbescänkung)<p>";
           }
 
 	}
@@ -313,7 +313,7 @@ class Library {
 	    $have = mysqli_num_rows($check_have) > 0;
 	  }
       
-	  $info['description'].="<b>Ben�tigte Forschung:</b><br>";
+	  $info['description'].="<b>Benötigte Forschung:</b><br>";
 	  $info['description'].='<a '.($have ? "" : 'class="red"').' href="library.php?s1=3&s2='.$research['category']."&s3=0&research_id=".$research['id']."&standalone=".$standalone.'">'.$research['name']."</a><br>";
 	}
 					
@@ -329,7 +329,7 @@ class Library {
 	case "s3": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Wein<br><br>"; break; }
 	case "s4": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Weizen<br><br>"; break; }
 	case "s5": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Pelze<br><br>"; break; }
-	case "s6": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Kr�uter<br><br>"; break; }
+	case "s6": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Kräuter<br><br>"; break; }
 	case "s7": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Gold<br><br>"; break; }
 	case "s8": { $info['description'].="<b>1</b> Gebäude pro Sonderfeld Edelstein<br><br><br>"; break; }
 	default: { $info['description'].="<br><br><br>"; break; }
@@ -370,14 +370,14 @@ class Library {
 	if ($data1['res_iron']>0) $info['description'].="<b>".$data1['res_iron']*IRON_PRODFACTOR."</b> <img src='".$imagepath."/iron2.gif'>/Tick (Ressourcenerzeugung, bei Verbrauch von doppelt soviel Eisenerz)<br>";
 	if ($data1['res_stone']>0) $info['description'].="<b>".$data1['res_stone']*STONE_PRODFACTOR."</b> <img src='".$imagepath."/stone2.gif'>/Tick (Ressourcenerzeugung, bei Verbrauch von doppelt soviel Bruchstein)<br>";
 	if ($data1['res_foodstorage']>0) $info['description'].="Lagerplatz für <b>".$data1['res_foodstorage']."</b> Nahrung<br>";
-	if ($data1['res_storage']>0) $info['description'].="Allgemeiner Lagerplatz: <b>".$data1['res_storage']."</b> Einheiten (Ausr�stung etc.)<br>";
+	if ($data1['res_storage']>0) $info['description'].="Allgemeiner Lagerplatz: <b>".$data1['res_storage']."</b> Einheiten (Ausrüstung etc.)<br>";
 	if ($data1['res_rp']>0) $info['description'].="<b>".($data1['res_rp']/2)."</b> <img src='".$imagepath."/rp.gif'>/Tick (pro ".RESEARCHEW." Einwohner)<br>";
 	if ($data1['res_attraction']>0) $info['description'].="<b>".$data1['res_attraction']."</b> Attraktivität<br>";
 	if ($data1['res_defense']>0) $info['description'].="Verteidigungsbonus: <b>".$data1['res_defense']." Punkte</b><br>";
 	if ($data1['res_training1']>0) $info['description'].="Erlaubt die Ausbildung von bis zu <b>".$data1['res_training1']."</b> Einheiten (gleichzeitig, Level1)<br>";
 	if ($data1['res_training2']>0) $info['description'].="Erlaubt die Ausbildung von bis zu <b>".$data1['res_training2']."</b> Einheiten (gleichzeitig, Level2 oder niedriger)<br>";
 	if ($data1['res_training3']>0) $info['description'].="Erlaubt die Ausbildung von bis zu <b>".$data1['res_training3']."</b> Einheiten (gleichzeitig, Level3 oder niedriger)<br>";
-	if ($data1['res_scouttime']>0) $info['description'].="<b>".formatTime($data1['res_scouttime'])."</b> Stunden Voraufkl�rung<br>";
+	if ($data1['res_scouttime']>0) $info['description'].="<b>".formatTime($data1['res_scouttime'])."</b> Stunden Voraufklärung<br>";
 	if ($data1['res_shortrange']>0) $info['description'].="<b>".$data1['res_shortrange']*SHORTRANGE_PRODFACTOR."</b> <img src='".$imagepath."/sword.gif'>/Tick (Erzeugung, bei Verbrauch von ".SHORTRANGE_COST."mal soviel Eisen)<br>";
 	if ($data1['res_longrange']>0) $info['description'].="<b>".$data1['res_longrange']*LONGRANGE_PRODFACTOR."</b> <img src='".$imagepath."/bow.gif'>/Tick (Erzeugung, bei Verbrauch von ".LONGRANGE_COST."mal soviel Holz)<br>";
 	if ($data1['res_armor']>0) $info['description'].="<b>".$data1['res_armor']*ARMOR_PRODFACTOR."</b> <img src='".$imagepath."/armor.gif'>/Tick (Erzeugung, bei Verbrauch von ".ARMOR_COST."mal soviel Eisen)<br>";
@@ -400,7 +400,7 @@ class Library {
 	    $img = getUnitImage($data1);
 
 	    $info['topic']=$data1['name'];
-	    // Einheiten-Icon in GROSS anh�ngen
+	    // Einheiten-Icon in GROSS anhängen
 	    $info['description'] = sprintf('<img src="%s/g%s"><br>', $GLOBALS['imagepath'], $img);
 	    $info['description'].= $data1['description']==NULL ? "(kein Beschreibungstext vorhanden)" : $data1['description'];
 	    
@@ -419,7 +419,7 @@ class Library {
 	    else $info['description'].="<b>".$data1['cost']."</b> <img src='".$imagepath."/gold2.gif'>/Tick (Unterhaltskosten)<br><br>";
 	    if ($data1['religion']==NULL) $info['description'].="keine Religionsvorraussetzung<br>";
 	    else $info['description'].="<b>".$religions[$data1['religion']-1]."</b> (Religionsvorraussetzung)<br>";
-	    $info['description'].="<br><b>Ben�tigte Forschung:</b><br>";
+	    $info['description'].="<br><b>Benötigte Forschung:</b><br>";
 	    $info['description'].=$data1['rname']."<br><br>";
 	    $info['description'].="<b>Typ:</b> ".$unittypes[$data1['type']-1]."<br>";
 	    $info['description'].="<b>Level ".$data1['level']."</b><br><br>";
@@ -443,7 +443,7 @@ class Library {
       while($data1=mysqli_fetch_assoc($res1)) {
 
 
-	// die F�higkeiten Anzeigen, die dadurch forschbar werden
+	// die Fähigkeiten Anzeigen, die dadurch forschbar werden
 	$res = do_mysqli_query("SELECT name,id,category FROM req_research LEFT JOIN research ON research.id=research_id ".
 			      " WHERE req_research = ".intval($rid) );
 
@@ -462,8 +462,8 @@ class Library {
 	  }	 
 	}
 	
-	// Bei Milit�rforschungen Gebäude anzeigen
-	// die F�higkeiten Anzeigen, die dadurch forschbar werden
+	// Bei Militärforschungen Gebäude anzeigen
+	// die Fähigkeiten Anzeigen, die dadurch forschbar werden
 	$res = do_mysqli_query("SELECT name,id,religion FROM unit ".
 			      " WHERE req_research = ".intval($rid) );
 	$rows = mysqli_num_rows($res);
@@ -515,7 +515,7 @@ class Library {
 
 	$res2=do_mysqli_query("SELECT research.name AS name, research.id AS id, lib_link FROM research, req_research  WHERE research.id = req_research.req_research AND req_research.research_id = ".$data1['id']);
 	if(mysqli_num_rows($res2)>0) {
-	  $info['description'].="<p><b>Ben�tigte Forschungen:</b><br>";
+	  $info['description'].="<p><b>Benötigte Forschungen:</b><br>";
 	  while($data2=mysqli_fetch_assoc($res2)) {
 	    if ($this->player==-1) {
 	      $check_have=do_mysqli_query("SELECT id as research FROM research WHERE id = ".$data2['id']);

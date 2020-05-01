@@ -200,7 +200,7 @@ echo "<tr><td> &nbsp </td></tr>";
 echo "<tr><td><a href=\"clan.php\">zurück</a></td></tr>";
 echo "<tr><td> &nbsp </td></tr>";
 echo "<tr><td><b>Bemerkung:</b> </td></tr>";
-echo "<tr><td colspan=\"4\">Mit * gekennzeichnete Spieler geh�ren nicht mehr dem Orden an!</td></tr>";
+echo "<tr><td colspan=\"4\">Mit * gekennzeichnete Spieler gehüren nicht mehr dem Orden an!</td></tr>";
 echo "</table>\n";
 }
 

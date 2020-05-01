@@ -49,7 +49,7 @@ Hier <b>sollte nun ein Werbebanner erscheinen</b> (zwischen den 2 Trennlinien di
 <hr>
 <br>
 Erscheint hier <b>KEIN Banner</b>, dann benutzt Ihr Browser wohl einen Banner-Blocker.
-Um Holy-Wars 2 wenigstens ein wenig zu Unterstützen sollten Sie sich bem�hen, diese
+Um Holy-Wars 2 wenigstens ein wenig zu Unterstützen sollten Sie sich bemühen, diese
 Banner-Blockade für Holy-Wars 2 aufzuheben.
 <p>
 <b>Der Hintergrund:</b><br>Die technische Ausstattung in Form von Servern verursacht regelmäßige Kosten, 
@@ -61,8 +61,8 @@ unserer Sponsoren sichert Ihr den kostenlosen Betrieb von Holy-Wars II.<p>
 <p>
 <hr>
 <p>
-Des weiteren habt Ihr die M�glichkeit, Holy-Wars II durch den <a href="premium.php">Erwerb eines Premium-Accounts</a> zu Unterstützen. 
-Ein solcher Account ist werbefrei und bietet - je nach H�he der Spende - zusätzliche Vorteile. Unter anderem erscheint dann keine
+Des weiteren habt Ihr die Möglichkeit, Holy-Wars II durch den <a href="premium.php">Erwerb eines Premium-Accounts</a> zu Unterstützen. 
+Ein solcher Account ist werbefrei und bietet - je nach Höhe der Spende - zusätzliche Vorteile. Unter anderem erscheint dann keine
 Werbung mehr.
 <hr>
 </td></tr>

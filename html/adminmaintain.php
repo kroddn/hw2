@@ -95,7 +95,7 @@ if (isset($delete)) {
 
 $res_buildings = do_mysqli_query("SELECT city,building FROM citybuilding LEFT JOIN city on citybuilding.city =  city.id WHERE city.id IS NULL");
 $num_buildings = mysqli_num_rows($res_buildings);
-// Gebäude ohne zugeh�rige Städte löschen
+// Gebäude ohne zugehörige Städte löschen
 if (isset($deletebuildings)) {  
   while ($del = mysqli_fetch_assoc($res_buildings)) {
     $sql =  "DELETE FROM citybuilding WHERE city = ".$del['city']." AND building=".$del['building'];
@@ -145,7 +145,7 @@ echo 'Es gibt <b>'.$city_without_owner['cnt'].' Städte ohne Spieleraccount</b>.
 
 
 // Gebäude ohne Stadt (wird oben abgefragt)
-echo 'Es gibt <b>'.$num_buildings.' Gebäude ohne zugeh�rige Stadt</b> (eigentlich m�sste hier immer 0 stehen!!!). <a href="?deletebuildings=1">Diese JETZT löschen.</a><p>';
+echo 'Es gibt <b>'.$num_buildings.' Gebäude ohne zugehörige Stadt</b> (eigentlich müsste hier immer 0 stehen!!!). <a href="?deletebuildings=1">Diese JETZT löschen.</a><p>';
 echo "<p><hr>";
 
 

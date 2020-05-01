@@ -28,7 +28,7 @@
  * Struktur Angreifer/Verteidiger/Ausgabe
  * $xxx[$i]['id'] = Unit-ID
  * $xxx[$i]['count'] = Unit-Anzahl
- * $xxx[$i]['player'] = Spieler-ID (wem die Einheit geh�rt: wichtig bei Belagerung mit mehreren Beteiligten)
+ * $xxx[$i]['player'] = Spieler-ID (wem die Einheit gehört: wichtig bei Belagerung mit mehreren Beteiligten)
  *
  *
  */
@@ -60,7 +60,7 @@ function fight($at, $df, $defensebonus, $tactic) {
         $lifefactor     = 1.1;
         $bonusfactor    = 0.95;
       }
-      // 2 = Erst�rmen
+      // 2 = Erstürmen
       elseif ($tactic == 2) {
         //$data1['damage'] = ceil($data1['damage'] * 1.22);
         //$data1['life'] = ceil($data1['life'] * 0.75);
@@ -131,9 +131,9 @@ function fight($at, $df, $defensebonus, $tactic) {
         $atbonus3 = 0;
         $dfcount = 0;
         $dfmain = 0;
-        $dfbonus1 = 0;		// Bogen Bonus vs Nahk�mpfer
+        $dfbonus1 = 0;		// Bogen Bonus vs Nahkämpfer
         $dfbonus2 = 0;		// Kavallarie Bonus vs Bogen
-        $dfbonus3 = 0;		// Nahk�mpfer Bonus vs Kavallerie
+        $dfbonus3 = 0;		// Nahkämpfer Bonus vs Kavallerie
         // Schaden errechnen
         for ($i = 0; $i < sizeof($at); ++ $i) {
             $atcount  += $at[$i]['count'];
@@ -293,7 +293,7 @@ function compute_despoil($city, $army) {
             if ($clan_data = mysqli_fetch_assoc($clan_res)) {
                 $price['cgold'] = floor(($prop['gold'] / $clan_data['finance']) * $clan_data['gold']);
                 
-                // Pl�nderung aus OK beschr�nken
+                // Plünderung aus OK beschränken
                 if ($price['cgold'] > $worth['gold'] * 2) {
                   $price['cgold'] = $worth['gold'] * 2;
                 }
@@ -320,7 +320,7 @@ function compute_despoil($city, $army) {
     if ($price['stone'] > $data1['stone'])
         $price['stone'] = $data1['stone'];
 
-    // Kalkuliere Eisen-Pl�nderung anhand von Stein und Holz
+    // Kalkuliere Eisen-Plünderung anhand von Stein und Holz
     $price['iron'] = ($price['stone'] +  $price['wood']) / 2;
     if ($price['iron'] > $data1['iron'])
         $price['iron'] = $data1['iron'];
@@ -395,7 +395,7 @@ function compute_despoil_new($city, $army, $burn = false) {
   }
   else {
   	if($city_data['owner']) {
-  	  // Siedler zur Stadtbev�lkerung addieren
+  	  // Siedler zur Stadtbevölkerung addieren
   	  $settler_data = do_mysqli_query_fetch_array("SELECT sum(missiondata) as settler_sum FROM army WHERE start = ".$city['cid']." AND owner=".$city_data['owner']."");
   	}
   	
@@ -418,7 +418,7 @@ function compute_despoil_new($city, $army, $burn = false) {
   }
   
   if ($price['gold'] > 0) {
-    // Bev�lkerungsstrafe maximal 50% der Bev�lkerung
+    // Bevölkerungsstrafe maximal 50% der Bevölkerung
     /*$price['penalty'] = round(min(0.5, $price['gold'] * 5 
                                   / (PROSPERITY_MAX_FACTOR * $city_data['attr'])
                                   * ($city_data['population']*2/$city_data['attr'])
@@ -429,12 +429,12 @@ function compute_despoil_new($city, $army, $burn = false) {
     $settler_sum_old = $settler_data['settler_sum'];
     $population_percentage_old = ($population_sum_old / $people_sum_old);
     $settler_percentage_old = ($settler_sum_old / $people_sum_old);
-    // Bev�lkerungsstrafe maximal 50% der (Bev�lkerung + Siedler)
+    // Bevölkerungsstrafe maximal 50% der (Bevölkerung + Siedler)
     $price['penalty'] = round(min(0.5, $price['gold'] * 5 
                                   / (PROSPERITY_MAX_FACTOR * $city_data['attr'])
                                   * ($people_sum_old*2/$city_data['attr']))                               
                               		* $people_sum_old);
-    // Neue Anzahl der Siedler und B�rger ausrechnen
+    // Neue Anzahl der Siedler und Bürger ausrechnen
     $people_sum_new = ($people_sum_old - $price['penalty']);
     //$population_sum_new = $city_data['population'];
     //$settler_sum_old = $settler_data['settler_sum'];
@@ -473,13 +473,13 @@ function compute_despoil_new($city, $army, $burn = false) {
         $settler_sum_new2 += $new_settler_amount;
         //$last_aid = $settler_data['aid'];
         //$last_amount = $new_settler_amount;
-        // ID's und Gr�sse der Siedlertrupps in einem Feld speichern
+        // ID's und Grösse der Siedlertrupps in einem Feld speichern
         $settler_array[$count_settler_units]['id'] = $settler_data['aid'];
         $settler_array[$count_settler_units]['count'] = $new_settler_amount;
         $count_settler_units++;
       }
       // Test, ob korrekte Anzahl Siedler gestorben ist
-      // wenn nicht zuf�lligen Trupp ausw�hlen und Differenz abziehen
+      // wenn nicht zufälligen Trupp auswählen und Differenz abziehen
       if($settler_sum_new2<$settler_sum_new) {
         //echo "Zu wenig Siedler gestorben -> gleiche aus: ".($settler_sum_new-$settler_sum_new2)." Siedler zusätzlich gestorben in army = ".$last_aid.", last_amount = ".$last_amount."\n";
         $choose_settler_array_id = mt_rand(0,$count_settler_units-1);
@@ -517,7 +517,7 @@ function compute_despoil_new($city, $army, $burn = false) {
       
         $price['cgold'] = round($clan_data['gold'] / $clan_data['finance']);
 
-        // Die Menge begrenzen. Aus ner armen Stadt wird auch weniger OK gepl�ndert
+        // Die Menge begrenzen. Aus ner armen Stadt wird auch weniger OK geplündert
         if ($price['cgold'] > $price['gold']) {
           if ($burn)
             $price['cgold'] = rand( $price['gold'], min($price['cgold'], $max_gold) );
@@ -559,7 +559,7 @@ function compute_despoil_new($city, $army, $burn = false) {
 
 /* Verteidiger wagt einen Ausfall gegen die Belagerer
  *
- * Dabei k�mpfen s�mtliche Verteidiger gegen s�mtliche Belagerer.
+ * Dabei kämpfen sämtliche Verteidiger gegen sämtliche Belagerer.
  * 
  */
 function attackSiege($cityid) {
@@ -586,14 +586,14 @@ function attackSiege($cityid) {
   $siege_res = do_mysqli_query ($sql);
   
   if (mysqli_num_rows($siege_res) == 0) {
-    return "Diese Stadt ist nicht unter Belagerung oder geh�rt nicht Euch.\n";
+    return "Diese Stadt ist nicht unter Belagerung oder gehört nicht Euch.\n";
   }
   else if ($siege_time < SALLY_MIN_SIEGE_TIME) {
     return "Sire! Wir sind noch nicht auf einen Ausfall vorbereitet. Gebt uns noch Zeit (es muss mindestens ".round(SALLY_MIN_SIEGE_TIME/60)." Minuten belagert worden sein).\n";  
   }
   else {
     // Ein Kampf beginnen, bei dem der Belagerer zum Verteidiger und der Stadtbesitzer zum Angreifer wird
-    // Taktik ist in diesem Fall erst�rmen
+    // Taktik ist in diesem Fall erstürmen
     $bonus = 0;    
 
     /*
@@ -698,10 +698,10 @@ function attackSiege($cityid) {
             $empty_armies .= $aid.", ";
           }
         }
-        // noch eine Null dranh�ngen, weil die aid in der form "11,12,332,44," zusammengebaut sind
+        // noch eine Null dranhängen, weil die aid in der form "11,12,332,44," zusammengebaut sind
         $empty_armies .= "0";
 
-        // Nun die überlebenden einf�gen
+        // Nun die überlebenden einfügen
         $aid = -1;
         foreach ($fightresult as $army) {
           $surviving_units .= " ".$army['count']." ".$arr_units[$army['id']]." von ".$arr_players[$army['player']]."\n";
@@ -715,7 +715,7 @@ function attackSiege($cityid) {
                          $army['count']);
           do_mysqli_query($sql, null, false);
         }
-        // Wieder ne 0 dranh�ngen, wie oben
+        // Wieder ne 0 dranhängen, wie oben
         $resulting_armies .= "0";
         $sql = "DELETE FROM army WHERE aid IN (".$empty_armies.") AND aid NOT IN (".$resulting_armies.")";
         do_mysqli_query($sql);

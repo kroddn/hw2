@@ -1,29 +1,31 @@
+Create a ConfigClass for PHP
+
 Login/Logout
   * Tabelle log_login um session_id erweitern und bei log_logout() entsprechend
     den Eintrag mit dieser session_id aktualisieren
     
 
 Turniere
-  * [DONE 01.12.2009] Für das ERSTE Turnier keine Bonuspunkte verlangen
+  * [DONE 01.12.2009] FÃ¼r das ERSTE Turnier keine Bonuspunkte verlangen
 
-Löschfunktion
-  * [DONE] Verzögertes Löschen/Löschmarkierung
-  * [DONE] Eigentliches Löschen erst nach 24 Stunden
-  * [DONE] Löschmarkierung durch Login wieder deaktivieren
-  * [DONE] Städte werden zu "freie Städte"
-  * [DONE] Löschen von Städten direkt, falls Account zu jung/im Noobschutz?  
+LÃ¶schfunktion
+  * [DONE] VerzÃ¶gertes LÃ¶schen/LÃ¶schmarkierung
+  * [DONE] Eigentliches LÃ¶schen erst nach 24 Stunden
+  * [DONE] LÃ¶schmarkierung durch Login wieder deaktivieren
+  * [DONE] StÃ¤dte werden zu "freie StÃ¤dte"
+  * [DONE] LÃ¶schen von StÃ¤dten direkt, falls Account zu jung/im Noobschutz?  
 
  
 Noobschutz
   * Aufheben des Noobschutzes, wenn man sich 48 Stunden nicht eingeloggt hat
   
   
-"freie Städte"
+"freie StÃ¤dte"
   * [DONE] owner NULL
-  * [DONE] cityunit - Spielertruppen bleiben, fremde Truppen werden gelöscht
-  * [DONE] Bevölkerung verhält sich wie bei normalen Städten
-  * [DONE] Jeder Spieler hat automatisch Krieg mit diesen Städten
-  * WICHTIG: Spieler im Noobschutz sollten KEINEN Krieg mit diesen Städten haben
+  * [DONE] cityunit - Spielertruppen bleiben, fremde Truppen werden gelÃ¶scht
+  * [DONE] BevÃ¶lkerung verhÃ¤lt sich wie bei normalen StÃ¤dten
+  * [DONE] Jeder Spieler hat automatisch Krieg mit diesen StÃ¤dten
+  * WICHTIG: Spieler im Noobschutz sollten KEINEN Krieg mit diesen StÃ¤dten haben
   * Stadt produziert Truppen
 
 
@@ -34,23 +36,23 @@ Aktivierung:
   * Aktivieren durch Email
   
   
-"Spionage" überarbeiten
-  * Wahrscheinlichkeit des Überlebens einzelner Angreifer abhängig von Truppenzahl in Stadt und Anzahl angreifer
+"Spionage" Ã¼berarbeiten
+  * Wahrscheinlichkeit des Ã¼berlebens einzelner Angreifer abhÃ¤ngig von Truppenzahl in Stadt und Anzahl angreifer
     
   
-Bonuspunkte fürs Voting
+Bonuspunkte fÃ¼rs Voting
 
 
-Kaufen von PA für Bonuspunkte
+Kaufen von PA fÃ¼r Bonuspunkte
 
 
 Multihunter erweitern
   * "Annotations" von Multihuntern zu Spielern
-  * Logging von Änderungen am Spielerstatus
+  * Logging von Ã„nderungen am Spielerstatus
   
   
-Plünderungen/Brandschatzung - Abbrechen der Ausbildung
- * Dem Verteidiger ne Nachricht übermitteln wenn Truppenausbildung angebrochen wurde
- * Ausbildung nur dann abbrechen, wenn auch wirklich geplündert wurde
+PlÃ¼nderungen/Brandschatzung - Abbrechen der Ausbildung
+ * Dem Verteidiger ne Nachricht Ã¼bermitteln wenn Truppenausbildung angebrochen wurde
+ * Ausbildung nur dann abbrechen, wenn auch wirklich geplÃ¼ndert wurde
  
  

@@ -129,9 +129,9 @@ if(isset($calc) && $_SESSION['player']->isMaintainer()) {
 
 
 /**
- * Spieler m�chte an einem Turnier teilnehmen
+ * Spieler möchte an einem Turnier teilnehmen
  *
- * "tournamentmagic" dient dazu, dass man nicht mehrmals die Seite neu l�dt.
+ * "tournamentmagic" dient dazu, dass man nicht mehrmals die Seite neu lädt.
  */
 if(isset($tid) && isset($part) &&
 (!isset($_SESSION['tournamentmagic']) || $tmagic == $_SESSION['tournamentmagic']))
@@ -151,7 +151,7 @@ if(isset($tid) && isset($part) &&
     $t = mysqli_fetch_assoc($tres);
 
     if($t['over']) {
-      $error = "Turnier vor�ber.";
+      $error = "Turnier vorüber.";
     }
     else {
       switch($part) {
@@ -203,7 +203,7 @@ if(isset($tid) && isset($part) &&
               if(mysqli_affected_rows($GLOBALS['con']) == 0) {                
                 $test_count = do_mysqli_query("SELECT tid FROM tournament_players WHERE player = $pid LIMIT 1");
                 if(mysqli_num_rows($test_count) > 0) {
-                  $error = "Ihr habt nicht gen�gend Bonuspunkte!";
+                  $error = "Ihr habt nicht genügend Bonuspunkte!";
                   $allow_it = false;
                 }                   
               }
@@ -323,8 +323,8 @@ in Kurzfassung:</span>
 	Bonuspunkte verloren.
 	
 	
-	<li>Es müssen mindestens die H�fte der maximalen Teilnehmer ihre
-	Teilnahme am Turnier bestätigt haben. Ansonsten f�llt es aus.
+	<li>Es müssen mindestens die Häfte der maximalen Teilnehmer ihre
+	Teilnahme am Turnier bestätigt haben. Ansonsten füllt es aus.
 	
 	
 	<li>Das Turnier startet automatisch am Ende der angegebenen Zeitspanne.
@@ -332,8 +332,8 @@ in Kurzfassung:</span>
 	
 	
 	<li>Haben sich mehr Spieler angemeldet, als das Turnier angibt, dann
-	spielen jene Spieler mit, die sich am fr�hesten angemeldet haben. Es
-	ist also lohnend, sich fr�h anzumelden. Die �brigen Spieler sind dann
+	spielen jene Spieler mit, die sich am frühesten angemeldet haben. Es
+	ist also lohnend, sich früh anzumelden. Die übrigen Spieler sind dann
 	halt leider Zuschauer.
 	
 	
@@ -355,7 +355,7 @@ Derzeit bekannte Fehler:
 <h1>Die Turniere</h1>
 Euch stehen
 <? echo $_SESSION['player']->getBonuspoints(); ?>
-Bonuspunkte zur Verf�gung.
+Bonuspunkte zur Verfügung.
 <p><?
 if(isset($part)) {
   if($inform != null) {
@@ -417,7 +417,7 @@ while($t = mysqli_fetch_assoc($tourn)) {
 
   $url= '<a href="'.$PHP_SELF.'?tmagic='.$tournamentmagic.'&tid='.$t['tid'].'&part=%d">%s</a>';
   if($t['over']) {
-    $action = "vor�ber";
+    $action = "vorüber";
     if($_SESSION['player']->isMaintainer() && $t['calctime']) {
       $action .= ", berechnet";
     }
@@ -427,7 +427,7 @@ while($t = mysqli_fetch_assoc($tourn)) {
     // anzeigen:
     if($isover) {
       $isover = false;
-      echo '</table><hr><table cellpadding="0" cellspacing="0" width="600"><tr><td><h2>Zuk�nftige Turniere</h2></td></tr></table>';
+      echo '</table><hr><table cellpadding="0" cellspacing="0" width="600"><tr><td><h2>Zukünftige Turniere</h2></td></tr></table>';
 
       printTableHeader(1);
     }
@@ -435,7 +435,7 @@ while($t = mysqli_fetch_assoc($tourn)) {
     if($t['me'] > 0) {
       if($t['now']) {
         if($t['booktime'])
-        $action = 'Ihr K�mpft!';
+        $action = 'Ihr Kämpft!';
         else
         $action = sprintf($url, 2, TOURNAMENT_CONFIRM_TEXT);
       }
@@ -469,11 +469,11 @@ in Kurzfassung:</span>
 <ul style="width: 600px;">
 	<li>Jeder Spieler kann <? echo TOURNAMENT_MAX_ORGANIZE;?> (<? echo TOURNAMENT_MAX_ORGANIZE_PREMIUM;?>,
 	wenn er Premium-User ist) Turnier<? if(TOURNAMENT_MAX_ORGANIZE > 1) echo "e";?>
-	veranstalten. Bereits absolvierte Turniere zählen nat�rlich nicht mit.
+	veranstalten. Bereits absolvierte Turniere zählen natürlich nicht mit.
 	
 	
 	
-	<li>Der Veranstalter legt die H�he des Preisgeldes fest. Diesen Betrag
+	<li>Der Veranstalter legt die Höhe des Preisgeldes fest. Diesen Betrag
 	erhält der Veranstalter nicht mehr zurück.
 	
 	
@@ -482,13 +482,13 @@ in Kurzfassung:</span>
 	
 	
 	<li>Der Veranstalter legt die maximale Anzahl an Teilnehmern fest. Das
-	Turnier <b>findet nicht statt</b>, wenn weniger als die H�lfte dieser
+	Turnier <b>findet nicht statt</b>, wenn weniger als die Hälfte dieser
 	Zahl ihre Teilnahme <b>bestätigt</b> haben.
 	
 	
 	<li>Die Mindestanzahl von <? echo TOURNAMENT_MIN_PLAYERS; ?>
-	Teilnehmern gilt hier nat�rlich auch. Das bedeutet, der Veranstalter
-	mu� als Maximalzahl mindestens <? echo 2*TOURNAMENT_MIN_PLAYERS; ?>
+	Teilnehmern gilt hier natürlich auch. Das bedeutet, der Veranstalter
+	muss als Maximalzahl mindestens <? echo 2*TOURNAMENT_MIN_PLAYERS; ?>
 	Teilnehmer eintragen.
 
 </ul>

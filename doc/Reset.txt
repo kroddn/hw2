@@ -67,10 +67,10 @@ html/includes/service.php
 
 Die SQL-Dateien aus dem Ordner SQL sind die Tabellendefinitionen, und die haben GENAU den Sinn :-)
 
-Leider gibts noch kein Script, dass die Dateien in der richtigen Reihenfolge an MYSQL �bergibt.
+Leider gibts noch kein Script, dass die Dateien in der richtigen Reihenfolge an MYSQL übergibt.
 
-Ich w�rde mich freuen, wenn jemand ein Bash oder PHP-Script daf�r schreiben m�chte.
+Ich würde mich freuen, wenn jemand ein Bash oder PHP-Script dafür schreiben möchte.
 
 Die Mysql Datenbank muss als "collation" latin1_german2_ci haben.
 
-Es fehlen sicherlich auch noch Tabellen. Die aktuell verf�gbaren sollten aber reichen, so dass zumindest mal ein Login stattfinden kann.
+Es fehlen sicherlich auch noch Tabellen. Die aktuell verfügbaren sollten aber reichen, so dass zumindest mal ein Login stattfinden kann.

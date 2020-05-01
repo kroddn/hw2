@@ -112,7 +112,7 @@ function calc_tournaments() {
       $R[$i] = getRPG($p['player']);
       $R[$i]['name'] = $p['name'];
       $R[$i]['nr']   = $i;
-      $R[$i]['fortune'] = 0; // Gl�ck mit 0 initialisieren
+      $R[$i]['fortune'] = 0; // Glück mit 0 initialisieren
       $i++;
       tDebug("<li>".$p['name']."\n");
       $text .= "\n[*]".$p['name'];
@@ -125,7 +125,7 @@ function calc_tournaments() {
     $text .= "\n[/list]\n";
 
     /**
-     * Nun die K�mpfe austragen.
+     * Nun die Kämpfe austragen.
      */
     if($t['maxplayers'] >= TOURNAMENT_MIN_PLAYERS &&
     $num >= $t['maxplayers'] / 2) {
@@ -140,10 +140,10 @@ function calc_tournaments() {
       tDebug("\nGewinner des Turniers:\n<ol><!-- Winners -->\n");
       $text .= "\nGewinner des Turniers:[list]";
 
-      tDebug("<li>".$result['first']['name'].", erhält $firstgold Gold Pr�mie</li>\n");
-      tDebug("<li>".$result['second']['name'].", erhält $secondgold Gold Pr�mie</li>\n");  
-      $text .= "\n[*] ".$result['first']['name'].", erhält $firstgold Gold Pr�mie";
-      $text .= "\n[*] ".$result['second']['name'].", erhält $secondgold Gold Pr�mie\n[/list]";
+      tDebug("<li>".$result['first']['name'].", erhält $firstgold Gold Prämie</li>\n");
+      tDebug("<li>".$result['second']['name'].", erhält $secondgold Gold Prämie</li>\n");  
+      $text .= "\n[*] ".$result['first']['name'].", erhält $firstgold Gold Prämie";
+      $text .= "\n[*] ".$result['second']['name'].", erhält $secondgold Gold Prämie\n[/list]";
 
       do_mysqli_query("UPDATE player SET gold=gold+$firstgold,cc_resources=1".
 		     " WHERE id = ".$result['first']['player']);
@@ -202,7 +202,7 @@ function calc_tournaments() {
 				  " WHERE tid = ".$t['tid']);
         while($pl = mysqli_fetch_assoc($players)) {
           $topic = "Turnier ausgefallen";
-          $body = "Das Turnier ist ausgefallen, weil nicht gen�gend Teilnehmer bestätigt haben.\n\n";
+          $body = "Das Turnier ist ausgefallen, weil nicht genügend Teilnehmer bestätigt haben.\n\n";
           $body .= $text;
           inform_tournament_player($pl['player'], $topic, $body);
         }
@@ -248,7 +248,7 @@ function calc_tournaments() {
     		      if($time3[$i]!=$testtime) {
     		        $inserted = 1;
     		        create_tournament($testtime,$max_players);
-    		        tDebug("\nZusätzliches Turnier innerhalb der nächsten 3h eingef�gt ...\n");
+    		        tDebug("\nZusätzliches Turnier innerhalb der nächsten 3h eingefügt ...\n");
     		        break;
     		      }
     		    }
@@ -315,7 +315,7 @@ function tournament_fight(&$OR, &$text) {
   tDebug("<ul style=\"margin-top: 0px;\">");
   $text .= "[list]";
 
-  // Solange noch mehr als 2 Leute k�mpfen:
+  // Solange noch mehr als 2 Leute kämpfen:
   while( ($c = sizeof($R)) > 1 && $round++ < 20) {
     $j = 0;
     $log = pow(2, floor(log($c) / log(2)));
@@ -335,7 +335,7 @@ function tournament_fight(&$OR, &$text) {
         tDebug("<br>".$R[$fortune]['name']." (".$fortune.") kommt durch Losentscheid weiter");
         $text .= "\n[b]".$R[$fortune]['name']."[/b] kommt durch Losentscheid weiter";
 
-        // Gl�ck erhöhen, damit derjenige beim nächstenmal nicht nochmal Gl�ck hat
+        // Glück erhöhen, damit derjenige beim nächstenmal nicht nochmal Glück hat
         $R[$fortune]['fortune'] += 1;
 
         // In nächste Runde übertragen
@@ -346,7 +346,7 @@ function tournament_fight(&$OR, &$text) {
     }
 
     $round2 = 0;
-    // Nun jeweils 2 k�mpfen und den Sieger weiterkommen lassen (Kampfrunden)
+    // Nun jeweils 2 kämpfen und den Sieger weiterkommen lassen (Kampfrunden)
     while(sizeof($R) > 0 && $round2++ < 20) {
       tDebug("<br>Kampf $round2 mit ".sizeof($R)." Teilnehmern - ");
       $text .= "\nKampf $round2 - ";
@@ -360,7 +360,7 @@ function tournament_fight(&$OR, &$text) {
         $ret['first']  = &$a;
         $RN[$j++] = $a;
 
-        // Den Datensatz des Verlieres updaten, der nun $round K�mpfe ausgetragen hat
+        // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
         do_mysqli_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$b['player']);
       }
       else {
@@ -371,7 +371,7 @@ function tournament_fight(&$OR, &$text) {
         $ret['first']  = &$b;
         $RN[$j++] = $b;
 
-        // Den Datensatz des Verlieres updaten, der nun $round K�mpfe ausgetragen hat
+        // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
         do_mysqli_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$a['player']);
       }
       tDebug($ret['first']['name']." besiegt ".$ret['second']['name']);
@@ -385,7 +385,7 @@ function tournament_fight(&$OR, &$text) {
   tDebug("</ul>");
   $text .= "\n[/list]\n";
 
-  // Den Datensatz des Verlieres updaten, der nun $round K�mpfe ausgetragen hat
+  // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
   do_mysqli_query("UPDATE rpg SET fights = fights + $round,victories=victories+1 WHERE player = ".$ret['first']['player']);
 
   return $ret;

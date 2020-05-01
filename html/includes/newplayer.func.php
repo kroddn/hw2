@@ -92,7 +92,7 @@ Login: $login
 Passwort: sollte bekannt sein
 Aktivierungscode: $key
 
-Nach Ihrem ersten Login können Sie einen Spielernamen w�hlen!
+Nach Ihrem ersten Login können Sie einen Spielernamen wählen!
 
 "
   .( 
@@ -100,7 +100,7 @@ Nach Ihrem ersten Login können Sie einen Spielernamen w�hlen!
   // *********************** Neue Aktivierung *******************************
   ? "Um Ihren Account vollständig zu aktivieren, klicken Sie einfach auf
 \"Antworten\" und senden diese komplette Email an uns zurück. 
-Wichtig ist, dass die Absender-Emailadresse mit der w�hrend der Registrierung
+Wichtig ist, dass die Absender-Emailadresse mit der während der Registrierung
 angegebenen Adresse übereinstimmmt und dass die folgende Zeile bei uns ankommt:  
 Aktivierungscode: $key"
   // *********************** alte Aktivierung *******************************
@@ -113,7 +113,7 @@ die Aktivierung aufrufen, und den Aktivierungscode eingeben."
 )."
 
 Vergessen Sie nicht, nach dem ersten Login Ihre Ausgangsstadt umzubenennen und
-weitere Informationen unter dem Men�punkt MyHW2 zu hinterlegen!
+weitere Informationen unter dem Menüpunkt MyHW2 zu hinterlegen!
 
 Bitte installieren Sie auch gleich den Grafik-Pack, um unseren Server zu
 schonen und die Spielgeschwindigkeit zu erhöhen. Download unter:
@@ -121,7 +121,7 @@ schonen und die Spielgeschwindigkeit zu erhöhen. Download unter:
 
 Diese eMail wurde automatisch generiert.
 		
-Viel Spaß w�nscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de");
+Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de");
   
 
   if ($p['ref'] != null) {
@@ -142,10 +142,10 @@ Viel Spaß w�nscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de"
                  "Bevor Ihr sofort loslegt, bitte beachtet unbedingt folgende Punkte:\n".
                  "1. Baut NICHT gleich alle bzw. zu viele Gebäude. Das treibt Euch in den Ruin!\n".
                  "2. Lest Euch unbedingt das Tutorial durch (siehe Bibliothek).\n".
-                 "3. Gr�ndet 2 neue Städte, nicht mehr (wird im Tutorial erkl�rt).\n".
-		         "   Städte gründen könnt Ihr im Rathaus (Men�punkt).\n".
+                 "3. Gründet 2 neue Städte, nicht mehr (wird im Tutorial erklärt).\n".
+		         "   Städte gründen könnt Ihr im Rathaus (Menüpunkt).\n".
 		         "4. Verdient Euch etwas Gold, indem Ihr an Ritterturnieren teilnehmt\n\n".
-                 "zu 1.: ein S�gewerk und zwei Holzfäller reichen anfangs vollkommen aus\n\n".
+                 "zu 1.: ein Sägewerk und zwei Holzfäller reichen anfangs vollkommen aus\n\n".
                  "Und nun viel Spaß beim Spiel!"                 
                  );
 

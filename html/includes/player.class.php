@@ -35,7 +35,7 @@
        
 include_once("includes/config.inc.php");
 
-// Array zum matchen von Settings zu Bin�r-Masken
+// Array zum matchen von Settings zu Binär-Masken
 // Das bit entspricht "2 hoch arrayindex"
 $GLOBALS['arr_settings']
      = array(0 => 'map_own',
@@ -150,7 +150,7 @@ class Player {
     $this->tutorialLvl = $db_player['tutorial'];
     
     // Postausgang
-    // Z�hle die Nachrichten im Postausgang
+    // Zähle die Nachrichten im Postausgang
     if (get_message_archive_size () > 0) {
       $this->messages_sent = -1;
     }
@@ -227,10 +227,10 @@ class Player {
         include_once("includes/sms.func.php");
         $sms_settings = mysqli_fetch_assoc($sms_res);
         
-        // Es müssen einige Bedingungen erf�llt sein
-        // 1. Der Spieler mu� Premium Pro haben
-        // 2. Er mu� ne gültige Nummer hinterlegt haben
-        // 3. Er mu� eingeschaltet haben, dass seine Nummer auch übertragen wird.
+        // Es müssen einige Bedingungen erfüllt sein
+        // 1. Der Spieler muss Premium Pro haben
+        // 2. Er muss ne gültige Nummer hinterlegt haben
+        // 3. Er muss eingeschaltet haben, dass seine Nummer auch übertragen wird.
         if ((is_premium_set_sms_sender() || $this->isAdmin()) &&            
             $sms_settings['sms_nr_show'] > 0
             )
@@ -265,10 +265,10 @@ class Player {
         include_once("includes/sms.func.php");
         $sms_settings = mysqli_fetch_assoc($sms_res);
         
-        // Es müssen einige Bedingungen erf�llt sein
-        // 1. Der Spieler mu� Premium Pro haben
-        // 2. Er mu� ne gültige Nummer hinterlegt haben
-        // 3. Er mu� eingeschaltet haben, dass seine Nummer auch übertragen wird.
+        // Es müssen einige Bedingungen erfüllt sein
+        // 1. Der Spieler muss Premium Pro haben
+        // 2. Er muss ne gültige Nummer hinterlegt haben
+        // 3. Er muss eingeschaltet haben, dass seine Nummer auch übertragen wird.
         if ((is_premium_set_sms_sender() || $this->isAdmin()) &&
             $sms_settings['sms_nr'] &&             
             valid_sms_nr($sms_settings['sms_nr']) )
@@ -409,7 +409,7 @@ class Player {
 	    return ($raw ? "" : "\n\n\n").$this->msgsignature;	    
 	  }
 	  else {
-        return ($raw ? "" : "\n\n\n")."Gezeichnet\n".$this->name."\n-----\nPers�nliche Signaturen sind für Besitzer eines Premium-Accounts möglich. Weitere Infos unter dem Men�punkt Einstellungen!";
+        return ($raw ? "" : "\n\n\n")."Gezeichnet\n".$this->name."\n-----\nPersönliche Signaturen sind für Besitzer eines Premium-Accounts möglich. Weitere Infos unter dem Menüpunkt Einstellungen!";
 	  }	  
 	}
 
@@ -514,7 +514,7 @@ class Player {
 	  if (mysqli_num_rows($res) > 0)
 	    return null;
 	  else
-	    return "Ihr habt die Forschung M�rkte noch nicht abgeschlossen!";
+	    return "Ihr habt die Forschung Märkte noch nicht abgeschlossen!";
 	}
 
 	function getScoutTime() {
@@ -613,7 +613,7 @@ class Player {
         // do_log(sprintf("Password changed: %s", md5($newpw1)) );
         return null;
       }
-      else return "Das beiden neuen Passw�rter stimmen nicht überein.<br>";
+      else return "Das beiden neuen Passwörter stimmen nicht überein.<br>";
     }
     else return "Das Alte Passwort stimmt nicht mit dem gespeicherten überein.<br>";
   }
@@ -812,7 +812,7 @@ class Player {
     function holidayMode($duration) {
       $duration = intval($duration);
       if($duration < 7) {
-        return "Ihr müsst mindestens 7 Tage Urlaub w�hlen.";
+        return "Ihr müsst mindestens 7 Tage Urlaub wählen.";
       }
       if($duration > 35) {
         return "Mehr als 35 Tage werden nicht zugelassen.";
@@ -842,13 +842,13 @@ class Player {
       if (mysqli_num_rows(do_mysqli_query("SELECT * FROM cityunit LEFT JOIN city ON city.id = cityunit.city ".
                                         "WHERE city.owner != ".$this->id." AND cityunit.owner =".$this->id)
                          ) > 0) {
-        $error .= "<li>Ihr habt noch Truppen bei Verbündeten. Zieht diese zurück (Siehe Verwaltung-&gt;Truppen�bersicht)";
+        $error .= "<li>Ihr habt noch Truppen bei Verbündeten. Zieht diese zurück (Siehe Verwaltung-&gt;Truppenübersicht)";
       }
       
 
       
       if ( $error != "" ) {
-        return "Folgende Bedingungen sind noch nicht erf�llt:<ul>".$error."</ul>";
+        return "Folgende Bedingungen sind noch nicht erfüllt:<ul>".$error."</ul>";
       }
 
       // Sekunden und Stunden Multiplizieren

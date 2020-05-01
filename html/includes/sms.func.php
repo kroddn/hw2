@@ -105,7 +105,7 @@ function valid_sms_nr($nr) {
  * SMS an eine Nummer senden.
  */
 function sms_send($nr, $text) {
-  // Pr�fen, ob der Service überhaupt aktiviert wurde
+  // Prüfen, ob der Service überhaupt aktiviert wurde
   if( !defined("SMS_SERVICE") || !SMS_SERVICE ) {
     return "SMS_DEACTIVATED";
   }
@@ -116,20 +116,20 @@ function sms_send($nr, $text) {
 
   // Gültigkeit der Nummer überprüfen
   if ( !valid_sms_nr($nr) ) {
-    return "Die Nummer des Empf�ngers ($nr) ist ungültig.";
+    return "Die Nummer des Empfängers ($nr) ist ungültig.";
   }
 
 
   // Leerzeichen abschneiden
   $text = trim($text);
   
-  // L�nge der Nachricht prüfen
+  // Länge der Nachricht prüfen
   $len = strlen($text);
   if ($len > SMS_MAX_LEN ) {
     return "Text ist länger als ".SMS_MAX_LEN." Zeichen";
   }
 
-  // Falls noch genug Platz ist, dann h�ngen wir Werbung an.
+  // Falls noch genug Platz ist, dann hängen wir Werbung an.
   if (SMS_MAX_LEN - $len >= strlen(SMS_TEXT_APPEND_LONG) ) {
     $text .= SMS_TEXT_APPEND_LONG;
   }
@@ -281,7 +281,7 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
       fclose($fp);
     }
     else {
-      $result = "Fehler beim �ffnen";
+      $result = "Fehler beim öffnen";
       log_fatal_error("SMS-Senden schlug fehl: '".$errormsg."'");
     }
   }

@@ -106,7 +106,7 @@ if(isset($sort)) {
   $market->setSort($sort);
 }
 
-// Vor/Rückbl�ttern
+// Vor/Rückblättern
 if (isset($prev)) {
   $market->show_prev();
 }
@@ -146,10 +146,10 @@ if ($error != null) {
 </tr>
 
 <tr>
-<td nowrap class="tblbody">Empf�nger eingeben: <input type='text' name='recipient' <?if (isset($sendto)) echo 'value="'.$sendto.'" '; ?> size='17'>
+<td nowrap class="tblbody">Empfänger eingeben: <input type='text' name='recipient' <?if (isset($sendto)) echo 'value="'.$sendto.'" '; ?> size='17'>
 <?
 echo "&nbsp;<select onChange=\"if(this.value != '') document.marketform.recipient.value=this.value\" name=\"addressbook\" size=\"1\" style=\"width:100px;\">";
-echo "<option value=\"\">Empf�nger w�hlen</option>\n";
+echo "<option value=\"\">Empfänger wählen</option>\n";
 
 if (is_premium_adressbook()) {
   echo "<option value=\"\">  -- Adressbuch --</option>\n";

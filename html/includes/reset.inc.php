@@ -144,7 +144,7 @@ function reset_rpg() {
   do_mysqli_query("TRUNCATE tournament_players");
   do_mysqli_query("TRUNCATE rpg");
   
-  // Neue Turniere einf�gen
+  // Neue Turniere einfügen
   for($i = 0; $i < 4; $i++) {
     $current_day = date("Y-m-d", time() + $i*24*3600);
     $sql = gen_tournament_sql_code($current_day);
@@ -255,7 +255,7 @@ function reset_logs() {
     closedir($dir);
   }
   else {
-    echo "Konnte ../log nicht �ffnen";
+    echo "Konnte ../log nicht öffnen";
     return;
   }
   
@@ -288,7 +288,7 @@ function reset_avatar_dir() {
     closedir($dir);
   }
   else {
-    echo "Konnte ".AVATAR_DIR." nicht �ffnen";
+    echo "Konnte ".AVATAR_DIR." nicht öffnen";
     return;
   }
 }
@@ -365,7 +365,7 @@ function reset_game_form() {
 <hr>
   <h2>Runde <? echo $GLOBALS['pagetitle']; ?> resetten?</h2>
   <form action="" method="get" onSubmit="return confirm('Wirklich <? echo $GLOBALS['pagetitle']; ?> Resetten???');">
-   Bitte Best�gtigungskey eingeben:<br>
+   Bitte Bestägtigungskey eingeben:<br>
    <? echo $_SESSION['reset_magic']; ?> <input name="reset_magic">
     <p>
         <input type="submit" name="do_reset" value=" RESET ">&nbsp;

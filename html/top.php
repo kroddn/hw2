@@ -87,7 +87,7 @@ else
       $attnum += $_SESSION['cities']->underAttack($city['id']);
     }
   }
-  // Falls ein Angriff stattfindet dann dies anzeigen. Ansonsten ein marker für sp�ter setzen
+  // Falls ein Angriff stattfindet dann dies anzeigen. Ansonsten ein marker für später setzen
   if ($attnum > 0) {
     echo '<td nowrap title="Achtung: Angriff!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></td><td><font color="orange">'.$attnum.'</font></td>';
   }

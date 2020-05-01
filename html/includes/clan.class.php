@@ -137,7 +137,7 @@ class Clan {
     if (mysqli_num_rows($res) > 0)
       return null; // alles okay
     else
-      return "Sie haben nicht die ben�tigten Kenntnisse (Forschung: <a href=\"library.php?s1=3&s2=0&s3=0&research_id=117\">Ordensführung</a>) um einen Orden erfolgreich führen zu können!";
+      return "Sie haben nicht die benötigten Kenntnisse (Forschung: <a href=\"library.php?s1=3&s2=0&s3=0&research_id=117\">Ordensführung</a>) um einen Orden erfolgreich führen zu können!";
   }
 
   
@@ -152,7 +152,7 @@ class Clan {
       return $can;
 
     if ((!$this->checkClanName($name)) || ($this->id > 0))
-      return "Ordensname nicht in Ordnung oder bereits zu einem Orden geh�rend";
+      return "Ordensname nicht in Ordnung oder bereits zu einem Orden gehörend";
 
     // Check for double clan
     $res1 = do_mysqli_query("SELECT id FROM clan WHERE name='".mysqli_escape_string($GLOBALS['con'], $name)."'");
@@ -355,14 +355,14 @@ class Clan {
     		do_mysqli_query("UPDATE player SET gold=gold+".$gold.", cc_resources=1, cc_messages=1 WHERE id=".$player);
     		//Nachricht an Spieler
     		$msgheader = "Auszahlung aus Ordenskasse";
-    		$msgbody = "Euch wurde soeben der Betrag von <b>".prettyNumber($gold)."</b> Goldst�cken durch Euren Finanzminister <b>".$this->player_name."</b> ausbezahlt!";
+    		$msgbody = "Euch wurde soeben der Betrag von <b>".prettyNumber($gold)."</b> Goldstücken durch Euren Finanzminister <b>".$this->player_name."</b> ausbezahlt!";
     		do_mysqli_query("INSERT INTO message (sender,recipient,date,category,header,body) VALUES ('SERVER',".$player.",".time().",1,'".$msgheader."','".$msgbody."')");
 
     		//Nachricht an alle Finanzminister und OL wegen Auszahlung
     		$get_rec_name = do_mysqli_query("SELECT name FROM player WHERE id=".$player);
     		$rec_name =  mysqli_fetch_assoc($get_rec_name);
     		$msgheader = "Auszahlung aus Ordenskasse";
-    		$msgbody = "Dem Ordensmitglied <b>".$rec_name['name']."</b> wurden soeben ".prettyNumber($gold)." Goldst�cke durch den Finanzminister <b>".$this->player_name."</b> ausbezahlt!";
+    		$msgbody = "Dem Ordensmitglied <b>".$rec_name['name']."</b> wurden soeben ".prettyNumber($gold)." Goldstücke durch den Finanzminister <b>".$this->player_name."</b> ausbezahlt!";
     		$res1= do_mysqli_query("SELECT id FROM player WHERE clan=".$this->id."  AND clanstatus & 1");
     		while($data1 = mysqli_fetch_assoc($res1)) {
     			do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['id'].",".time().",'".$msgheader."','".$msgbody."',1)");
@@ -409,7 +409,7 @@ class Clan {
     		return null;
     	}
     	else {
-    		return "Der Spieler <b>".$data['name']."</b> besitzt noch nicht die notwendigen Kenntnisse, um eine F�hrungsposition in Eurem Orden zu begleiten! Informiert jenen, auf dass er sobald seine F�higkeiten und Kenntnisse aufbessert.";
+    		return "Der Spieler <b>".$data['name']."</b> besitzt noch nicht die notwendigen Kenntnisse, um eine Führungsposition in Eurem Orden zu begleiten! Informiert jenen, auf dass er sobald seine Fähigkeiten und Kenntnisse aufbessert.";
     	}
     }
   }
@@ -482,12 +482,12 @@ class Clan {
   			} else {
   				do_mysqli_query("DELETE FROM clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")");
   				if ($data2['type'] == 3) {
-  					$this->diploMessage($clan, $this->name." k�ndigt Bündnis", "Der Orden ".$this->name." hat euer Bündnis gek�ndigt.");
-  					$this->diploMessage($this->id, "Bündnis mit ".$data1['name']." gek�ndigt", "Ihr habt das Bündnis mit ".$data1['name']." gek�ndigt");
+  					$this->diploMessage($clan, $this->name." kündigt Bündnis", "Der Orden ".$this->name." hat euer Bündnis gekündigt.");
+  					$this->diploMessage($this->id, "Bündnis mit ".$data1['name']." gekündigt", "Ihr habt das Bündnis mit ".$data1['name']." gekündigt");
   				} 
   				else if ($data2['type'] == 2) {
-  					$this->diploMessage($clan, $this->name." k�ndigt NAP", "Der Orden ".$this->name." hat euer Nichtangriffspakt gek�ndigt.");
-  					$this->diploMessage($this->id, "NAP mit ".$data1['name']." gek�ndigt", "Ihr habt den Nichtangriffspakt mit ".$data1['name']." gek�ndigt");
+  					$this->diploMessage($clan, $this->name." kündigt NAP", "Der Orden ".$this->name." hat euer Nichtangriffspakt gekündigt.");
+  					$this->diploMessage($this->id, "NAP mit ".$data1['name']." gekündigt", "Ihr habt den Nichtangriffspakt mit ".$data1['name']." gekündigt");
   				}
   			}
   		}
@@ -525,13 +525,13 @@ class Clan {
   	$res1 = do_mysqli_query("SELECT id,name FROM clan WHERE id=".$clan);
   	if (($this->id != $clan) && ($this->status & 4) && ($data1 = mysqli_fetch_assoc($res1))) {
   		if ($msg = $this->canNotWar($this->id, $clan)) {
-  			$this->diploMessage($this->id, "Kriegserkl�rung an ".$data1['name']." fehlgeschlagen", $this->player_name." hat versucht ".$data1['name']." den Krieg zuer erkl�ren folgende Hindernisse stellen sich dem noch in den Weg:\n\n".$msg);
+  			$this->diploMessage($this->id, "Kriegserklärung an ".$data1['name']." fehlgeschlagen", $this->player_name." hat versucht ".$data1['name']." den Krieg zuer erklären folgende Hindernisse stellen sich dem noch in den Weg:\n\n".$msg);
   		}
   		else{
   			setDBrel("clanrel", $this->id, $clan, 0);
   			delDBreq_rel("req_clanrel", $this->id, $clan);
-  			$this->diploMessage($clan, "Kriegserkl�rung von ".$this->name, "Der Orden ".$this->name." hat euch den Krieg erkl�rt. M�ge der Bessere gewinnen.");
-  			$this->diploMessage($this->id, "Kriegserkl�rung an ".$data1['name'], "Ihr habt dem Orden ".$data1['name']." den Krieg erkl�rt. M�ge der Bessere gewinnen.");
+  			$this->diploMessage($clan, "Kriegserklärung von ".$this->name, "Der Orden ".$this->name." hat euch den Krieg erklärt. Möge der Bessere gewinnen.");
+  			$this->diploMessage($this->id, "Kriegserklärung an ".$data1['name'], "Ihr habt dem Orden ".$data1['name']." den Krieg erklärt. Möge der Bessere gewinnen.");
   		}
   	}
   }
@@ -584,8 +584,8 @@ class Clan {
     	if ($data2 = mysqli_fetch_assoc($res2)) {
     		if ($data2['type']>2) {
     			do_mysqli_query("UPDATE clanrel SET type=2 WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")") or die(mysqli_error($GLOBALS['con']));
-    			$this->diploMessage($clan, $this->name."hat Bündnis in NAP umgewandelt", "Der Orden ".$this->name." euer Bündnis gek�ndigt, will aber trotzem weiterhin in Frieden mit euch leben.");
-    			$this->diploMessage($this->id, "Bündnis mit ".$data1['name']." in NAP umgewandelt", $this->player_name." hat das Bündnis mit dem Orden ".$data1['name']." gek�ndigt, wollt aber trotzem weiterhin in Frieden mit ihnen leben.");
+    			$this->diploMessage($clan, $this->name."hat Bündnis in NAP umgewandelt", "Der Orden ".$this->name." euer Bündnis gekündigt, will aber trotzem weiterhin in Frieden mit euch leben.");
+    			$this->diploMessage($this->id, "Bündnis mit ".$data1['name']." in NAP umgewandelt", $this->player_name." hat das Bündnis mit dem Orden ".$data1['name']." gekündigt, wollt aber trotzem weiterhin in Frieden mit ihnen leben.");
     		} 
     		else {
     			$res3 = do_mysqli_query("SELECT type FROM req_clanrel WHERE id1=".$this->id." AND id2=".$clan);
@@ -626,7 +626,7 @@ class Clan {
   			}
   		}
   		else{
-  			$this->diploMessage($this->id, "Bündnisangebot an Ungl�ubigen", $this->player_name." wollte dem Ungl�ubigen Orden ".$data1['name']." ein Bündnis anbieten, mögen ihm die Gl�ubigen jedes Haar einzeln ausrupfen!");
+  			$this->diploMessage($this->id, "Bündnisangebot an Ungläubigen", $this->player_name." wollte dem Ungläubigen Orden ".$data1['name']." ein Bündnis anbieten, mögen ihm die Gläubigen jedes Haar einzeln ausrupfen!");
   		}
   	}
   }
@@ -684,8 +684,8 @@ class Clan {
   			}
   			
   			if ($data2['type'] == 1) {
-  				$this->diploMessage($clan, "Frieden mit ".$this->name, "Der Orden ".$this->name." hat euer Friedensangebot angenommen, mögen eure V�lker fortan in Frieden und Eintracht leben.");
-  				$this->diploMessage($this->id, "Frieden mit ".$data1['name'], "Ihr habt das Friedensangebot von ".$data1['name']." angenommen, mögen eure V�lker fortan in Frieden und Eintracht leben.");
+  				$this->diploMessage($clan, "Frieden mit ".$this->name, "Der Orden ".$this->name." hat euer Friedensangebot angenommen, mögen eure Völker fortan in Frieden und Eintracht leben.");
+  				$this->diploMessage($this->id, "Frieden mit ".$data1['name'], "Ihr habt das Friedensangebot von ".$data1['name']." angenommen, mögen eure Völker fortan in Frieden und Eintracht leben.");
   			} 
   			else if ($data2['type'] == 1) {
   				$this->diploMessage($clan, "NAP von ".$this->name." angenommen", "Der Orden ".$this->name." hat euer Angebot für einen Nichtangriffspakt angenommen.");

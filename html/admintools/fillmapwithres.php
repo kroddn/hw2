@@ -55,7 +55,7 @@ else {
   $special_res = imagecreatetruecolor($sx, $sy);
   imagecolortransparent($special_res);
   imagepng($special_res, SPECIALMAPNAME);
-  imagedestroy($special_res); // aufr�umen
+  imagedestroy($special_res); // aufräumen
 
   // Hauptprogramm
   $starttime = time();
@@ -76,7 +76,7 @@ else {
   echo $amount." Steine erstellt!<br>\n";
  
   $amount = round((MAP_SIZE_X * MAP_SIZE_Y) * PERCENT_WOOD / 100);
-  echo $amount." B�ume... <br>";
+  echo $amount." Bäume... <br>";
 
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
@@ -88,7 +88,7 @@ else {
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
-  echo $amount." B�ume erstellt!<br>\n";
+  echo $amount." Bäume erstellt!<br>\n";
 
   // Specialres eintragen
   fillmapwithspecialwaterres(getcol("water"),getcol("pearls"), AMOUNT_SPECIAL_PEARLS);
@@ -167,7 +167,7 @@ function fillmapwithres($condition, $replacement, $exclude, $runs) {
       echo "\rRun $i";
     }
   }
-  //echo $i." ".$replacement." Res eingef�gt!";
+  //echo $i." ".$replacement." Res eingefügt!";
   imagepng($img, MAPNAME);
 }
 
@@ -194,7 +194,7 @@ function fillmapwithspecialres($condition, $replacement, $runs) {
     	$i++;
     }
   }
-  //echo $i." Spezialres eingef�gt!";
+  //echo $i." Spezialres eingefügt!";
   imagepng($specialimg, SPECIALMAPNAME);
 }
 
@@ -462,7 +462,7 @@ function fillmapwithspecialwaterres($condition, $replacement, $runs) {
     	$i++;
     }
   }
-  //echo $i." SpecialWaterRes eingef�gt!";
+  //echo $i." SpecialWaterRes eingefügt!";
   imagepng($specialimg,SPECIALMAPNAME);
 }
 

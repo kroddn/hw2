@@ -46,7 +46,7 @@ function request_exception($notes, $players) {
     }
   }
 
-  //TODO: überprüfen, ob schon eine gleichartige exception existiert, wenn ja, einfach notes hinzuf�gen
+  //TODO: überprüfen, ob schon eine gleichartige exception existiert, wenn ja, einfach notes hinzufügen
 
   do_mysqli_query("INSERT INTO multi_exceptions (type, time, valid, comment) VALUES (0, ".time().", 0,'".mysqli_escape_string($GLOBALS['con'], $notes)."')");
   $exid = mysqli_insert_id($GLOBALS['con']);
@@ -205,7 +205,7 @@ function adminprintf() {
  * 
  * 
  * 
- * @param $p  Klasse Player des zu k�dernden Multis 
+ * @param $p  Klasse Player des zu ködernden Multis 
  */
 define("MULTI_TRAP_COOKIE_NAME", "hw2_localdata");
 define("MULTI_TRAP_COOKIE_EXPIRE", 28*24*60*60);
@@ -231,7 +231,7 @@ function multi_trap($p) {
       do_mysqli_query("UPDATE multi_trap SET used = used + 1 WHERE mid = ".$dbcookie['mid']);
       
       if($dbcookie['player'] == $p->getID()) {
-        // Cookie geh�rt dem Spieler, also nur upcount
+        // Cookie gehört dem Spieler, also nur upcount
       }
       else {
         // oO ... hier ist ein Multi entlarvt.

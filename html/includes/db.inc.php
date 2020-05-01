@@ -74,7 +74,7 @@ function do_mysqli_query_fetch_assoc($sql) {
  * @param $conn   Mysql-Connection, auf die das Query abgesetzt wird. NULL bedeuted Standard-Session Verbindung.
  * @param $abort  Falls TRUE wird nach dem Logging eine Fehlermeldung ausgegeben und die weitere Verarbeitung
  *                abgebrochen. Falls FALSE wird die Verarbeitung nach dem Fehler fortgesetzt (z.B. bei diversen
- *                queries, die abgearbeitet werden M�SSEN, um keinen Fehler in der DB zu erzeugen)
+ *                queries, die abgearbeitet werden MÜSSEN, um keinen Fehler in der DB zu erzeugen)
  * @return Rückgabewert entspricht dem der Funktion mysql_query
  */
 function do_mysqli_query($string, $conn=null, $abort = true) {
@@ -107,7 +107,7 @@ function do_mysqli_query($string, $conn=null, $abort = true) {
     $pid = $player->getID();
   }
 
-  // Speichern, welches Skript aufgerufen wurde. __FILE__ w�rde ja
+  // Speichern, welches Skript aufgerufen wurde. __FILE__ würde ja
   // leider immer db.inc.php zurückliefern
   $scriptname = $_SERVER['SCRIPT_FILENAME'];
 
@@ -115,7 +115,7 @@ function do_mysqli_query($string, $conn=null, $abort = true) {
   // so, mal kurz dokumentieren. Im Hintergrund schwallt Richi mal wieder wirres Zeug
   // Die SQL Query ($string) wird ausgeführt. Falls das Result ($res) fehlerhaft ist,
   // dann wird der Fehler in der DB gespeichert. An dieser Stelle haben wir versucht,
-  // den gl�sernen User gleich mitzuspeichern :-)
+  // den gläsernen User gleich mitzuspeichern :-)
   if (! ($res = mysqli_query($conn, $string)) ) {
     ob_start();
     debug_print_backtrace();

@@ -204,7 +204,7 @@ function print_playerinfo ($id) {
     $rowspan = 3;
     if($data1['clanid'] > 0) $rowspan+=1;
     
-	echo "</td></tr>\n<tr><td class=\"tblbody\" colspan=\"3\">".getReliImage($data1['religion'])." Anh�nger des ".$relstr.'</td>';
+	echo "</td></tr>\n<tr><td class=\"tblbody\" colspan=\"3\">".getReliImage($data1['religion'])." Anhänger des ".$relstr.'</td>';
          
         echo '<td class="tblhead" rowspan="'.$rowspan.'" style="padding: 0px;" align="center">';
         if($data1['avatar']==2) 
@@ -240,7 +240,7 @@ function print_playerinfo ($id) {
 
     // EIn Link für Multihunter
     if ($_SESSION['player']->isMultihunter()) {
-      echo "<p>".get_href("Multihunter-�berpr�fung", "multihunter.php?showid=".$data1['id'] );      
+      echo "<p>".get_href("Multihunter-überprüfung", "multihunter.php?showid=".$data1['id'] );      
       switch ($data1['status']) {
       case 2: echo "<br><b class='error'>Spieler bereits gesperrt</b>"; break;
       case 3: echo "<br><b class='error'>Spieler unter Verdacht</b>"; break;	
@@ -249,7 +249,7 @@ function print_playerinfo ($id) {
 
 	if($data1['descr']) {
 		echo "<table style=\"margin-top:10px;\" width=\"400\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\"><tr>\n";
-		echo "<td class=\"tblhead\"><strong>H&ouml;rt, was sein Botschafter verk�ndet:</strong></td></tr>\n";
+		echo "<td class=\"tblhead\"><strong>H&ouml;rt, was sein Botschafter verkündet:</strong></td></tr>\n";
 		echo "<tr><td class=\"tblbody\">".bbCode($data1['descr'])."</td></tr>\n";
 		echo "</table>\n";
 	}
@@ -261,7 +261,7 @@ function print_playerinfo ($id) {
     
     echo "<table cellpadding=\"1\" cellspacing=\"1\" width=\"400\" style=\"margin-top:10px;\">\n";
     echo "<tr class=\"tblhead\" style=\"font-weight:bold;\">";
-    echo "<td>Name</td><td>Koord</td><td>Stadtgr&ouml;�e</td><td>Religion</td><td>Aktion</td></tr>";
+    echo "<td>Name</td><td>Koord</td><td>Stadtgröße</td><td>Religion</td><td>Aktion</td></tr>";
 
     $res2 = do_mysqli_query("SELECT city.id,x,y,name,population,prosperity,religion,capital ".
                            " FROM city LEFT JOIN map ON city.id=map.id ".
@@ -380,7 +380,7 @@ function print_claninfo ($id) {
     else
     $religion = "Islam";
      
-    // Zeile anh�ngen falls immernoch derselbe clanstatus
+    // Zeile anhängen falls immernoch derselbe clanstatus
     if($cat == $clanstatus) {
       echo "<tr><td class=\"tblbody\"><a href=\"info.php?show=player&name=".$data2['name']."\">".$data2['name']."</a></td><td class=\"tblbody\" style=\"text-align:right; padding-right:4px;\">".number_format($data2['points'],0,",",".")."&nbsp;Pt.</td><td class=\"tblbody\">".$religion."</td></tr>";
     }
@@ -416,8 +416,8 @@ function print_towninfo ($id) {
       echo "<tr class='tblbody'><td>&nbsp;</td><td><b>Herrenlose</b> Stadt</td></tr>";
     }
 
-    // Die Bev�lkerung nicht genau anzeigen
-    echo "<tr class='tblbody'><td>Stadtgr&ouml;�e</td><td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</tr>\n";    
+    // Die Bevölkerung nicht genau anzeigen
+    echo "<tr class='tblbody'><td>Stadtgröße</td><td nowrap>".get_population_string($data1['population'], $data1['prosperity'])."</tr>\n";    
 
     // Hauptstadt anzeigen
     if ($data1['capital'])
@@ -437,7 +437,7 @@ function print_towninfo ($id) {
     
     echo "</td></tr>";
 
-    // Die n�heste eigene Stadt bestimmen
+    // Die näheste eigene Stadt bestimmen
     echo "<tr class='tblbody'><td>Nahe Städte</td><td>";
     $cit = do_mysqli_query ("SELECT city.id,name,round(sqrt( (".$data1['x']."-x)*(".$data1['x']."-x)+(".$data1['y']."-y)*(".$data1['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." AND city.id != ".$id." ORDER BY dist LIMIT 3");
     

@@ -42,7 +42,7 @@ class FightClass {
   var $attarmys = array ();
   //Stadtname
   var $cityname;
-  //Stadtbev�lkerung
+  //Stadtbevölkerung
   var $citypopulation;
   //Stadtwohlstand
   var $cityprosperity;
@@ -61,7 +61,7 @@ class FightClass {
   function FightClass() {
   }
   //Methoden zum einlesen von Daten
-  //Manuell einen Spieler mitsamt Armee hinzuf�gen
+  //Manuell einen Spieler mitsamt Armee hinzufügen
   function AddPlayerArmy($isattacker, $playerid, $playername, $army) {
     if ($isattacker == true) {
       $this->attackers[$playerid] = $playername;
@@ -79,10 +79,10 @@ class FightClass {
   }
   //Einlesen von DB
   function AddCityFromDB($cityid) {
-    //stadtbesitzer und bev�lkerung ermitteln
+    //stadtbesitzer und bevölkerung ermitteln
     $rescityowner = "SELECT city.owner AS id, player.name AS name, population,prosperity FROM city LEFT JOIN player ON player.id = city.owner WHERE city.id=".$cityid;
     $this->cityowner = mysqli_fetch_assoc($rescityowner);
-    //Stadtbev�lkerung setzen
+    //Stadtbevölkerung setzen
     $this->citypopulation = $this->cityowner['population'];
     $this->cityprosperity = $this->cityowner['prosperity'];
     //Stadtbevölkerung aus cityowner wieder löschen ;)
@@ -98,7 +98,7 @@ class FightClass {
         $df[]['count'] = $units['count'];
         $df[]['player'] = $defender['id'];
       }
-      //Verteidiger hinzuf�gen
+      //Verteidiger hinzufügen
       $this->AddPlayerArmy(false, $defender['id'], $defender['name'], $df);
       if (DEBUG)
         echo " Defender:".$defender['name']." ";
@@ -121,7 +121,7 @@ class FightClass {
       $at[$i]['count'] = $atter['count'];
       $at[$i]['player'] = $armyowner['id'];
     }
-    //Hinzuf�gen
+    //Hinzufügen
     $this->AddPlayerArmy(true, $armyowner['id'], $armyowner['name'], $at);
   }
   //Kampf beginnen
@@ -225,7 +225,7 @@ class FightClass {
       $tacticmsg = "defensiv";
     }
     elseif ($this->tactic == 2) {
-      $tacticmsg = "erst�rmen";
+      $tacticmsg = "erstürmen";
     }
     //Angriffsart angeben
     if ($isattacker == true) {

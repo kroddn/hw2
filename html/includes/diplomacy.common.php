@@ -97,7 +97,7 @@ function getClanRel($id1,$id2) {
 
 /**
  * 
- * Funktion die in service.inc.php ben�tzt wird um herauszufinden ob gek�mpft wird!
+ * Funktion die in service.inc.php benutzt wird um herauszufinden ob gekämpft wird!
  * Sofern der Spieler mit dem anderen Spieler nicht verbündet ist, aber die Orden verbündet sind, wird neutral zurückgegeben.
  * Return Wert:
  * 0 == Feind

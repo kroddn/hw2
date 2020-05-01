@@ -77,7 +77,7 @@ if (isset($changesettings) || isset($savesettings)) {
       $_SESSION['player']->saveSettings();
     }
     else {
-      $errormsg = "Die M�glichkeit des dauerhaften Abspeicherns ist Besitzern eines Premium-Accounts vorbehalten.";
+      $errormsg = "Die Möglichkeit des dauerhaften Abspeicherns ist Besitzern eines Premium-Accounts vorbehalten.";
     }
   }
 
@@ -160,7 +160,7 @@ if ( (!defined("SPEED") || !SPEED) && isset($holidaymode) && isset($holidayduran
     }
   }
   else {
-    $errormsg = "Sie müssen 'Ja' im Feld neben<br>der L�nge des Urlaubs w�hlen";
+    $errormsg = "Sie müssen 'Ja' im Feld neben<br>der Länge des Urlaubs wählen";
   }
 }
 
@@ -168,7 +168,7 @@ if (isset($changesms)) {
   $sms = trim($sms);
   $sms = preg_replace( "/[^0-9a-zA-Z\+]/", "", $sms );
   
-  // Falls die Nummer mit 01 anf�ngt ersetze die 0 durch +49
+  // Falls die Nummer mit 01 anfängt ersetze die 0 durch +49
   if (substr($sms,0,2) == "01") {
     $sms = "+49".substr($sms, 1);
   }
@@ -177,7 +177,7 @@ if (isset($changesms)) {
   if (strlen($sms) == 0) {
     $_SESSION['player']->changeSMS(null);
   }
-  // RegEx überpr�fung der SMS-Nummer
+  // RegEx überprüfung der SMS-Nummer
   else if ( valid_sms_nr($sms) ) {
     $_SESSION['player']->changeSMS($sms);
   }
@@ -191,7 +191,7 @@ if (isset($changesms_sender_nr)) {
   $sms_sender_number = trim($sms_sender_number);
   $sms_sender_number = preg_replace( "/[^0-9a-zA-Z\+]/", "", $sms_sender_number );
   
-  // Falls die Nummer mit 01 anf�ngt ersetze die 0 durch +49
+  // Falls die Nummer mit 01 anfängt ersetze die 0 durch +49
   if (substr($sms_sender_number,0,2) == "01") {
     $sms_sender_number = "+49".substr($sms_sender_number, 1);
   }
@@ -200,7 +200,7 @@ if (isset($changesms_sender_nr)) {
   if (strlen($sms_sender_number) == 0) {
     $_SESSION['player']->changeSMSSenderNumber(null);
   }
-  // RegEx überpr�fung der SMS-Nummer
+  // RegEx überprüfung der SMS-Nummer
   else if ( valid_sms_nr($sms_sender_number) ) {
     $_SESSION['player']->changeSMSSenderNumber($sms_sender_number, 
                                                (isset($show_sender_nr) && $show_sender_nr == 1) );
@@ -222,7 +222,7 @@ if (isset($change_desc) && isset($theText)) {
 
 if (isset($change_passwd)) {
   if(empty($oldpw) || empty($newpw1) || empty($newpw2))
-    $errormsg .= "Sie haben nicht alle Felder ausgef�llt.";
+    $errormsg .= "Sie haben nicht alle Felder ausgefüllt.";
   else {
     $err = $_SESSION['player']->changePassword($oldpw, $newpw1, $newpw2);
     if($err == null) 
@@ -291,7 +291,7 @@ if ($_FILES['userfile']) {
 	$upload_dir = AVATAR_DIR; 
 	$errormsg = do_upload($upload_dir, $upload_url);
     if ($errormsg == null) 
-      $infomsg = "Der Upload war erfolgreich. Ein Namehunter wird ihren Avatar in K�rze freischalten!";
+      $infomsg = "Der Upload war erfolgreich. Ein Namehunter wird ihren Avatar in Kürze freischalten!";
 } 
 
 //avatar file handle
@@ -398,7 +398,7 @@ if (!isset($_SESSION['settings_lastshow'])) {
   $_SESSION['settings_lastshow'] = "account";
 }
 
-// Default-Wert falls kein Men�punkt gewählt ist
+// Default-Wert falls kein Menüpunkt gewählt ist
 if (!isset($show)) {
   $show = $_SESSION['settings_lastshow'];
 }
@@ -418,7 +418,7 @@ switch($show) {
    $showfunction();
    break;
  default:
-   // Kein gültiger Men�punkt
+   // Kein gültiger Menüpunkt
    show_wrong();
    $_SESSION['settings_lastshow'] = $show="account";
    echo "<p>\n";
@@ -440,12 +440,12 @@ end_page();
 function show_settings_menu($show) {
   $hints = array("account" => "Einstellungen zum Account - Emailadresse, Passwort, Urlaubsmodus, Multi-Exceptions etc.",
                  "game" => "Einstellungen zur Spielfigur - Beschreibung, Nachrichten-Signatur und Avatar",
-                 "grapa" => "Grafikpack einrichten und Hauptmen� konfigurieren",
+                 "grapa" => "Grafikpack einrichten und Hauptmenü konfigurieren",
                  "sms" => "SMS-Absenderkennung oder Empfangsnummer einrichten, SMS-Kontingent verwalten oder freischalten ",
                  "premium" => "Premium-Account: Einstellungen einrichten und einsehen. Adressbuch einsehen.",
                  "ads" => "F&ouml;rdere HW2: HW2 Banner, Forensignatur" );
 ?>
-<!-- Men� -->
+<!-- Menü -->
 <table id="settings_menu" name="settings_menu" cellspacing = "1" cellpadding="0">
   <tr>
     <td onMouseOver="setClickHint('<? echo $hints['account']; ?>')" nowrap width="20%" <? if ($show=="account") echo 'class="active"';?>>
@@ -513,10 +513,10 @@ function show_settings_menu($show) {
 
 
 
-// Falsche Men�option
+// Falsche Menüoption
 function show_wrong() { ?>
 <p>
-Diese Men�option existiert nicht. 
+Diese Menüoption existiert nicht. 
 <? 
 } // show_wrong() 
 
@@ -567,7 +567,7 @@ Andere Spieler können Ihnen dann SMSe senden. </b>
 <tr><td>
 Die Nummer wird jedoch keinem Spieler
 angezeigt, ein Versand ist nur aus Holy-Wars 2 heraus möglich! Dies dient Ihrer
-Privatsph�re.<p>
+Privatsphäre.<p>
 <form name="theSMSForm" action="settings.php" method="post" target="main">
 <input type="text" name="sms" value="<? echo $_SESSION['player']->getSMS(); ?>">&nbsp;&nbsp;
 <input type="submit" name="changesms" value=" ändern ">
@@ -596,9 +596,9 @@ Format mit +49 am Anfang (also nicht wundern).
 <b>Sie können an dieser Stelle eine
 Absenderkennung für den SMS-Versand einstellen.</b>
 <br>
-Beim Empf�nger einer HW2SMS
+Beim Empfänger einer HW2SMS
 wird dann Ihre Nummer anstelle der Nummer von Holy-Wars 2  angezeigt. Der
-Empf�nger kann Ihnen dann direkt antworten.<P>
+Empfänger kann Ihnen dann direkt antworten.<P>
 <?
   if (is_premium_set_sms_sender()) {
 ?>
@@ -608,10 +608,10 @@ if ($_SESSION['player']->getSMSSenderNumber() == null) {
   echo "Geben Sie hier die Nummer ein.<br>\n";
 }
 else if ($_SESSION['player']->isValidSMSSenderNumber()) {
-  echo "Die eingestellte Nummer ist gültig und überpr�ft.<br>\n";
+  echo "Die eingestellte Nummer ist gültig und überprüft.<br>\n";
 }
 else {
-  echo "<b class=\"error\">Die Nummer wurde noch nicht auf Gültigkeit überpr�ft</b>.".
+  echo "<b class=\"error\">Die Nummer wurde noch nicht auf Gültigkeit überprüft</b>.".
   " Wenden Sie sich an einen Administrator.<br>\n";
 }
 ?>
@@ -648,11 +648,11 @@ Format mit +49 am Anfang (also nicht wundern).
 </td></tr>
 <tr class="tblbody">
 <td colspan="2" align="center">
-<b>Um einem Mitspieler eine SMS auf sein Empfangsger�t zu senden, müssen
+<b>Um einem Mitspieler eine SMS auf sein Empfangsgerät zu senden, müssen
 Sie Ihr Kontingent aufladen.</b><p>
 Beim Versand einer SMS über das Holy-Wars 2 SMS-System wird dann eine
 SMS von Ihrem Kontingent abgezogen.<br>
-Dies geschieht �hnlich einer Prepayd-Karte eines Mobilfunk-Anbieters.<p>
+Dies geschieht ähnlich einer Prepayd-Karte eines Mobilfunk-Anbieters.<p>
 Um Ihr SMS-Kontingent aufzuladen, nehmen Sie Kontakt mit einem<br>
 <a target="_blank" href="impressum.php">Holy-Wars 2 Administrator</a> auf.
 </td>
@@ -664,7 +664,7 @@ Um Ihr SMS-Kontingent aufzuladen, nehmen Sie Kontakt mit einem<br>
 <tr class="tblbody">
   <td colspan="2" align="center">
 <b>Sie können SMS auf Ihren Holy-Wars 2 Account empfangen.</b><p>
-Dazu mu� ein Mitspieler eine kostenpflichtige SMS an Holy-Wars 2 senden, 
+Dazu muss ein Mitspieler eine kostenpflichtige SMS an Holy-Wars 2 senden, 
 Sie zahlen dafür nichts. 
   </td>
 </tr>
@@ -717,16 +717,16 @@ function show_grapa()
 Den aktuellen Grafikpack Version <b><? echo GFX_VERSION; ?></b> finden Sie <a target="_new" href="grafikpaket/hw_grafik_v<? echo GFX_VERSION; ?>.zip">hier</a>.
 <? $gp_update = "grafikpaket/hw_grafik_update_v".GFX_VERSION.".zip";
  if (file_exists($gp_update)) { 
-   echo '<br>Falls Sie nur einige neue Grafiken ben�tigen, dann finden Sie ein Update <a href="'.$gp_update.'">hier</a>.';
+   echo '<br>Falls Sie nur einige neue Grafiken benötigen, dann finden Sie ein Update <a href="'.$gp_update.'">hier</a>.';
  }
 ?>
     <h3>2. Entpacken</h3>
 Entpacken Sie den Grafikpfad auf Ihre Festplatte.<br>
 Unter Windows XP können Sie
 die Datei im Explorer entpacken, indem Sie mit der rechten Maustaste darauf
-klicken und dann &quot;Alle Extrahieren&quot; ausw�hlen.
+klicken und dann &quot;Alle Extrahieren&quot; auswählen.
     <h3>3. Grafikpfad einstellen</h3>
-      Klicken Sie auf das Feld &quot;Durchsuchen&quot; (oder &quot;Browse&quot;) und w�hlen Sie die Datei <b>gfx_version.gif</b> an der Stelle aus,
+      Klicken Sie auf das Feld &quot;Durchsuchen&quot; (oder &quot;Browse&quot;) und wählen Sie die Datei <b>gfx_version.gif</b> an der Stelle aus,
     wo Sie den Grafikpack (Schritt 2.) ausgepackt haben. Benutzen Sie den Button &quot;Testen&quot; zum überprüfen, ob alles in Ordnung ist.
     <hr>
     Der aktuelle Grafikpfad lautet: 
@@ -758,7 +758,7 @@ klicken und dann &quot;Alle Extrahieren&quot; ausw�hlen.
     <select class="input" name="gfx_path_select" 
             onchange="document.theGFXForm.gfx_path_value.value=document.theFileForm.gfx_path_select.value"
     >
-      <option value="">Oder hier ausw�hlen</option>
+      <option value="">Oder hier auswählen</option>
 <!--  <option value="SERVER4">Server Version 4 (Standard)</option> -->
       <option value="SERVER3">Server Version 3</option>
       <option value="HOWLY4">Version 4 by Howly</option>
@@ -770,7 +770,7 @@ klicken und dann &quot;Alle Extrahieren&quot; ausw�hlen.
     <input type="hidden" name="changegfx">
     <input type="button" onClick="testGfxPath(document.theGFXForm.gfx_path_value.value)" name="testgfx"   value=" Testen ">
     <input type="submit" 
-    onClick="if(document.theGFXForm.gfx_path_value.value=='') { alert('Sie müssen zuerst einen Pfad ausw�hlen oder eingeben!'); return false;}" 
+    onClick="if(document.theGFXForm.gfx_path_value.value=='') { alert('Sie müssen zuerst einen Pfad auswählen oder eingeben!'); return false;}" 
     name="changegfx" 
     value=" ändern ">
     </form>
@@ -785,7 +785,7 @@ klicken und dann &quot;Alle Extrahieren&quot; ausw�hlen.
 
 
 <tr class="tblhead_22">
-  <td colspan="2"><h2><a name="grapa_menu">Men� und sonstige Einstellungen</a></h2></td>
+  <td colspan="2"><h2><a name="grapa_menu">Menü und sonstige Einstellungen</a></h2></td>
 </tr>
   <tr class="tblbody">    
    <td colspan="2">
@@ -794,9 +794,9 @@ klicken und dann &quot;Alle Extrahieren&quot; ausw�hlen.
 <div style="width:400px; border: 1px solid black; text-align: left; margin: 4px; ">
 <?php
   {
-    settings_check_button_br("forum_own",                     "Forum in einem extra Fenster �ffnen.");    
-    settings_check_button_br("map_own",                       "Karte in einem extra Fenster �ffnen.");
-    settings_check_button_br("library_own",                   "Bibliothek in einem extra Fenster �ffnen.");
+    settings_check_button_br("forum_own",                     "Forum in einem extra Fenster öffnen.");    
+    settings_check_button_br("map_own",                       "Karte in einem extra Fenster öffnen.");
+    settings_check_button_br("library_own",                   "Bibliothek in einem extra Fenster öffnen.");
     settings_check_button_br("hide_banner",                   "Werbe-Banner nicht anzeigen (Premium-Account).");    
     settings_check_button_br("disable_login_counter",         "Login-Ticker ausblenden.");
     settings_check_button_br("disable_toplist_bonuspoints",   "Auftauchen in der Toplist Bonuspunkte unterdrücken.");
@@ -822,7 +822,7 @@ else
 ">&nbsp;
         <input type="submit" name="loadsettings" value=" Letze Version laden "><p>
 Bei &quot;Dauerhaft Speichern&quot; werden die Einstellungen 
-auf dem Server gespeichert und sind nach jedem Login wieder verf�gbar.
+auf dem Server gespeichert und sind nach jedem Login wieder verfügbar.
     </center>
     </form><!-- theMenuForm -->
    </td>   
@@ -867,7 +867,7 @@ insertBBForm(2);
 <td colspan="2" align="center">
 <? 
    if (is_premium_signature()) {
-     echo 'Euer <a href="premium.php">Premium-Account</a> erlaubt Euch die �nderung der Nachrichten-Signatur<p>';
+     echo 'Euer <a href="premium.php">Premium-Account</a> erlaubt Euch die Änderung der Nachrichten-Signatur<p>';
      echo '<textarea id="msgsignature" rows="4" cols="45" name="msgsignature">'.$_SESSION['player']->getMsgSignature(true).'</textarea><p>';
      echo '<input type="submit" name="changesignature" value=" Signatur ändern ">';
      echo '</td>';     
@@ -961,7 +961,7 @@ function show_premium() { ?>
 <? if($GLOBALS['premium_flags'] & PREMIUM_NOADS) {
      echo " Ja</b>"; 
      if(! $_SESSION['settings']['hide_banner'])
-       echo ', Ihnen wird aber Werbung eingeblendet. Dies können Sie im Reiter <a href="settings.php?show=grapa">Grafik/Men�</a> ändern. ';
+       echo ', Ihnen wird aber Werbung eingeblendet. Dies können Sie im Reiter <a href="settings.php?show=grapa">Grafik/Menü</a> ändern. ';
      else
        echo ', die Werbung ist abgeschaltet.';
 }
@@ -999,7 +999,7 @@ function show_premium() { ?>
  <td><h2><a name="premium_banner">Werbebanner ein/ausschalten</a></h2></td>
 </tr>
 <tr><td colspan="2" align="center">
-Unter <a href="settings.php?show=grapa">&quot;Grafik / Men�&quot;</a> können Sie Banner ein- und ausschalten, sofern
+Unter <a href="settings.php?show=grapa">&quot;Grafik / Menü&quot;</a> können Sie Banner ein- und ausschalten, sofern
 Ihr Premium-Account das zulässt.
 </td></tr>
 
@@ -1022,7 +1022,7 @@ function show_ads() {
     <td colspan="2" style="padding:10px;"><center><span style="font-weight: bold; background-color: white; padding: 4px; margin-top: 4px;"><? echo $url; ?></span></center>
 <p>Langfristig erhältst Du für jeden geworbenen Spieler <u>Bonuspunkte</u>!
 Es gibt jeweils 1000 Punkte für Dich, sobald der geworbene Spieler eine
-dieser drei Forschungen abschließt: <i>H�here Bildung</i>, <i>Fachrichtungen</i> und <i>Konstitutionelle Monarchie</i>.
+dieser drei Forschungen abschließt: <i>Höhere Bildung</i>, <i>Fachrichtungen</i> und <i>Konstitutionelle Monarchie</i>.
 <p>
 Wer aktive Spieler wirbt hat also klare Vorteile, da er bis 
 zu 3000 Bonuspunkte pro geworbenem Spieler erhält.
@@ -1163,10 +1163,10 @@ function show_account() {
 	<tr>
   <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) { ?>
 	  <td colspan="3" align="center">
-	       <input type="submit" name="acc_delete_process" value="ACCOUNT ZUM L�SCHEN VORMERKEN">
+	       <input type="submit" name="acc_delete_process" value="ACCOUNT ZUM LöscheN VORMERKEN">
 	  </td>
   <?php } else { ?>
-      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT SOFORT L�SCHEN"></td>
+      <td colspan="3" align="center"><input type="submit" name="acc_delete_process" value="ACCOUNT SOFORT LöscheN"></td>
   <?php }?>
 	</tr>
       </table>
@@ -1176,7 +1176,7 @@ function show_account() {
     <td colspan="2" align="center" style="color: white;">
     <?php if(defined("ABANDONE_CITIES") && ABANDONE_CITIES && $_SESSION['player']->getAccountAge() > TIME_IMMED_DELETE) { ?>
        Ihr Account wird zum Löschen lediglich <b>&quot;markiert&quot;</b>. Die wirkliche Löschung
-       des Accounts erfolgt etwa 24 Stunden sp�ter. Alle Städte werden dabei als <b>Herrenlose Städte</b> freigegeben.
+       des Accounts erfolgt etwa 24 Stunden später. Alle Städte werden dabei als <b>Herrenlose Städte</b> freigegeben.
        Sie können diese Vormerkung jederzeit revidieren, indem Sie sich innerhalb der 24 Stunden einloggen.
     <?php } else { ?> 
     Achtung: Eine Accountlöschung kann nicht rückgängig gemacht werden!
@@ -1194,15 +1194,15 @@ function show_account() {
    <ul>
     <li>Keine neuen Angriffe auf den Spieler sind möglich. Bestehende Angriffe laufen weiter.
     <li>Der Spieler hat nur noch 50% Truppenkosten.
-    <li>Der Spieler erhält keine Ressourcen- und keine Ausr�stungs-Produktion.
+    <li>Der Spieler erhält keine Ressourcen- und keine Ausrüstungs-Produktion.
     <li>Der Spieler erhält 50% weniger Steuern und Forschungspunkte.
     <li>Alle Einnahmen aus Gebäuden sind 0. Bei Ausgaben werden diese weiterhin gezahlt.
     <li>Der Spieler kann sich erst wieder nach Ablauf des Urlaubsmodus einloggen.
     <li>Zwischen 10 bis 35 Tagen kann der Urlaubsmodus gewählt werden.
     <li>Nach Ablauf des Urlaubsmodus ist 14 Tage lang kein neuer Urlaubsmodus möglich.
-    <li>W�hrend und noch 7 Tage lang nach Ablauf des Urlaubsmodus ist der Spieler vor dem Inaktivitäts-Skript sicher und wird nicht wegen Inaktivität gelöscht.
+    <li>Während und noch 7 Tage lang nach Ablauf des Urlaubsmodus ist der Spieler vor dem Inaktivitäts-Skript sicher und wird nicht wegen Inaktivität gelöscht.
    </ul>
-   Folgende Vorbedingungen müssen erf�llt sein:                                  
+   Folgende Vorbedingungen müssen erfüllt sein:                                  
    <ul>
     <li>Der Spieler darf keine Truppen in fremden Städten stationiert haben.
     <li>Keine eigenen Truppenbewegungen (ausser Rückkehr) dürfen aktiv sein.
@@ -1220,7 +1220,7 @@ function show_account() {
   } // !SPEED
   else {
 ?>
-  <tr><td class="tblbody" style="padding:10px;" colspan="2">Urlaubsmodus in dieser Runde nicht verf�gbar.</td></tr>
+  <tr><td class="tblbody" style="padding:10px;" colspan="2">Urlaubsmodus in dieser Runde nicht verfügbar.</td></tr>
 <?  
   }
 ?>

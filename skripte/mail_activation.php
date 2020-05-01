@@ -23,21 +23,21 @@
  **************************************************************************/
 
 /**
- * Empfange emails �ber STDIN. Durchsuche die Email nach entsprechender Zeichenkette.
+ * Empfange emails über STDIN. Durchsuche die Email nach entsprechender Zeichenkette.
  * http://www.exim.org/exim-html-3.20/doc/html/spec_18.html
  * 
  * ==== Maildaemon ====
  * 
  * Der Maildaemon muss so konfiguriert werden, dass er eine Email an dieses PHP-Skript
- * �bergibt.
+ * übergibt.
  * Bei EXIM4 erreicht man das, indem man in der alias oder virtual Konfiguration eine Zeile
- * einf�gt, derart:
+ * einfügt, derart:
  *    targetaddress:    "|/usr/bin/php -f /path/to/mail_activation.php
  * 
  * Wird dann eine Email an <targetaddress@domain.xx> gesendet, wird mail_activation.php
- * ausgeführt und der Inhalt des Emails �ber STDIN gesendet.
+ * ausgeführt und der Inhalt des Emails über STDIN gesendet.
  * 
- * Manchnal kann es sinnvoll sein, zus�tzlich zu dieser PIPE noch einen Empf�nger
+ * Manchnal kann es sinnvoll sein, zusätzlich zu dieser PIPE noch einen Empfänger
  * anzugeben, damit bei einem Fehler des Skriptes die Email zugestellt wird.
  */
 
@@ -45,7 +45,7 @@ define("LOGFILE", "/tmp/parse_email.log");
 
 $sender = getenv("SENDER");
 if($sender == null || strlen($sender) < 5) {
-  echo "Ung�ltige Absender-Emailadresse.\r\n";
+  echo "Ungültige Absender-Emailadresse.\r\n";
   exit(1);  
 }
 
@@ -84,46 +84,46 @@ else {
  * Verarbeite die Email.
  * Sucht nach "From:" und nach "Subject:" im Email.
  * Dort sollte die Emailadresse des Ansenders und die ID des 
- * zugeh�rigen Spielers zu finden sein.
+ * zugehörigen Spielers zu finden sein.
  * 
  */
 function parse_email($email) {
   // Die gesamte Email ins Logfile schreiben
   file_put_contents(LOGFILE, $email, FILE_APPEND);
   
-  // Den Inhalt der Mail durchsuchen, nach Aktivierungsschl�ssel
+  // Den Inhalt der Mail durchsuchen, nach Aktivierungsschlüssel
   $matches = 0; $pos = 0;
   $search = "Aktivierungscode: ";
   $searchlen = strlen($search);
   while( ($pos = strpos($email, $search, $pos)) !== FALSE ) {
-    // Unters�tze Aktivierungscodes von 8-16 Zeichen L�nge
+    // Untersätze Aktivierungscodes von 8-16 Zeichen Länge
     $substring = substr($email, $pos + $searchlen, 20);
     if(preg_match("/([a-z0-9]{8,16})[::white::]*/i", $substring, $regs)) {
       logTMP("Aktivierungscode '".$regs[1]."' gefunden!\r\n", true);
       
-      // Aktivierungskey g�ltig?
+      // Aktivierungskey gültig?
       if(check_activation($regs[1])) {
         exit(0);
       }
     }
     else {
-      logTMP("Kein g�ltiger Aktivierungscode in '$substring' gefunden!");
+      logTMP("Kein gültiger Aktivierungscode in '$substring' gefunden!");
     }    
     
     $matches++;
     $pos+=$searchlen;
   }
   
-  logTMP($matches." �bereinstimmungen gefunden.");
+  logTMP($matches." übereinstimmungen gefunden.");
   
   // Beende
-  echo "Kein passender Aktivierungsschl�ssel in Datenbank(en) vorhanden.\r\n";
+  echo "Kein passender Aktivierungsschlüssel in Datenbank(en) vorhanden.\r\n";
   exit(1);
 }
 
 /**
- * Baut eine Verdingung zur Aktivierungskey-Datenbank auf und �berpr�ft,
- * ob der Benutzer dort den passenden Schl�ssel hinterlegt hatte.
+ * Baut eine Verdingung zur Aktivierungskey-Datenbank auf und überprüft,
+ * ob der Benutzer dort den passenden Schlüssel hinterlegt hatte.
  * 
  * @param $key
  * @return unknown_type

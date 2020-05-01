@@ -260,7 +260,7 @@ else {
         </div>
         <div class="tblbody"
           style="text-align: center; margin-left: 2px; float: left; width: 128px;">
-          <a href="#" onclick="showhide('2');">Feindaufkl�rung</a>
+          <a href="#" onclick="showhide('2');">Feindaufklärung</a>
         </div>
         <div class="tblbody"
           style="text-align: center; margin-left: 2px; float: left; width: 128px;">
@@ -280,7 +280,7 @@ else {
 </table>
 
 <div id="tbl1" style="width: 660px; display: none; margin-top: 10px;" />
- <!-- Tabelle genau in der Größe des dar�berliegenden div formatieren -->
+ <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr height="20">
     <td colspan="7" class="tblhead"><strong>Aktuelle Truppenbewegungen</strong></td>
@@ -318,7 +318,7 @@ else {
       case "settle":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/settle.png"    title="Siedeln"    alt="Siedeln">'; break;
       case "move":     $missiontext='<img src="'.$GLOBALS['imagepath'].'/move.png"      title="Verlegung" alt="Verlegung">'; break;
       case "return":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/return.png"    title="Heimkehr" alt="Heimkehr">'; break;
-      case "attack":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/schwerter.gif" title="�bernehmen" alt="�bernehmen">'; break; 
+      case "attack":   $missiontext='<img src="'.$GLOBALS['imagepath'].'/schwerter.gif" title="übernehmen" alt="übernehmen">'; break; 
       case "burndown": $missiontext='<img src="'.$GLOBALS['imagepath'].'/death.gif"     title="Brandschatzen" alt="Brandschatzen">'; break;
       case "despoil":  $missiontext='<img src="'.$GLOBALS['imagepath'].'/despoil.gif"   title="Plündern" alt="Plündern">'; break; 
       case "siege":    $missiontext='<img src="'.$GLOBALS['imagepath'].'/siege.png"     title="Belagern" alt="Belagern">'; break;
@@ -399,7 +399,7 @@ else {
 </div>
 
 <div id="tbl2" style="width: 660px; display: none; margin-top: 10px;">
- <!-- Tabelle genau in der Größe des dar�berliegenden div formatieren -->
+ <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr>
     <td colspan="1" class="tblhead"><strong>Feindaufkl&auml;rung</strong></td>
@@ -416,8 +416,8 @@ else {
   </tr>
   <?php
   // Hier wird nun jeder Armee-Datensatz solange verjoint, bis die Stadt auf die
-  // die Armee unterwegs ist ein Gebäude mit aufkl�rung hat. Existiert ein solches
-  // dann wird geschaut ob es innerhalb der Aufkl�rungszeit ankommt.
+  // die Armee unterwegs ist ein Gebäude mit aufklärung hat. Existiert ein solches
+  // dann wird geschaut ob es innerhalb der Aufklärungszeit ankommt.
   // Datensätze von Armeen, die zu Städten unterwegs sind in denen noch keine solches
   // Gebäude errichtet ist (NULL-JOINS) fallen also sofort heraus.
   $res_spy = do_mysqli_query("SELECT
@@ -473,7 +473,7 @@ else {
       echo '</td>';
       echo "</tr>\n";
       echo '<tr class="tblbody">';
-      echo '<td valign="top">Eure Aufkl�rer konnten folgende Einheiten ersp�hen:</td>';
+      echo '<td valign="top">Eure Aufklärer konnten folgende Einheiten erspähen:</td>';
       echo '<td valign="top" colspan="2" nowrap>';
       $unitcount = 0;
       while($data_spy_unit = mysqli_fetch_assoc($res_spy_unit)) {
@@ -486,7 +486,7 @@ else {
       }
       // Siedler nur anzeigen, wenn KEIN Geleitschutz dabei.
       if ($unitcount == 0 && $data_spy['missiondata'] > 0) {
-        echo "<b>M�nner, Frauen und Kinder: </b>".$data_spy['missiondata']."<br>";
+        echo "<b>Männer, Frauen und Kinder: </b>".$data_spy['missiondata']."<br>";
       }
       echo '</td>';
       echo "</tr>\n";
@@ -494,10 +494,10 @@ else {
     }
   }
   else if($_SESSION['player']->getScoutTime() <= 0) {
-    echo "<tr class='tblbody'><td colspan=\"3\"><font class='error'>kein Aufkl�rungsgebäude errichtet!</font></td></tr>";
+    echo "<tr class='tblbody'><td colspan=\"3\"><font class='error'>kein Aufklärungsgebäude errichtet!</font></td></tr>";
   }
   else {
-    echo "<tr class='tblbody'><td colspan=\"3\">Keine Feindesaufkl�rungen</td></tr>";
+    echo "<tr class='tblbody'><td colspan=\"3\">Keine Feindesaufklärungen</td></tr>";
   }
 
   ?>
@@ -506,7 +506,7 @@ else {
 
 <div id="tbl3" style="width: 660px; display: none; margin-top: 10px;">
  <form action="<? echo $PHP_SELF; ?>" method="POST" name="attackform">
- <!-- Tabelle genau in der Größe des dar�berliegenden div formatieren -->
+ <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr>
     <td colspan="3" class="tblhead"><strong>Neue Mission starten</strong></td>
@@ -519,7 +519,7 @@ else {
   <tr class="tblbody">
     <td valign="top" align="center"><select
       onChange="fillInKoords(this.value)">
-      <option value="0">Stadt ausw�hlen...</option>
+      <option value="0">Stadt auswählen...</option>
       <?
       $js = "";
       $me = $_SESSION['player']->getId();
@@ -599,7 +599,7 @@ ORDER BY owner != %d, owner, y
     </table>
     </td>
     <td valign="top">
-    <input type="radio" name="tactic" value="2">Erst�rmen<br />
+    <input type="radio" name="tactic" value="2">Erstürmen<br />
     <input type="radio" name="tactic" value="0" checked> Offensiv<br />
     <input type="radio" name="tactic" value="1"> Defensiv</td>
   </tr>
@@ -611,7 +611,7 @@ ORDER BY owner != %d, owner, y
   						          " ORDER BY cityunit.unit");
 
   if (mysqli_num_rows($res_cityunits)==0) {
-    echo "<tr><td colspan='3' class='tblbody' style=\"padding-top:10px; padding-bottom:10px; font-weight:bold; color:red; text-align:center;\">Es sind keine Einheiten in " . $_SESSION['cities']->activecityname . " verf�gbar!</td></tr>";
+    echo "<tr><td colspan='3' class='tblbody' style=\"padding-top:10px; padding-bottom:10px; font-weight:bold; color:red; text-align:center;\">Es sind keine Einheiten in " . $_SESSION['cities']->activecityname . " verfügbar!</td></tr>";
   }
   else {
     $elem_num = 0;
@@ -669,13 +669,13 @@ if ($from == $_SESSION['cities']->getActiveCity()) {
     der <a href="library.php?open=0">Bibliothek</a> unter <b>Krieg und
     Kampf zu finden.</b>
     <h3>Truppen-Laufzeit</h3>
-    Die Laufzeit zur Zielstadt ist prim�r abh�ngig von der Entfernung
+    Die Laufzeit zur Zielstadt ist priär abhängig von der Entfernung
     und Geschwindigkeit der langsamsten Einheit in der Armee.<br>
     Je nach Größe der Armee dauert es zwischen <?php echo round(ARMY_TIME_TO_PREPARE/3600, 2); ?> Stunden
     und <?php echo round(ARMY_MAX_TIME/86400, 2); ?> Tagen (Realzeit), 
     bis die Armee überhaupt losmarschiert (die sogenannte Vorbereitungszeit). 
     Je 1.000 Mann erhöht sich die Laufzeit um <?php echo round(ARMY_TIME_PER_1000/60, 2); ?> Minuten, 
-    eine Armee ben�tigt aber mindestens <?php echo (ARMY_TIME_TO_PREPARE/60); ?> Minuten Vorbereitungszeit.
+    eine Armee benötigt aber mindestens <?php echo (ARMY_TIME_TO_PREPARE/60); ?> Minuten Vorbereitungszeit.
     
     <?php 
     	// Ausgabe für Testrunden.

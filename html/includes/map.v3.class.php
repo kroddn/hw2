@@ -190,7 +190,7 @@ class MapVersion3 {
 	  '<tr>'."\n" );
 
     while ( $field = mysqli_fetch_array($fields) ) {
-      // Wenn Grid an und Grasfl�che dann Koordinaten ausgeben
+      // Wenn Grid an und Grasfläche dann Koordinaten ausgeben
       if( $GLOBALS['gox'] == $field['x'] && $GLOBALS['goy'] == $field['y']){
         $kclass = "koord_hilight";
         $hilight = true;
@@ -314,10 +314,10 @@ class MapVersion3 {
 			'<a href=info.php?show=clan&id='.$field['clan'].'>Zur Ordensseite</a>' );
           }
           
-          // Spielernamen s�ubern
+          // Spielernamen säubern
           $ownername = str_replace(" ", "%20", $field['ownername']);
           $ownerlink = 'Herrscher: <a class="hell" href="javascript:playerinfo(\''.urlencode($field['ownername']).'\')">'.$field['ownername'].'</a>';
-          // Spezielle konvertierung für den "Zurück" Button, der per JavaScript code HTML in ein div einf�gt
+          // Spezielle konvertierung für den "Zurück" Button, der per JavaScript code HTML in ein div einfügt
           $js_ownerlink = htmlentities('Herrscher: <a class="hell" href="javascript:playerinfo(\\\''.urlencode($field['ownername']).'\\\')">'.$field['ownername'].'</a>', ENT_QUOTES);
         }
         

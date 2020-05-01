@@ -104,6 +104,6 @@ echo "-- Services starten"
 echo "-- Turniere generieren"
 echo
 
-#echo "-- Tabelle bookings r�berkopieren"
+#echo "-- Tabelle bookings rüberkopieren"
 #echo "-- MAX_PLAYER in includes/config.inc.php auf 0 setzen und Voranmeldungen aktivieren"
 

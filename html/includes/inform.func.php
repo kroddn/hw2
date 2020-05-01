@@ -40,7 +40,7 @@ if( isset($_REQUEST['accept_inform']) )
     unset($error);
   }
   else {
-    $error = "Setzen Sie ein H�kchen!";
+    $error = "Setzen Sie ein Häkchen!";
   }
 }
 
@@ -64,8 +64,8 @@ function show_inform($inf) {
 ?>
 <h1>Wichtige Information</h1>
 Bitte lesen Sie nachfolgende Informationen durch und bestätigen
-Sie die Kenntnisnahme durch Setzen eines H�kchens bzw. Ankreuzen
-der entsprechenden Schaltfl�che.
+Sie die Kenntnisnahme durch Setzen eines Häkchens bzw. Ankreuzen
+der entsprechenden Schaltfläche.
 <p>
 <hr>
 <?

@@ -47,7 +47,7 @@ function list_player_not_activated () {
   
   echo "<h1>Noch nicht aktivierte Spieleraccounts</h1>\n";
   echo 'Die Spieler sind nach der Reihenfolge Ihrer Anmeldung sortiert. <a href="#last">Ganz unten</a> sollte man die zuletzt angemeldeten finden.<p>';
-  echo 'Gr�n markierte Spieler sind bereits seit mind. 2 Tagen erstellt und nicht aktiviert worden.<br>';
+  echo 'Grün markierte Spieler sind bereits seit mind. 2 Tagen erstellt und nicht aktiviert worden.<br>';
 
   $sql = "SELECT id, login, email, activationkey, status,
  unix_timestamp() - regtime AS inactive_seconds,
@@ -79,7 +79,7 @@ ORDER BY id";
       '<td align="right" title="regtime_unixtime: '.$p['regtime_unixtime'].'">'.$p['regtime_time']. "</td>\n".
       '<td align="right" title="lastseen_unixtime: '.$p['lastseen_unixtime'].'">'.$p['lastseen_time']."</td>\n".
       '<td align="right" title="Sekunden: '.$p['inactive_seconds'].'">'.formatTime($p['inactive_seconds'])." h</td>\n".
-      // L�nger als xxx Tage nicht aktiviert...
+      // Länger als xxx Tage nicht aktiviert...
       "<td>".
       '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler löschen wollt?\')" href="?delete='.$p['id'].'">Löschen</a>&nbsp;&nbsp;'. 
       '<a onClick="return confirm(\'Spieler aktivieren?\')" href="activate.php?activate=1&activationcode='.$p['activationkey'].'&loginname='.$p['login'].'">Aktivieren</a>&nbsp;&nbsp;'.
@@ -124,7 +124,7 @@ function list_player_locked () {
       '<td align="right" title="regtime_unixtime: '.$p['regtime_unixtime'].'">'.$p['regtime_time']. "</td>\n".
       '<td align="right" title="lastseen_unixtime: '.$p['lastseen_unixtime'].'">'.$p['lastseen_time']."</td>\n".
       '<td align="right" title="Sekunden: '.$p['inactive_seconds'].'">'.formatTime($p['inactive_seconds'])." h</td>\n".
-      // L�nger als xxx Tage nicht aktiviert...
+      // Länger als xxx Tage nicht aktiviert...
       "<td>".
       '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler löschen wollt?\')" href="?delete='.$p['id'].'">Löschen</a>&nbsp;&nbsp;'. 
       '<a onClick="return confirm(\'Sperre aufheben?\')" href="adminmaintain.php?reactivate=1&id='.$p['id'].'">Freigeben</a>&nbsp;&nbsp;'.
@@ -168,7 +168,7 @@ function list_player_new ($hours = 48) {
       '<td align="right" title="regtime_unixtime: '.$p['regtime_unixtime'].'">'.$p['regtime_time']. "</td>\n".
       '<td align="right" title="lastseen_unixtime: '.$p['lastseen_unixtime'].'">'.$p['lastseen_time']."</td>\n".
       '<td align="right" title="Sekunden: '.$p['inactive_seconds'].'">'.formatTime($p['inactive_seconds'])." h</td>\n".
-      // L�nger als xxx Tage nicht aktiviert...
+      // Länger als xxx Tage nicht aktiviert...
       "<td>".
       '<a onClick="return confirm(\'Seid Ihr sicher, dass Ihr den Spieler löschen wollt?\')" href="?delete='.$p['id'].'">Löschen</a>&nbsp;&nbsp;'. 
       '<a onClick="return confirm(\'Sperre aufheben?\')" href="adminmaintain.php?reactivate=1&id='.$p['id'].'">Freigeben</a>&nbsp;&nbsp;'.
@@ -216,7 +216,7 @@ function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
 	do_mysqli_query($sql);
 	$num++;
       }
-      echo "<b>Ja</b>. $num St�ck übernommen<br>";
+      echo "<b>Ja</b>. $num Stück übernommen<br>";
     }
     else {
       echo "Nein. <br>";

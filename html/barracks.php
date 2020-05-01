@@ -200,7 +200,7 @@ for($i=0;$i<sizeof($units);++$i) {
   $possible = max(0, $units[$i]['possible']);
   
   // FIXME: Durch das max wird verhindert, dass dem Benutzer hier negative Werte angezeigt werden
-  // Dieser "Bug" m�sste eigentlich in cities.class.php gefixt werden.
+  // Dieser "Bug" müsste eigentlich in cities.class.php gefixt werden.
   $maxpossible = max(0, $units[$i]['maxpossible']);
   
   if ($maxpossible>0) $nobarracks = false;
@@ -251,7 +251,7 @@ for($i=0;$i<sizeof($units);++$i) {
 }
 
 if ($nobarracks) {
-  echo '<tr><td class="tblbody" colspan="12" align="center" class="error"><b>Ihr m�sst zuerst (weitere) Kasernen errichten!</b></td></tr>';
+  echo '<tr><td class="tblbody" colspan="12" align="center" class="error"><b>Ihr müsst zuerst (weitere) Kasernen errichten!</b></td></tr>';
 }
 
 $costFactor = getLoyalityCostFactor( round($_SESSION['cities']->getACLoyality()/100));

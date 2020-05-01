@@ -30,7 +30,7 @@ include_once ("includes/fight.class.php");
 
 <html>
 <head>
-<title>Tool zum Simulieren von K�mpfen</title>
+<title>Tool zum Simulieren von Kämpfen</title>
 </head>
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
 <style>
@@ -49,8 +49,8 @@ if (defined("HW2DEV") && HW2DEV && !$_SESSION['player'] ->isMaintainer() ) {
   echo "<h1 class=\"error\">Kampfsimulator in HW2DEV nur für Maintainer!</h1>";
 }
 else if (!$allowed) {
-    echo "<h1 class=\"error\">Ihr habt nicht gen�gend Bonuspunkte!</h1>";
-    echo "Ihr ben�tigt wenigstens ".FIGHTSIM_NEED_POINTS." Bonuspunkte. ";
+    echo "<h1 class=\"error\">Ihr habt nicht genügend Bonuspunkte!</h1>";
+    echo "Ihr benötigt wenigstens ".FIGHTSIM_NEED_POINTS." Bonuspunkte. ";
     echo "<a href='settings.php?show=account'>Weitere Infos (hier klicken).</a><p>";
 }
 if ($_SESSION['player']->isMaintainer()) {
@@ -96,7 +96,7 @@ if (isset ($fight) && ($allowed || $_SESSION['player']->isAdmin()) ) {
   if(count($defftotal) <= 0) {
   }
   else if (count($atttotal) <= 0) {
-    echo '<h1 class="error">Es mu� mindestens eine Einheit angreifen!</h1>';        
+    echo '<h1 class="error">Es muss mindestens eine Einheit angreifen!</h1>';        
   }
   else {
 
@@ -185,13 +185,13 @@ while ($Unit = mysqli_fetch_assoc($resUnits)) {
 <select name="tac">
 <option value="0" <? if($tac == 0) echo "selected"; ?>>Offensiv</option>
 <option value="1" <? if($tac == 1) echo "selected"; ?>>Defensiv</option>
-<option value="2" <? if($tac == 2) echo "selected"; ?>>Erst�rmen</option>
+<option value="2" <? if($tac == 2) echo "selected"; ?>>Erstürmen</option>
 </select>
 </td>
 </tr>
 
 <tr>
-<td class='tblbody'>Stadtbev�lkerung</td>
+<td class='tblbody'>Stadtbevölkerung</td>
 <td class='tblbody'><input type='text' name='citypop' value='<?echo $citypop?>' style=\"width:100%;\"></td>
 </tr>
 <tr>

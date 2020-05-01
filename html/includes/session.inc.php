@@ -50,6 +50,7 @@ if (isPlayerSet()) {
 }
 
 $click = new stdClass();
+$_SESSION['click'] = $click;
 // Bannerzähler hochsetzen
 if (isset($bannerplus)) {
   $ad->banner_id+=$bannerplus;

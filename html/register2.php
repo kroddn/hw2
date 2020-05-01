@@ -81,7 +81,7 @@ if (isset($_POST['register'])) {
 	$registration=true;
 	if(defined("MAX_PLAYER")) {
           if( MAX_PLAYER == 0 ) { $registration=false; $errmsg="Die Registrierung neuer Accounts ist eingestellt.";}
-          else if  (MAX_PLAYER <= $erg0) { $registration=false; $errmsg="Momentan sind keine freien Pl�tze mehr verf�gbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";}
+          else if  (MAX_PLAYER <= $erg0) { $registration=false; $errmsg="Momentan sind keine freien Plätze mehr verfügbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";}
         }
 
 	if (!checkBez($name, 3, 40)) {$registration=false; $errmsg="Das gewählte Login ist zu kurz, zu lang oder verstößt gegen die Namenskonventionen.";}
@@ -105,7 +105,7 @@ if (isset($_POST['register'])) {
 	}
 	if ($registration) {
 		if (!checkPassword($pw1)) {$registration=false; $errmsg="Das gewählte Passwort ist zu kurz.";}
-		elseif (!($pw1==$pw2)) {$registration=false; $errmsg="Die Passw�rter stimmen nicht überein.";}
+		elseif (!($pw1==$pw2)) {$registration=false; $errmsg="Die Passwörter stimmen nicht überein.";}
 		elseif (!checkEmail($email)) {$registration=false; $errmsg="Sie haben keine oder eine falsche eMail-Adresse angegeben.";}
 	}
 
@@ -163,7 +163,7 @@ if(defined("MAX_PLAYER")) {
   }
   else if  (MAX_PLAYER <= $erg0) { 
     echo "<div class='error'><b>";
-    echo "Momentan sind keine freien Pl�tze mehr verf�gbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";
+    echo "Momentan sind keine freien Plätze mehr verfügbar (maximal ".MAX_PLAYER." Spieler in dieser Runde).";
     echo "</b></div><br></div>\n</body>\n</html>";
     exit;
   }
@@ -182,8 +182,8 @@ if(defined("MAX_PLAYER")) {
 		<td colspan="2" class="tblhead" align="center">
 		<br>
 		<h2 style="color:red;">Login bedeutet nicht Spielername</h2>
-		Spielername und Login sind zwei getrennt zu w�hlende Namen! Beim ersten Login
-		kann man den Spielernamen und Startposition sowie die Religion ausw�hlen.
+		Spielername und Login sind zwei getrennt zu wählende Namen! Beim ersten Login
+		kann man den Spielernamen und Startposition sowie die Religion auswählen.
 		<br>
 		&nbsp;
 		</td>
@@ -223,8 +223,8 @@ if(defined("MAX_PLAYER")) {
 	</tr>
 
 	<tr>
-		<td colspan="2" class="tblbody">Wichtiger Hinweis: Zur Erkennung von sogenannten "Multis" (Spieler, die sich unfaire Vorteile durch Nutzen mehrerer Accounts verschaffen wollen) führen wir unter anderem eine Pr�fung ihrer Adresse (IP) durch. Wir sperren generell alle Spieler mit gleicher Adresse.
-<br>Sollten sich in Ihrem Haushalt schon Holy-Wars 2 Spieler befinden, so melden Sie sich nach der Registrierung bei einem Multihunter oder besuchen Sie unseren Chatraum im <a target="_blank" href="http://www.holy-wars2.de/cgiirc">IRC</a> und schildern Sie uns Ihre Situation inklusive der Angabe aller betroffenen Spieler. Eine Genehmigung für �ffentliche Einrichtungen wie Schulen, Internet-Cafe oder andere �ffentlich zugänglichen Orten erteilen wir nur in Ausnahmef�llen</td>
+		<td colspan="2" class="tblbody">Wichtiger Hinweis: Zur Erkennung von sogenannten "Multis" (Spieler, die sich unfaire Vorteile durch Nutzen mehrerer Accounts verschaffen wollen) führen wir unter anderem eine Prüfung ihrer Adresse (IP) durch. Wir sperren generell alle Spieler mit gleicher Adresse.
+<br>Sollten sich in Ihrem Haushalt schon Holy-Wars 2 Spieler befinden, so melden Sie sich nach der Registrierung bei einem Multihunter oder besuchen Sie unseren Chatraum im <a target="_blank" href="http://www.holy-wars2.de/cgiirc">IRC</a> und schildern Sie uns Ihre Situation inklusive der Angabe aller betroffenen Spieler. Eine Genehmigung für öffentliche Einrichtungen wie Schulen, Internet-Cafe oder andere öffentlich zugänglichen Orten erteilen wir nur in Ausnahmefällen</td>
 	</tr>
 <tr><td  colspan="2" align="center">
 <? if (isset($recruiter)) echo '<input type="hidden" name="recruiter" value="'.$recruiter.'">'; ?>

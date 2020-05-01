@@ -275,7 +275,7 @@ if(isset($selectPlayerName)) {
 			<tr>
 				<td width="22%" valign="top"></td>
 				<td width="53%" valign="top" align="center" class="tblbody">
-				<h1>Spielernamen und Startposition w�hlen</h1>
+				<h1>Spielernamen und Startposition wählen</h1>
 				<form method="post" action="choose_name.php"></form>
 				</td>
 				<td width="22%" valign="top"></td>

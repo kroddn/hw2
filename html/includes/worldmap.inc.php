@@ -40,13 +40,13 @@ include_once("includes/banner.inc.php");
 start_page();
 start_body(false);
 
-// Die eigene ID wird �fter ben�tigt, besser lesbar
+// Die eigene ID wird öfter benötigt, besser lesbar
 $my_pid = $_SESSION['player']->getID();
 
 
 /*** HERE START ***/
 if (!isset($what)) {
-  echo "<b>Haha, ihr seid vielleicht ein Held! Welche Karte m�chtet ihr denn gerne betrachten? Gebt gef�lligst Infos an!<b></body></html>";
+  echo "<b>Haha, ihr seid vielleicht ein Held! Welche Karte möchtet ihr denn gerne betrachten? Gebt gefälligst Infos an!<b></body></html>";
   die();
 }
 include_once("includes/util.inc.php");
@@ -199,7 +199,7 @@ if (!isset($takecoloursby))
  * Wahl der Farbe bestimmt. Sinnvolle Werte sind 'id' oder 'rel',
  * falls es sich um eine Beziehungskarte handelt.
  *
- * $city ben�tigt die Assoc-Indizes:
+ * $city benötigt die Assoc-Indizes:
  * - id
  * - name
  * - ownerid

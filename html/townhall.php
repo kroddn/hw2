@@ -82,7 +82,7 @@ if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY && $_SESSION['player']->getReli
   
   if($_REQUEST['do_convert']) {
     if(!$has_convert_building) {
-      $error = "Ihr besitzt kein Gebäude, das Euch eine Konvertierung erlauben w�rde!";
+      $error = "Ihr besitzt kein Gebäude, das Euch eine Konvertierung erlauben würde!";
     }
     else if(!$has_convert_loyality) {
       $error = "Eure Einwohner sind noch nicht loyal genug, um zu konvertieren.";
@@ -119,7 +119,7 @@ if ($error!=null && strlen($error) > 0) {
 }
 else {
   if ($settle)
-  echo "<h3>Ihre Siedler befinden sich auf dem Weg zur Gr�ndung einer neuen Siedlung.</h3><a href=\"general.php\">Zum Generalstab</a>.<p>\n";
+  echo "<h3>Ihre Siedler befinden sich auf dem Weg zur Gründung einer neuen Siedlung.</h3><a href=\"general.php\">Zum Generalstab</a>.<p>\n";
 }
 
 if ($inform!=null && strlen($inform) > 0) {
@@ -136,7 +136,7 @@ $cd=$_SESSION['cities']->getCityData();
 
 $res1=do_mysqli_query("SELECT sum(citybuilding.count * building.res_attraction) AS attr,sum(citybuilding.count * building.res_food) AS incfood,city.id AS id,city.food AS food FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id = ".$cd['id']." GROUP BY id");
 $data1 = mysqli_fetch_assoc($res1);
-//MYSQLd abh�nige �nderung -> Vgl. statistic.inc.php
+//MYSQLd abhänige Änderung -> Vgl. statistic.inc.php
 $data1['attr'] +=1000;
 ?>
 <table width="500" cellspacing="1" cellpadding="0" border="0">
@@ -150,7 +150,7 @@ $data1['attr'] +=1000;
 <form action="<? echo $PHP_SELF; ?>" method="POST">
 <table width="500" cellspacing="1" cellpadding="1" border="0">
   <tr>
-    <td colspan="4" class="tblhead"><b>�bersicht</b></td>
+    <td colspan="4" class="tblhead"><b>übersicht</b></td>
   </tr>
   <tr>
     <td class="tblbody" width="150">Einwohner</td>
@@ -159,13 +159,13 @@ $data1['attr'] +=1000;
     <td class="tblbody" style="text-align: right; font-weight: bold;"><? echo $data1['attr']; ?></td>
   </tr>
   <tr>
-    <td class="tblbody" width="150">-> davon verf�gbar</td>
+    <td class="tblbody" width="150">-> davon verfügbar</td>
     <td class="tblbody" align="right" width="50"><b><? echo $cd['apopulation']?></b></td>
     <td class="tblbody" width="150">Nahrungsproduktion:</td>
     <td class="tblbody" style="text-align: right; font-weight: bold;"><? echo $data1['incfood']; ?></td>
   </tr>
   <tr>
-    <td colspan="4" class="tblhead" width="200"><b>St�dtisches
+    <td colspan="4" class="tblhead" width="200"><b>Städtisches
     Einwohnerlimit</b></td>
   </tr>
   <tr>
@@ -191,7 +191,7 @@ $maySettle = false;
   </tr>
   <?
   if(defined("START_POS_NEW") && START_POS_NEW) {
-    printf('<tr><td colspan="2" class="tblbody">Die <font color="#FF0000">Regeln zum Gr�nden neuer Städte</font> wurden geändert. Weiter Informationen <a href="library.php?topic=Stadtgr">hier in der Bibliothek</b>.</td></tr>');
+    printf('<tr><td colspan="2" class="tblbody">Die <font color="#FF0000">Regeln zum Gründen neuer Städte</font> wurden geändert. Weiter Informationen <a href="library.php?topic=Stadtgr">hier in der Bibliothek</b>.</td></tr>');
   }
   $ackerbau = do_mysqli_query("SELECT * FROM playerresearch WHERE player=".$_SESSION['player']->getID()." AND research=5");
 
@@ -207,7 +207,7 @@ $maySettle = false;
     echo "<tr class='tblbody'><td>Anzahl Siedler (50 bis ".$cd['apopulation'].")</td><td><input style='".(isset($newsettle) ? 'background-color: #FFA0C0;': "")."' type='text' name='settler' id='settler' size='6' maxlength='4' onkeyup='updateTravelTime()' onChange='updateTravelTime()'></td></tr>\n";
     echo '<tr class="tblbody"><td>Zeit bis Ankunft / Speed</td>';
     echo ' <td><input type="text" style="text-align: right" name="traveltime" id="traveltime" value="n/a" size="9" readonly> h / <span id="armyspeed">3</span></td></tr>';
-    echo "\n<tr><td colspan='2' class='tblbody' style='font-size: 9px; padding-left: 10px; '>Siedler verbrauchen <b>Nahrung</b>, genauso wie B�rger.<br>Bei Nahrungsmangel sterben erst B�rger und dann Siedler</td></tr>";
+    echo "\n<tr><td colspan='2' class='tblbody' style='font-size: 9px; padding-left: 10px; '>Siedler verbrauchen <b>Nahrung</b>, genauso wie Bürger.<br>Bei Nahrungsmangel sterben erst Bürger und dann Siedler</td></tr>";
     echo "<tr><td colspan='2' class='tblhead'><b>Begleitschutz</b></td></tr>";
     $guards=$_SESSION['cities']->getCityUnits();
     if (sizeof($guards)==0) {
@@ -237,13 +237,13 @@ $maySettle = false;
     echo "<tr><td class='tblbody'>Mit Ihrer aktuellen Verwaltungsstufe können Sie $maxcities Städte 100% effektiv verwalten. Sie haben $actcities".($settlers>0 ? " und gründen $settlers neue Städte!" : ".")."</td><td class='tblbody' align='left'><input type='submit' name='settle' value=' aufbrechen ' ".
         // Schutz einbauen dass Noobs nicht aus versehen zuviel Siedeln
     ($actcities + $settlers >= $maxcities
-    ? 'onClick="return confirm(\'Eine weitere Stadt w�rde die Effektivität Ihrer Verwaltung schm�lern. Genaueres könnt Ihr in der Bibliothek unter Spielprinzipien -> Städte -> Verwaltung nachlesen.'.
+    ? 'onClick="return confirm(\'Eine weitere Stadt würde die Effektivität Ihrer Verwaltung schmälern. Genaueres könnt Ihr in der Bibliothek unter Spielprinzipien -> Städte -> Verwaltung nachlesen.'.
     "\\n\\n".'Seid Ihr sicher, dass ihr noch eine Stadt gründen wollt?\')"'
          : "").
     "></td></tr>";
 }
 else {
-  echo "<tr><td colspan='2' style='padding: 10px;' class='tblbody'>nicht möglich, <b>nicht gen�gend Einwohner</b> (mindestens 50 ben�tigt)</td></tr>";
+  echo "<tr><td colspan='2' style='padding: 10px;' class='tblbody'>nicht möglich, <b>nicht genügend Einwohner</b> (mindestens 50 benötigt)</td></tr>";
 }
 ?>
 </table>
@@ -263,10 +263,10 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
 <tr class="tblbody">
   <td colspan="2">Diese Stadt besitzt einen anderen Glauben als Ihr!
   <p>Eure Aufgabe ist es, die Einwohner zum rechten Glauben
-  zurückzuführen. Abh�ngig von der Loyalität der hiesigen Einwohner
+  zurückzuführen. Abhängig von der Loyalität der hiesigen Einwohner
   (derzeit <b><? echo round($current_loyality/100); ?>%</b>) wird es 
-  möglich, sie zu konvertieren. Mit etwas Gl�ck gewinnt Ihr durch die
-  Konvertierung sogar religißse Anh�nger, die mit Euch in die 
+  möglich, sie zu konvertieren. Mit etwas Glück gewinnt Ihr durch die
+  Konvertierung sogar religißse Anhänger, die mit Euch in die 
   Schlacht ziehen wollen.
   
   </td>
@@ -275,7 +275,7 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
     //$possible_loy_buildings = do_mysqli_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality IS NOT NULL ORDER BY convert_loyality DESC");
 
     if($has_convert_building) {
-      printf('<tr class="tblbody"><td colspan="2">Ihr <b>ben�tigt %s %d%% Loyalität</b> zum Konvertieren dieser Stadt, %s &quot;%s&quot;.<br>', 
+      printf('<tr class="tblbody"><td colspan="2">Ihr <b>benötigt %s %d%% Loyalität</b> zum Konvertieren dieser Stadt, %s &quot;%s&quot;.<br>', 
       $has_convert_loyality ? "nur" : "<font color=\"red\"><u>erst</u></font>", round($loy['convert_loyality']/100),
       $has_convert_loyality ? "dank Eures Gebäudes" : "ermöglicht durch Euer Gebäude", $loy['name']);
        
@@ -314,7 +314,7 @@ else {
 </tr>
 <tr>
   <td class="tblbody">Einwohner bekehren (kostet <? echo CONVERT_COST; ?>
-  Gold pro Einwohner, der Rest k�mpft gegen die Stadtbewachung)</td>
+  Gold pro Einwohner, der Rest kämpft gegen die Stadtbewachung)</td>
 </tr>
 <tr>
   <td class="tblbody">
@@ -326,7 +326,7 @@ else {
   </td>
 </tr>
   <?
-} // keine LOYALIT�T
+} // keine LOYALITÄT
 echo "</table><p>";
 }
 

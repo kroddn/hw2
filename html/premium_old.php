@@ -99,10 +99,10 @@ Durch eine freiwillige Spende erhalten Sie als Spieler Zugang zu vielen weiteren
 Jedoch entstehen durch diese Features keine Vorteile gegenüber anderen Spielern, 
 welche keinen Premiumaccount besitzen. Es wird nur der "Komfort" gesteigert.
 <p>
-Je nach H�he der Spende an das Holy-Wars 2 Projekt richten wir den gew�nschten NoADS
+Je nach Höhe der Spende an das Holy-Wars 2 Projekt richten wir den gewünschten NoADS
 oder Premium-Account ein.</i>
 <p>
-Durch die Spende entstehen keinerlei Rechtsanspr�che der Spielleitung gegen�ber. 
+Durch die Spende entstehen keinerlei Rechtsansprüche der Spielleitung gegenüber. 
 Bei Ausfall oder Abschaltung des Spieles werden keine Spenden rückerstattet. 
 Jede Spende kommt der Spielentwicklung und Erhaltung zugute.
 <p>
@@ -110,7 +110,7 @@ Wir weisen noch einmal ausdrücklich darauf hin, dass auch bei der Nutzung eines
 Premium-Accounts die 
 <a target="_new" href="https://<? echo $_SERVER['HTTP_HOST'];?>/register.php?info=1">Nutzungsbedingungen</a>
 weiterhin einzuhalten sind. Bei Verstößen und Löschung des Accounts verfallen
-auch s�mtliche Premium-Merkmale.
+auch sämtliche Premium-Merkmale.
 <hr>
 <h1>Erwerb eines Premium-Accounts</h1>
 Es stehen Ihnen mehrere Zahlungsm&ouml;glichkeit Verf&uuml;gung.<br>
@@ -123,10 +123,10 @@ else {
  echo "(diese finden Sie unter Einstellungen, sobald Sie eingeloggt sind) ";
 }
 ?>
-</b> an,  sowie den gew�nschten Premium-Account.
+</b> an,  sowie den gewünschten Premium-Account.
 <ul>
 <li>
-<h2>Bank�berweisung</h2>
+<h2>Banküberweisung</h2>
 Hier die Daten des HW2-Kontos:<br>
 <? include("includes/konto.php"); ?>
 <? 
@@ -144,7 +144,7 @@ Hier die Daten des HW2-Kontos:<br>
 <ul>
 <li <? if($mark=='noads') echo 'style="color: blue;"'; ?>>HW2 Werbefrei!
 <li>Keine Unterbrechung durch "Halt" -Seite
-<li>Keine Werbebanner, somit schnellerer Spielflu�
+<li>Keine Werbebanner, somit schnellerer Spielfluss
 <li>Autologout erst nach 2 Stunden
 <li>8 Angebote pro Seite auf dem Marktplatz
 <li>Erweiterte Statistiken
@@ -166,8 +166,8 @@ Hier die Daten des HW2-Kontos:<br>
 <li>50 Nachrichten für 4 Wochen zugänglich
 <li>Autologout erst nach 12 Stunden
 <li>Avatar auch ohne Toplistenposition
-<li>Adressbuch mit Verbündeten und Ordensbr�dern - auch für Marktplatz 
-<li><font color="#FF2020"><b>NEU!!!</b></font> Adressbuch auch für SMS-Empf�nger 
+<li>Adressbuch mit Verbündeten und Ordensbrüdern - auch für Marktplatz 
+<li><font color="#FF2020"><b>NEU!!!</b></font> Adressbuch auch für SMS-Empfänger 
 <li><font color="#FF2020"><b>NEU!!!</b></font> Diplomatie-Karte: Verbündete und Feinde im Überblick
 <li>Signatur bearbeitbar
 </ul>
@@ -194,7 +194,7 @@ else {
 </td></tr></table>
 <? if( defined("PREMIUM_SMS") && PREMIUM_SMS ) { ?>
 <p>
-<font size="-1">*) EUR 2,99 pro SMS aus allen <b>deutschen</b> Netzen, zuz�glich eventueller Betreibergeb�hren.</font>
+<font size="-1">*) EUR 2,99 pro SMS aus allen <b>deutschen</b> Netzen, zuzüglich eventueller Betreibergebühren.</font>
 <? } ?>
 <hr>
 <a name="premiumpro"><h2>HW2 Premium Pro</h2></a>
@@ -208,7 +208,7 @@ else {
 <li>Kein Autologout, <font color="#FF2020">Kein Security-Code</font>
 <li><b>10 SMS</b> pro Monat kostenlos
 <li><font color="#FF2020"><b>NEU!!!</b></font> Eigene Mobilfunknummer als Absenderkennung
-bei SMS-Versand einstellbar, so dass Empf�nger direkt aufs Handy antworten kann.
+bei SMS-Versand einstellbar, so dass Empfänger direkt aufs Handy antworten kann.
 </ul>
 <table><tr><td>
 3 Monate EUR 10,00<br />
@@ -224,10 +224,10 @@ bei SMS-Versand einstellbar, so dass Empf�nger direkt aufs Handy antworten kan
 <li>HW2 Premium Pro inklusive!
 <li>unbegrenzt (10000) Nachrichten für 8 Wochen zugänglich
 <li>Namensschutz lifetime ab 1 Jahr Laufzeit
-<li>Eigene Abteilung im HW2-Forum mit Subdom�ne, z.B. <a href="http://wunschname-forum.holy-wars2.de/" target="_blank">http://wunschname-forum.holy-wars2.de/</a>
+<li>Eigene Abteilung im HW2-Forum mit Subdomäne, z.B. <a href="http://wunschname-forum.holy-wars2.de/" target="_blank">http://wunschname-forum.holy-wars2.de/</a>
 <li><b>20 SMS</b> pro Monat kostenlos
 <li><font color="#FF2020"><b>NEU!!!</b></font> Eigene Mobilfunknummer als Absenderkennung 
-bei SMS-Versand einstellbar, so dass Empf�nger direkt aufs Handy antworten kann.
+bei SMS-Versand einstellbar, so dass Empfänger direkt aufs Handy antworten kann.
 </ul>
 12 Monate EUR 50,00<br />
 24 Monate EUR 90,00<br />

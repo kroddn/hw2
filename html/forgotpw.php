@@ -44,15 +44,15 @@ if ($getkey) {
       $key = createKey();
       do_mysqli_query("UPDATE player SET activationkey='$key' WHERE id=".$db_login['id']);
       $body = "Sehr geehrter Teilnehmer,\n
-				Mit dem folgenden Aktivierungscode können Sie ihr Passwort im entsprechenden Men� ändern!\n
+				Mit dem folgenden Aktivierungscode können Sie ihr Passwort im entsprechenden Menü ändern!\n
 		
 				Aktivierungscode: $key\r\n
 		
-				Der Key verf�llt, falls Sie sich mit ihrem alten Passwort einloggen.\n
+				Der Key verfällt, falls Sie sich mit ihrem alten Passwort einloggen.\n
 		
 				Diese eMail wurde automatisch generiert. Bitte antworten Sie nicht dieser eMail-Adresse.\n		
 		
-				Viel Spaß w�nscht Ihnen das Team von Holy-Wars";
+				Viel Spaß wünscht Ihnen das Team von Holy-Wars";
 
       $ip = getenv('REMOTE_ADDR');
       mail($email, "Holy-Wars 2: Passwort vergessen", $body, "FROM: no-reply@holy-wars2.de");
@@ -91,7 +91,7 @@ elseif ($changepw) {
 					}
 					else { $changeerror = "Der eingegebene Aktivierungscode ist falsch."; }
 				}
-				else { $changeerror = "Die Passw�rter stimmen nicht überein."; }
+				else { $changeerror = "Die Passwörter stimmen nicht überein."; }
 			}
 			else {$changeerror = "Das gewählte Passwort ist zu kurz.";}
 		}

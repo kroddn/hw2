@@ -79,15 +79,15 @@ else {
 					fehlgeschlagen. Nun war die Stadt eingekreist. Ihr geht die
 					Doppelmauer entlang, klopft hier eine Schulter, reißt dort einen
 					Scherz. Und die Männer schöpfen für den Augenblick Mut.
-					Verzweifelte Hoffnung erf�llt ihre Augen und doch verschwindet sie,
-					sobald Ihr euch wegdreht. Immer noch eilen M�nner auf die Mauern,
+					Verzweifelte Hoffnung erfüllt ihre Augen und doch verschwindet sie,
+					sobald Ihr euch wegdreht. Immer noch eilen Männer auf die Mauern,
 					Speertruppen, Panzerpieken, aber auch Leute der Stadtmiliz eilen
 					hin und her und leisten ihren Dienst. Ihr blickt in die Stadt und
 					Eure Augen wandern an den Mauern Eurer Festung hinauf. Der letzte
 					Rückzugspunkt, scheinbar uneinnehmbar. Und doch schien es
 					hoffnungslos. Endlos erstreckte sich das Heer der Ungläubigen. Dann
 					unvermittelt, setzen die Trommeln ein. Ihr kniet nieder und sprecht
-					ein Gebet. überall auf der Mauer tun es die M�nner Euch gleich,
+					ein Gebet. überall auf der Mauer tun es die Männer Euch gleich,
 					knien nieder und beten. Und dann beginnt es....</i></b></font>
 <?php } ?>
 					</td>
@@ -104,16 +104,16 @@ else {
 				src="<? echo $imagepath; ?>/logo_80x80.gif" alt="HW2 Logo Schild"
 				align="left" border="0"></a> <font
 				style="font-family: Tahoma; font-size: 11px;"> Wir schreiben
-			tiefstes Mittelalter. Papst Urban II. hat zu den Kreuzz�gen
-			aufgerufen und der heilige Krieg beginnt. W�hlet zwischen dem
+			tiefstes Mittelalter. Papst Urban II. hat zu den Kreuzüügen
+			aufgerufen und der heilige Krieg beginnt. Wählet zwischen dem
 			christlichen oder dem islamischen Glauben und übernehmet die
 			Herrschaft über Euer eigenes Reich. Gebietet Ihr am Anfang nur über
 			ein einfaches Dorf, werdet Ihr mit der Zeit ein <b>gewaltiges Reich</b>
-			Euer Eigen nennen. Gr�ndet neue Städte oder erobert bereits
-			bestehende. Seht Eure D�rfer zu prunkvollen Städten heranwachsen und
-			gewaltige Heere werden auf Euer Wort h�ren. F�hret die Einwohner zum
-			rechten Glauben und zerschmettert die Ungl�ubigen. Doch Ihr seid
-			nicht alleine. Erbittet Aufnahme in einem der m�chtigen Orden Eures
+			Euer Eigen nennen. Gründet neue Städte oder erobert bereits
+			bestehende. Seht Eure Dörfer zu prunkvollen Städten heranwachsen und
+			gewaltige Heere werden auf Euer Wort hören. Führet die Einwohner zum
+			rechten Glauben und zerschmettert die Ungläubigen. Doch Ihr seid
+			nicht alleine. Erbittet Aufnahme in einem der möchtigen Orden Eures
 			Glaubens und erklimmt die Hierarchie! Oder gründet Euren eigenen
 			Orden und führet ihn zu Macht, Ruhm und Ansehen. Es liegt allein in
 			Eurer Hand....</font>

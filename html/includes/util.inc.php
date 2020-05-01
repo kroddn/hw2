@@ -105,7 +105,7 @@ function player_to_adr($name) {
           ? '<a href="edit_adr.php?addname='.urlencode($name).'">'
           : '<a onClick="alert(\'Diese Funktion ist Besitzern eines Premium-Accounts vorbehalten\')">'
           ).
-    'Spieler zum Adressbuch hinzuf�gen.</a>';
+    'Spieler zum Adressbuch hinzufügen.</a>';
 }
 
 function header_redirect($url) {
@@ -310,7 +310,7 @@ function RemovePlayer_old($id) {
     do_mysqli_query("DELETE FROM message WHERE recipient  = ".$id);
     //Forschende Forschungen löschen
     do_mysqli_query("DELETE FROM researching WHERE player = ".$id);
-    // Namens�nderungen löschen
+    // Namensänderungen löschen
     do_mysqli_query("DELETE FROM namechange WHERE id = ".$id);
     //Forschungen löschen
     do_mysqli_query("DELETE FROM playerresearch WHERE player = ".$id);
@@ -381,7 +381,7 @@ function RemovePlayerAbandoneCities($id) {
     do_mysqli_query("DELETE FROM message WHERE recipient  = ".$id);
     //Forschende Forschungen löschen
     do_mysqli_query("DELETE FROM researching WHERE player = ".$id);
-    // Namens�nderungen löschen
+    // Namensänderungen löschen
     do_mysqli_query("DELETE FROM namechange WHERE id = ".$id);
     //Forschungen löschen
     do_mysqli_query("DELETE FROM playerresearch WHERE player = ".$id);
@@ -480,7 +480,7 @@ function removeCity($id) {
 
 
     $xy=mysqli_fetch_assoc(do_mysqli_query("SELECT x, y FROM map WHERE id = ".$id));
-    // Nur einf�gen wenn es die Startpos noch nicht gibt
+    // Nur einfügen wenn es die Startpos noch nicht gibt
     if ($xy['x'] != NULL && $xy['y'] != NULL &&
     mysqli_num_rows(do_mysqli_query("SELECT x, y FROM startpositions ".
                                      "WHERE x = ".$xy['x']." AND y = ".$xy['y'])) == 0 ) 
@@ -505,7 +505,7 @@ function abandoneCity($id) {
   
   $city_res = do_mysqli_query("SELECT owner FROM city WHERE id = ".$id);
   if( $city = mysqli_fetch_assoc($city_res) ) {
-    // Alle Truppen löschen, die nicht dem Spieler geh�rt haben
+    // Alle Truppen löschen, die nicht dem Spieler gehört haben
     do_mysqli_query("DELETE FROM cityunit WHERE owner != ".$city['owner']." AND city = ".$id);
     
     // Alle restlichen Truppen herrenlos machen
@@ -668,7 +668,7 @@ if(!function_exists("restart_player")) {
 			 " LEFT JOIN playerresearch pr ON (r.id=pr.research AND pr.player=$id) ".
 			 " WHERE rp = 0 AND pr.player IS NULL");
 
-    // Startforschungen (jene mit 0 Forschungspunkten) einf�gen
+    // Startforschungen (jene mit 0 Forschungspunkten) einfügen
     while($data6=mysqli_fetch_assoc($res6)) {
       do_mysqli_query("INSERT INTO playerresearch (player,research) VALUES (".$id.", ".$data6['id'].")");
     }
@@ -755,7 +755,7 @@ function getStartPosWhere($pos, $reli) {
 
 
 /**
- * Diese Funktion schaut, ob es n�tig w�rde, den Siedlungsradius
+ * Diese Funktion schaut, ob es nötig würde, den Siedlungsradius
  * zu erweitern.
  */
 function checkSettleRadius() {
@@ -808,7 +808,7 @@ function checkSettleRadius() {
       for($i=0; $i<sizeof($pos) && !$extend; $i++) {
         //echo "Pos[$i] = ".$pos[$i]."<br>";
         if($pos[$i] <= $tolerance) {
-          echo "Ein Gebiet hat weniger als ".$tolerance." Pl�tze. Radius mu� erweitert werden!<br>";
+          echo "Ein Gebiet hat weniger als ".$tolerance." Plätze. Radius muss erweitert werden!<br>";
           $extend = true;
         }
       }
@@ -821,7 +821,7 @@ function checkSettleRadius() {
         $tolerance = 55;
       }
       if($sum <= $tolerance) {
-        echo "Insgesamt zu wenige Pl�tze (<".$tolerance."). Radius mu� erweitert werden!<br>";
+        echo "Insgesamt zu wenige Plätze (<".$tolerance."). Radius muss erweitert werden!<br>";
         $extend = true;
       }
     }
@@ -840,8 +840,8 @@ function checkSettleRadius() {
  * 
  * Es gibt 3 Gebiete je Religion:
  * - Hinterland: Dies sind die Sektoren am oberen bzw. unteren Rand des Siedlungs-Ringes
- * - Übergangsgebiet: die Gebiete n�rdlich bzw. s�dlich des �quators, ohne Hinterland
- * - Kriegsgebiet - die Sektoren am �quator, nicht im Siedlungsring
+ * - Übergangsgebiet: die Gebiete nördlich bzw. südlich des Äquators, ohne Hinterland
+ * - Kriegsgebiet - die Sektoren am Äquator, nicht im Siedlungsring
  *
  * Die Startposition des Spielers:
  * 0 - Hinterland
@@ -849,7 +849,7 @@ function checkSettleRadius() {
  * 2 - Kriegsgebiet
  * 
  * Diese Funktion gibt einen Array mit Gebieten zurück, die in dem
- * abgefragten Gebiet liegen. Die Arrays haben jeweils 4 Werte, n�mlich
+ * abgefragten Gebiet liegen. Die Arrays haben jeweils 4 Werte, nämlich
  * die Ecken eines Rechtecks, also z.B.
  * arr[0] = { 0,0 , 100,100 }; Rechteck 100x100
  * arr[1] = {200,0, 250,100 }; Rechteck  50x100
@@ -1001,7 +1001,7 @@ function searchStartPosNew($pid) {
             $x = $s['x'];
             $y = $s['y'];
 
-            // Nachschauen, ob es Städte in der N�he gibt
+            // Nachschauen, ob es Städte in der Nähe gibt
             $sql = sprintf("SELECT x,y FROM city AS c LEFT JOIN map USING(id) ".
             " WHERE (x - %d <= 4 AND x - %d >= -4) AND ".
             "       (y - %d <= 4 AND y - %d >= -4) ",
@@ -1009,7 +1009,7 @@ function searchStartPosNew($pid) {
             );
              
             
-            // Kontlikt-Positionen aufl�sen und löschen.
+            // Kontlikt-Positionen auflösen und löschen.
             $conflict = do_mysqli_query($sql);
             $num = mysqli_num_rows($conflict);
             if($num > 0) {
@@ -1096,7 +1096,7 @@ function searchStartPos($pid) {
                                   " WHERE x >= ".max(0, $xy['x']-4)." AND x <= ".min($fx-1, $xy['x']+4)." ".
                                   " AND y >= ".max(0, $xy['y']-4)." AND y <= ".min($fy-1, $xy['y']+4) );
 
-      // Es dürfen keine Städte im weg sein und die Startpos mu� gültig sein
+      // Es dürfen keine Städte im weg sein und die Startpos muss gültig sein
       if (mysqli_num_rows($cityid_res) > 0 && mysqli_num_rows($inway) == 0) {
         $city = mysqli_fetch_assoc($cityid_res);
         $ret['id'] = $city['id'];
@@ -1113,7 +1113,7 @@ function searchStartPos($pid) {
 }
 
 /**
- * Neue Stadt einf�gen
+ * Neue Stadt einfügen
  */
 function insertCity($mapid, $owner, $reli, $capital = false) {
   do_mysqli_query("INSERT INTO city (id,name,capital,religion,owner,prosperity) VALUES (".$mapid.",'Startstadt ".$mapid."',".( $capital ? "1" : "0" ).",".$reli.",".$owner.",".($capital ? 2000 : 1000).")");
@@ -1127,7 +1127,7 @@ function insertCity($mapid, $owner, $reli, $capital = false) {
     //  do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mid['id'].", ".BUILDING_SCHOOL.", 1)");
   }
   else {
-    // Farm nur einf�gen, wenn es nicht die Startstadt ist und bereits ne Residenz erhalten hat
+    // Farm nur einfügen, wenn es nicht die Startstadt ist und bereits ne Residenz erhalten hat
     do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mapid.",1,1)");
   }
 
@@ -1139,9 +1139,9 @@ function insertCity($mapid, $owner, $reli, $capital = false) {
 
 
 /**
- * Stadtgr�ssenstufe auf Basis der Einwohnerzahl ermitteln
+ * Stadtgrössenstufe auf Basis der Einwohnerzahl ermitteln
  * param:  Einwohnerzahl
- * return: Stadtgr�ssenstufe */
+ * return: Stadtgrössenstufe */
 if(!function_exists("get_citysize_level")) {
   function get_citysize_level($pop) {
     if ($pop>=18001) return 9;
@@ -1165,7 +1165,7 @@ if (!function_exists("get_siege_min_armysize")) {
 
 /**
  * Einen gerundeten Wert für Einwohner zurückliefern,
- * damit man anhand der Toplist keine Rückschl�sse auf
+ * damit man anhand der Toplist keine Rückschlüsse auf
  * Rekrutierungen ziehen kann.
  *
  * @param unknown_type $amount
@@ -1200,7 +1200,7 @@ function get_loyality_string($loy) {
   $max = defined("MAX_LOYALITY") ? MAX_LOYALITY : 10000.0;
   
   if     ($loy*100 / $max < 10) return "rebellisch";
-  else if($loy*100 / $max < 25) return "erz�rnt";
+  else if($loy*100 / $max < 25) return "erzörnt";
   else if($loy*100 / $max < 50) return "abgeneigt";
   else if($loy*100 / $max < 75) return "moderat";
   else if($loy*100 / $max < 90) return "loyal";
@@ -1410,7 +1410,7 @@ if(!function_exists("insertBBForm")) {
     echo "<option style=\"color:orange; background-color:transparent\" value=\"orange\">Orange</option>\n";
     echo "<option style=\"color:brown; background-color:transparent\" value=\"brown\">Braun</option>\n";
     echo "<option style=\"color:yellow; background-color:transparent\" value=\"yellow\">Gelb</option>\n";
-    echo "<option style=\"color:green; background-color:transparent\" value=\"green\">Gr�n</option>\n";
+    echo "<option style=\"color:green; background-color:transparent\" value=\"green\">Grün</option>\n";
     echo "<option style=\"color:olive; background-color:transparent\" value=\"olive\">Oliv</option>\n";
     echo "<option style=\"color:cyan; background-color:transparent\" value=\"cyan\">Cyan</option>\n";
     echo "<option style=\"color:blue; background-color:transparent\" value=\"blue\">Blau</option>\n";
@@ -1423,7 +1423,7 @@ if(!function_exists("insertBBForm")) {
     echo "<option style=\"color:coral; background-color:transparent\" value=\"coral\">Koralle</option>\n";
     echo "<option style=\"color:crimson; background-color:transparent\" value=\"crimson\">Crimson</option>\n";
     echo "<option style=\"color:tomato; background-color:transparent\" value=\"tomato\">Tomate</option>\n";
-    echo "<option style=\"color:seagreen; background-color:transparent\" value=\"seagreen\">See Gr�n</option>\n";
+    echo "<option style=\"color:seagreen; background-color:transparent\" value=\"seagreen\">See Grün</option>\n";
     echo "<option style=\"color:darkorchid; background-color:transparent\" value=\"darkorchid\">Dunkle Orchidee</option>\n";
     echo "<option style=\"color:chocolate; background-color:transparent\" value=\"chocolate\">Schokolade</option>\n";
     echo "<option style=\"color:deepskyblue; background-color:transparent\" value=\"deepskyblue\">Tiefseeblau</option>\n";
@@ -1595,7 +1595,7 @@ if(!function_exists("MapFactory")) {
     //    $fx = $mapsize['x'];
     //    $fy = $mapsize['y'];
 
-    // Abh�ngig von Spielereinstellung Map instanziieren
+    // Abhängig von Spielereinstellung Map instanziieren
     switch ($player->getMapVersion()) {
       case "v0":
         include_once("includes/map.v0.class.php");
@@ -1722,9 +1722,9 @@ function getSiegeFactor ($time) {
 
 
 // marktplatz rücknahem!!!
-// erkl�rung franzl falls sich hier jemand frag wtf ist das
+// erklärung franzl falls sich hier jemand frag wtf ist das
 // wurde ein waffenangebot oder eine waffennachfrage am markt positioniert wird lagerplatz dafür reserviert
-// dieser muss frei gegeben werden. au�erdem müssen die waffen wieder zurück in die stadt
+// dieser muss frei gegeben werden. außerdem müssen die waffen wieder zurück in die stadt
 // wenn jemand ne function dafür schreiben will... gerne
 function marketRetractionForCity($cityid) {
   $resA = do_mysqli_query("SELECT id,wantsType,wantsQuant,hasType,hasQuant,player,timestamp,city FROM market WHERE city=".intval($cityid) );
@@ -1946,7 +1946,7 @@ function setConfig($name, $val) {
   * # # X X X X X X # #  X = Sektoren genau auf dem Radius
   * # # X O O O O X # #  0 = Sektoren innerhalb, uneingeschränkt siedelbar
   * # # X O O O O X # #
-  * # # X O O O O X # #  in diesem Fall w�re x > 280 oder y > 280
+  * # # X O O O O X # #  in diesem Fall wäre x > 280 oder y > 280
   * # # X O O O O X # #                 oder x < 120 oder y < 120
   * # # X X X X X X # #  ausserhalb des erlaubten Radius
   * # # # # # # # # # #
@@ -2047,7 +2047,7 @@ function printRoundTimes()
 
 
   /**
-   * Pr�fen, ob zwei Spieler eine gemeinsame Multiexception haben
+   * Prüfen, ob zwei Spieler eine gemeinsame Multiexception haben
    * 
    * @param $id1  ID des ersten Spielers
    * @param $id2  ID des ersten Spielers
@@ -2056,7 +2056,7 @@ function printRoundTimes()
    *         Andernfalls eine Fehlermeldung, die den "comment" der Exception liefert.
    */
   function checkMultiException($id1, $id2) {
-    // Pr�fen, ob die beiden Spieler eine gemeinsame Multiexception haben.
+    // Prüfen, ob die beiden Spieler eine gemeinsame Multiexception haben.
     // Es werden alle Datensätze abgefragt, bei denen die gleiche Exception-ID vorliegt
     // und die beiden Spieler enthalten sind.
     $sql = "SELECT ex.comment,e1.id AS id1,e2.id AS id2 FROM multi_exceptions_players e1 ".

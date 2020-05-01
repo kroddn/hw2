@@ -64,7 +64,7 @@ else {
 
 
 
-// Der Code war h�sslich, also hab ich ihn noch ein bisschen h�sslicher gemacht (co2)
+// Der Code war hässlich, also hab ich ihn noch ein bisschen hässlicher gemacht (co2)
 function typeNr($col) {
   $type = NULL;
 
@@ -127,7 +127,7 @@ function imgToDB($startrow) {
 
     //mysqli_query($GLOBALS['con']"ALTER TABLE map AUTO_INCREMENT=0");
 
-    echo "L�sche Startpos\n";
+    echo "Lösche Startpos\n";
     mysqli_query($GLOBALS['con']"TRUNCATE startpositions");
   }
 
@@ -142,7 +142,7 @@ function imgToDB($startrow) {
     
   echo "Größe: ".MAP_SIZE_X."x".MAP_SIZE_Y."\n";
   
-  //  Z�hler erstellen
+  //  Zähler erstellen
   $row=$startrow;
   $id_counter = 0;
 

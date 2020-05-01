@@ -66,7 +66,7 @@ else {
   echo "holiday tolerance: ".($holiday_tolerance/(24*3600))."\n";
 }
 
-echo "\nStarte. L�sche inaktive (l�nger als ".round($max_inactive/(3600*24), 2)." Tage)\n\n";
+echo "\nStarte. Lösche inaktive (länger als ".round($max_inactive/(3600*24), 2)." Tage)\n\n";
 
 // Zunächst die ganz alten Spieler löschen
 $players = do_mysqli_query(
@@ -95,7 +95,7 @@ echo "\nInsgesamt gelöscht: $deleted\n";
 
 
 /**
- * L�sche Spieler wirklich jetzt.
+ * Lösche Spieler wirklich jetzt.
  * 
  * @param $p  Assoziativer Array, wie er von mysqli_fetch_assoc kommt
  * @return unknown_type
@@ -104,7 +104,7 @@ function deleteResult($p) {
   global $max_inactive;
   
   if($p['markdelete'] > 0) {
-    echo "Player '".$p['name']." [".$p['login']."]" ."' zum L�schen markiert ".date("d.m.y H:i", $p['markdelete'])."\n";
+    echo "Player '".$p['name']." [".$p['login']."]" ."' zum Löschen markiert ".date("d.m.y H:i", $p['markdelete'])."\n";
     RemovePlayerAbandoneCities($p['id']);
     return true;
   }

@@ -120,7 +120,7 @@ erfragt werden.
 <table cellpadding="0" cellspacing="1" border="0" width="500">
 <tr class="tblhead">
 <?php
-// Abh�ngig von show die entsprechende Funktion aufrufen
+// Abhängig von show die entsprechende Funktion aufrufen
 switch($show) {
   case "player":
   case "player_avg":
@@ -478,8 +478,8 @@ function top_div () {
 
   echo "Auf der bekannten Welt sind <b>".prettyNumber($christ['cnt']).
     " christliche</b> Recken und Fürsten bekannt, denen sich <b>".prettyNumber($islam['cnt']).
-    " islamische</b> Statthalter und K�mpfer entgegenstellen (".prettyNumber($islam['cnt']+$christ['cnt'])." Spieler). ";
-  echo "Die Christen haben sich eine <b>Durchschnittspunktezahl von ".prettyNumber($christ[0])."</b> erk�mpft. Denen stehen <b>".prettyNumber($islam[0])." Punkte</b> der islamischen Anh�nger gegen�ber.<p>\n";
+    " islamische</b> Statthalter und Kämpfer entgegenstellen (".prettyNumber($islam['cnt']+$christ['cnt'])." Spieler). ";
+  echo "Die Christen haben sich eine <b>Durchschnittspunktezahl von ".prettyNumber($christ[0])."</b> erkämpft. Denen stehen <b>".prettyNumber($islam[0])." Punkte</b> der islamischen Anhänger gegenüber.<p>\n";
 
   echo "<p>In jedem Winkel der bekannten Welt streben Kleriker und Lehrmeister nach neuem Wissen. ".
     "Auf Seiten des Christentums haben sich hierbei <b>".prettyNumber($christ['rp']).
@@ -505,7 +505,7 @@ function top_div () {
   echo "Die <b>Christen bewohnen ".
     prettyNumber($christcities['cnt'])." Städte</b> mit ".prettyNumber($christcities['pop']).
     " Einwohnern, <b>".prettyNumber($islamcities['cnt'])." islamische Städte</b> werden von ".
-    prettyNumber($islamcities['pop'])." Einwohnern bev�lkert. Das sind ".
+    prettyNumber($islamcities['pop'])." Einwohnern bevölkert. Das sind ".
     prettyNumber($christcities['pop']/$christcities['cnt']).
     " Einwohner pro christlicher und ".prettyNumber($islamcities['pop']/$islamcities['cnt']).
     " Einwohner pro islamischer Stadt.<br>";
@@ -515,7 +515,7 @@ function top_div () {
   }
     
   echo "<b>".prettyNumber($settle['cnt'])." Trupps</b> sind mit <b>".
-    prettyNumber($settle['settlers'])." Siedlern</b> auf dem Weg zur Gr�ndung neuer Welten und neuer Zivilisationen.\n<p>";
+    prettyNumber($settle['settlers'])." Siedlern</b> auf dem Weg zur Gründung neuer Welten und neuer Zivilisationen.\n<p>";
 
     
   echo "<h2>Krieg</h2>\n";
@@ -524,7 +524,7 @@ function top_div () {
 				    " FROM relation LEFT JOIN player ON id1 = player.id ".
                                     " WHERE type = 0 GROUP BY id1,name ORDER BY cnt DESC LIMIT 1");
   if ($war['name'] != null)
-    echo "Der größerte Kriegstreiber der Welt ist <b>".$war['name']."</b> mit ".$war['cnt']." ausgesprochenen Kriegserkl�rungen.\n";
+    echo "Der größerte Kriegstreiber der Welt ist <b>".$war['name']."</b> mit ".$war['cnt']." ausgesprochenen Kriegserklärungen.\n";
   else
     echo "Hm. So wie es scheint gibt es keine Kriege...\n";
     
@@ -533,7 +533,7 @@ function top_div () {
 				    " FROM relation LEFT JOIN player ON id2 = player.id ".
                                     " WHERE type = 0 GROUP BY id2,name ORDER BY cnt DESC LIMIT 1");
   if ($war['name'] != null)
-    echo "<br>Das größerte Opfer heißt <b>".$war['name']."</b> - ihm wurde ".$war['cnt']." mal der Krieg erkl�rt.\n";     
+    echo "<br>Das größerte Opfer heißt <b>".$war['name']."</b> - ihm wurde ".$war['cnt']." mal der Krieg erklärt.\n";     
   else
     echo "<br>Und wie schon gesagt. Komischerweise gibts keine Kriege...\n";
 
@@ -545,7 +545,7 @@ function top_div () {
 
 
   echo "<p>Barden berichten, dass weltweit <b>".$siege['cnt']." Belagerungen</b> im Gange sind, ";
-  echo "w�hrend <b>".prettyNumber($attack['cnt'])." Armeen</b> zu Schlachten unterwegs sind.<p>";
+  echo "während <b>".prettyNumber($attack['cnt'])." Armeen</b> zu Schlachten unterwegs sind.<p>";
 
   echo '<p style="margin-top: 30px; margin-bottom: 30px; "><center>';
 

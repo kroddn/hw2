@@ -45,7 +45,7 @@ start_page();
 
 <script language="JavaScript">
 <!--
-// JavaScript-Funktion �ffnet Kindfenster für die Suche nach einer Städten
+// JavaScript-Funktion öffnet Kindfenster für die Suche nach einer Städten
 function popUp(sel) {
   if(sel=="world")
     var win = window.open("usermap.php","Weltkarte","width=820,height=800,left=0,scrollbars=yes,top=0,dependent=yes");
@@ -115,17 +115,17 @@ function hideCity(id) {
 ie5=(document.getElementById && document.all && document.styleSheets)?1:0;
 nn6=(document.getElementById && !document.all)?1:0;
 
-// Kontextmen� initialisieren
+// Kontextmenü initialisieren
 if (ie5 || nn6) {
   menuWidth=122, menuHeight=183;
   menuStatus=0;
 
-  // Rechter Mausklick: Men� anzeigen, linker Mausklick: Men� verstecken
+  // Rechter Mausklick: Menü anzeigen, linker Mausklick: Menü verstecken
   document.oncontextmenu=showMenu; //oncontextmenu geht nicht bei NN 6.01
   document.onmouseup=hideMenu;
 }
 
-// Kontextmen� anzeigen
+// Kontextmenü anzeigen
 function showMenu(e) {
   if(ie5) {
     if(event.clientX>menuWidth) xPos=event.clientX-menuWidth+document.body.scrollLeft;
@@ -145,7 +145,7 @@ function showMenu(e) {
   return false;
 }
 
-// Kontextmen� verstecken
+// Kontextmenü verstecken
 function hideMenu(e) {
   if (menuStatus==1 && ((ie5 && event.button==1) || (nn6 && e.which==1))) {
     setTimeout("document.getElementById('menu').style.top=-250",250);

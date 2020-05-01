@@ -46,4 +46,4 @@ else {
 <h2>Zahlung per Paypal</h2>
 Holy-Wars 2 unterstützt <img src="https://pics.ebaystatic.com/aw/pics/paypal/logoPaypal.gif">.<br>
 Um eine Zahlung vorzunehmen, überweisen Sie den Betrag an <img src="images/email3.png">.
-Vergessen Sie auch dabei nicht, Ihre HW2 ID und den gew�nschten Premium-Account mit anzugeben.<br>
+Vergessen Sie auch dabei nicht, Ihre HW2 ID und den gewünschten Premium-Account mit anzugeben.<br>

@@ -29,7 +29,7 @@ extern void do_log(const char *msg, ...);
 */
 
 
-/* geb�udeupdates */
+/* gebäudeupdates */
 void completeBuidings(void)
 {        
   static MYSQL hahw, hahw2;
@@ -38,7 +38,7 @@ void completeBuidings(void)
   con(&hahw);
   char tmp[8192];
       
-  /* alle Aufträge ausw�hlen, die fertig sind */
+  /* alle Aufträge auswählen, die fertig sind */
   send_query(&hahw, "SELECT "
              " building.name, city.name, citybuilding_ordered.time, owner, "
              " building, bid, city.id, type, typelevel, count, makescapital "
@@ -64,12 +64,12 @@ void completeBuidings(void)
       if ( row[10] && atoi(row[10]) ) 
         {
 #ifdef DEBUG
-          do_log("Gebäude führt zu Hauptstadt. L�sche �brige Gebäude.");
+          do_log("Gebäude führt zu Hauptstadt. Lösche übrige Gebäude.");
 #endif
           send_query(&hahw2, "UPDATE city SET capital = 0 WHERE owner = %s", row[3]);
           send_query(&hahw2, "UPDATE city SET capital = 1 WHERE id = %s", row[6]);
 
-          // Alle anderen Hauptstadtgeb�ude abreisen
+          // Alle anderen Hauptstadtgebäude abreisen
           send_query(&hahw2, "DELETE FROM citybuilding WHERE city IN "
                      "(SELECT id FROM city WHERE owner=%s AND id <> %s) "
                      "AND building IN "
@@ -80,11 +80,11 @@ void completeBuidings(void)
                      "AND building IN "
                      "(SELECT id FROM building WHERE makescapital=1)", row[3], row[6]);
           
-          moreText="\nSire, die Stadt wurde zu Eurer Hauptstadt. Besch�tzt Sie gut.";
+          moreText="\nSire, die Stadt wurde zu Eurer Hauptstadt. Beschützt Sie gut.";
         }
 
 
-      /* Pr�fen ob das Gebäude ein anderes ersetzen muss (ist der Fall wenn der Typlevel größerer als 1 is */
+      /* Prüfen ob das Gebäude ein anderes ersetzen muss (ist der Fall wenn der Typlevel größerer als 1 is */
       if (row[8] && atoi(row[8])>1)
         {       
           send_query(&hahw2, "SELECT building, count FROM citybuilding, building WHERE citybuilding.building=building.id AND city=%s AND type=%s AND typelevel=%d", row[6], row[7], atoi(row[8])-1);
@@ -123,7 +123,7 @@ void completeBuidings(void)
 	  }
         }
 
-      /* Pr�fen ob schon diese Art Gebäude existieren... */
+      /* Prüfen ob schon diese Art Gebäude existieren... */
       send_query(&hahw2, "SELECT count FROM citybuilding WHERE building=%s AND city=%s", row[4], row[6]);
 
 
@@ -149,7 +149,7 @@ void completeBuidings(void)
         }
       
 
-      /* wenn die Stadt jemanden geh�rt */
+      /* wenn die Stadt jemanden gehört */
       if(row[3]!=NULL)
         {
           if (atoi(row[9])>1) {
@@ -189,7 +189,7 @@ void completeResearches(void) {
 
   con(&hwha);
 
-  /* Alle Forschungen ausw�hlen die fertig sind */
+  /* Alle Forschungen auswählen die fertig sind */
 
   send_query(&hwha, "SELECT researching.player, researching.rid, researching.endtime, research.name, research.id, research.category, player.nooblevel, player.recruiter FROM researching LEFT JOIN research ON research.id=researching.rid LEFT JOIN player ON player.id = researching.player WHERE researching.endtime<= UNIX_TIMESTAMP() ORDER BY endtime");
 
@@ -210,7 +210,7 @@ void completeResearches(void) {
       // Set nooblevel to 0 if player finished verwaltung
       if ( atoi(row[5]) == 0 && atoi(row[6]) > 0 && atoi(row[1]) != 1 ) {
         do_log("Noobschutz weg");
-        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'Neulingsschutz abgelaufen', 'Durch die Erforschung von %s wurde Euer Neulingsschutz aufgehoben. Ihr seid nun der willk�rlichen Gewalt der anderen Spieler ausgeliefert.\n\nIhr solltet als nächstes für die Verteidigung Eurer Städte sorgen, indem Ihr mehrere Kasernen in Euren Städten errichtet und Truppen aushebt!',4)", row[0], row[2], row[3]);
+        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'Neulingsschutz abgelaufen', 'Durch die Erforschung von %s wurde Euer Neulingsschutz aufgehoben. Ihr seid nun der willkürlichen Gewalt der anderen Spieler ausgeliefert.\n\nIhr solltet als nächstes für die Verteidigung Eurer Städte sorgen, indem Ihr mehrere Kasernen in Euren Städten errichtet und Truppen aushebt!',4)", row[0], row[2], row[3]);
 
         send_query(&hwha2, "UPDATE player SET cc_messages=1, nooblevel=0 WHERE id=%s", row[0]);
       }
@@ -231,7 +231,7 @@ void completeResearches(void) {
       if(rid == 80 || rid == 81 || rid == 93) {
         do_log("Forschung %s fertig, Recruiter %s bekommt Bonuspunkte\n", row[1], row[7]);
         send_query(&hwha2, "UPDATE player SET cc_messages=1, cc_resources=1, bonuspoints = bonuspoints + %d WHERE id=%s", bonuspoints, row[7]);                  
-        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'%d Bonuspunkte', 'Ihr habt %d Bonuspunkte bekommen, weil ein geworbener Spieler eine h�here Entwicklungsstufe erreicht hat.', 3)", row[7], row[2], bonuspoints, bonuspoints);
+        send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER', %s,%s,'%d Bonuspunkte', 'Ihr habt %d Bonuspunkte bekommen, weil ein geworbener Spieler eine höhere Entwicklungsstufe erreicht hat.', 3)", row[7], row[2], bonuspoints, bonuspoints);
         do_log("Done\n");
       }
 

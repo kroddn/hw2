@@ -43,10 +43,10 @@ include_once("includes/session.inc.php");
 <div align="center">
 <table width="600"><tr><td height="250" valign="center">
 <hr>
-<div align="center"><h1 class="error">Reichtum? St�rke? Ruhm!!</h1></div>
+<div align="center"><h1 class="error">Reichtum? Stärke? Ruhm!!</h1></div>
 <font size="+1">
 <b>Hast Du bereits weitere Spieler geworben?</b> Wenn ja, hast Du das auch mit deinem <a href="settings.php?show=account">
-Werbe-Link unter dem Men�punkt Einstellungen</a> getan? Dafür gibt es n�mlich eine Belohnung: <b>Bonuspunkte</b>!
+Werbe-Link unter dem Menüpunkt Einstellungen</a> getan? Dafür gibt es nämlich eine Belohnung: <b>Bonuspunkte</b>!
 <p>
 <center>Dein Link lautet: 
 <input type="text" size="50" value="https://<? echo $_SERVER['HTTP_HOST'];?>/register.php?ref=<? echo $player->getID(); ?>"></center>

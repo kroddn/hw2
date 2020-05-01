@@ -26,7 +26,7 @@
 
 TODO:
 
-- Marktsteuern, gem�ss den Forschungen setzen
+- Marktsteuern, gemäss den Forschungen setzen
 
 DB:
 
@@ -523,13 +523,13 @@ function takeBack($id) {
     $id = intval($id);
     $res = do_mysqli_query("SELECT wantsType,wantsQuant,hasType,hasQuant,player,city FROM market WHERE id=".$id);
     if ($data = mysqli_fetch_assoc($res)) {
-      // Falls das Angebot dem aktuellen Spieler geh�rt, ziehe es zurück
+      // Falls das Angebot dem aktuellen Spieler gehört, ziehe es zurück
       if ($data['player'] == $this->player) {
         $this->takeBack($id);
         return null;
       } 
       else {
-        // Pr�fen, ob die handeln dürfen
+        // Prüfen, ob die handeln dürfen
         if(null != ($error = $this->checkMayTrade($this->player, $id))) {
           return $error;
         }
@@ -555,7 +555,7 @@ function takeBack($id) {
     if (in_array($type, $this->resarray)) {      
       $res1 = do_mysqli_query("SELECT id FROM player WHERE name='".mysqli_escape_string($GLOBALS['con'], $to)."'");
       if($data1 = mysqli_fetch_assoc($res1)) {
-        // Pr�fen, ob die handeln dürfen
+        // Prüfen, ob die handeln dürfen
         if(null != ($error = $this->checkMayTrade($this->player, $data1['id']))) {
           return $error;
         }
@@ -696,7 +696,7 @@ function takeBack($id) {
   
   
   /**
-   * Pr�fen, ob zwei Spieler miteinander Handeln dürfen.
+   * Prüfen, ob zwei Spieler miteinander Handeln dürfen.
    * 
    * @param $id1  ID des ersten Spielers, mit dem der Handel stattfindet.
    * @param $id2  ID des ersten Spielers, mit dem der Handel stattfindet.

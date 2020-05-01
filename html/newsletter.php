@@ -522,7 +522,7 @@ function real_send_mail($topic, $body, $recipients = null) {
       echo "<h1>Insgesamt $cnt Emails raus (SPAWN).</h1>";
     }
     else {
-      echo "<h1>$cnt Emailempf�nder generiert.</h1>";
+      echo "<h1>$cnt Emailempfänder generiert.</h1>";
     }
   }
 
@@ -536,7 +536,7 @@ function real_send_mail($topic, $body, $recipients = null) {
       }
     }
     else {
-      echo "Keine Empf�nger bzw. Simulationsmodus.";
+      echo "Keine Empfänger bzw. Simulationsmodus.";
     }
   }
 

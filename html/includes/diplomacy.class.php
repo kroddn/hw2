@@ -65,7 +65,7 @@ class diplomacy {
           if (($data1['clan'] == $data2['clan']) && $type == 0) {
             $res7 = do_mysqli_query("SELECT id FROM player WHERE clan=".$data1['clan']."  AND clanstatus & 4");;
             while($data7 = mysqli_fetch_assoc($res7))
-            $this->message($data7['id'], "Bruderkrieg zwischen ".$data1['name']." und ".$data2['name'].".", "Der Spieler ".$data1['name']." hat seinem und eurem Ordensbruder ".$data2['name']." den Krieg erkl�rt.");
+            $this->message($data7['id'], "Bruderkrieg zwischen ".$data1['name']." und ".$data2['name'].".", "Der Spieler ".$data1['name']." hat seinem und eurem Ordensbruder ".$data2['name']." den Krieg erklärt.");
           }
           $res3 =do_mysqli_query("SELECT type FROM clanrel WHERE (id1=".$data1['clan']." AND id2=".$data2['clan'].") OR (id1=".$data2['clan']." AND id2=".$data1['clan'].")");
           if ($data3 = mysqli_fetch_assoc($res3)) {
@@ -81,12 +81,12 @@ class diplomacy {
               } else if (($data['type'] == 2) && ($type == 0)) {
                 $res7 = do_mysqli_query("SELECT id FROM player WHERE (clan=".$data1['clan']." OR clan=".$data2['clan'].") AND clanstatus & 4") or die(mysqli_error($GLOBALS['con']));
                 while($data7 = mysqli_fetch_assoc($res7))
-                $this->message($data7['id'], "NAP von ".$data4['name']." und ".$data5['name']." gebrochen.", "Durch eine Kriegserkl�rung von ".$data1['name']." vom Orden ".$data4['name']." gegen ".$data2['name']." vom Orden ".$data5['name']." wurde eurer NAP verletzt.");
+                $this->message($data7['id'], "NAP von ".$data4['name']." und ".$data5['name']." gebrochen.", "Durch eine Kriegserklärung von ".$data1['name']." vom Orden ".$data4['name']." gegen ".$data2['name']." vom Orden ".$data5['name']." wurde eurer NAP verletzt.");
 
               } else if (($data['type'] == 3) && ($type == 0)) {
                 $res7 = do_mysqli_query("SELECT id FROM player WHERE (clan=".$data1['clan']." OR clan=".$data2['clan'].") AND clanstatus & 4") or die(mysqli_error($GLOBALS['con']));
                 while($data7 = mysqli_fetch_assoc($res7))
-                $this->message($data7['id'], "Bündnis von ".$data4['name']." und ".$data5['name']." gebrochen.", "Durch eine Kriegserkl�rung von ".$data1['name']." vom Orden ".$data4['name']." gegen ".$data2['name']." vom Orden ".$data5['name']." wurde eurer Bündnis gebrochen.");
+                $this->message($data7['id'], "Bündnis von ".$data4['name']." und ".$data5['name']." gebrochen.", "Durch eine Kriegserklärung von ".$data1['name']." vom Orden ".$data4['name']." gegen ".$data2['name']." vom Orden ".$data5['name']." wurde eurer Bündnis gebrochen.");
               }
             }
           }
@@ -107,8 +107,8 @@ class diplomacy {
           delDBrel("relation", $pid, $this->player);
            
           if ($data2['type'] == 2) {
-            $this->message($pid, $this->name." k�ndigt Bündnis", "Der Spieler ".$this->name." hat euer Bündnis gek�ndigt.");
-            $this->message($this->player, "Bündnis mit ".$data1['name']." gek�ndigt", "Ihr habt das Bündnis mit ".$data1['name']." gek�ndigt");
+            $this->message($pid, $this->name." kündigt Bündnis", "Der Spieler ".$this->name." hat euer Bündnis gekündigt.");
+            $this->message($this->player, "Bündnis mit ".$data1['name']." gekündigt", "Ihr habt das Bündnis mit ".$data1['name']." gekündigt");
           }
         }
       }
@@ -129,7 +129,7 @@ class diplomacy {
     }
 
 
-    // Nachprüfen, ob bereits Truppenbewegungen zum zuk�nftigen Gegner unterwegs sind.
+    // Nachprüfen, ob bereits Truppenbewegungen zum zukünftigen Gegner unterwegs sind.
     $res = do_mysqli_query("SELECT count(*) AS cnt".
 			  " FROM army LEFT JOIN city AS endcity ON army.end = endcity.id".
 			  " WHERE army.owner = $id1 AND endcity.owner = $id2"
@@ -137,7 +137,7 @@ class diplomacy {
     $data = mysqli_fetch_assoc($res);
     if($data['cnt'] > 0) {
       return "Ihr habt noch ".$data['cnt']." Truppenbewegung(en) zu Städten dieses Herrschers aktiv. ".	
-	         "Euer Ehrgefühl verlangt, dass Ihr Angriffe erst nach einer Kriegserkl�rung startet.";
+	         "Euer Ehrgefühl verlangt, dass Ihr Angriffe erst nach einer Kriegserklärung startet.";
     }
 
     // Kein Fehler. Return einfach
@@ -149,7 +149,7 @@ class diplomacy {
     $res1 = do_mysqli_query("SELECT name FROM player WHERE id=".$pid);
     if (($this->player != $pid) && ($data1=mysqli_fetch_assoc($res1))) {
       if ($msg = $this->canNotWar($this->player, $pid))
-      $this->message($this->player, "Kriegserkl�rung an ".$data1['name']." fehlgeschlagen", "Um ".$data1['name']." den Krieg erkl�ren zu können müssen sich folgende Truppen zurückziehen:\n\n".$msg);
+      $this->message($this->player, "Kriegserklärung an ".$data1['name']." fehlgeschlagen", "Um ".$data1['name']." den Krieg erklären zu können müssen sich folgende Truppen zurückziehen:\n\n".$msg);
       else {
         // Allen Armeen mit Ausgangspunkt Feind und Laufzeit kleiner
         // als die Scoutzeit eine neue Ausgangsstadt zuteilen.
@@ -181,8 +181,8 @@ class diplomacy {
 
         setDBrel("relation", $this->player, $pid, 0);
         delDBreq_rel("req_relation", $this->player, $pid);
-        $this->message($pid, "Kriegserkl�rung von ".$this->name, "Der Spieler ".$this->name." hat euch den Krieg erkl�rt, m�ge der bessere gewinnen.");
-        $this->message($this->player, "Kriegserkl�rung an ".$data1['name'], "Ihr habt dem Spieler ".$data1['name']." den Krieg erkl�rt, m�ge der bessere gewinnen.");
+        $this->message($pid, "Kriegserklärung von ".$this->name, "Der Spieler ".$this->name." hat euch den Krieg erklärt, möge der bessere gewinnen.");
+        $this->message($this->player, "Kriegserklärung an ".$data1['name'], "Ihr habt dem Spieler ".$data1['name']." den Krieg erklärt, möge der bessere gewinnen.");
         $this->clanDiplo($this->player, $pid, 0);
 
         // Neulingsschutz deaktivieren
@@ -213,7 +213,7 @@ class diplomacy {
       if ($msg = $this->canNotBND($this->player,$pid)) {
         $this->message($this->player, "Bündnisangebot an ".$data1['name']." fehlgeschlagen", 
                                       "Ihr wollt dem Spieler ".$data1['name']." ein Bündnisangebot unterbreiten, folgende Angriffe stehen dem noch entgegen:\n\n".$msg);
-        return "Fehlgeschlagen. Pr�ft Eure <a href=\"messages.php\">Nachrichten</a>!";
+        return "Fehlgeschlagen. Prüft Eure <a href=\"messages.php\">Nachrichten</a>!";
       }
       else {
         setDBreq_rel("req_relation", $this->player, $pid, 2);
@@ -223,8 +223,8 @@ class diplomacy {
       }
     }
     else {
-      $m = "Wehe, du willst einen Bündnis mit einem Ungl�ugigen, mögen dir die Gl�ubigen jedes Haar einzeln ausrupfen!";
-      $this->message($this->player, "Bündnisangebot an Ungl�ubigen", $m);
+      $m = "Wehe, du willst einen Bündnis mit einem Ungläugigen, mögen dir die Glüubigen jedes Haar einzeln ausrupfen!";
+      $this->message($this->player, "Bündnisangebot an Ungläubigen", $m);
       return $m;
     }
   }
@@ -274,8 +274,8 @@ class diplomacy {
             setDBrel("relation", $this->player, $pid, $data2['type']);
             delDBreq_rel("req_relation", $pid, $this->player);
             if ($data2['type'] == 1) {
-              $this->message($pid, "Frieden mit ".$this->name, "Der Spieler ".$this->name." hat euer Friedensangebot angenommen, mögen eure V�lker fortan in Frieden und Eintracht leben.");
-              $this->message($this->player, "Frieden mit ".$data1['name'], "Ihr habt das Friedensangebot von ".$data1['name']." angenommen, mögen eure V�lker fortan in Frieden und Eintracht leben.");
+              $this->message($pid, "Frieden mit ".$this->name, "Der Spieler ".$this->name." hat euer Friedensangebot angenommen, mögen eure Völker fortan in Frieden und Eintracht leben.");
+              $this->message($this->player, "Frieden mit ".$data1['name'], "Ihr habt das Friedensangebot von ".$data1['name']." angenommen, mögen eure Völker fortan in Frieden und Eintracht leben.");
             } else {
               if(defined("HISPEED") && HISPEED) return "In der HiSpeed deaktiviert (code 22).";
               $this->message($pid, "Bündnis von ".$this->name." angenommen", "Der Spieler ".$this->name." hat euer Bündnisangebot angenommen.");

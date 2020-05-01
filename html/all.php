@@ -51,7 +51,7 @@ Kontaktdaten erfahren Sie im <a href="impressum.php" target="_blank">Impressum</
 <p>
 <h1>Aktuelle Werbepartner</h1>
 Hinweis: das Klicken auf diese Banner über diese Seite ist <b>deaktiviert</b>, 
-um das Einhalten der allgemeinen Gesch�ftsbedigungen unserer Werbepartnern 
+um das Einhalten der allgemeinen Geschäftsbedigungen unserer Werbepartnern 
 zu gewährleisten.<p>
 
 <table><tr valign="top"><td valign="top">

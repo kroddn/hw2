@@ -131,8 +131,8 @@ class Research {
     $rid = intval($rid);
     if ($this->checkRID($rid) == TRUE) {
       if(!$this->checkRequirements($rid)) {
-        log_fatal_error("Spieler ".$_SESSION['player']->id." wollte schummeln: Forschungsvoraussetzungen nicht erf�llt.");
-        return "Forschungsvoraussetzungen nicht erf�llt.";
+        log_fatal_error("Spieler ".$_SESSION['player']->id." wollte schummeln: Forschungsvoraussetzungen nicht erfüllt.");
+        return "Forschungsvoraussetzungen nicht erfüllt.";
       }
       
       $res1 = do_mysqli_query("SELECT rp FROM player WHERE id = '".$this->player."'");
@@ -165,7 +165,7 @@ class Research {
           return null; // OK
         }
         else {
-          return "Nicht gen�gend Forschungspunkte (RP)";
+          return "Nicht genügend Forschungspunkte (RP)";
         }
       }
       else {
@@ -187,7 +187,7 @@ class Research {
       $nrp = floor($rdata['rp']/2);
       do_mysqli_query("UPDATE player SET rp= (rp + '".$nrp."'), cc_messages=1,cc_resources=1 WHERE id = '".$this->player."'");
       do_mysqli_query("DELETE FROM researching WHERE player = '".$this->player."'");
-      do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$this->player.", UNIX_TIMESTAMP(),'Abbruch: ".$rdata['name']."','Dieser Forschauftrag wurde auf Euer Geheiß hin abgebrochen.\n\nAbz�glich der Unkosten erhaltet Ihr ".$nrp." Forschungspunkte zurück.',3)");
+      do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$this->player.", UNIX_TIMESTAMP(),'Abbruch: ".$rdata['name']."','Dieser Forschauftrag wurde auf Euer Geheiß hin abgebrochen.\n\nAbzüglich der Unkosten erhaltet Ihr ".$nrp." Forschungspunkte zurück.',3)");
       do_log("Researching aborted. Requested on abortResearching() [".$rdata['name']."]");
     }
 		

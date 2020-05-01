@@ -58,7 +58,7 @@ else {
 
 
 /**
- * Erkl�rung:
+ * Erklärung:
  * show_banner(0) - Standartbanner
  * show_banner(1) - Skyscraper
  * show_banner(3) - PopUp
@@ -107,7 +107,7 @@ function show_banner($bid, $force=false) {
 /**
  * Eigene Advertising Funktion. Damit keine Banner-Blocker aktiv werden
  * können wird diese Methode von der index.php aufgerufen zusammen mit
- * einem parameter $magic. Ist $magic auf den zuf�lligen Wert für ADS
+ * einem parameter $magic. Ist $magic auf den zufälligen Wert für ADS
  * gesetzt, dann wird eine Werbeseite generiert, ansonsten wird ganz
  * normal die index.php weiterverarbeitet.
  */ 

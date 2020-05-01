@@ -134,7 +134,7 @@ window.onmousemove  = executeOnmousemoveFunctions;
 
 function doDebug(param) {  
   for (i=0; i<debugFunctions.length; i++) {
-    // Es wird eine Tempor�re Funktion erzeugt, die wiederum nur 
+    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
     // ein Befehlt enthält: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("str", debugFunctions[i]+"(str)");
@@ -144,7 +144,7 @@ function doDebug(param) {
 
 function executeOnmousedownFunctions(param) {
   for (i=0; i<onmousedownFunctions.length; i++) {
-    // Es wird eine Tempor�re Funktion erzeugt, die wiederum nur 
+    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
     // ein Befehlt enthält: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("ev", onmousedownFunctions[i]+"(ev)");
@@ -156,7 +156,7 @@ function executeOnmousedownFunctions(param) {
 
 function executeOnmouseupFunctions(param) {
   for (i=0; i<onmouseupFunctions.length; i++) {
-    // Es wird eine Tempor�re Funktion erzeugt, die wiederum nur 
+    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
     // ein Befehlt enthält: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("ev", onmouseupFunctions[i]+"(ev)");
@@ -167,7 +167,7 @@ function executeOnmouseupFunctions(param) {
 function executeOnmousemoveFunctions(param) {
   retFunc = true;
   for (i=0; i<onmousemoveFunctions.length; i++) {
-    // Es wird eine Tempor�re Funktion erzeugt, die wiederum nur 
+    // Es wird eine Temporäre Funktion erzeugt, die wiederum nur 
     // ein Befehlt enthält: sie ruft die im Array gespeicherte 
     // Funktion auf.
     tmp = new Function ("ev", onmousemoveFunctions[i]+"(ev)");
@@ -317,7 +317,7 @@ function showKakadu() {
   document.getElementById("kakaduframe").style.visibility="visible";
 }
 
-// Anfangs ist das Teil nat�rlich eingerollt
+// Anfangs ist das Teil natürlich eingerollt
 var kakaduRolledIn;
 
 function rollinKakadu() {
@@ -414,11 +414,11 @@ function printTutorialTopics() {
       }
     }
     if (!$found && $lasttut['page'] != null) {
-      echo "topicStrings.push('<br>Das Tutorial geht hier nicht weiter.\\n\\nDu mu�t nun zu ".$lasttut['page'].", um weiterzumachen.');\n";
+      echo "topicStrings.push('<br>Das Tutorial geht hier nicht weiter.\\n\\nDu musst nun zu ".$lasttut['page'].", um weiterzumachen.');\n";
     }
   } 
   else if (!$tut['page']) {
-    echo "topicStrings.push('<br>Leider ist das Tutorial an dieser Stelle zuende. Solltest Du Vorschl�ge haben, wie man das Tutorial noch verbessern kann, dann kontaktiere uns doch! Kontaktinformationen kannst Du unter Nachrichten oder im Forum  finden.');\n";    
+    echo "topicStrings.push('<br>Leider ist das Tutorial an dieser Stelle zuende. Solltest Du Vorschläge haben, wie man das Tutorial noch verbessern kann, dann kontaktiere uns doch! Kontaktinformationen kannst Du unter Nachrichten oder im Forum  finden.');\n";    
   }
 }
 

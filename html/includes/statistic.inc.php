@@ -247,7 +247,7 @@ function stat_cities($id) {
   echo "</tr>";
   echo '<tr class="tblhead" align="center">';
   echo '<td align="left"><a href="kingdom.php?order=city">Stadt</a></td>';
-  echo "<td colspan=\"2\"><a href=\"kingdom.php?order=ew\">Einwohner<br>B�rger</a> / ";
+  echo "<td colspan=\"2\"><a href=\"kingdom.php?order=ew\">Einwohner<br>Bürger</a> / ";
   echo "<b>Siedler</b></td>";
   if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY)
     echo "<td><a href=\"kingdom.php?order=loy\">LOY</a></td>\n";
@@ -299,7 +299,7 @@ function stat_cities($id) {
     $newpop = get_new_pop($data1['incfood']+$data1['food'], $data1['attr'], $data1['pop']+$settler_data['settler_sum'], $data1['poplimit']);
     if ($data1['poplimit']>0) {
       // Hinweis ausgeben, dass ein Limit gesetzt wurde
-      $inform = "Bei den mit <b>*</b> markierten Städten haben Sie ein Bev�lkerungslimit gesetzt! Dies können Sie im Rathaus der Stadt einsehen.";
+      $inform = "Bei den mit <b>*</b> markierten Städten haben Sie ein Bevölkerungslimit gesetzt! Dies können Sie im Rathaus der Stadt einsehen.";
     }
 			
     $research = round(get_city_research($eff, $newpop-$settler_data['settler_sum'], RESEARCHEW, $data1['research']) * $siege_factor);
@@ -383,7 +383,7 @@ function stat_cities($id) {
     //echo '<td style="margin-left:0px; padding-left:0px;">'.$diffstr."</td>";
     if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY) {
       if($data1['prev_loy'] > $data1['loy'] ) {
-        printf('<td style="font-weight: bold; color: red;" title="Die Einwohner schw�ren noch dem Vorbesitzer die Treue (%d %% Loyalität)">', $data1['prev_loy'] );
+        printf('<td style="font-weight: bold; color: red;" title="Die Einwohner schwören noch dem Vorbesitzer die Treue (%d %% Loyalität)">', $data1['prev_loy'] );
       }
       else {
         echo "<td>";
@@ -507,7 +507,7 @@ function stat_terrain($id) {
   
     for($i=0; $i<4; $i++) {
       $x = $c['x']; $y = $c['y'];
-      // Die Felder um die Stadt ausw�hlen, jedoch ohne das Stadtfeld selbst
+      // Die Felder um die Stadt auswählen, jedoch ohne das Stadtfeld selbst
       
       $s1 = $i*2+1;
       $s2 = $i*2+2;
@@ -742,7 +742,7 @@ FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN buildi
     echo "<tr class=\"tblhead\"><td colspan='11'><b>Sie haben lediglich eine Geb&auml;udeeffektivität von ".round($res_eff*100)."%</b></td></tr>\n";
   }
   echo "<tr class=\"tblhead\" height=\"5\"><td colspan='11'></td></tr>";
-  echo "<tr class=\"tblbody\"><td colspan='11'><h3>Legende:</h3>Man ben�tigt für 1 Endprodukt 2 Rohstoffe (z.B. 2 Bruchstein für 1 Stein).<br>Mehr als <i>maximal</i> kann von den errichteten Gebäuden nicht produziert werden (Kapazität des Gebäudes).<br>überschüssige Rohstoffe landen in den Lagern.</td></tr>";
+  echo "<tr class=\"tblbody\"><td colspan='11'><h3>Legende:</h3>Man benötigt für 1 Endprodukt 2 Rohstoffe (z.B. 2 Bruchstein für 1 Stein).<br>Mehr als <i>maximal</i> kann von den errichteten Gebäuden nicht produziert werden (Kapazität des Gebäudes).<br>überschüssige Rohstoffe landen in den Lagern.</td></tr>";
 
 
 
@@ -1337,7 +1337,7 @@ function stat_troop_enemy($id) {
       echo '</td>';
       echo '</tr>';
       echo '<tr class="tblbody">';
-      echo '<td width="50%" valign="top">Eure Aufkl�rer konnten folgende Einheiten ersp�hen:</td>';
+      echo '<td width="50%" valign="top">Eure Aufklärer konnten folgende Einheiten erspähen:</td>';
       echo '<td valign="top">';
       while($spy_unit=mysqli_fetch_assoc($spy_unit_res)) {
 	echo "<b>".$spy_unit['name']."</b>: ".$spy_unit['count']."<br />";
@@ -1346,7 +1346,7 @@ function stat_troop_enemy($id) {
       echo '</tr>';
 
     }
-  } else echo "<tr class='tblbody'><td>keine Feindesaufkl�rungen</td></tr>";
+  } else echo "<tr class='tblbody'><td>keine Feindesaufklärungen</td></tr>";
   echo "</table>";
 }
 
@@ -1357,7 +1357,7 @@ function stat_troopoverview($id) {
 
 
 
-  // Zunächst gesamt�bersicht
+  // Zunächst gesamtübersicht
   $sql1 = " 
    SELECT name, sum(count) AS cnt FROM cityunit 
                    LEFT JOIN unit ON cityunit.unit = unit.id
@@ -1465,7 +1465,7 @@ function stat_troopoverview($id) {
   echo( '<table cellspacing="1" cellpadding="0" width="400">'.
 	'  <tr>'.
 	'    <td class="tblhead"><b>Stadt</b></td>'.
-	'    <td class="tblhead"><b>Truppen�bersicht</b></td>'.
+	'    <td class="tblhead"><b>Truppenübersicht</b></td>'.
 	'  </tr>' );
 
   if (sizeof($data)>0) {

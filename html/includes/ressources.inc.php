@@ -102,7 +102,7 @@ function get_external_cucost($pid) {
 
 
 /**
- * Armeekosten, laufende M�nner.
+ * Armeekosten, laufende Männer.
  * Armeen, die bereits belagern, kosten nichts.
  */
 function get_army_cost($pid) {
@@ -140,7 +140,7 @@ function get_army_cost_siege($pid) {
 
 
 /**
- * Truppenkosten, stehende M�nner
+ * Truppenkosten, stehende Männer
  */
 function get_ucost($pid) {
   $pid = intval($pid);

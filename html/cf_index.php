@@ -75,7 +75,7 @@ function checkLeaderRights() {
  * 
  */
 function checkClanOwner($forum_id) {
-  // franzl hat "cat_order" als Clan-ID missbraucht. Das muss gepr�ft werden.
+  // franzl hat "cat_order" als Clan-ID missbraucht. Das muss geprüft werden.
   if($_SESSION['player']->clan > 0) {
     
     $sql = "SELECT * FROM clanf_forums LEFT JOIN clanf_categories USING(cat_id)".

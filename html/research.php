@@ -107,7 +107,7 @@ if($countResearching >= $schools['cnt']+1) {
   $maxResearches = 1;
 
   echo "<table style=\"margin:1px;\" width=\"498\" cellspacing=\"0\" cellpadding=\"0\" border=\"0\">\n";
-  echo "<tr><td class=\"tblhead\">W�hrend Ihr darauf wartet, dass die Forschung abgeschlossen ist, könntet Ihr für Holy-Wars 2 voten.</td></tr>";
+  echo "<tr><td class=\"tblhead\">Während Ihr darauf wartet, dass die Forschung abgeschlossen ist, könntet Ihr für Holy-Wars 2 voten.</td></tr>";
 
   echo "<tr><td class=\"tblhead\">";
   //include("includes/vote.inc.php");
@@ -137,7 +137,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
       $noobtime = defined("SPEED") && SPEED ? (7*24*60*60) : (3*7*24*60*60);
 
       echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Beim Erforschen einer höheren Stufe der Reichsverwaltung verliert Ihr Euren Neulingsschutz!<br>Der Neulingsschutz wirkt bis ".
-        (date("d.m.Y H:i:s", ($starttime > $player->getActivationTime() ? $starttime : $player->getActivationTime()) + $noobtime) ).", danach verf�llt er automatisch.</font></td></tr>\n";
+        (date("d.m.Y H:i:s", ($starttime > $player->getActivationTime() ? $starttime : $player->getActivationTime()) + $noobtime) ).", danach verfällt er automatisch.</font></td></tr>\n";
     }
 
     //$player->getNoobLevel() > 0 &&
@@ -145,19 +145,19 @@ for ($i=0;$i<sizeof($rs);$i++) {
       getMapSize($fx, $fy);
 
       if(round($fy/2) < $_SESSION['cities']->city_y) {
-        $direction ="s�dlich";
+        $direction ="südlich";
         $hintsearch="Lehmgewinnung";
         $hintnotsearch="Steinabbau";
         $hintwhen = "Norden";
       }
       else {
-        $direction ="n�rdlich";
+        $direction ="nördlich";
         $hintsearch="Steinabbau";
         $hintnotsearch="Lehmgewinnung";
-        $hintwhen = "S�den";
+        $hintwhen = "Süden";
       }
 
-      echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Eure aktuelle Stadt ist <b>$direction</b> des Holy-Wars-�quators gelegen. Daher solltet Ihr <b>$hintsearch</b> forschen. $hintnotsearch solltet Ihr erst erforschen, wenn Ihr eine Stadt im $hintwhen gegründet oder erobert habt.</font></td></tr>\n";
+      echo "<tr><td align=\"center\" class=\"tblhead\" colspan=\"2\"><font color=\"red\">Eure aktuelle Stadt ist <b>$direction</b> des Holy-Wars-Äquators gelegen. Daher solltet Ihr <b>$hintsearch</b> forschen. $hintnotsearch solltet Ihr erst erforschen, wenn Ihr eine Stadt im $hintwhen gegründet oder erobert habt.</font></td></tr>\n";
     }
 
 
@@ -202,7 +202,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
       if($maxResearches == 0) {
 	if($_SESSION['player']->rp >= $rs[$i]['content']['rp']) {
 	  $areabuilding = false;
-	  echo "<td width=\"15\" class=\"tblhead\" align=\"center\"><a href=\"research.php?rid=".$rs[$i]['content']['id']."\"".($areabuilding ? 'onClick="return confirm(\'Diese Forschung führt zu gebietsabh�ndigen Gebäuden. Seid Ihr sicher, dass Ihr forschen wollt?\')"' : "")."><img src=\"".$imagepath."/arrow.gif\" border=\"0\"></a></td>";
+	  echo "<td width=\"15\" class=\"tblhead\" align=\"center\"><a href=\"research.php?rid=".$rs[$i]['content']['id']."\"".($areabuilding ? 'onClick="return confirm(\'Diese Forschung führt zu gebietsabhändigen Gebäuden. Seid Ihr sicher, dass Ihr forschen wollt?\')"' : "")."><img src=\"".$imagepath."/arrow.gif\" border=\"0\"></a></td>";
 	} 
 	else {
 	  echo "<td width=\"15\" class=\"tblhead\" align=\"center\"><img src=\"".$imagepath."/arrowred.gif\" border=\"0\"></td>";

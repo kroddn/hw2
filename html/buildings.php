@@ -78,8 +78,8 @@ if($builderror != null) {
 <h1>Baumeister in <? echo $_SESSION['cities']->getACName()." ".getReliImage($_SESSION['cities']->getACReligion()); ?> </h1>
 <? if (BUILDINGSPEED > 1) echo "Errichten wird um Faktor ".BUILDINGSPEED." beschleunigt.<p>"; ?>
 
-Eine Anleitung findet sich <a href="library.php?s1=0&s2=3&s3=1">hier in der Bibliothek</a>. Dort wird auch der fundamentale <font color="red">Unterschied</font> zwischen <b>Lehmgruben</b> und <b>Steinbr�chen</b> erkl�rt!<p>
-<b>Achtung:</b> es sollten NIE mehr verarbeitende Gebäude gebaut werden als man erzeugende Gebäude hat. Es reicht zum Beispiel <b>1 S�gewerk für 2 Holzfäller</b>.
+Eine Anleitung findet sich <a href="library.php?s1=0&s2=3&s3=1">hier in der Bibliothek</a>. Dort wird auch der fundamentale <font color="red">Unterschied</font> zwischen <b>Lehmgruben</b> und <b>Steinbrüchen</b> erklärt!<p>
+<b>Achtung:</b> es sollten NIE mehr verarbeitende Gebäude gebaut werden als man erzeugende Gebäude hat. Es reicht zum Beispiel <b>1 Sägewerk für 2 Holzfäller</b>.
 </td></tr>
 <tr><td>
 
@@ -97,7 +97,7 @@ for($i=0;$i<=sizeof($bld);++$i) {
     if ($bld[$i]['category']>$actcat){
       if ($actcat>=0 && $_SESSION['player']->getNoobLevel() > 0) {
         echo '<tr><td colspan="16" class="tblbody" align="center">';
-        echo'Achtung: bauen Sie <b>keine unn�tigen Gebäude</b>. Lesen Sie sich zuerst die Bibliothek durch (auf den Gebäudenamen klicken)</td></tr>';
+        echo'Achtung: bauen Sie <b>keine unnötigen Gebäude</b>. Lesen Sie sich zuerst die Bibliothek durch (auf den Gebäudenamen klicken)</td></tr>';
       }
       echo "<tr><td colspan='16'>&nbsp;</td></tr><tr><td colspan='3' class='tblhead'><b>".$buildingcategories[$bld[$i]['category']]."</b></td>";
       echo "<td colspan=\"3\" class=\"tblbody\" style=\"text-align:center; font-weight:bold;\">Kosten</td>";

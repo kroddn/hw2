@@ -36,9 +36,9 @@
 // die Daten für Premiem-Accounts des Spielers befinden
 // sich in einer Extra-Tabelle "premiumacc"
 
-// Tabelledefinition und erkl�rung siehe sql/premium.sql
+// Tabelledefinition und erklärung siehe sql/premium.sql
 
-// für defines ben�tigt
+// für defines benötigt
 include_once("includes/db.config.php");  
 
 // --- Konstanten für Werbefreie Accs ---
@@ -220,7 +220,7 @@ function get_message_archive_size () {
 
 /** 
  * Die maximale Sitzungsdauer, nach der man rausgeworfen wird
- * (unabh�ngig von der Session-Livetime des Apache) (normalerweise 60 Minuten)
+ * (unabhängig von der Session-Livetime des Apache) (normalerweise 60 Minuten)
  */
 function get_premium_session_time() {
   global $premium_flags, $premium_expire;
@@ -228,7 +228,7 @@ function get_premium_session_time() {
   if(defined("OLD_GAME") && OLD_GAME)     $default = 1200; // OLD
   else if( defined("HISPEED") && HISPEED) $default = 600;  // HiSpeedrunde
   else if( defined("SPEED") && SPEED)     $default = 1800; // Speedrunde
-  else                                    $default = 3600; // Normale Session-L�nge
+  else                                    $default = 3600; // Normale Session-Länge
   
   // Den Ablauf des PA einberechnen.
   $max = max($premium_expire-time(), $default);

@@ -42,7 +42,7 @@ $error = null;
 $pos = intval($pos);
 
 if(isset($_POST['selectname'])) {
-  // F�hrende und abschließende Leerzeichen weglassen
+  // Führende und abschließende Leerzeichen weglassen
   $playername = trim($_POST['playername']);
   $pos = $_POST['pos'];
   
@@ -53,7 +53,7 @@ if(isset($_POST['selectname'])) {
   else {      
     include_once ("includes/db.inc.php");
     
-    // Pr�fen, ob der Name bereits vergeben ist
+    // Prüfen, ob der Name bereits vergeben ist
     $check = do_mysqli_query("SELECT * FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'], $playername)."'");
     if(mysqli_num_rows($check) > 0) {
       $error = "Der Spielername '$playername' ist bereits vergeben.";
@@ -121,7 +121,7 @@ if(defined("START_POS_NEW") && START_POS_NEW) {
       else           $loc[5-$p] = intval($count['c']);
     }
   }
-  // Jetzt mu� noch korrigiert werden für das alte Skript.
+  // Jetzt muss noch korrigiert werden für das alte Skript.
 }
 else {
   $mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
@@ -176,18 +176,18 @@ und Login nicht identisch sind.
 <?php
 if($christratio > 1.0 ) { ?>
  <tr>
-  <td colspan="2" class="tblbody" align="center"><font color="red" size="+2">Anh�nger des Islam gesucht!</font><br>Zur Zeit sind die Christen auf dem Vormarsch. Darum überlegt Euch gut, ob Ihr nicht auf Seiten des Islam einsteigen wollt (dem Spielspaß kommt es zugute).
+  <td colspan="2" class="tblbody" align="center"><font color="red" size="+2">Anhänger des Islam gesucht!</font><br>Zur Zeit sind die Christen auf dem Vormarsch. Darum überlegt Euch gut, ob Ihr nicht auf Seiten des Islam einsteigen wollt (dem Spielspaß kommt es zugute).
   </td>
  </tr>
 <? 
 } 
 ?>
  <tr height="40" class="tblbody"><td colspan="2" valign="middle" align="center">
-   Angemeldet: <? echo $registered[0][0]." Christen und ". $registered[1][0]. " Moslems. <b>W�hlt ".($registered[0][0] >= $registered[1][0] ? "Islam" : "Christentum").",</b> um das Gleichgewicht zu wahren."; ?>
+   Angemeldet: <? echo $registered[0][0]." Christen und ". $registered[1][0]. " Moslems. <b>Wählt ".($registered[0][0] >= $registered[1][0] ? "Islam" : "Christentum").",</b> um das Gleichgewicht zu wahren."; ?>
  </td></tr>
  
  <tr height="40" class="tblbody"><td colspan="2" valign="middle" align="center">
-   <b><font size="+1">Ausgangslage w�hlen</font> (<? echo $locsum; ?> offene Positionen)</b>
+   <b><font size="+1">Ausgangslage wählen</font> (<? echo $locsum; ?> offene Positionen)</b>
  </td></tr>
  <tr class="tblbody">
  <td align="center">

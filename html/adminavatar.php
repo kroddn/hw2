@@ -65,8 +65,8 @@ if($player->isNamehunter()) {
 		echo "<td>";
 		echo showAvatarDate($avatar['id']);
 		echo "</td>\n";
-		echo "<td><a href=\"".$PHP_SELF."?delete=".$avatar['id']."\">l&ouml;schen</a></td>\n";
-		echo "<td><a href=\"".$PHP_SELF."?publish=".$avatar['id']."\">akzeptieren</a></td>\n";
+		echo "<td><a href=\"".$_SERVER['PHP_SELF']."?delete=".$avatar['id']."\">l&ouml;schen</a></td>\n";
+		echo "<td><a href=\"".$_SERVER['PHP_SELF']."?publish=".$avatar['id']."\">akzeptieren</a></td>\n";
 		echo "</tr>\n";
 	}
 	echo "</table>\n";
@@ -91,7 +91,7 @@ if($player->isNamehunter()) {
 		echo "<td>";
 		echo showAvatarDate($avatar['id']);
 		echo "</td>\n";
-		echo "<td><a href=\"".$PHP_SELF."?delete=".$avatar['id']."\">l&ouml;schen</a></td>\n";
+		echo "<td><a href=\"".$_SERVER['PHP_SELF']."?delete=".$avatar['id']."\">l&ouml;schen</a></td>\n";
 		echo "</tr>\n";
 	}
 	echo "</table>\n";

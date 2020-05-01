@@ -111,7 +111,7 @@ elseif ($changepw) {
 -->
 <tr><td colspan="3" valign="top" align="center">
 
-<form name="requestkey" action="<? echo $PHP_SELF; ?>" method="POST">
+<form name="requestkey" action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <div align="center">
 <table width="400" cellspacing="1" cellpadding="0" border="0">
 	<tr>
@@ -143,7 +143,7 @@ elseif ($changepw) {
 <br><input type="submit" value=" Aktivierungscode senden " name="getkey"><br><br><br><br><br><br>
 </form>
 
-<form name="changepw" action="<? echo $PHP_SELF; ?>" method="POST">
+<form name="changepw" action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <table width="400" cellspacing="1" cellpadding="0" border="0">
 	<tr>
 		<td colspan="2" align="center"><? if ($changeerror) echo "<div class='error'><b>$changeerror</b></div><br>"; ?></td>

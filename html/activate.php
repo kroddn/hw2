@@ -82,7 +82,7 @@ gewohnt ein und folgen Sie dort den Aktivierungsanweisungen.
 else 
 {
 ?>
-<form name="login" action="<? echo $PHP_SELF; ?>" method="POST">
+<form name="login" action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <tr><td colspan="3" valign="top">
 
 <div align="center">

@@ -98,16 +98,16 @@ if($player->isAdmin()) {
   }
 
   echo "<center>";
-  echo "<form method=\"post\" action=\"".$PHP_SELF."\" style=\"padding:0px; margin:0px;\">\n";
+  echo "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\" style=\"padding:0px; margin:0px;\">\n";
   echo "<table width=\"500\">\n";
   echo "<tr><td class=\"tblhead\" colspan=\"13\" align=\"center\" height=\"30\" valign=\"middle\"><b>Browser Statistik</b></td></tr>";
   echo "<tr class=\"tblbody\"><td class=\"tblhead\"><b>Jahr:</b></td>";
-  for($i=1;$i<=6;$i++) { echo "<td colspan=\"2\" align=\"center\"><a href=\"".$PHP_SELF."?view=year&year=".(2003+$i)."\">".(2003+$i)."</a></td>"; }
+  for($i=1;$i<=6;$i++) { echo "<td colspan=\"2\" align=\"center\"><a href=\"".$_SERVER['PHP_SELF']."?view=year&year=".(2003+$i)."\">".(2003+$i)."</a></td>"; }
   echo "</tr>";
   echo "<tr class=\"tblbody\"><td class=\"tblhead\"><b>Monat:</b></td>";
   for($i=1;$i<=12;$i++) {
     if($_GET['year']) {$year=$_GET['year']; } else { $year=date("Y",time()); }
-    echo "<td align=\"center\"><a href=\"".$PHP_SELF."?view=month&year=".$year."&month=".$i."\">".$i."</a></td>"; 
+    echo "<td align=\"center\"><a href=\"".$_SERVER['PHP_SELF']."?view=month&year=".$year."&month=".$i."\">".$i."</a></td>"; 
   }
   echo "</tr>";
   echo "</table>";
@@ -152,11 +152,11 @@ if($player->isAdmin()) {
 
     echo "<table width=\"500\">\n";
     echo "<tr class=\"tblhead\" height=\"30\">";
-    echo "<td><a href=\"".$PHP_SELF."?view=month&str=".($timestamp-((60*60)*24)*30)."\">Voriger Monat</a></td>";
+    echo "<td><a href=\"".$_SERVER['PHP_SELF']."?view=month&str=".($timestamp-((60*60)*24)*30)."\">Voriger Monat</a></td>";
     echo "<td align=\"center\"><b>";
     echo date("F",$timestamp)." ".date("Y",$timestamp);
     echo "</b></td>";
-    echo "<td align=\"right\"><a href=\"".$PHP_SELF."?view=month&str=".($timestamp+((60*60)*24)*32)."\">N&auml;chster Monat</a></td>";
+    echo "<td align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?view=month&str=".($timestamp+((60*60)*24)*32)."\">N&auml;chster Monat</a></td>";
     echo "</tr>";
     echo "<tr class=\"tblbody\">";
     echo "<td colspan=\"3\" align=\"center\">";
@@ -206,11 +206,11 @@ if($player->isAdmin()) {
 
     echo "<table width=\"500\">\n";
     echo "<tr class=\"tblhead\" height=\"30\">";
-    echo "<td><a href=\"".$PHP_SELF."?view=month&str=".($timestamp-((60*60)*24)*30)."\">Voriger Monat</a></td>";
+    echo "<td><a href=\"".$_SERVER['PHP_SELF']."?view=month&str=".($timestamp-((60*60)*24)*30)."\">Voriger Monat</a></td>";
     echo "<td align=\"center\"><b>";
     echo date("F",$timestamp)." ".date("Y",$timestamp);
     echo "</b></td>";
-    echo "<td align=\"right\"><a href=\"".$PHP_SELF."?view=month&str=".($timestamp+((60*60)*24)*32)."\">N&auml;chster Monat</a></td>";
+    echo "<td align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?view=month&str=".($timestamp+((60*60)*24)*32)."\">N&auml;chster Monat</a></td>";
     echo "</tr>";
     echo "<tr class=\"tblbody\">";
     echo "<td colspan=\"3\" align=\"center\">";
@@ -258,11 +258,11 @@ if($player->isAdmin()) {
   unset($total);
   echo "<table width=\"500\">\n";
   echo "<tr class=\"tblhead\" height=\"30\">";
-  echo "<td><a href=\"".$PHP_SELF."?time=".prevDay($timestamp)."\">Voriger Tag</a></td>";
+  echo "<td><a href=\"".$_SERVER['PHP_SELF']."?time=".prevDay($timestamp)."\">Voriger Tag</a></td>";
   echo "<td align=\"center\"><b>";
   echo date("d.m.Y",$timestamp);
   echo "</b></td>";
-  echo "<td align=\"right\"><a href=\"".$PHP_SELF."?time=".nextDay($timestamp)."\">N&auml;chster Tag</a></td>";
+  echo "<td align=\"right\"><a href=\"".$_SERVER['PHP_SELF']."?time=".nextDay($timestamp)."\">N&auml;chster Tag</a></td>";
   echo "</tr>";
   echo "<tr class=\"tblbody\">";
   echo "<td colspan=\"3\" align=\"center\">";

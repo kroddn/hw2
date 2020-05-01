@@ -347,7 +347,7 @@ echo "></td></tr>";
 
 <div class="little_space"></div>
 <table width="520" cellspacing="1" cellpadding="0" border="0">
-<form action="<? echo $PHP_SELF; ?>" method="GET">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="GET">
 	<tr>
 		<td class="tblhead" colspan="4"><strong>Angebot aufgeben</strong></td>
         </tr>

@@ -415,7 +415,7 @@ while($t = mysqli_fetch_assoc($tourn)) {
   $starttime = $t['time'];
   $endtime   = $t['time']+TOURNAMENT_DURATION;
 
-  $url= '<a href="'.$PHP_SELF.'?tmagic='.$tournamentmagic.'&tid='.$t['tid'].'&part=%d">%s</a>';
+  $url= '<a href="'.$_SERVER['PHP_SELF'].'?tmagic='.$tournamentmagic.'&tid='.$t['tid'].'&part=%d">%s</a>';
   if($t['over']) {
     $action = "vorüber";
     if($_SESSION['player']->isMaintainer() && $t['calctime']) {
@@ -509,7 +509,7 @@ if(isset($newtournament)) {
   }
 }
 ?>
-<form method="get" action="<? echo $PHP_SELF; ?>">
+<form method="get" action="<? echo $_SERVER['PHP_SELF'];  ?>">
 <table>
 	<tr>
 		<td>Preisgeld:</td>

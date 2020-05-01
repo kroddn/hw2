@@ -910,11 +910,11 @@ insertBBForm(2);
       $img=mysqli_fetch_assoc($res);
       if($img['avatar']==1) {
         echo ".<p><b class=\"error\">Dein Avatar muss erst von einem Namehunter freigeschalten werden!</b><p>";
-        echo "<a href=\"".$PHP_SELF."?delete=avatar\">Avatar l&ouml;schen</a>\n";
+        echo "<a href=\"".$_SERVER['PHP_SELF']."?delete=avatar\">Avatar l&ouml;schen</a>\n";
       } 
       elseif($img['avatar']==2) {
         echo " und ist freigeschalten!<p>";
-        echo "<a href=\"".$PHP_SELF."?delete=avatar\">Avatar l&ouml;schen</a><p>\n";
+        echo "<a href=\"".$_SERVER['PHP_SELF']."?delete=avatar\">Avatar l&ouml;schen</a><p>\n";
       } 
       else {
         do_mysqli_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");

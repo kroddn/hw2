@@ -42,7 +42,7 @@ TODO: Delete this if documentation is set
 - errstr auskommentiert
 
 /html/start_header.php
-- $PHP_SELF zu $_SERVER['PHP_SELF'] geändert
+- $_SERVER['PHP_SELF'] zu $_SERVER['PHP_SELF'] geändert
 - include zu includes
 
 /xampp/phpmyadmin/config.inc.php

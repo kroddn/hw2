@@ -114,9 +114,9 @@ class Library {
   function output() {
     global $standalone;
     if ($standalone==1)
-      $LINK = $PHP_SELF."?standalone=1&";
+      $LINK = $_SERVER['PHP_SELF']."?standalone=1&";
     else
-      $LINK = $PHP_SELF."?";
+      $LINK = $_SERVER['PHP_SELF']."?";
 
     require("includes/config.inc.php");
     global $imagepath;

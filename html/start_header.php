@@ -195,7 +195,7 @@ if ($cookieref) echo "<!-- CookieRef true -->\n";
 						<td width="10%" valign="middle" align="center" class="tblhead"
 							onmouseout="this.style.backgroundColor='#F0F0AA';"
 							onmouseover="this.style.backgroundColor='#FFFFC8';">
-							<? if(strstr($PHP_SELF, 'login.php')) {
+							<? if(strstr($_SERVER['PHP_SELF'], 'login.php')) {
 							 echo '<a style="display: block; width: 100%;" href="portal.php">Home</a>';
 							} 
 							else { 
@@ -307,7 +307,7 @@ function print_news_table() {
     if(mysqli_num_rows($resN)>1) {
       echo "<tr class=\"tblbody\"><td valign=\"middle\" height=\"30\">\n";
       while($dataN=mysqli_fetch_assoc($resN)) {
-	echo "<span style=\"float:left;\"><a href=\"".$PHP_SELF."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">(".date("d.m.Y",$dataN['time']).")</span><br>";
+	echo "<span style=\"float:left;\"><a href=\"".$_SERVER['PHP_SELF']."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">(".date("d.m.Y",$dataN['time']).")</span><br>";
       }
       echo "</td></tr>";
     }

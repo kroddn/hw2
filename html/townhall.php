@@ -147,7 +147,7 @@ $data1['attr'] +=1000;
 </table>
 <br />
 
-<form action="<? echo $PHP_SELF; ?>" method="POST">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <table width="500" cellspacing="1" cellpadding="1" border="0">
   <tr>
     <td colspan="4" class="tblhead"><b>übersicht</b></td>
@@ -184,7 +184,7 @@ $data1['attr'] +=1000;
 $maySettle = false;
 ?>
 
-<form name="newsettle" action="<? echo $PHP_SELF; ?>" method="GET">
+<form name="newsettle" action="<? echo $_SERVER['PHP_SELF'];  ?>" method="GET">
 <table cellspacing="1" width="500" cellpadding="0" border="0">
   <tr>
     <td colspan="2" class="tblhead"><b>Neue Stadt gründen</b></td>
@@ -281,7 +281,7 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
        
       if($has_convert_loyality) {
         echo "<br>\n";
-        echo '<form action="'.$PHP_SELF.'" method="POST"><input name="do_convert" type="submit" value=" Konvertieren " onClick="return confirm(\'Sind Sie sicher?\')"></form>';
+        echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST"><input name="do_convert" type="submit" value=" Konvertieren " onClick="return confirm(\'Sind Sie sicher?\')"></form>';
       }
       
       if(!$has_convert_loyality)  {
@@ -318,7 +318,7 @@ else {
 </tr>
 <tr>
   <td class="tblbody">
-  <form action="<? echo $PHP_SELF; ?>" method="POST">
+  <form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
   <input type="text"
          name="ratio" value="" size="3">% <input type="submit"
          value=" Konvertieren "
@@ -345,7 +345,7 @@ else {
 
 
 <table width="400" cellspacing="1" cellpadding="0" border="0">  
- <form action="<? echo $PHP_SELF; ?>" method="GET" >
+ <form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="GET" >
   <tr>
     <td class="tblhead" width="150"><b>Stadtname</b></td>
     <td class="tblbody" align="right" width="175"><input type='text'

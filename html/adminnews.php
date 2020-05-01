@@ -47,7 +47,7 @@ if($_GET['delete']) {
 if($player->isAdmin()) {
 
 if(!$_GET['edit']) {
-	echo "<form action=\"".$PHP_SELF."\" method=\"POST\">\n";
+	echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">\n";
 	echo "<table width=\"300\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n";
 	echo "<tr><td class=\"error\">\n";
 	if (isset($err)) { echo $err; } else echo " &nbsp ";
@@ -66,7 +66,7 @@ if(!$_GET['edit']) {
 } else {
 	$edit=do_mysqli_query("SELECT topic,text FROM news WHERE id='".$_GET['edit']."'");
 	$edit=mysqli_fetch_assoc($edit);
-	echo "<form action=\"".$PHP_SELF."\" method=\"POST\">\n";
+	echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">\n";
 	echo "<table width=\"300\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n";
 	echo "<tr><td class=\"error\">\n";
 	if (isset($err)) { echo $err; } else echo " &nbsp ";
@@ -97,8 +97,8 @@ if(!$_GET['edit']) {
 	$news=do_mysqli_query("SELECT * FROM news WHERE 1 order by id desc limit 0,10");
 	while($get_news=mysqli_fetch_assoc($news)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
-		echo "<td width=\"16\"><a href=\"".$PHP_SELF."?delete=".$get_news['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
-		echo "<td width=\"16\"><a href=\"".$PHP_SELF."?edit=".$get_news['id']."\"><img src=\"".$imagepath."/ad_fixed.png\" border=\"0\" alt=\"Bearbeiten\"></a></td>\n";
+		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_news['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
+		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?edit=".$get_news['id']."\"><img src=\"".$imagepath."/ad_fixed.png\" border=\"0\" alt=\"Bearbeiten\"></a></td>\n";
 		echo "<td width=\"30\">".$get_news['id']."</td>";
 		echo "<td width=\"80\">".date("d.m.y H:i",$get_news['time'])."</td>";
 		echo "<td>".$get_news['topic']."</td>";

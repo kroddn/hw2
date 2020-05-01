@@ -42,7 +42,7 @@ if ($delete_log_err=="1") {
 <?
 if($player->isMaintainer()) {
 	//log_mysqlerr darstellen
-	echo "<form target=\"_self\" action=\"".$PHP_SELF."\" method=\"POST\"><input type=\"hidden\" name=\"delete_log_mysqlerr\" value=\"1\" />";
+	echo "<form target=\"_self\" action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\"><input type=\"hidden\" name=\"delete_log_mysqlerr\" value=\"1\" />";
 	echo "<table width=\"600\" border=\"0\" style=\"width:500px;\">";
 	echo "<tr class=\"tblhead\" width=\"100%\"><td colspan=\"8\" class=\"tblhead\"><b>log_mysqlerr Tabelle (die letzten 50 Einträge)</td></tr>\n";
 	echo "<tr class=\"tblhead\" width=\"100%\">\n";
@@ -77,7 +77,7 @@ if($player->isMaintainer()) {
 	echo "<table><tr><td><input type=\"submit\" type=\"button\" value=\"Änderung übernehmen\" class=\"submit\"></form></td></tr>\n</table>";
 	//log_err darstellen
 	echo "<br><br>";
-	echo "<form target=\"_self\" action=\"".$PHP_SELF."\" method=\"POST\">
+	echo "<form target=\"_self\" action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">
         <input type=\"hidden\" name=\"delete_log_err\" value=\"1\">";
 	echo "<table width=\"650\">";
 	echo "<tr class=\"tblhead\"><td colspan=7><b>log_err Tabelle (die letzten 50 Einträge)</td></tr>\n";

@@ -170,7 +170,7 @@ if(defined("MAX_PLAYER")) {
 }
 
 ?>
-<form action="<? echo $PHP_SELF; ?>" method="POST">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <table width="500" cellspacing="1" cellpadding="0" border="0">
 	<tr height="0">
 		<td width="200"></td><td width="300"></td>

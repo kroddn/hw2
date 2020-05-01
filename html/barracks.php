@@ -107,7 +107,7 @@ if ($error!=null && strlen($error) > 0) {
  <div class="tblbody" style="text-align:center; margin-left:1px; float:left; width:20%;"><a target="_blank" href="fightsim.php">Kampfsimulator</a></div>
  <div style="clear:left" />
 
-<form action="<? echo $PHP_SELF; ?>" method="POST" name="res" id="res">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST" name="res" id="res">
 <table id="tbl1" cellspacing="1" cellpadding="0" border="0" width="550" style="display:none;">
 <tr><td class="tblhead" colspan="7" style="padding-top:4px; padding-bottom:4px;"><b>Waffenproduktion in <?php echo $_SESSION['cities']->activecityname; ?></b></td></tr>
 <tr class="tblhead" style="font-weight:bold;">
@@ -208,7 +208,7 @@ for($i=0;$i<sizeof($units);++$i) {
   $img = getUnitImage($units[$i]);
   $href= getUnitLibLink($units[$i]);
 
-  echo "<form action=".$PHP_SELF." method='POST'>";
+  echo "<form action=".$_SERVER['PHP_SELF']." method='POST'>";
   printf('<tr class="tblbody"><td nowrap width="100"><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"> %s</a></td>',
          $href, $GLOBALS['imagepath'], $img, $units[$i]['name'], $units[$i]['name'], $units[$i]['name']);
   
@@ -312,7 +312,7 @@ if($old_code) {
 
   if (mysqli_num_rows($res1)>0) {
     //mysqli_data_seek($res1, 0);
-    echo "<form action=".$PHP_SELF.' method="GET" name="disarmform">';
+    echo "<form action=".$_SERVER['PHP_SELF'].' method="GET" name="disarmform">';
     echo '<table id="tbl4" cellspacing="1" cellpadding="0" border="0" width="550" style="margin-top:10px; display:none;">';
     echo "<tr class=\"tblhead\"><td colspan=\"4\"><strong>Einheiten entlassen</strong></td></tr>";
     echo '<input type="hidden" name="from" value="'.$from.'">';
@@ -329,7 +329,7 @@ if($old_code) {
       $img = getUnitImage($data1);
       $href= getUnitLibLink($data1);
 
-      //echo '<form action="'.$PHP_SELF.'" method="POST">';
+      //echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
       printf('<tr class="tblbody"><td><a href="%s" target="_blank"><img src="%s/%s" alt="%s" title="%s" border="0"> %s</a></td>',
       $href, $GLOBALS['imagepath'], $img, $data1['uname'], $data1['uname'], $data1['uname']);
 

@@ -29,7 +29,7 @@ if($_GET['setsame']) {
 }
 
 if($_GET['reset']=="true") {
-  echo "<a href=\"".$PHP_SELF."?reset=doIt\">Forum wirklich reseten</a>\n";
+  echo "<a href=\"".$_SERVER['PHP_SELF']."?reset=doIt\">Forum wirklich reseten</a>\n";
   exit;
 } 
 elseif($_GET['reset']=="doIt") {
@@ -72,7 +72,7 @@ if($player->isAdmin()) {
 		while($data1=mysqli_fetch_assoc($res1)) {
 			echo "<tr><td colspan=\"2\" class=\"tblbody\">".$data1['name']."</td>";
 			//echo "<td>".$data1['pwdcf'].":".$data1['pwd']."</td>";
-			echo "<td class=\"tblhead\"><a href=\"".$PHP_SELF."?setsame=pwd&id=".$data1['uid']."&pass=".$data1['pwd']."\">bereinigen</a></td></tr>\n";
+			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?setsame=pwd&id=".$data1['uid']."&pass=".$data1['pwd']."\">bereinigen</a></td></tr>\n";
 		}
 	} else {
 		echo "<tr class=\"tblbody\"><td colspan=\"3\" height=\"40\" valign=\"middle\" align=\"center\">Es liegen keine Passwortkonflikte vor</td></tr>\n";
@@ -83,7 +83,7 @@ if($player->isAdmin()) {
 	if(mysqli_num_rows($res1) > 0) {
 		while($data1=mysqli_fetch_assoc($res1)) {
 			echo "<tr><td colspan=\"2\" class=\"tblbody\">".$data1['name']."</td>";
-			echo "<td class=\"tblhead\"><a href=\"".$PHP_SELF."?setsame=name&id=".$data1['uid']."&name=".$data1['name']."\">bereinigen</a></td></tr>\n";
+			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?setsame=name&id=".$data1['uid']."&name=".$data1['name']."\">bereinigen</a></td></tr>\n";
 		}
 	} else {
 		echo "<tr class=\"tblbody\"><td colspan=\"3\" height=\"40\" valign=\"middle\" align=\"center\">Es liegen keine Namenskonflikte vor</td></tr>\n";
@@ -96,7 +96,7 @@ if($player->isAdmin()) {
 			echo "<tr>";
 			echo "<td class=\"tblhead\">".$data1['id']."</td>";
 			echo "<td class=\"tblbody\">(".$data1['topic_replies'].") Antworte(n)</td>";
-			echo "<td class=\"tblhead\"><a href=\"".$PHP_SELF."?delete=topic&id=".$data1['id']."\">bereinigen</a></td>\n";
+			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?delete=topic&id=".$data1['id']."\">bereinigen</a></td>\n";
 			echo "</tr>";
 		}
 	} else {
@@ -111,14 +111,14 @@ if($player->isAdmin()) {
 		while($data1=mysqli_fetch_assoc($res1)) {
 			echo "<tr>";
 			echo "<td class=\"tblbody\" colspan=\"2\">".$data1['id']."</td>";
-			echo "<td class=\"tblhead\"><a href=\"".$PHP_SELF."?delete=post&id=".$data1['id']."\">bereinigen</a></td>\n";
+			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?delete=post&id=".$data1['id']."\">bereinigen</a></td>\n";
 			echo "</tr>";
 		}
 	} else {
 		echo "<tr class=\"tblbody\"><td colspan=\"3\" height=\"40\" valign=\"middle\" align=\"center\">Es liegen keine Konflikte vor</td></tr>\n";
 	}
 
-	echo "<tr class=\"tblhead\"><td colspan=\"3\" height=\"40\" valign=\"middle\" align=\"center\"><a style=\"color:red;\" href=\"".$PHP_SELF."?reset=true\">Forum RESET</a><br />Kann NICHT R&uuml;ckg&auml;ngig gemacht werden!</td></tr>\n";
+	echo "<tr class=\"tblhead\"><td colspan=\"3\" height=\"40\" valign=\"middle\" align=\"center\"><a style=\"color:red;\" href=\"".$_SERVER['PHP_SELF']."?reset=true\">Forum RESET</a><br />Kann NICHT R&uuml;ckg&auml;ngig gemacht werden!</td></tr>\n";
 	echo "</table>";
 }
 ?>

@@ -505,7 +505,7 @@ else {
 </div>
 
 <div id="tbl3" style="width: 660px; display: none; margin-top: 10px;">
- <form action="<? echo $PHP_SELF; ?>" method="POST" name="attackform">
+ <form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST" name="attackform">
  <!-- Tabelle genau in der Größe des darüberliegenden div formatieren -->
  <table cellspacing="1" cellpadding="0" border="0" style="width: 660px;">
   <tr>
@@ -719,7 +719,7 @@ $cid = "";
         '(<a href="map.php?gox='.$data['x'].'&goy='.$data['y'].'">'.$data['x'].':'.$data['y'].'</a>)'.
         ' von <a href="javascript:playerinfo(\''.urlencode($data['pname']).'\')">'.$data['pname'].'</a> ';
 
-    	$href= $PHP_SELF.'?from='.$data['cid'];
+    	$href= $_SERVER['PHP_SELF'].'?from='.$data['cid'];
     	if(isset($selectx)) $href .= "&selectx=".$selectx;
     	if(isset($selecty)) $href .= "&selecty=".$selecty;
 

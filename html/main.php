@@ -256,7 +256,7 @@ echo "<tr class=\"tblhead\" height=\"25\"><td width=\"210\" style=\"font-weight:
 echo "<tr valign=\"top\" class=\"tblhead\"><td style=\"padding: 3px; \">\n";
 $resN=do_mysqli_query("SELECT id, time, topic FROM news ORDER BY id DESC");
 while($dataN=mysqli_fetch_assoc($resN)) {
-  echo "<span style=\"float:left;\"><a href=\"".$PHP_SELF."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">".date("d.m.Y",$dataN['time'])."</span><br>";
+  echo "<span style=\"float:left;\"><a href=\"".$_SERVER['PHP_SELF']."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">".date("d.m.Y",$dataN['time'])."</span><br>";
 }
 echo "</td><td class=\"tblbody\" style=\"padding: 3px;\">";
 echo $dataNews['text'];

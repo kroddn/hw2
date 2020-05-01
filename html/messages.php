@@ -59,11 +59,11 @@ else {
 
 <table cellspacing = "1" cellpadding="0" border="0">
   <tr height="20" class="tblhead">
-    <td <? printActive("read"); ?> class="tblhead"><a href="<?php echo "$PHP_SELF?show=read"; ?>">Nachrichten lesen</a></td>
-    <td <? printActive("write"); ?> class="tblhead"><a href="<?php echo "$PHP_SELF?show=write"; ?>">Nachrichten Verfassen</a></td>
-    <td <? printActive("archiv"); ?> class="tblhead"><a href="<?php echo "$PHP_SELF?show=archiv"; ?>">Nachrichten-Archiv</a></td>
-    <td <? printActive("settings"); ?> class="tblhead"><a href="<?php echo "$PHP_SELF?show=settings"; ?>">Nachrichten-Einstellungen</a></td>
-	<?php if (get_show_fights($player->getID())==1) echo '<td '.printActive("settings").'class="tblhead"><a href="'."$PHP_SELF?show=fights".'">Kampfberichte/Einheits-Bewegungen</a></td>';?>
+    <td <? printActive("read"); ?> class="tblhead"><a href="<?php echo $_SERVER['PHP_SELF']."?show=read"; ?>">Nachrichten lesen</a></td>
+    <td <? printActive("write"); ?> class="tblhead"><a href="<?php echo $_SERVER['PHP_SELF']."?show=write"; ?>">Nachrichten Verfassen</a></td>
+    <td <? printActive("archiv"); ?> class="tblhead"><a href="<?php echo $_SERVER['PHP_SELF']."?show=archiv"; ?>">Nachrichten-Archiv</a></td>
+    <td <? printActive("settings"); ?> class="tblhead"><a href="<?php echo $_SERVER['PHP_SELF']."?show=settings"; ?>">Nachrichten-Einstellungen</a></td>
+	<?php if (get_show_fights($player->getID())==1) echo '<td '.printActive("settings").'class="tblhead"><a href="'.$_SERVER['PHP_SELF']."?show=fights".'">Kampfberichte/Einheits-Bewegungen</a></td>';?>
   </tr>
 </table>
 

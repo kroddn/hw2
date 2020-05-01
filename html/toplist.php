@@ -89,18 +89,18 @@ start_body();
 
 <table cellpadding="0" cellspacing="1" border="0" width="500">
 <tr class="tblhead" height="20">
-	<td><a <? printActive("player"); ?> href="<? echo $PHP_SELF; ?>?show=player">Spieler</a></td>
-	<td><a <? printActive("player_avg"); ?> href="<? echo $PHP_SELF; ?>?show=player_avg">Durchschnitt</a></td>
-	<td><a <? printActive("town"); ?> href="<? echo $PHP_SELF; ?>?show=town">St&auml;dte</a></td>
-	<td><a <? printActive("population"); ?> href="<? echo $PHP_SELF; ?>?show=population">Einwohner</a></td>
+	<td><a <? printActive("player"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=player">Spieler</a></td>
+	<td><a <? printActive("player_avg"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=player_avg">Durchschnitt</a></td>
+	<td><a <? printActive("town"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=town">St&auml;dte</a></td>
+	<td><a <? printActive("population"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=population">Einwohner</a></td>
   <?php if(!defined("HISPEED") ) { ?>
-	<td><a <? printActive("clan"); ?> href="<? echo $PHP_SELF; ?>?show=clan">Orden</a></td>
+	<td><a <? printActive("clan"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=clan">Orden</a></td>
   <?php } 
         if(!defined("SPEED") && !defined("HISPEED")) {
   ?>
-	<td><a <? printActive("honor"); ?> href="<? echo $PHP_SELF; ?>?show=honor">Bonuspunkte</a></td>
+	<td><a <? printActive("honor"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=honor">Bonuspunkte</a></td>
   <?php } ?>
-	<td><a <? printActive("div"); ?> href="<? echo $PHP_SELF; ?>?show=div">Diverses</a></td>
+	<td><a <? printActive("div"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=div">Diverses</a></td>
 </tr>
 <tr>
 <td colspan="7" align="center" style="padding: 8px;">

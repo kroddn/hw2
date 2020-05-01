@@ -273,7 +273,7 @@ $_SESSION['clan']->update();
 if ($askpromote && ($status == 63) && intval($clanmember) ) {
   $res = do_mysqli_query("SELECT name FROM player WHERE id=".mysqli_real_escape_string($clanmember) );
   if ($data = mysqli_fetch_assoc($res)) {
-    echo "Sie wollen ".$data['name'].' zum Ordensleiter erheben, ist dies wirlich euer Wille? Bestätigen sie dies bitte mit einem Klick <a href="'.$PHP_SELF.'?promote=1&status=63&clanmember='.$clanmember.'"><u>zu bestätigen</u></a> oder <a href="'.$PHP_SELF.'"><u>abzulehnen</u></a>';
+    echo "Sie wollen ".$data['name'].' zum Ordensleiter erheben, ist dies wirlich euer Wille? Bestätigen sie dies bitte mit einem Klick <a href="'.$_SERVER['PHP_SELF'].'?promote=1&status=63&clanmember='.$clanmember.'"><u>zu bestätigen</u></a> oder <a href="'.$_SERVER['PHP_SELF'].'"><u>abzulehnen</u></a>';
     exit;
   }
 }
@@ -296,7 +296,7 @@ if ($error_string != null)
 	echo "</div><br />\n";
 	
 	
-	echo '<form action="'.$PHP_SELF.'" method="POST">';
+	echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
 	$res1 = do_mysqli_query("SELECT id,name,points,clanstatus FROM player WHERE clan=".$clan->getID()." ORDER BY clanstatus DESC,name ASC");
 
 	// ORDENSGESCHEHEN
@@ -426,7 +426,7 @@ if ($error_string != null)
 	}
 	echo "</form>";
 
-		echo '<form action="'.$PHP_SELF.'" method="POST">';	
+		echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';	
 	// AUßENMINISTERIUM
 	if ($clan->getStatus() & 4) {	
 		echo "<table id=\"lay3\" style=\"margin-top:4px; display:none; width:500px;\">";
@@ -591,7 +591,7 @@ if ($error_string != null)
 	 
 	// ORDENSBESCHREIBUNG
        if ($clan->getStatus() == 63) {
-	 echo '<form name="theForm" action="'.$PHP_SELF.'" method="POST">';	   
+	 echo '<form name="theForm" action="'.$_SERVER['PHP_SELF'].'" method="POST">';	   
 	 echo '<table style="display:none; margin-top:4px;" id="lay4" width="500"><tr class="tblhead"><td>Ordensbeschreibung</td></tr><tr class="tblbody">';
 	 echo '<td><textarea id="theText" rows="15" cols="45" style="width:100%;" name="desc">'.$clan->getDescription().'</textarea></td></tr>';
 	 insertBBForm(1);
@@ -599,19 +599,19 @@ if ($error_string != null)
 	 echo "</form>";
        }
        if (isset($myclan))
-	 echo "Sie sind Mitglied des Ordens <b>".$myclan['name'].'</b>. (<a onClick="return confirm(\'Wirklich Austreten?\')"  href="'.$PHP_SELF.'?leave=1"><u>Austreten</u></a>)';
+	 echo "Sie sind Mitglied des Ordens <b>".$myclan['name'].'</b>. (<a onClick="return confirm(\'Wirklich Austreten?\')"  href="'.$_SERVER['PHP_SELF'].'?leave=1"><u>Austreten</u></a>)';
 
      } 
      else {
-       echo '<form action="'.$PHP_SELF.'" method="POST">';
+       echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
        $res1 = do_mysqli_query("SELECT clanapplication FROM player WHERE id=".$player->getID());
        if ($data1 = mysqli_fetch_assoc($res1))
 	 if ($data1['clanapplication'] > 0) {
 	   $res2 = do_mysqli_query("SELECT name FROM clan WHERE id=".$data1['clanapplication']);
 	   if ($data2 = mysqli_fetch_assoc($res2))
-	     echo "Sie bewerben sich um die Mitgliedschaft im Orden ".$data2['name']. '(<a href="'.$PHP_SELF.'?dropApp=1&clanapplicant='.$player->getID().'">Abbrechen</a>)';
+	     echo "Sie bewerben sich um die Mitgliedschaft im Orden ".$data2['name']. '(<a href="'.$_SERVER['PHP_SELF'].'?dropApp=1&clanapplicant='.$player->getID().'">Abbrechen</a>)';
 	   else
-	     echo 'Der Orden, bei dem ihr euch um die Mitgliedschaft beworbenhabt, existiert nicht mehr. (<a href="'.$PHP_SELF.'?dropApp=1&clanapplicant='.$player->getID().'">Click!</a>)';
+	     echo 'Der Orden, bei dem ihr euch um die Mitgliedschaft beworbenhabt, existiert nicht mehr. (<a href="'.$_SERVER['PHP_SELF'].'?dropApp=1&clanapplicant='.$player->getID().'">Click!</a>)';
 	 } else {
 	   echo "<table>";
 	   echo '<tr class="tblhead"><td colspan="2">Orden gr&uuml;nden</td></tr>';

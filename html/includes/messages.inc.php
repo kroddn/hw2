@@ -106,7 +106,7 @@ function message_read($id)
 		{
 			$senderid = $datensatz['sender'];
 			$sendername = get_user_name($senderid);
-			echo "<td class='tblbody'><a href='".$PHP_SELF."?show=write&sender=".$sendername."'>".$sendername."</a></td>";
+			echo "<td class='tblbody'><a href='".$_SERVER['PHP_SELF']."?show=write&sender=".$sendername."'>".$sendername."</a></td>";
 		}
 		//echo "<td>".$datensatz['status']."</td>"; -- Das nur für Testzwecke benutzen 
 		echo "<td class='tblbody'>".gmdate("d.m.Y - H:i:s", $datensatz['date'])."</td>";
@@ -342,7 +342,7 @@ function message_archiv($id)
 	echo '<tr height="20" class="tblhead"><td></td><td><a>Von:</a></td><td><a>Datum:</a></td><td><a>Betreff:</a></td><td><a>Nachricht:</a></td></tr>';
 
 	// Start Form von Checkboxen + Manage
-	echo '<form name="set_mess_manage" action="'.$PHP_SELF.'" method="post">';
+	echo '<form name="set_mess_manage" action="'.$_SERVER['PHP_SELF'].'" method="post">';
 	
 	// Den Inhalt jeder Spalte der Tabelle anzeigen
 	$datensaetze = do_mysqli_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
@@ -468,7 +468,7 @@ function message_show_fights($id)
 	echo '<tr height="20" class="tblhead"><td></td><td><a>Von:</a></td><td><a>Datum:</a></td><td><a>Betreff:</a></td><td><a>Nachricht:</a></td></tr>';
 
 	// Start Form von Checkboxen + Manage
-	echo '<form name="set_mess_manage" action="'.$PHP_SELF.'" method="post">';
+	echo '<form name="set_mess_manage" action="'.$_SERVER['PHP_SELF'].'" method="post">';
 	
 	// Den Inhalt jeder Spalte der Tabelle anzeigen
 	$datensaetze = do_mysqli_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
@@ -553,7 +553,7 @@ function message_settings($id)
 	//if($get_settings['show_fights']==1) message_show_fights($id);
 	
 	// Einstellungen auflisten mit Forms
-	echo '<form method="POST" action='.$PHP_SELF.'>';
+	echo '<form method="POST" action='.$_SERVER['PHP_SELF'].'>';
 	echo '<table class="tblhead>';
 		echo '<tr class="tblbody">';
 			echo '<td class="tblbody">Wie viele Nachrichten Pro Seite angezeigt werden sollen</td>';

@@ -996,19 +996,19 @@ function stat_building_ordered($id, $sort) {
   echo "<td class=\"tblbody\" colspan=\"3\" style=\"text-align:right\">";
   echo "<table cellspacing=\"1\" cellpadding=\"0\">";
   echo "<tr><td><b>Sortierung:</b></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=build&sort=0\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=build&sort=0\">";
   if($sort == "0") echo "<b><i>Stadt</i></b>";
   else echo "Stadt";
   echo "</a></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=build&sort=1\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=build&sort=1\">";
   if($sort == "1") echo "<b><i>Geb&auml;ude</i></b>";
   else echo "Geb&auml;ude";
   echo "</a></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=build&sort=2\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=build&sort=2\">";
   if($sort == "2") echo "<b><i>Anzahl</i></b>";
   else echo "Anzahl";
   echo "</a></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=build&sort=3\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=build&sort=3\">";
   if($sort == "3") echo "<b><i>Zeit</i></b>";
   else echo "Zeit";
   echo "</a></td>";
@@ -1091,19 +1091,19 @@ function stat_troop_ordered($id,$sort) {
   echo "<td class=\"tblbody\" colspan=\"3\" style=\"text-align:right\">";
   echo "<table cellspacing=\"1\" cellpadding=\"0\">";
   echo "<tr><td><b>Sortierung:</b></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=troops&sort=0\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=troops&sort=0\">";
   if($sort == "0") echo "<b><i>Stadt</i></b>";
   else echo "Stadt";
   echo "</a></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=troops&sort=1\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=troops&sort=1\">";
   if($sort == "1") echo "<b><i>Einheit</i></b>";
   else echo "Einheit";
   echo "</a></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=troops&sort=2\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=troops&sort=2\">";
   if($sort == "2") echo "<b><i>Anzahl</i></b>";
   else echo "Anzahl";
   echo "</a></td>";
-  echo "<td class=\"tblhead\"><a href=\"$PHP_SELF?show=troops&sort=3\">";
+  echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?show=troops&sort=3\">";
   if($sort == "3") echo "<b><i>Zeit</i></b>";
   else echo "Zeit";
   echo "</a></td>";
@@ -1158,7 +1158,7 @@ function stat_troop_city($id) {
     " FROM unit,cityunit,city,player AS p1,player AS p2 LEFT JOIN map on map.id=city.id WHERE unit.id=cityunit.unit AND cityunit.city=city.id AND p1.id=city.owner AND p2.id=cityunit.owner AND p2.id=".$id." ORDER BY city.owner=".$_SESSION['player']->getID()." DESC, city.capital DESC, city.id");
   $cid = NULL;
 
-  echo "<form action=".$PHP_SELF.' method="POST">';
+  echo "<form action=".$_SERVER['PHP_SELF'].' method="POST">';
   echo '<table cellspacing="1" cellpadding="0" border="0">';
   echo '<tr class="tblhead"><td>Einheit</td>';
   echo '<td>Stadt</td>';
@@ -1278,7 +1278,7 @@ function stat_wert($id) {
 //only for bofh
 function stat_troop_army($id) {
   $id = intval($id);
-  echo '<p><a href="'.$PHP_SELF.'?delallarmies=1"><b class="error">Alle Armeen dieses Spielers löschen(DISALBED)</b></a></p>';
+  echo '<p><a href="'.$_SERVER['PHP_SELF'].'?delallarmies=1"><b class="error">Alle Armeen dieses Spielers löschen(DISALBED)</b></a></p>';
   echo '<table cellspacing="1" cellpadding="0" border="0" width="600">';
   $armies_res = do_mysqli_query("SELECT aid,start,end,map.id,x,y,starttime,endtime,mission,missiondata,city.name as cityname,player.name AS playername FROM army LEFT JOIN map ON map.id=army.end LEFT JOIN city ON map.id=city.id LEFT JOIN player ON player.id=city.owner WHERE army.owner=".$id." ORDER BY endtime ASC");
   if (mysqli_num_rows($armies_res)==0) {
@@ -1305,7 +1305,7 @@ function stat_troop_army($id) {
       }
     }
     echo "<tr valign='top'><td width='160' valign='top' class='tblbody'>".
-      "<a href='map.php?gox=".$armies['x']."&goy=".$armies['y']."'>".(isset($armies['cityname']) ? ($armies['cityname']."<br>") : "").(isset($armies['playername']) ? ($armies['playername']."<br>") : "")."&nbsp;(".$armies['x']." : ".$armies['y'].")</a></td><td width='60' align='center' valign='top' class='tblbody'>".$missiontext."</td><td width='350' class='tblbody'>".$armies['missiondata']." Siedler".$txt."</td><td align='center' valign='top' width='50' class='tblbody'><span class='noerror' id='".$armies['aid']."'><script type=\"text/javascript\">addTimer(".$remaining.",".$armies['aid'].");</script></span></td><td align='center' valign='top' width='60' class='tblbody'><a target='main' href='".$PHP_SELF."?delarmy=".$armies['aid']."'><b class='error'>Löschen</b></a></td><td align='center' valign='top' width='200' class='tblbody'></td></td></tr>";
+      "<a href='map.php?gox=".$armies['x']."&goy=".$armies['y']."'>".(isset($armies['cityname']) ? ($armies['cityname']."<br>") : "").(isset($armies['playername']) ? ($armies['playername']."<br>") : "")."&nbsp;(".$armies['x']." : ".$armies['y'].")</a></td><td width='60' align='center' valign='top' class='tblbody'>".$missiontext."</td><td width='350' class='tblbody'>".$armies['missiondata']." Siedler".$txt."</td><td align='center' valign='top' width='50' class='tblbody'><span class='noerror' id='".$armies['aid']."'><script type=\"text/javascript\">addTimer(".$remaining.",".$armies['aid'].");</script></span></td><td align='center' valign='top' width='60' class='tblbody'><a target='main' href='".$_SERVER['PHP_SELF']."?delarmy=".$armies['aid']."'><b class='error'>Löschen</b></a></td><td align='center' valign='top' width='200' class='tblbody'></td></td></tr>";
   }
   echo "</table>";
 }

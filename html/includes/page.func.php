@@ -92,7 +92,7 @@ function end_page() {
 
 
 function redirect_to($href = null) {
-  global $error, $PHP_SELF;
+  global $error;
 
   if ($href==null) {
     // Falls das redirekt vom index.php kommt dann portal zeigen. Ansonsten login.

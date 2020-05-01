@@ -133,7 +133,7 @@ else {
 ?>
 <tr><td valign="top">
 
-<form action="<? echo $PHP_SELF; ?>" method="POST">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <table cellspacing="1" cellpadding="0" border="0">
 <tr><td class="tblhead" colspan="3" style="padding-top:4px; padding-bottom:4px;"><b>Armeen</b></td></tr>
 <tr class="tblhead" style="font-weight:bold;">
@@ -167,7 +167,7 @@ while ($Unit = mysqli_fetch_assoc($resUnits)) {
 ?>
 </table>
 <br>
-<form action="<? echo $PHP_SELF; ?>" method="POST">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST">
 <table cellspacing="1" cellpadding="0" border="0">
 <tr><td class="tblhead" colspan="2" style="padding-top:4px; padding-bottom:4px;"><b>Einstellungen</b></td></tr>
 <tr class="tblhead" style="font-weight:bold;">

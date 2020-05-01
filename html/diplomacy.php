@@ -134,7 +134,7 @@ if ($setrel_error != null) {
 <font color="#FF2020"><b>Neu: </b></font><a onclick="minimap(); return false;" href="diplomap.php">Diplomatie-Karte</a><br>
 Auf dieser Karte sehen Sie Freunde und Feinde im Überblick.
 <p>
-<form action="<? echo $PHP_SELF; ?>" method="GET">
+<form action="<? echo $_SERVER['PHP_SELF'];  ?>" method="GET">
 <table>
 <tr class="tblhead">
 <td>Feinde</td>
@@ -219,7 +219,7 @@ echo '<td><input type="submit" name="delownpeace" value=" Frieden zur&uuml;ckzie
 echo '<td><input type="submit" name="delownreqbnd" value=" B&uuml;ndnis zur&uuml;ckziehen "></td></tr>';
 echo "</table></form>";
 echo "<br><table>";
-echo '<form action="'.$PHP_SELF.'" method="POST" '.($_SESSION['player']->getNoobLevel() > 0 ? ' onSubmit="if(this.type.value==0) return confirm(\'Wenn Sie Krieg erklären, dann verlieren sie Ihren Neulingsschutz!\')"' : '').'>';
+echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST" '.($_SESSION['player']->getNoobLevel() > 0 ? ' onSubmit="if(this.type.value==0) return confirm(\'Wenn Sie Krieg erklären, dann verlieren sie Ihren Neulingsschutz!\')"' : '').'>';
 echo '<tr class="tblhead"><td colspan="4">Neue diplomatische Beziehung</td></tr>';
 echo '<tr class="tblbody"><td>Spielername</td>';
 echo "<td><input type='text' name='playername' value='".$name."' NAOsize='12'></td>";

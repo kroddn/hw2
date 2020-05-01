@@ -386,7 +386,7 @@ if($_GET['setup']) {
 		echo "Lasst eurem Zeigeger&auml;t daher freien Lauf und aktiviert mit Ihm die nachstehende Schaltfl&auml;che!<br />\n";
 		echo "</td></tr>\n";
 		echo "<tr><td colspan=\"4\" class=\"tblhead\" style=\"text-align:center;\">\n";
-		echo "<form method=\"post\" action=\"".$PHP_SELF."\">\n";
+		echo "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">\n";
 		echo "<br /><input type=\"submit\" style=\"font-weight:bold;\" name=\"setupforum\" value=\"MyLord ".$_SESSION['player']->name."! Klickt hier um das Forum einzurichten >>\" />\n";
 		echo "</form>\n";
 		echo "</td></tr>\n";
@@ -399,24 +399,24 @@ if($_GET['setup']) {
 		while($data2=mysqli_fetch_assoc($res2)) {
 			echo "<tr><td class=\"tblbody\" width=\"250\">\n";
 			if($data2['forum_status']==1)
-				echo $data2['forum_name']."</td><td class=\"tblbody\" width=\"100\"><a href=\"".$PHP_SELF."?unlockforum=".$data2['forum_id']."\">entsperren</a></td><td class=\"tblbody\" width=\"100\">";
+				echo $data2['forum_name']."</td><td class=\"tblbody\" width=\"100\"><a href=\"".$_SERVER['PHP_SELF']."?unlockforum=".$data2['forum_id']."\">entsperren</a></td><td class=\"tblbody\" width=\"100\">";
 			else
-				echo $data2['forum_name']."</td><td class=\"tblbody\" width=\"100\"><a href=\"".$PHP_SELF."?lockforum=".$data2['forum_id']."\">sperren</a></td><td class=\"tblbody\" width=\"100\">";
+				echo $data2['forum_name']."</td><td class=\"tblbody\" width=\"100\"><a href=\"".$_SERVER['PHP_SELF']."?lockforum=".$data2['forum_id']."\">sperren</a></td><td class=\"tblbody\" width=\"100\">";
 
 			if($data2['forum_status']==2)
-        echo "<a href=\"".$PHP_SELF."?unprivforum=".$data2['forum_id']."\">F&uuml;r alle Member</a></td><td class=\"tblbody\" width=\"100\">";
+        echo "<a href=\"".$_SERVER['PHP_SELF']."?unprivforum=".$data2['forum_id']."\">F&uuml;r alle Member</a></td><td class=\"tblbody\" width=\"100\">";
 			else
-				echo "<a href=\"".$PHP_SELF."?privforum=".$data2['forum_id']."\">Ministerforum</a></td><td class=\"tblbody\" width=\"100\">";
+				echo "<a href=\"".$_SERVER['PHP_SELF']."?privforum=".$data2['forum_id']."\">Ministerforum</a></td><td class=\"tblbody\" width=\"100\">";
 
-			echo "<a href=\"".$PHP_SELF."?deleteqry=".$data2['forum_id']."\">l&ouml;schen</a></td>";
-			echo "<td class=\"tblbody\" width=\"100\"><a href=\"".$PHP_SELF."?editforum=".$data2['forum_id']."\">bearbeiten</a></td></tr>\n";
+			echo "<a href=\"".$_SERVER['PHP_SELF']."?deleteqry=".$data2['forum_id']."\">l&ouml;schen</a></td>";
+			echo "<td class=\"tblbody\" width=\"100\"><a href=\"".$_SERVER['PHP_SELF']."?editforum=".$data2['forum_id']."\">bearbeiten</a></td></tr>\n";
 		}
 		echo "<tr><td class=\"tblhead\" colspan=\"5\">";
-		echo "<a href=\"".$PHP_SELF."?setmod=true\"><b>Moderatoren verwalten</b></a>";
+		echo "<a href=\"".$_SERVER['PHP_SELF']."?setmod=true\"><b>Moderatoren verwalten</b></a>";
 		echo "</td></tr>";
 		echo "<tr><td class=\"tblhead\" colspan=\"5\"><b>Forum anlegen</b></td></tr>";
 		echo "<tr><td class=\"tblbody\" colspan=\"5\" style=\"text-align:center;\">\n";
-		echo "<form method=\"post\" action=\"".$PHP_SELF."\">";
+		echo "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
 		echo "<input type=\"text\" style=\"width:550px;\" name=\"fname\" value=\"Forentitel\" /><br />";
 		echo "<textarea name=\"fdesc\"style=\"width:550px; heigth:200px;\" rows=\"5\" />Optionale Beschreibung</textarea><br />";
 		echo "<input type=\"submit\" value=\"Forum anlegen\" />";
@@ -431,7 +431,7 @@ if($_GET['setup']) {
 if($_GET['deleteqry']) {
 	echo "Wollen Sie dieses Forum <b>unwideruflich</b> l&ouml;schen?<br /><br />";
 	echo "<a href=\"javascript:history.back(1)\">Nein</a> - ";
-	echo "<a href=\"".$PHP_SELF."?deleteforum=".$_GET['deleteqry']."\">Ja</a><br />";
+	echo "<a href=\"".$_SERVER['PHP_SELF']."?deleteforum=".$_GET['deleteqry']."\">Ja</a><br />";
 }
 if($_GET['deleteforum']) {
 	checkLeaderRights();
@@ -447,7 +447,7 @@ if($_GET['deleteforum']) {
 if($_GET['makemod']) {
 	checkLeaderRights();
 	mysqli_query($GLOBALS['con'], "INSERT INTO clanf_user_group (group_id,user_id,user_pending) VALUES ('3','".mysqli_escape_string($GLOBALS['con'], $_GET['makemod'])."','0')");
-	header_redirect("".$PHP_SELF."?setmod=true");
+	header_redirect("".$_SERVER['PHP_SELF']."?setmod=true");
 }
 if($_GET['removemod']) {
 	checkLeaderRights();
@@ -455,7 +455,7 @@ if($_GET['removemod']) {
 	$data1=mysqli_fetch_assoc($res1);
 	if($data1['clanstatus'] != 63) {
 		mysqli_query($GLOBALS['con'], "DELETE FROM clanf_user_group WHERE group_id='3' AND user_id='".mysqli_escape_string($GLOBALS['con'], $_GET['removemod'])."'");
-		header_redirect("".$PHP_SELF."?setmod=true");
+		header_redirect("".$_SERVER['PHP_SELF']."?setmod=true");
 	} else {
 		echo "<b class=\"error\">Ordensführern können die Moderatorenrechte nicht entzogen werden!</b><br />";
 	}
@@ -469,9 +469,9 @@ if($_GET['setmod']) {
 	while($data1=mysqli_fetch_assoc($res1)) {
 		$res2=mysqli_query($GLOBALS['con'], "SELECT user_id FROM clanf_user_group WHERE group_id = '3' AND user_id='".$data1['id']."'");
 		if(mysqli_num_rows($res2) > 0)
-			echo "<tr><td class=\"tblhead\" width=\"300\"><b>".$data1['name']."</b></td><td class=\"tblbody\"><a href=\"".$PHP_SELF."?removemod=".$data1['id']."\">Moderatorenrechte entziehen</a></td></tr>";
+			echo "<tr><td class=\"tblhead\" width=\"300\"><b>".$data1['name']."</b></td><td class=\"tblbody\"><a href=\"".$_SERVER['PHP_SELF']."?removemod=".$data1['id']."\">Moderatorenrechte entziehen</a></td></tr>";
 		else
-			echo "<tr><td class=\"tblhead\" width=\"300\">".$data1['name']."<td class=\"tblbody\"><a href=\"".$PHP_SELF."?makemod=".$data1['id']."\">Moderatorenrechte vergeben</a></td></tr>";
+			echo "<tr><td class=\"tblhead\" width=\"300\">".$data1['name']."<td class=\"tblbody\"><a href=\"".$_SERVER['PHP_SELF']."?makemod=".$data1['id']."\">Moderatorenrechte vergeben</a></td></tr>";
 	}
 	echo "<tr><td colspan=\"2\" class=\"tblbody\" height=\"30\" valign=\"middle\"><a href=\"javascript:history.back(1)\">zur&uuml;ck</a></td></tr>\n";
 	echo "</table>\n";
@@ -493,7 +493,7 @@ if($_GET['editforum']) {
 	echo "<tr><td colspan=\"4\" class=\"tblhead\" height=\"30\" valign=\"middle\"><b>Internes Forum Administrieren</b></td></tr>";
 	echo "<tr><td class=\"tblhead\" colspan=\"4\"><b>Forum bearbeiten</b></td></tr>";
 	echo "<tr><td class=\"tblbody\" colspan=\"4\" style=\"text-align:center;\">\n";
-	echo "<form method=\"post\" action=\"".$PHP_SELF."\">";
+	echo "<form method=\"post\" action=\"".$_SERVER['PHP_SELF']."\">";
 	echo "<input type=\"text\" style=\"width:550px;\" name=\"edtname\" value=\"".$data2['forum_name']."\" /><br />";
 	echo "<textarea name=\"edtdesc\"style=\"width:550px; heigth:200px;\" rows=\"5\" />".$data2['forum_desc']."</textarea><br />";
 	echo "</td></tr>";
@@ -662,7 +662,7 @@ if( ( $total_categories = count($category_rows) ) )
 				ORDER BY f.cat_id, f.forum_order";
 
 	if($_SESSION['player']->clanstatus == 63) {
-		echo "<br /><div style=\"width:100%; padding:4px; border: 1px solid red; text-align:center;\"><a href=\"".$PHP_SELF."?setup=".$_SESSION['player']->clan."\">Forum Administrieren</a></div><br />";
+		echo "<br /><div style=\"width:100%; padding:4px; border: 1px solid red; text-align:center;\"><a href=\"".$_SERVER['PHP_SELF']."?setup=".$_SESSION['player']->clan."\">Forum Administrieren</a></div><br />";
 	}
 
 	if ( !($result = $db->sql_query($sql)) )

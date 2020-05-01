@@ -80,7 +80,7 @@ der entsprechenden Schaltfläche.
   echo $inf['text'];
   echo "</div>";
 ?>  
-  <form method="GET" action="<? echo $PHP_SELF;?>">
+  <form method="GET" action="<? echo $_SERVER['PHP_SELF']; ?>">
   <input type="hidden" name="infid" value="<? echo $inf['infid']; ?>">
   <input type="checkbox" name="confirm" value="1"> <input type="submit" name="accept_inform" value=" Gelesen ">
   </form>

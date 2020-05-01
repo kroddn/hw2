@@ -168,7 +168,7 @@ if($help) { include("includes/sms_help.html"); die("</body></html>"); } ?>
 <br>
 <div align="center" style="width: 600px;">
 <h1>Holy-Wars 2 SMS-System</h1>
-<form name="smsform" id="theForm" target="_self" action="<? echo $PHP_SELF; ?>" method="POST" 
+<form name="smsform" id="theForm" target="_self" action="<? echo $_SERVER['PHP_SELF'];  ?>" method="POST" 
 onSubmit="document.getElementById('waitmessage').style.visibility='visible';">
  <table cellspacing="1" cellpadding="0" border="0" width="500">
 <? 

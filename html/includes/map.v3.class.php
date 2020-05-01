@@ -99,7 +99,7 @@ class MapVersion3 {
 		      'hright'  => 'Halber Sektor rechts',
 		      'hup'     => 'Halber Sektor oben',
 		      'hdown'   => 'Halber Sektor unten' );
-    return ( '<a href="'.$PHP_SELF.$tr_url[$direction].'"'.
+    return ( '<a href="'.$_SERVER['PHP_SELF'].$tr_url[$direction].'"'.
 	     ' onmouseover = "this.style.backgroundColor=\'white\';"'.
 	     ' onmouseout  = "this.style.backgroundColor=\'\';"'.
 	     ' style="width:100%; display:block; padding:1px; padding-left:4px;">'.$tr_desc[$direction].'</a>'."\n" );

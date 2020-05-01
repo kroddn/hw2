@@ -40,10 +40,10 @@ if($player->isNamehunter()) {
 	$zitat=do_mysqli_query("SELECT zitate.id as id,active,player.name as player,text,admin FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active != '1' ORDER BY id DESC");
 	while($get_zitat=mysqli_fetch_assoc($zitat)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
-		echo "<td width=\"16\"><a href=\"".$PHP_SELF."?delete=".$get_zitat['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
+		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_zitat['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
 		echo "<td width=\"30\">".$get_zitat['player']."</td>";
 		echo "<td>".nl2br($get_zitat['text'])."</td>";
-		echo "<td><a href=\"".$PHP_SELF."?activate=".$get_zitat['id']."\">aktiviern</a></td>\n";
+		echo "<td><a href=\"".$_SERVER['PHP_SELF']."?activate=".$get_zitat['id']."\">aktiviern</a></td>\n";
 		echo "</tr>";
 	}
 	echo "</table>";
@@ -62,7 +62,7 @@ if($player->isNamehunter()) {
 		$res=do_mysqli_query("SELECT name FROM player WHERE id='".$get_zitat['admin']."'");
 		$admin=mysqli_fetch_assoc($res);
 		echo "<tr class=\"tblbody\" width=\"100%\">";
-		echo "<td width=\"16\"><a href=\"".$PHP_SELF."?delete=".$get_zitat['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
+		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_zitat['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
 		echo "<td width=\"30\">".$get_zitat['player']."</td>";
 		echo "<td>".nl2br($get_zitat['text'])."</td>";
 		echo "<td>".$admin['name']."</td>\n";

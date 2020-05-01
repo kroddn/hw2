@@ -1033,7 +1033,7 @@ function stat_building_ordered($id, $sort) {
   }
 
   if($count > 0) {
-    usort($build, bld_sortier_funktion);
+    usort($build, 'bld_sortier_funktion');
 
     $i=0;
     foreach( $build as $b){

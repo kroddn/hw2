@@ -82,7 +82,7 @@ function message_read($id)
 	echo '<tr height="20" class="tblhead"><td></td><td><a>Von:</a></td><td><a>Datum:</a></td><td><a>Betreff:</a></td><td><a>Nachricht:</a></td></tr>';
 
 	// Start Form von Checkboxen + Manage
-	echo '<form name="set_mess_manage" action="'.$PHP_SELF.'" method="post">';
+	echo '<form name="set_mess_manage" action="'.$_SERVER['PHP_SELF'].'" method="post">';
 	
 	// Den Inhalt jeder Spalte der Tabelle anzeigen
 	$datensaetze = do_mysqli_query($sql. " LIMIT "  . $start . ", " . $daten_pro_seite);
@@ -272,7 +272,7 @@ function message_write($id)
 {
 	if($_GET['sender']) $recipient_name = $_GET['sender'];
 	echo "<table>";
-	echo "<form method='POST' action=".$PHP_SELF.">";
+	echo "<form method='POST' action=".$_SERVER['PHP_SELF'].">";
 		echo '<tr class="tblbody">';
 			echo '<td class="tblbody"><label>Empf&auml;nger: </label>';
 			echo '<td class="tblbody"><textarea name="recipient" maxlength="15" cols="45" rows="1">'.$recipient_name.'</textarea></td></tr>';

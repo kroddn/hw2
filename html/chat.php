@@ -36,7 +36,7 @@ function nickvalid() {
    var nick = document.loginform.Nickname.value;
    if(nick.match(/^[A-Za-z0-9\[\]\{\}^\\\|\_\-`]{1,32}$/))
       return true;
-   alert('Bitte einen gültigen Nicknamen eingeben!');
+   alert('Bitte einen gÃ¼ltigen Nicknamen eingeben!');
    document.loginform.Nickname.value = nick.replace(/[^A-Za-z0-9\[\]\{\}^\\\|\_\-`]/g, '');
    return false;
 }
@@ -57,11 +57,11 @@ h2 {  font-size: 14px; color: 202020; }
 
 <body marginwidth="0" marginheight="0" topmargin="2" leftmargin="2" background="<? echo $imagepath; ?>/bg.gif">
 <h1>Einrichtung eines Clients (Tutorial)</h1>
-Für die Einrichtung eines Chat-Programms haben wir eine Hilfe zusammengestellt: 
+FÃ¼r die Einrichtung eines Chat-Programms haben wir eine Hilfe zusammengestellt: 
 <a href="http://www.holy-wars2.de/wiki/index.php/IRC-Anleitung">Hier klicken</a>.
 <p>
 Falls Du bereits einen IRC-Client auf Deinem PC installiert hast 
-(z.B. XChat oder MIRC), dann kannst Du zum Holy-Wars 2 Chat über
+(z.B. XChat oder MIRC), dann kannst Du zum Holy-Wars 2 Chat Ã¼ber
 den Server <b>irc.holy-wars2.de</b> und <b>Port 6666</b> verbinden. 
 In den Channel von HW2 gelangst Du dann mit dem Befehl <b>/j #hw2</b>.
 <h1>Ohne eigenen Client</h1>
@@ -93,7 +93,7 @@ In den Channel von HW2 gelangst Du dann mit dem Befehl <b>/j #hw2</b>.
 	<input type="hidden" name="Password" value="">
 	<input type="hidden" name="Format" value="mirc">
     <p>
-    Der Chat wird in einem neuen Fenster geöffnet.
+    Der Chat wird in einem neuen Fenster geÃ¶ffnet.
   </td>
  </tr>
  <tr class="tblbody">
@@ -111,7 +111,7 @@ Java kann man <a href="http://java.com/de/download/" target="_blank">hier</a> ru
  </tr>
  <tr class="tblbody">
     <td>Falls der Java-basierte IRC nicht funktioniert, haben wir 
- noch einen weiteren Chat zur Verfügung:<br> 
+ noch einen weiteren Chat zur VerfÃ¼gung:<br> 
  <a href="http://www.holy-wars2.de/cgiirc" target="_blank">Hier klicken</a>.
   </td>
  </tr>
@@ -129,14 +129,14 @@ dass der / zu Beginn eines Befehls elementar wichtig ist. <p>
 ist. Dazu muss man sich aber auch jedesmal identifizieren. Das geht
  so:<br>
 <code>/ns identify PASSWORT</code><br>
-Hierbei den / nicht vergessen, sonst verrät man das Passwort!
+Hierbei den / nicht vergessen, sonst verrÃ¤t man das Passwort!
 <!-- <li>Man kann auch einstellen, welche Channels beim Identifizieren
  betreten werden sollen:<br>
 <code>/ns set ajoin #channel1, #channel2<br>
 So listet man diese Channels wieder auf:<br>
 <code>/ns set ajoin list<br>
 -->
-<li>Weitere Hilfe zu möglichen Befehlen:<br>
+<li>Weitere Hilfe zu mÃ¶glichen Befehlen:<br>
 <code>/ns help</code>
 </ul>
 <p>
@@ -146,7 +146,7 @@ So listet man diese Channels wieder auf:<br>
 <p>
 <h2>Premium-Lite per SMS?</h2>
 <? 
-include("includes/premium_sms.php"); 
+//include("includes/premium_sms.php"); Not found
 end_page();
 ?>
 

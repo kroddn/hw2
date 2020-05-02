@@ -252,7 +252,6 @@ void completeUnits(void)
   MYSQL_ROW row;
 
   con(&hwha);
-
   send_query(&hwha, "SELECT city.name, unit.name, cityunit_ordered.time, cityunit_ordered.count, cityunit_ordered.city, city.owner, cityunit_ordered.unit, uid FROM unit, city, cityunit_ordered WHERE city.id=cityunit_ordered.city AND unit.id=cityunit_ordered.unit AND cityunit_ordered.time<=%d ORDER BY time", (int)time(NULL));
 
   res = mysql_use_result(&hwha);
@@ -286,12 +285,13 @@ void completeUnits(void)
         }
       send_query(&hwha2, "INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',%s,%s,'Ausbildung: %s (%s)','Eure Truppen in %s wurden fertig ausgebildet:\n\n<b>%s</b>\nAnzahl: %s',4)", row[5], row[2], row[1], row[3], row[0], row[1], row[3]);
       send_query(&hwha2, "UPDATE player SET cc_messages=1 WHERE id=%s", row[5]);
+
+      mysql_close(&hwha2);
     }
 
   if (res)
     mysql_free_result(res);
 
-  mysql_close(&hwha2);
   mysql_close(&hwha);
 
 }

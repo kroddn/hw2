@@ -132,55 +132,57 @@ class Library {
         for($j=0;$j<sizeof($this->subcategory[$i]);++$j) {
           if ($this->subexpand[$i][$j]==true) {
             echo "<tr><td class='nopadding'></td><td class='nopadding'></td><td class='nopadding'><a href='".$LINK."close=".$i."&closesub=".$j."'><img border='0' src='".$imagepath."/library1.gif'></a></td><td colspan='2' width='100%'><a href='".$LINK."close=".$i."&closesub=".$j."'><b>".$this->subcategory[$i][$j]."</b></a></td></tr>\n";
-            for ($k=0;$k<sizeof($this->element[$i][$j]);++$k) {
-              $image_entry = $this->element[$i][$j][$k][2];
+						if ($this->element[$i][$j]) {
+							for ($k=0;$k<sizeof($this->element[$i][$j]);++$k) {
+								$image_entry = $this->element[$i][$j][$k][2];
 
-              // Einträge ausgeben
-              echo "<!-- Start Entry -->\n<tr><td class='nopadding'></td><td class='nopadding'></td><td class='nopadding'></td>";
-			  if(!$image_entry)
-			  {
-                echo "<td class='nopadding'><img src='".$imagepath."/library3.gif'></td>";
-                echo "<td style='padding: 0px; ' width='100%' valign='middle' nowrap>";
-			  }
-			  else
-			  {
-			    echo "<td colspan='2' style='padding: 0px; ' width='100%' valign='middle' nowrap>";
-			  }
-			  
-			  echo "<a href='".$LINK."s1=".$i."&s2=".$j."&s3=".$k."'";
-              
-              
-              // Blau markieren, wenn ein Eintrag angeklickt wurde
-              if($this->topic != null && $this->element[$i][$j][$k][0] == $this->topic) {
-                $this->active[0] = $i;
-                $this->active[1] = $j;
-                $this->active[2] = $k;
-                $mark = "blue";
-              }
-              // Rot markieren, wenn er durch Direktlink angezeigt wurde
-              else if(!isset($_REQUEST['building_id']) && !isset($_REQUEST['unit_id']) && 
-                      $this->topic == null && $i == $this->active[0] && $j == $this->active[1] && $k == $this->active[2] ) 
-              {
-                $mark = "red";
-              }
-              else {
-                $mark = null;
-              }
-              if($mark) echo " style='color: $mark; font-weight: normal; '";
+								// Einträge ausgeben
+								echo "<!-- Start Entry -->\n<tr><td class='nopadding'></td><td class='nopadding'></td><td class='nopadding'></td>";
+					if(!$image_entry)
+					{
+									echo "<td class='nopadding'><img src='".$imagepath."/library3.gif'></td>";
+									echo "<td style='padding: 0px; ' width='100%' valign='middle' nowrap>";
+					}
+					else
+					{
+						echo "<td colspan='2' style='padding: 0px; ' width='100%' valign='middle' nowrap>";
+					}
+					
+					echo "<a href='".$LINK."s1=".$i."&s2=".$j."&s3=".$k."'";
+								
+								
+								// Blau markieren, wenn ein Eintrag angeklickt wurde
+								if($this->topic != null && $this->element[$i][$j][$k][0] == $this->topic) {
+									$this->active[0] = $i;
+									$this->active[1] = $j;
+									$this->active[2] = $k;
+									$mark = "blue";
+								}
+								// Rot markieren, wenn er durch Direktlink angezeigt wurde
+								else if(!isset($_REQUEST['building_id']) && !isset($_REQUEST['unit_id']) && 
+												$this->topic == null && $i == $this->active[0] && $j == $this->active[1] && $k == $this->active[2] ) 
+								{
+									$mark = "red";
+								}
+								else {
+									$mark = null;
+								}
+								if($mark) echo " style='color: $mark; font-weight: normal; '";
 
-              // <a tag schließen
-              echo ">";
-              
-			  // Mini-Icon einblenden
-              if($image_entry)
-              {
-                printf('<img border="0" src="%s"> ', $image_entry); 
-              }
-              
-              // Name der Forschung
-              echo $this->element[$i][$j][$k][0];
-              echo "</a></td></tr>\n";
-            }
+								// <a tag schließen
+								echo ">";
+								
+					// Mini-Icon einblenden
+								if($image_entry)
+								{
+									printf('<img border="0" src="%s"> ', $image_entry); 
+								}
+								
+								// Name der Forschung
+								echo $this->element[$i][$j][$k][0];
+								echo "</a></td></tr>\n";
+							}
+						}
           }
           else {
             echo "<tr><td class='nopadding'></td><td class='nopadding'></td><td class='nopadding'><a href='".$LINK."open=".$i."&opensub=".$j."'><img border='0' src='".$imagepath."/library2.gif'></a></td><td colspan='2' width='100%'><a href='".$LINK."open=".$i."&opensub=".$j."'><b>".$this->subcategory[$i][$j]."</b></a></td></tr>\n";
@@ -194,7 +196,7 @@ class Library {
 	
   function opensub($cat,$subcat) {
     $this->open($cat);
-    if (($subcat<sizeof($this->category[$cat])) || ($cat>-1) || ($subcat>-1)) $this->subexpand[$cat][$subcat]=true;
+    if ((gettype($this->category[$cat]) == "array" && $subcat<sizeof($this->category[$cat])) || ($cat>-1) || ($subcat>-1)) $this->subexpand[$cat][$subcat]=true;
   }
   function closesub($cat,$subcat) {
     if (($subcat<sizeof($this->category[$cat])) || ($cat>-1) || ($subcat>-1)) $this->subexpand[$cat][$subcat]=false;

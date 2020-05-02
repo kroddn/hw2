@@ -1336,7 +1336,7 @@ class Cities {
       $dataB = mysqli_fetch_assoc($resB);
       $wt = computeWalktime($x, $y, $dataB['x'], $dataB['y'], $speed, $unitcount);
 
-      do_mysqli_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata,tactic) VALUES ( '".$this->player."', '".$from."', '".$data1['id']."', '".time()."', '". (time() + $wt)."', 'move', 'NULL', '".$tactic."')");
+      do_mysqli_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata,tactic) VALUES ( '".$this->player."', '".$from."', '".$data1['id']."', '".time()."', '". (time() + $wt)."', 'move', 0, '".$tactic."')");
       $aid = mysqli_insert_id($GLOBALS['con']);
       $k = 1;
       foreach ($u as $key => $value) {
@@ -1432,7 +1432,7 @@ class Cities {
     $dataB = mysqli_fetch_assoc($resB);
     $wt = computeWalktime($x, $y, $dataB['x'], $dataB['y'], $speed, $unitcount);
 
-    do_mysqli_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata,tactic) VALUES ( '".$this->player."', '".$from."', '".$data1['id']."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + ".$wt.", '".$type."', 'NULL', '".$tactic."')");
+    do_mysqli_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata,tactic) VALUES ( '".$this->player."', '".$from."', '".$data1['id']."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + ".$wt.", '".$type."', 0, '".$tactic."')");
     $aid = mysqli_insert_id($GLOBALS['con']);
 
 
@@ -1460,7 +1460,7 @@ class Cities {
     }
 
     //time equal starttime from army
-    do_mysqli_query("INSERT INTO log_army (id,owner,start,end,time,endtime,mission,missiondata,tactic) VALUES (".$aid.",'".$this->player."', '".$from."', '".$data1['id']."', '".time()."', '". (time() + $wt)."', '".$type."', 'NULL', '".$tactic."')");
+    do_mysqli_query("INSERT INTO log_army (id,owner,start,end,time,endtime,mission,missiondata,tactic) VALUES (".$aid.",'".$this->player."', '".$from."', '".$data1['id']."', '".time()."', '". (time() + $wt)."', '".$type."', 0, '".$tactic."')");
     $k = 1;
     foreach ($u as $key => $value) {
       if ($cu[$k][0] == $key && $value > 0) {

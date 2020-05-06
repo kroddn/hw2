@@ -44,7 +44,7 @@ if (!isset($library)) {
 
 
 // Bei Info wird nicht active Page gesetzt, weil das
-// stören würde
+// stÃ¶ren wÃ¼rde
 //if (isset($player) && $player ) {
 //  $player->setActivePage(basename(__FILE__));
 //}

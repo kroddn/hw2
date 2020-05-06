@@ -77,37 +77,33 @@ class Library {
     $count=0;
     $res1=do_mysqli_query("SELECT id,topic,category FROM library ORDER BY category,topic");
     while($data1=mysqli_fetch_assoc($res1)) {
-			if ($this->element[0][$data1['category']]) {
-				$temp=sizeof($this->element[0][$data1['category']]);
-				$this->element[0][$data1['category']][$temp][0]=$data1['topic'];
-				$this->element[0][$data1['category']][$temp][1]=$data1['id'];
-			}
+			$elementData = $this->element[0][$data1['category']];
+      $temp=is_array($elementData) ? sizeof($elementData) : 0;
+      $this->element[0][$data1['category']][$temp][0]=$data1['topic'];
+      $this->element[0][$data1['category']][$temp][1]=$data1['id'];
     }
     $res2=do_mysqli_query("SELECT id,name,category FROM building ORDER BY category,id");
     while($data2=mysqli_fetch_assoc($res2)) {
-			if ($this->element[1][$data2['category']]) {
-				$temp=sizeof($this->element[1][$data2['category']]);
-				$this->element[1][$data2['category']][$temp][0]=$data2['name'];
-				$this->element[1][$data2['category']][$temp][1]=$data2['id'];
-			}
+			$elementData = $this->element[1][$data2['category']];
+      $temp=is_array($elementData) ? sizeof($elementData) : 0;
+      $this->element[1][$data2['category']][$temp][0]=$data2['name'];
+      $this->element[1][$data2['category']][$temp][1]=$data2['id'];
     }
     $res3=do_mysqli_query("SELECT id,name,religion AS religion,level,type FROM unit ORDER BY religion,id");
     while($data3=mysqli_fetch_assoc($res3)) {
-			if ($this->element[2][$data3['religion']-1]) {
-				$temp=sizeof($this->element[2][$data3['religion']-1]);
-				$this->element[2][$data3['religion']-1][$temp][0]=$data3['name'];
-				$this->element[2][$data3['religion']-1][$temp][1]=$data3['id'];
-				$img = $GLOBALS['imagepath']."/".getUnitImage($data3);
-				$this->element[2][$data3['religion']-1][$temp][2]=$img;
-			}
+			$elementData = $this->element[2][$data3['religion']-1];
+      $temp=is_array($elementData) ? sizeof($elementData) : 0;
+      $this->element[2][$data3['religion']-1][$temp][0]=$data3['name'];
+      $this->element[2][$data3['religion']-1][$temp][1]=$data3['id'];
+      $img = $GLOBALS['imagepath']."/".getUnitImage($data3);
+      $this->element[2][$data3['religion']-1][$temp][2]=$img;
     }
     $res4=do_mysqli_query("SELECT id,name,category FROM research ORDER BY category,typ,typlevel");
     while($data4=mysqli_fetch_assoc($res4)) {
-			if ($this->element[3][$data4['category']]) {
-				$temp=sizeof($this->element[3][$data4['category']]);
-				$this->element[3][$data4['category']][$temp][0]=$data4['name'];
-				$this->element[3][$data4['category']][$temp][1]=$data4['id'];
-			}
+			$elementData = $this->element[3][$data4['category']];
+			$temp=is_array($elementData) ? sizeof($elementData) : 0;
+      $this->element[3][$data4['category']][$temp][0]=$data4['name'];
+      $this->element[3][$data4['category']][$temp][1]=$data4['id'];
     }
   }
 	

@@ -41,16 +41,16 @@ if (!defined('GFX_PATH')) define('GFX_PATH', 'images/ingame');
 if (!defined('GFX_PATH_LOCAL')) define('GFX_PATH_LOCAL', 'images/ingame');
 if (!defined('GFX_VERSION')) define('GFX_VERSION', '3.20');
 
-// Pfad fuer die Avatare ---- Ka wof¸r das ist ....
+// Pfad fuer die Avatare ---- Ka wof√ºr das ist ....
 if (!defined('AVATAR_DIR')) define('AVATAR_DIR', '/home/hw2_speed/avatars/');
 
-$messagetypes = array("Spieler","Orden/Diplomatie","Handel","Bau","Milit‰r","RolePlay", 9 => "Team-Nachrichten", 10 => "Gesendete Nachrichten");
+$messagetypes = array("Spieler","Orden/Diplomatie","Handel","Bau","Milit√§r","RolePlay", 9 => "Team-Nachrichten", 10 => "Gesendete Nachrichten");
 $messagecolors = array("B79F87","B19695","9EB96E","D1B96E","D1866E","f7c8f2",9 => "FF8000", 10 => "3F8D8D");
-$strategycategories= array("Landkarte","St‰dte","Spieler","Bedienung","Diplomatie","Fragen und Antworten (FAQ)", "Krieg und Kampf");
-$buildingcategories = array("Ressourcengewinnung","Verarbeitung und Lagerung","ˆffentliche Einrichtungen","Ausbildung und Waffenproduktion","Stadtverteidigung und -verwaltung","Sondergeb‰ude", "Hauptstadtgeb&auml;ude");
-$researchcategories = array("Reichsverwaltung","Technik","÷ffentliche Einrichtungen","Milit‰r","Stadtverteidigung und -verwaltung");
+$strategycategories= array("Landkarte","St√§dte","Spieler","Bedienung","Diplomatie","Fragen und Antworten (FAQ)", "Krieg und Kampf");
+$buildingcategories = array("Ressourcengewinnung","Verarbeitung und Lagerung","√ñffentliche Einrichtungen","Ausbildung und Waffenproduktion","Stadtverteidigung und -verwaltung","Sondergeb√§ude", "Hauptstadtgeb√§ude");
+$researchcategories = array("Reichsverwaltung","Technik","√ñffentliche Einrichtungen","Milit√§r","Stadtverteidigung und -verwaltung");
 $religions = array("Christentum","Islam");
-$unittypes = array("Nahk‰mpfer","Fernk‰mpfer","Kavallerie");
+$unittypes = array("Nahk√§mpfer","Fernk√§mpfer","Kavallerie");
 $speedtypes=array("sehr langsam","langsam","mittel","schnell","sehr schnell");
 if (!defined('SPEED_BOTE')) define('SPEED_BOTE', 5);
 if (!defined('ADVANCED_TOP')) define('ADVANCED_TOP', 1);

@@ -16,7 +16,7 @@ SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur f¸r Tabelle `unit`
+-- Tabellenstruktur f√ºr Tabelle `unit`
 --
 
 CREATE TABLE IF NOT EXISTS `unit` (
@@ -45,32 +45,32 @@ CREATE TABLE IF NOT EXISTS `unit` (
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1 COLLATE=latin1_german2_ci;
 
 --
--- Daten f¸r Tabelle `unit`
+-- Daten f√ºr Tabelle `unit`
 --
 
 INSERT INTO `unit` (`id`, `name`, `description`, `type`, `religion`, `req_research`, `level`, `damage`, `bonus1`, `bonus2`, `bonus3`, `life`, `speed`, `gold`, `shortrange`, `longrange`, `armor`, `horse`, `time`, `cost`, `points`) VALUES
-(1, 'Milizen', 'sehr schwache Kurzwaffeninfanteristen (Nahk‰mpfer)', 1, 1, 1, 0, 5, 0, 0, 0, 24, 3, 10, 0, 0, 0, 0, 3600, 0.2, 0),
-(2, 'Speertr‰ger', 'schwache Stangenwaffeninfanteristen (Nahk‰mpfer)', 1, 1, 11, 1, 11, 0, 0, 4, 55, 3, 15, 1, 0, 1, 0, 7200, 0.3, 4),
-(3, 'Bogensch¸tzen', 'schwache Fernk‰mpfer', 2, 1, 12, 1, 9, 7, 0, 0, 45, 3, 20, 0, 1, 0, 0, 7200, 0.3, 4),
-(4, 'Berittene Hauptm‰nner', 'mittelstarke, sehr schnelle Kavalleristen', 3, 1, 13, 1, 10, 0, 5, 0, 59, 5, 25, 1, 0, 1, 1, 7200, 0.3, 4),
-(5, 'Pikeniere', 'mittelstarke Stangenwaffeninfanteristen (Nahk‰mpfer)', 1, 1, 94, 2, 13, 0, 0, 8, 75, 2, 30, 1, 0, 1, 0, 14400, 0.4, 6),
-(6, 'Armbrustsch¸tzen', 'mittelstarke Fernk‰mpfer', 2, 1, 98, 2, 14, 12, 0, 0, 75, 2, 40, 0, 1, 1, 0, 14400, 0.4, 6),
+(1, 'Milizen', 'sehr schwache Kurzwaffeninfanteristen (Nahk√§mpfer)', 1, 1, 1, 0, 5, 0, 0, 0, 24, 3, 10, 0, 0, 0, 0, 3600, 0.2, 0),
+(2, 'Speertr√§ger', 'schwache Stangenwaffeninfanteristen (Nahk√§mpfer)', 1, 1, 11, 1, 11, 0, 0, 4, 55, 3, 15, 1, 0, 1, 0, 7200, 0.3, 4),
+(3, 'Bogensch√ºtzen', 'schwache Fernk√§mpfer', 2, 1, 12, 1, 9, 7, 0, 0, 45, 3, 20, 0, 1, 0, 0, 7200, 0.3, 4),
+(4, 'Berittene Hauptm√§nner', 'mittelstarke, sehr schnelle Kavalleristen', 3, 1, 13, 1, 10, 0, 5, 0, 59, 5, 25, 1, 0, 1, 1, 7200, 0.3, 4),
+(5, 'Pikeniere', 'mittelstarke Stangenwaffeninfanteristen (Nahk√§mpfer)', 1, 1, 94, 2, 13, 0, 0, 8, 75, 2, 30, 1, 0, 1, 0, 14400, 0.4, 6),
+(6, 'Armbrustsch√ºtzen', 'mittelstarke Fernk√§mpfer', 2, 1, 98, 2, 14, 12, 0, 0, 75, 2, 40, 0, 1, 1, 0, 14400, 0.4, 6),
 (7, 'Feudalritter', 'starke, schnelle Kavalleristen', 3, 1, 104, 2, 13, 0, 8, 0, 81, 4, 50, 1, 0, 1, 1, 14400, 0.4, 6),
-(8, 'Panzerpikeniere', 'sehr starke aber sehr langsame Stangenwaffeninfanteristen (Nahk‰mpfer)', 1, 1, 95, 3, 15, 0, 0, 20, 120, 1, 70, 1, 0, 1, 0, 21600, 0.5, 10),
-(9, 'Arbalestensch¸tzen', 'sehr starke Fernk‰mpfer', 2, 1, 100, 3, 20, 12, 0, 0, 95, 2, 80, 0, 1, 1, 0, 21600, 0.5, 10),
-(10, 'Kˆnigliche Ritter', 'sehr starke, schnelle Kavalleristen', 3, 1, 105, 3, 20, 0, 15, 0, 115, 4, 100, 1, 0, 1, 1, 21600, 0.5, 10),
-(31, 'Milizen', 'sehr schwache Kurzwaffeninfanteristen (Nahk‰mpfer)', 1, 2, 1, 0, 6, 0, 0, 0, 19, 3, 10, 0, 0, 0, 0, 3600, 0.2, 0),
-(32, 'Abessinen', 'schwache Kurzwaffeninfanteristen (Nahk‰mpfer)', 1, 2, 11, 1, 11, 0, 0, 5, 50, 3, 15, 1, 0, 1, 0, 7200, 0.3, 4),
-(33, 'Turkmenen', 'schwache Fernk‰mpfer', 2, 2, 12, 1, 12, 6, 0, 0, 44, 3, 20, 0, 1, 0, 0, 7200, 0.3, 4),
+(8, 'Panzerpikeniere', 'sehr starke aber sehr langsame Stangenwaffeninfanteristen (Nahk√§mpfer)', 1, 1, 95, 3, 15, 0, 0, 20, 120, 1, 70, 1, 0, 1, 0, 21600, 0.5, 10),
+(9, 'Arbalestensch√ºtzen', 'sehr starke Fernk√§mpfer', 2, 1, 100, 3, 20, 12, 0, 0, 95, 2, 80, 0, 1, 1, 0, 21600, 0.5, 10),
+(10, 'K√∂nigliche Ritter', 'sehr starke, schnelle Kavalleristen', 3, 1, 105, 3, 20, 0, 15, 0, 115, 4, 100, 1, 0, 1, 1, 21600, 0.5, 10),
+(31, 'Milizen', 'sehr schwache Kurzwaffeninfanteristen (Nahk√§mpfer)', 1, 2, 1, 0, 6, 0, 0, 0, 19, 3, 10, 0, 0, 0, 0, 3600, 0.2, 0),
+(32, 'Abessinen', 'schwache Kurzwaffeninfanteristen (Nahk√§mpfer)', 1, 2, 11, 1, 11, 0, 0, 5, 50, 3, 15, 1, 0, 1, 0, 7200, 0.3, 4),
+(33, 'Turkmenen', 'schwache Fernk√§mpfer', 2, 2, 12, 1, 12, 6, 0, 0, 44, 3, 20, 0, 1, 0, 0, 7200, 0.3, 4),
 (34, 'Faris', 'mittelstarke, sehr schnelle Kavalleristen', 3, 2, 13, 1, 11, 0, 5, 0, 54, 5, 25, 1, 0, 1, 1, 7200, 0.3, 4),
-(35, 'Muwahid', 'mittelstarke Stangenwaffeninfanteristen (Nahk‰mpfer)', 1, 2, 94, 2, 16, 0, 0, 8, 70, 2, 30, 1, 0, 1, 0, 14400, 0.4, 6),
-(36, 'Janitscharen-Bogensch¸tzen', 'mittelstarke Fernk‰mpfer', 2, 2, 99, 2, 17, 9, 0, 0, 60, 2, 45, 0, 1, 1, 0, 14400, 0.4, 6),
+(35, 'Muwahid', 'mittelstarke Stangenwaffeninfanteristen (Nahk√§mpfer)', 1, 2, 94, 2, 16, 0, 0, 8, 70, 2, 30, 1, 0, 1, 0, 14400, 0.4, 6),
+(36, 'Janitscharen-Bogensch√ºtzen', 'mittelstarke Fernk√§mpfer', 2, 2, 99, 2, 17, 9, 0, 0, 60, 2, 45, 0, 1, 1, 0, 14400, 0.4, 6),
 (37, 'Ghulam', 'starke, schnelle Kavalleristen', 3, 2, 104, 2, 16, 0, 7, 0, 72, 4, 50, 1, 0, 1, 1, 14400, 0.4, 6),
-(38, 'Janitscharen-Infanterie', 'starke Kurzwaffeninfanteristen (Nahk‰mpfer)', 1, 2, 95, 3, 20, 0, 0, 13, 95, 2, 65, 1, 0, 1, 0, 21600, 0.5, 10),
-(39, 'Mameluken', 'sehr starke Fernk‰mpfer', 2, 2, 103, 3, 22, 18, 0, 0, 100, 2, 100, 0, 1, 1, 0, 21600, 0.5, 10),
+(38, 'Janitscharen-Infanterie', 'starke Kurzwaffeninfanteristen (Nahk√§mpfer)', 1, 2, 95, 3, 20, 0, 0, 13, 95, 2, 65, 1, 0, 1, 0, 21600, 0.5, 10),
+(39, 'Mameluken', 'sehr starke Fernk√§mpfer', 2, 2, 103, 3, 22, 18, 0, 0, 100, 2, 100, 0, 1, 1, 0, 21600, 0.5, 10),
 (40, 'Sipahi', 'sehr starke, schnelle Kavalleristen', 3, 2, 105, 3, 20, 0, 12, 0, 105, 4, 100, 1, 0, 1, 1, 21600, 0.5, 10),
-(100, 'Dorfbewohner', 'Ein erz¸rnter Dorfbewohner, dessen Stadt gebrandschatzt werden soll.', 1, 0, NULL, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0.1, 2),
+(100, 'Dorfbewohner', 'Ein erz√∂rnter Dorfbewohner, dessen Stadt gebrandschatzt werden soll.', 1, 0, NULL, 1, 1, 0, 0, 0, 2, 1, 0, 0, 0, 0, 0, 0, 0.1, 2),
 (101, 'Lindwurm', 'Grausamer, Feuerspeiender Drache', 0, 3, NULL, 0, 127, 0, 0, 0, 127, 5, 0, 0, 0, 0, 0, 0, 0.1, 2),
-(102, 'Berittene Bogensch¸tzen', NULL, 3, 3, NULL, 2, 10, 5, 5, 0, 56, 5, 35, 1, 1, 1, 1, 7200, 0.4, 4),
-(21, 'Kreuzritter', 'Bonuseinheit. Streng gl‰ubige Elite-Soldaten, die f¸r die Kirche auf Kreuzzug gehen', 1, 1, NULL, 5, 30, 0, 0, 0, 127, 2, 0, 0, 0, 0, 0, 0, 0, 5),
-(51, 'Dschihadkrieger', 'Bonuseinheit. Schnelle, streng gl‰ubige Elite-K‰mpfer f¸r den islamischen Dschihad.', 1, 2, NULL, 5, 35, 0, 0, 0, 100, 3, 0, 0, 0, 0, 0, 0, 0, 5);
+(102, 'Berittene Bogensch√ºtzen', NULL, 3, 3, NULL, 2, 10, 5, 5, 0, 56, 5, 35, 1, 1, 1, 1, 7200, 0.4, 4),
+(21, 'Kreuzritter', 'Bonuseinheit. Streng gl√§ubige Elite-Soldaten, die f√ºr die Kirche auf Kreuzzug gehen', 1, 1, NULL, 5, 30, 0, 0, 0, 127, 2, 0, 0, 0, 0, 0, 0, 0, 5),
+(51, 'Dschihadkrieger', 'Bonuseinheit. Schnelle, streng gl√§ubige Elite-K√§mpfer f√ºr den islamischen Dschihad.', 1, 2, NULL, 5, 35, 0, 0, 0, 100, 3, 0, 0, 0, 0, 0, 0, 0, 5);

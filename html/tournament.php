@@ -396,7 +396,7 @@ printTableHeader(0);
 
 $tourn = do_mysqli_query("SELECT t.tid,t.gold,t.time,t.calctime,t.maxplayers,o.name,p.booktime,".
 			"  count(tp.player) AS count, count(tp.booktime) AS count_book, ".
-			"  unix_timestamp() > t.time+".TOURNAMENT_DURATION." AS over,".
+			"  unix_timestamp() > t.time+".TOURNAMENT_DURATION." AS t_over,".
 			"  unix_timestamp() > t.time AND unix_timestamp() < t.time+".TOURNAMENT_DURATION." AS now, ".
 			"  count(if(tp.player=".$pid.",TRUE,NULL)) AS me,".
 			"  res.name AS res_name, pr.research AS res_has ".
@@ -406,7 +406,7 @@ $tourn = do_mysqli_query("SELECT t.tid,t.gold,t.time,t.calctime,t.maxplayers,o.n
 			"  LEFT JOIN research res ON res.id = t.require_research".
 			"  LEFT JOIN tournament_players p ON (p.tid = t.tid AND p.player = ".$pid.") ".
 			" WHERE unix_timestamp() < t.time + 48*3600 ".
-			" GROUP BY t.tid ORDER BY over DESC, $order");
+			" GROUP BY t.tid ORDER BY t_over DESC, $order");
 
 $i=0;
 $isover = true;
@@ -416,7 +416,7 @@ while($t = mysqli_fetch_assoc($tourn)) {
   $endtime   = $t['time']+TOURNAMENT_DURATION;
 
   $url= '<a href="'.$_SERVER['PHP_SELF'].'?tmagic='.$tournamentmagic.'&tid='.$t['tid'].'&part=%d">%s</a>';
-  if($t['over']) {
+  if($t['t_over']) {
     $action = "vorüber";
     if($_SESSION['player']->isMaintainer() && $t['calctime']) {
       $action .= ", berechnet";
@@ -449,7 +449,7 @@ while($t = mysqli_fetch_assoc($tourn)) {
 
   printf("<tr class=\"col%d\"><td>%d</td><td nowrap>%s <b>%s</b></td><td style=\"padding: 0px;\">-</td><td nowrap>%s</td>".
 	 "<td>%s</td><td>%s</td><td>%s / %d / %d</td><td>%s</td></tr>\n",
-  $t['now'] ? 2 : ($t['over'] ? 3 : $i), $t['tid'],
+  $t['now'] ? 2 : ($t['t_over'] ? 3 : $i), $t['tid'],
   date("d.m.y", $starttime), date("H:i", $starttime), date("H:i", $endtime),
   $t['name'] ? $t['name'] : "Server",
   $t['gold'] > TOURNAMENT_MAX_GOLD ? "<b>".$t['gold']." !!!</b>" : $t['gold'],

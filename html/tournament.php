@@ -141,7 +141,7 @@ if(isset($tid) && isset($part) &&
   $part= intval($part);
 
   $tres = do_mysqli_query("SELECT t.*,tp.player AS part,".
-			 " unix_timestamp() > time+".TOURNAMENT_DURATION." AS over,".
+			 " unix_timestamp() > time+".TOURNAMENT_DURATION." AS t_over,".
 			 " unix_timestamp() > time AND unix_timestamp() < time+".TOURNAMENT_DURATION." AS now".
 			 " FROM tournament t ".
 			 " LEFT JOIN tournament_players tp".
@@ -150,7 +150,7 @@ if(isset($tid) && isset($part) &&
   if(mysqli_num_rows($tres) == 1) {
     $t = mysqli_fetch_assoc($tres);
 
-    if($t['over']) {
+    if($t['t_over']) {
       $error = "Turnier vorüber.";
     }
     else {

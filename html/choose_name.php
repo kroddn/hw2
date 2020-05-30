@@ -209,6 +209,7 @@ Für Details auf die Karte klicken!
 </td>
 <td valign="middle" align="left">
 <?php
+//#TODO: settlemap is not shown 
 
 if ($loc[0]>0 && $christratio < REGISTER_RATIO_LIMIT_HARD)   echo "<input class='register' type='radio' name='pos' value='1' ".($pos==1 ? "checked" : "").">&nbsp;Christentum, Hinterland (Zone I) <b>(".$loc[0].' offen)</b><div class="register"><hr class="register"></div>';
 else echo "<div class='error'><input class='noborder' type='radio' name='pos' value='' disabled>&nbsp;Christentum, Hinterland (Zone I)</div>";

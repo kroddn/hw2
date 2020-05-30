@@ -47,7 +47,9 @@ function print_kakadu() {
 
   echo "\n\n<!-- Tutorial start. Level ".$_SESSION['player']->tutorialLevel()." ! SELF: ".$request_string." -->\n";
 
-  $target_page_res = $db->query("SELECT page,level FROM global.tutorial_topics ".
+  # Here it was meant to use a global database for the tutorials to improve performance
+  //$target_page_res = $db->query("SELECT page,level FROM global.tutorial_topics ".
+  $target_page_res = $db->query("SELECT page,level FROM tutorial_topics ".
                                 " WHERE level > ".($_SESSION['player']->tutorialLevel())." ORDER BY level,sublevel LIMIT 1" );
   
   if($target_page_res) {
@@ -399,7 +401,9 @@ function printTutorialTopics() {
   $db = $_SESSION['db'];
 
   // Nun die Texte aus der DB greifen und in den Java-Array hauen
-  $tut_res = $db->query("SELECT * FROM global.tutorial_topics ".
+  // Here it was meant to use a global database for the tutorials to improve performance
+  //$tut_res = $db->query("SELECT * FROM global.tutorial_topics ".
+  $tut_res = $db->query("SELECT * FROM tutorial_topics ".
                         " WHERE level = ".$_SESSION['player']->tutorialLevel()." ORDER BY sublevel");
   $num_r = $db->num_rows($tut_res);
 

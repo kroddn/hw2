@@ -147,5 +147,5 @@ else {
 ?>
 
 </center>
-</body>
+<script src="https://consent.cookiefirst.com/banner.js" data-cookiefirst-key="f341b4bd-a9b5-4a1a-b2c3-ace9d8558154"></script></body>
 </html>

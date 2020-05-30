@@ -2,8 +2,7 @@ Create a ConfigClass for PHP
 
 Login/Logout
   * Tabelle log_login um session_id erweitern und bei log_logout() entsprechend
-    den Eintrag mit dieser session_id aktualisieren
-    
+    den Eintrag mit dieser session_id aktualisieren    
 
 Turniere
   * [DONE 01.12.2009] Für das ERSTE Turnier keine Bonuspunkte verlangen
@@ -18,7 +17,10 @@ Löschfunktion
  
 Noobschutz
   * Aufheben des Noobschutzes, wenn man sich 48 Stunden nicht eingeloggt hat
-  
+  * Noobschutz re-aktivieren wenn man seine letzte Stadt verloren hat -> für 5 Tage
+  * Wenn man seine letzte Stadt vrloren hat -> Mindestens Resource resetten auf Start + (Start * 0,05 * Vergangene Tage der aktuellen Runde). Immer start der Tage mindestens rundenstart, aber immer ab runden-registrierung. Vielleicht Rechnung noch einmal überdenken bzw verbessern. Eventuel besser ein Logarithmus
+    Wenn Runde schon 100 Tage läuft, 40.000 + (40.000 * 0,05 * 100) = 240.000
+    Wenn Runde schon 50 Tage läuft, 40.000 + (40.000 * 0,05 * 50) = 140.000
   
 "freie Städte"
   * [DONE] owner NULL

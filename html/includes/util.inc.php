@@ -353,7 +353,7 @@ function RemovePlayer_old($id) {
     # Defaults for SQL
     $playername  = $delplayer['name'] ? "'".$delplayer['name']."'" : "NULL";
     $reli_string = $delplayer['religion'] ? $delplayer['religion'] : "NULL";
-    $clan_int = $delplayer['clan'] ? $delplayer['clan'] : "NULL";
+    $clan_int = $delplayer['clan'] ? $delplayer['clan'] : 0;
 
     do_mysqli_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysqli_escape_string($GLOBALS['con'], $delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$clan_int."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysqli_escape_string($GLOBALS['con'], $delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
 

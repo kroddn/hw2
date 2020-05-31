@@ -280,7 +280,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 	$restoplist=do_mysqli_query("SELECT toplist FROM player WHERE id='".$_SESSION['player']->id."'");
 	$toplist=mysqli_fetch_assoc($restoplist);
 	$pos=$toplist['toplist'];
-	if($pos != NULL || pos != 0) {
+	if($pos != NULL || $pos != 0) {
 		if($pos == 1) {echo "MyLord! Ihr seid <b>der Beste!</b> Seht selbst in der <a href=\"toplist.php\">Toplist</a>!";}
 		elseif($pos <= 10) {echo "MyLord! Ihr seid <b>".$toplist['toplist']."ter</b> und damit einer der besten Spieler! Seht selbst in der <a href=\"toplist.php\">Toplist</a>!";}
 		elseif($pos <= 20) {echo "MyLord! Ihr seid als <b>".$toplist['toplist']."ter</b> unter den besten 20 Spielern in der <a href=\"toplist.php\">Toplist</a> vertreten!";}
@@ -295,8 +295,8 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 	echo "<tr><td class=\"tblbody\" height=\"25\" colspan=\"2\">\n";
 	$restoplist=do_mysqli_query("SELECT toplist FROM clan WHERE id='".$_SESSION['player']->clan."'");
 	$toplist=mysqli_fetch_assoc($restoplist);
-	$pos=$toplist['toplist'];
-	if($pos != NULL || pos != 0) {
+	$pos = $toplist['toplist'];
+	if($pos != NULL || $pos != 0) {
 		if($pos == 1) {echo "MyLord! Ihr geh&ouml;rt <b>dem Besten Orden</b> an! Seht selbst in der <a href=\"toplist.php?show=clan\">Toplist</a>!";}
 		elseif($pos <= 10) {echo "MyLord! Euer Orden ist der <b>".$toplist['toplist']."t</b> Beste! Seht selbst in der <a href=\"toplist.php?show=clan\">Toplist</a>!";}
 		elseif($pos <= 20) {echo "MyLord! Eurer Orden ist als <b>".$toplist['toplist']."ter</b> unter den Besten 20 Orden! Die <a href=\"toplist.php?show=clan\">Toplist</a> beweist es!";}

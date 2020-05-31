@@ -147,8 +147,9 @@ function is_premium_payd () {
 // Ist der Account werbefrei?
 function is_premium_noads () {
   if(isset($_SESSION['first_login']) && $_SESSION['first_login']) return true;
+  $prem_flag = isset($GLOBALS['premium_flags']) ? $GLOBALS['premium_flags'] : 0;
   
-  return $GLOBALS['premium_flags'] & PREMIUM_NOADS && $_SESSION['settings']['hide_banner'];
+  return $prem_flag & PREMIUM_NOADS && $_SESSION['settings']['hide_banner'];
 }
 
 
@@ -276,5 +277,15 @@ function is_premium_set_sms_sender() {
 
 function is_premium_diplomap() {
   return $GLOBALS['premium_flags'] >= PREMIUM_LITE;
+}
+
+function printPaypal() {
+  echo '<h3>Wenn ihr mich unterstützen wollt :)</h3>';
+  echo '<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">';
+  echo '<input type="hidden" name="cmd" value="_s-xclick" border="0"/>';
+  echo '<input type="hidden" name="hosted_button_id" value="2J98MFNZKBMT4" />';
+  echo '<input type="image" style="border-style: none;"  src="https://www.paypalobjects.com/de_DE/DE/i/btn/btn_donate_SM.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Spenden mit dem PayPal-Button" />';
+  echo '<img alt="" border="0" src="https://www.paypal.com/de_DE/i/scr/pixel.gif" width="1" height="1" />';
+  echo '</form>';
 }
 ?>

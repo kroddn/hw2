@@ -238,9 +238,9 @@ function get_user_name($id)
 //Wenn der Send Button gedrückt wurde
 if (isset($_POST['messagesend']))
 {
-	$message 		= mysqli_real_escape_string(trim($_POST['message']));
-	$subject      	= mysqli_real_escape_string(trim($_POST['subject']));
-	$recipient      = mysqli_real_escape_string(trim($_POST['recipient']));
+	$message 		= mysqli_real_escape_string($GLOBALS['con'], trim($_POST['message']));
+	$subject      	= mysqli_real_escape_string($GLOBALS['con'], trim($_POST['subject']));
+	$recipient      = mysqli_real_escape_string($GLOBALS['con'], trim($_POST['recipient']));
 	$recipient_id	= get_user_id($recipient);
 	$sender  		= $player->getID();
 	$sql       		= "INSERT 
@@ -270,7 +270,8 @@ if (isset($_POST['messagesend']))
 
 function message_write($id)
 {
-	if($_GET['sender']) $recipient_name = $_GET['sender'];
+	$recipient_name = isset($_GET['sender']) ? $_GET['sender'] : "";
+	//if($_GET['sender']) $recipient_name = $_GET['sender'];
 	echo "<table>";
 	echo "<form method='POST' action=".$_SERVER['PHP_SELF'].">";
 		echo '<tr class="tblbody">';

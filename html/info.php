@@ -219,7 +219,7 @@ function print_playerinfo ($id) {
 	  echo "<tr><td class=\"tblbody\" colspan=\"3\">Krieger des Ordens ".$data1['clanname']."</td></tr>\n";
     }
     
-    echo "<tr><td class=\"tblbody\" width=\"24%\" style=\"text-align:center;\"><a href=\"messages2.php?msgrecipient=".urlencode($data1['name'])."\">Nachricht schreiben</a></td>";
+    echo "<tr><td class=\"tblbody\" width=\"24%\" style=\"text-align:center;\"><a href=\"messages.php?show=write&sender=".urlencode($data1['name'])."\">Nachricht schreiben</a></td>";
     
     echo "<td width=\"24%\" class=\"tblbody\" style=\"text-align:center;\">".
       ($data1['clanid'] > 0 

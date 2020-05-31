@@ -94,9 +94,10 @@ function show_banner($bid, $force=false) {
       if ($_SESSION['player']->isMaintainer()) {
 	echo "ID: ".$ad->banner_id.' <a href="?bannerplus=-1">--</a> <a href="?bannerplus=1">++</a> ';
       }
-      echo '<a style="color: blue;" href="premium.php?mark=noads#accounts">Werbefrei?</a>';     
-      echo '&nbsp;&nbsp;&nbsp;<a href="all.php">Werbepartner anzeigen</a> / <a href="all.php">Partner werden</a>';
-      echo '&nbsp;&nbsp;&nbsp;<a style="color: red;" href="premium.php">HW2 Premium-Account</a>';
+      printPaypal();
+      //echo '<a style="color: blue;" href="premium.php?mark=noads#accounts">Werbefrei?</a>';     
+      //echo '&nbsp;&nbsp;&nbsp;<a href="all.php">Werbepartner anzeigen</a> / <a href="all.php">Partner werden</a>';
+      //echo '&nbsp;&nbsp;&nbsp;<a style="color: red;" href="premium.php">HW2 Premium-Account</a>';
     }
 
     echo "<br>\n";

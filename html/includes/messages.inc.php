@@ -1,4 +1,25 @@
 <?php
+
+/*
+	Message Status:
+		0 - Ungelesen
+		1 - Gelesen
+		2 - Archiviert
+		3 - Gelöscht
+		4 - Favorit
+
+	Message Category:
+		0 - User Nachricht
+		1 - Clan/Diplomacy Nachrichten
+		2 - Markt Nachrichten
+		3 - Bau/Forsch Nachrichten
+		4 - Militär 
+		5 - Turnierbote
+		9 - Multihunter
+
+
+
+*/
 include_once("includes/db.inc.php");
 include_once("includes/config.inc.php");
 include_once("includes/session.inc.php");
@@ -79,7 +100,7 @@ function message_read($id)
 
 	// Start Table
 	echo '<table cellspacing = "1" cellpadding="0" border="0">';
-	echo '<tr height="20" class="tblhead"><td></td><td><a>Von:</a></td><td><a>Datum:</a></td><td><a>Betreff:</a></td><td><a>Nachricht:</a></td></tr>';
+	echo '<tr height="20" class="tblhead"><td></td><td><a>Von:</a></td><td><a>Datum:</a></td><td><a>Status:</a></td><td><a>Betreff:</a></td><td><a>Nachricht:</a></td></tr>';
 
 	// Start Form von Checkboxen + Manage
 	echo '<form name="set_mess_manage" action="'.$_SERVER['PHP_SELF'].'" method="post">';
@@ -93,10 +114,19 @@ function message_read($id)
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
 	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
 	{
-		echo "<tr>";
+		$status = ($datensatz['status'] == 0) ? "ungelesen" : "gelesen";
+		$status = ($datensatz['status'] == 4) ? "Favorit " : $status; 
+		// Read/unread/favorite
+		$messageStyle = ($datensatz['status'] == 0 || $datensatz['status'] == 4 ) ? "msg_unread" : "";
+		// Other Classes
+		$extra_class = ($datensatz['category'] == "4") ? "msg_military" : "";
+		$messageStyle = $messageStyle . $extra_class;
+
+		echo "<tr class='".$messageStyle."'>";
 		
 		// Checkbox ausgabe - id für checkall, Class für checkall group, In Value steht die Message ID aus der DB
 		echo '<td class="tblbody"><input type="checkbox" id="'.$select_counter.'" class="check_group" name="checked[]" value="'.$datensatz['id'].'"></td>';
+
 		
 		if($datensatz['sender'] == "SERVER") // Falls die Nachricht vom Server ist nicht SERVER schreiben
 		{ 
@@ -110,6 +140,7 @@ function message_read($id)
 		}
 		//echo "<td>".$datensatz['status']."</td>"; -- Das nur für Testzwecke benutzen 
 		echo "<td class='tblbody'>".gmdate("d.m.Y - H:i:s", $datensatz['date'])."</td>";
+		echo "<td class='tblbody'>".$status."</td>";
 		echo "<td class='tblbody'>".$datensatz['subject']."</td>";
 		echo "<td class='tblbody'>".$datensatz['message']."</td>";
 		echo "</tr>";
@@ -153,10 +184,12 @@ function message_manage($todo, $checked)
 	if($todo == "markasread")
 	{
 		$sql="UPDATE message SET status='1' WHERE id=";
-		foreach ($checked as $do)
-		{
-			// echo "mark as read: ".$do."</br>"; Testzwecke!
-			if(!do_mysqli_query($sql.$do)) echo "ERROR!!!";
+		if (isset($checked) && count($checked) > 0) {
+			foreach ($checked as $do)
+			{
+				// echo "mark as read: ".$do."</br>"; Testzwecke!
+				if(!do_mysqli_query($sql.$do)) echo "ERROR!!!";
+			}
 		}
 	} 
 	else if ($todo == "archive")

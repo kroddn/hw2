@@ -290,7 +290,7 @@ span.click:hover {
            }
 #adr hr { width: 500px; }
 
-/* Die Menüpunkte oben auf der Einstellungen-Seite */
+/* Die Menï¿½punkte oben auf der Einstellungen-Seite */
 #settings_menu { width: 600; border: 0px; }
 #settings_menu td { vertical-align: middle; text-align: center; padding: 6px; background-color: #FFFFC8;}
 #settings_menu td.active { background-color: #F0F0AA; }
@@ -342,4 +342,12 @@ tr.marketline:hover, tr.marketline:active, tr.marketline:focus {
     display: none;
     background-color: #FFFFFF;
     border:1px solid black;
+}
+
+.msg_unread * {
+  font-weight: bold;
+}
+
+.msg_military * {
+  color: red; 
 }

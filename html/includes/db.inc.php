@@ -95,6 +95,7 @@ function do_mysqli_query($string, $conn=null, $abort = true) {
   if (sizeof($_POST)>0) {
     $post = "?";
     foreach ($_POST as $key => $value) {
+      if (is_array($value)) continue;
       if ($post != "?") $post .= "&";
       $post .= $key."=".$value;
     }

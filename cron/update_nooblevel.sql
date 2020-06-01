@@ -1,0 +1,1 @@
+UPDATE player set nooblevel = 0 WHERE regtime IS NULL OR regtime = 0 OR regtime + 3 * 7 * 24 * 60 * 60 < UNIX_TIMESTAMP();

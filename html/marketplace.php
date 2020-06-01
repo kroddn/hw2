@@ -371,7 +371,7 @@ echo "></td></tr>";
 <?
             if ($aufgeben) {
               echo '<input accesskey="n" style="margin-top: 4px; width: 100px; " type="button" value=" Nochmal (Alt+N)" onClick="'.
-              ($GLOBALS['premium_flags'] >= PREMIUM_LITE ? "window.location.reload()" : "alert('Nur für Premium-Account')").'">';
+              ($_SESSION['premium_flags'] >= PREMIUM_LITE ? "window.location.reload()" : "alert('Nur für Premium-Account')").'">';
             }            
 ?>
         </td>

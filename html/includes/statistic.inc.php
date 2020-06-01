@@ -512,7 +512,7 @@ function stat_terrain($id) {
       $s1 = $i*2+1;
       $s2 = $i*2+2;
       $sql = "SELECT count(*) AS c ".
-	($GLOBALS['premium_flags'] > 0 
+	($_SESSION['premium_flags'] > 0 
 	 ?( " , count(if(special = ".$s1.",TRUE,NULL)) AS s1, ".
 	    " count(if(special = ".$s2.",TRUE,NULL)) AS s2 ")
 	 : "").
@@ -524,7 +524,7 @@ function stat_terrain($id) {
       //echo "<!-- $sql -->\n";
       $f = do_mysqli_query_fetch_assoc($sql);
 
-      if($GLOBALS['premium_flags'] > 0 ) {
+      if($_SESSION['premium_flags'] > 0 ) {
 	$sql_template = 
 	  "SELECT coalesce(sum(count),0) AS c FROM citybuilding c LEFT JOIN building b ON b.id=c.building ".
 	  " WHERE c.city = %d AND b.req_fields = 's%d'";
@@ -544,7 +544,7 @@ function stat_terrain($id) {
       var_dump($b);
       echo "-->\n";
 
-      if($GLOBALS['premium_flags'] > 0){
+      if($_SESSION['premium_flags'] > 0){
         $amount1 = ($b[0] > 0)
                     ? ($b[0] < $f['s1'] ? "<font color='#40BB20'>" : "<font color='darkgreen'>"). "<b>(".$b[0].")</b></font>"
                     : ($f['s1'] > 0 ? "(-)" : "");
@@ -576,16 +576,16 @@ function stat_terrain($id) {
   }
   echo '<tr class="tblhead" align="center"><td align=\"left\">Summe</td>';
   for($i=0; $i<4; $i++) {
-    if($GLOBALS['premium_flags'] > 0){
+    if($_SESSION['premium_flags'] > 0){
       printf("<td>%d</td><td>%d</td><td>%d</td>", $sum['c'.$i], $sum['s'.($i*2+1)], $sum['s'.($i*2+2)] );
     }
     else {
       printf("\n<td>%d</td><td>?</td><td>?</td>\n", $sum['c'.$i]);
     }
   }
-  printf("<td>%s</td></tr>\n", $GLOBALS['premium_flags'] > 0 ? $sum['all'] : "?");
+  printf("<td>%s</td></tr>\n", $_SESSION['premium_flags'] > 0 ? $sum['all'] : "?");
   
-  if($GLOBALS['premium_flags'] == 0){
+  if($_SESSION['premium_flags'] == 0){
     echo '<tr class="tblhead" align="center"><td colspan="14" style="font-size: 9px;">*) die erweiterte Statistik ist Besitzern eines <a href="premium.php">Premium-Accounts</a> zugänglich. Das ganze sieht dann in etwa so aus (<a href="'.GFX_PATH_LOCAL.'/nutzfelder.jpg" target="_blank">hier klicken</a>).</td>';
     
   }

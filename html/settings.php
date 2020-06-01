@@ -958,7 +958,7 @@ function show_premium() { ?>
 </tr>
 <tr><td><b>Premium-Flags:</b> <? echo $_SESSION['premium_flags'];?></td></tr>
 <tr><td><b>No-ADS (HW2 werbefrei?):</b> 
-<? if($GLOBALS['premium_flags'] & PREMIUM_NOADS) {
+<? if($_SESSION['premium_flags'] & PREMIUM_NOADS) {
      echo " Ja</b>"; 
      if(! $_SESSION['settings']['hide_banner'])
        echo ', Ihnen wird aber Werbung eingeblendet. Dies können Sie im Reiter <a href="settings.php?show=grapa">Grafik/Menü</a> ändern. ';

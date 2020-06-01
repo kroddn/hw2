@@ -136,18 +136,18 @@ function get_premium_expire_string($expire)
 
 // Ist der Account Premium??
 function is_premium () {
-  return $GLOBALS['premium_flags'] > 0;
+  return $_SESSION['premium_flags'] > 0;
 }
 
 // Ist der Account Premium??
 function is_premium_payd () {
-  return $GLOBALS['premium_flags'] > 0 && $GLOBALS['premium_payd'] > 0;
+  return $_SESSION['premium_flags'] > 0 && $GLOBALS['premium_payd'] > 0;
 }
 
 // Ist der Account werbefrei?
 function is_premium_noads () {
   if(isset($_SESSION['first_login']) && $_SESSION['first_login']) return true;
-  $prem_flag = isset($GLOBALS['premium_flags']) ? $GLOBALS['premium_flags'] : 0;
+  $prem_flag = isset($_SESSION['premium_flags']) ? $_SESSION['premium_flags'] : 0;
   
   return $prem_flag & PREMIUM_NOADS && $_SESSION['settings']['hide_banner'];
 }
@@ -155,7 +155,7 @@ function is_premium_noads () {
 
 // Hat der Premium-Account Turnier-Vorteile?
 function is_premium_tournament () {
-  return $GLOBALS['premium_flags'] & PREMIUM_NOADS;
+  return $_SESSION['premium_flags'] & PREMIUM_NOADS;
 }
 
 
@@ -166,7 +166,7 @@ function is_premium_adressbook () {
     return true;
   }
 
-  return $GLOBALS['premium_flags'] >= PREMIUM_LITE;
+  return $_SESSION['premium_flags'] >= PREMIUM_LITE;
 }
 
 
@@ -179,7 +179,7 @@ function is_premium_no_click_hint () {
   
   if(isset($_SESSION['first_login']) && $_SESSION['first_login']) return true;
   
-  return $GLOBALS['premium_flags'] >= PREMIUM_NOADS;
+  return $_SESSION['premium_flags'] >= PREMIUM_NOADS;
 }
 
 
@@ -190,13 +190,13 @@ function is_premium_signature () {
     return true;
   }
 
-  return $GLOBALS['premium_flags'] >= PREMIUM_LITE;
+  return $_SESSION['premium_flags'] >= PREMIUM_LITE;
 }
 
 
 // Darf er nen Avatar hochladen?
 function is_premium_avatar () {
-  return $GLOBALS['premium_flags'] >= PREMIUM_LITE;
+  return $_SESSION['premium_flags'] >= PREMIUM_LITE;
 }
 
 
@@ -271,12 +271,12 @@ function get_market_size () {
 
 
 function is_premium_set_sms_sender() {
-  return $GLOBALS['premium_flags'] >= PREMIUM_PRO;
+  return $_SESSION['premium_flags'] >= PREMIUM_PRO;
 }
 
 
 function is_premium_diplomap() {
-  return $GLOBALS['premium_flags'] >= PREMIUM_LITE;
+  return $_SESSION['premium_flags'] >= PREMIUM_LITE;
 }
 
 function printPaypal() {

@@ -40,6 +40,7 @@ include_once("includes/session.inc.php");
 include_once("includes/banner.inc.php");
 
 $_SESSION['player']->setActivePage(basename(__FILE__));
+$diplomacy = $_SESSION['diplomacy'];
 
 if (isset($newRel)) {
   if(isset($playername) && isset($type)) {

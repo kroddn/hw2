@@ -155,7 +155,7 @@ Hier die Daten des HW2-Kontos:<br>
 6 Monate EUR 8,00<br />
 12 Monate EUR 15,00<br />
 </td><td>
-<? if(isset($_SESSION['player'])) paypal_button("8.00", "sechs Monate Premium NoADS"); ?>
+<? if(isset($_SESSION['player'])) echo "hier wäre der Paypal Button"; //paypal_button("8.00", "sechs Monate Premium NoADS"); ?>
 </td></tr></table>
 
 <hr><h2>HW2 Premium Lite</h2>
@@ -190,7 +190,7 @@ else {
 6 Monate EUR 11,00<br />
 12 Monate EUR 20,00<br />
 </td><td>
-<? if(isset($_SESSION['player'])) paypal_button("6.00", "drei Monate Premium Lite"); ?>
+<? if(isset($_SESSION['player'])) echo "hier wäre der Paypal Button"; //paypal_button("6.00", "drei Monate Premium Lite"); ?>
 </td></tr></table>
 <? if( defined("PREMIUM_SMS") && PREMIUM_SMS ) { ?>
 <p>
@@ -215,7 +215,7 @@ bei SMS-Versand einstellbar, so dass Empfänger direkt aufs Handy antworten kann
 6 Monate EUR 19,00<br />
 12 Monate EUR 35,00<br />
 </td><td>
-<? if(isset($_SESSION['player'])) paypal_button("10.00", "drei Monate Premium Pro"); ?>
+<? if(isset($_SESSION['player'])) echo "hier wäre der Paypal Button"; //paypal_button("10.00", "drei Monate Premium Pro"); ?>
 </td></tr></table>
 <?
 /*

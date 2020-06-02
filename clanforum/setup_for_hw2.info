@@ -1,0 +1,7 @@
+das interne forum basiert auf phpBB 2.0.8
+das table pr‰fix muss clanf_ heiﬂen.
+weiters muss der user anonymous angelegt sein.
+dieser hat die id -1. existiert dieser nicht, ist das forum nicht administrierbar.
+user werden automatisch angelegt. ebenso log-in.
+
+franzl

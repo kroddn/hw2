@@ -121,7 +121,7 @@ if (isset($msgsend)) {
       		$rcp_ids = array();
       		foreach($rcp_array as $rcp_name) {
       			$rcp_name = trim($rcp_name);
-      			$res1=do_mysqli_query("SELECT id FROM player WHERE name = '".mysqli_escape_string($rcp_name)."'");      		      			
+      			$res1=do_mysqli_query("SELECT id FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'],$rcp_name)."'");      		      			
       			if (mysqli_num_rows($res1)>0) {
       				$rec_id = mysqli_fetch_assoc($res1);
       				array_push($rcp_ids, $rec_id['id']);

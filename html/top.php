@@ -55,7 +55,7 @@ function updateframe(newpage) {
 </head>
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
 <body class="nopadding" marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" background="<? echo $imagepath; ?>/top.gif">
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="nopadding" marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" background="<? echo $imagepath; ?>/top.gif">
 <tr valign="middle">
 <td width="25">&nbsp</td>
 <?

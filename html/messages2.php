@@ -45,15 +45,15 @@ include_once("includes/banner.inc.php");
 define("TEAM_SENDER", "HW2-Team");
 
 if(isset($show)) {
-  $res1=do_mysql_query("SELECT id,sender,recipient,date,header,body FROM message
+  $res1=do_mysqli_query("SELECT id,sender,recipient,date,header,body FROM message
       WHERE id=".$show." AND ((recipient=".$player->getID()." AND !(status&".MSG_RECIPIENT_DELETED."))
       OR (sender='".$player->getName()."' AND date>=".$player->getRegTime().") AND !(status&".MSG_SENDER_DELETED."))"
       );
-  if (mysql_num_rows($res1)==1) {
-    do_mysql_query("UPDATE message SET status=status|".MSG_RECIPIENT_READ." WHERE id=".$show." AND recipient=".$player->getID());
-    do_mysql_query("UPDATE message SET status=status|".MSG_SENDER_READ." WHERE id=".$show." AND sender='".$player->getName()."' AND date>=".$player->getRegTime());
-    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());
-    $db_msg=mysql_fetch_assoc($res1);
+  if (mysqli_num_rows($res1)==1) {
+    do_mysqli_query("UPDATE message SET status=status|".MSG_RECIPIENT_READ." WHERE id=".$show." AND recipient=".$player->getID());
+    do_mysqli_query("UPDATE message SET status=status|".MSG_SENDER_READ." WHERE id=".$show." AND sender='".$player->getName()."' AND date>=".$player->getRegTime());
+    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());
+    $db_msg=mysqli_fetch_assoc($res1);
     $showmsg=1;
   }
 }
@@ -71,11 +71,11 @@ elseif (isset($msgfw)) {
   $msgheader = ereg_replace("&quot","\"",stripslashes($msgheader));
 }
 elseif (isset($msgdel)) {
-  $res1=do_mysql_query("SELECT id FROM message WHERE id=".$msgid." AND recipient=".$player->getID());
-  if (mysql_num_rows($res1)==1) {
-    do_mysql_query("UPDATE message SET status=status|".MSG_RECIPIENT_DELETED." WHERE id=".$msgid." AND recipient=".$player->getID());
-    do_mysql_query("UPDATE message SET status=status|".MSG_SENDER_DELETED." WHERE id=".$msgid." AND sender='".$player->getName()."' AND date>=".$player->getRegTime());
-    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());    
+  $res1=do_mysqli_query("SELECT id FROM message WHERE id=".$msgid." AND recipient=".$player->getID());
+  if (mysqli_num_rows($res1)==1) {
+    do_mysqli_query("UPDATE message SET status=status|".MSG_RECIPIENT_DELETED." WHERE id=".$msgid." AND recipient=".$player->getID());
+    do_mysqli_query("UPDATE message SET status=status|".MSG_SENDER_DELETED." WHERE id=".$msgid." AND sender='".$player->getName()."' AND date>=".$player->getRegTime());
+    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());    
     header("location:messages.php");
   }
 }
@@ -121,9 +121,9 @@ if (isset($msgsend)) {
       		$rcp_ids = array();
       		foreach($rcp_array as $rcp_name) {
       			$rcp_name = trim($rcp_name);
-      			$res1=do_mysql_query("SELECT id FROM player WHERE name = '".mysql_escape_string($rcp_name)."'");      		      			
-      			if (mysql_num_rows($res1)>0) {
-      				$rec_id = mysql_fetch_assoc($res1);
+      			$res1=do_mysqli_query("SELECT id FROM player WHERE name = '".mysqli_escape_string($rcp_name)."'");      		      			
+      			if (mysqli_num_rows($res1)>0) {
+      				$rec_id = mysqli_fetch_assoc($res1);
       				array_push($rcp_ids, $rec_id['id']);
       				$cachercp = $rcp_name;      			
       			}
@@ -139,8 +139,8 @@ if (isset($msgsend)) {
       		
       		if(!$msgerror) {
       			foreach($rcp_ids AS $id) {
-      				do_mysql_query("INSERT INTO message (sender,recipient,date,header,body) VALUES ('".$player->getName()."',".$id.", UNIX_TIMESTAMP(),'".htmlentities($msgheader,ENT_QUOTES)."','".$msgbody."')");
-      				do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$id);
+      				do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body) VALUES ('".$player->getName()."',".$id.", UNIX_TIMESTAMP(),'".htmlentities($msgheader,ENT_QUOTES)."','".$msgbody."')");
+      				do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$id);
       			}
       			$player->incSentMessages( sizeof($rcp_ids) );
 
@@ -155,11 +155,11 @@ if (isset($msgsend)) {
     }
     //Ordensnachricht
     if ($clanbroadcast=="1" && isset($msgsend)) {
-     	$playerids = do_mysql_query("SELECT id,name FROM player WHERE clan=".$clan->getID()." ORDER BY name ASC");
+     	$playerids = do_mysqli_query("SELECT id,name FROM player WHERE clan=".$clan->getID()." ORDER BY name ASC");
     	$header = "(ON) ".htmlentities($msgheader,ENT_QUOTES);
-    	while ($get_playerids = mysql_fetch_assoc($playerids)) {
-    		do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".$player->getName()."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANMSG.")");
-    		do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
+    	while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    		do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".$player->getName()."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANMSG.")");
+    		do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     	}
     	$player->incSentMessages();
     	unset($msgheader);
@@ -170,11 +170,11 @@ if (isset($msgsend)) {
     	$msgnoerror="Die Ordensnachricht wurde erfolgreich an alle Mitglieder des Ordens versandt.";
     }
     if ($minbroadcast=="1" and isset($msgsend)) {
-    	$playerids = do_mysql_query("SELECT id,name FROM player WHERE clan=".$clan->getID()." AND clanstatus > '0' ORDER BY name ASC");
+    	$playerids = do_mysqli_query("SELECT id,name FROM player WHERE clan=".$clan->getID()." AND clanstatus > '0' ORDER BY name ASC");
     	$header = "(MN) ".htmlentities($msgheader,ENT_QUOTES);
-    	while ($get_playerids = mysql_fetch_assoc($playerids)) {
-    		do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".$player->getName()."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANMINISTERMSG.")");
-    		do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
+    	while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    		do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".$player->getName()."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANMINISTERMSG.")");
+    		do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     	}
     	$player->incSentMessages();
 
@@ -216,25 +216,25 @@ if (isset($msgsend)) {
     	if($_SESSION['player']->isAdmin()) {
     		//An alle
     		if (!isset($onlycf)) {
-    			$playerids = do_mysql_query("SELECT id FROM player WHERE 1");
+    			$playerids = do_mysqli_query("SELECT id FROM player WHERE 1");
     			$header = "(AN) ".htmlentities($msgheader,ENT_QUOTES);
-    			while ($get_playerids = mysql_fetch_assoc($playerids)) {
-    				do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".TEAM_SENDER."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANFOUNDERMSG.")");
-    				do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
+    			while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    				do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".TEAM_SENDER."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANFOUNDERMSG.")");
+    				do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     			}
     			$player->incSentMessages();
     			$msgnoerror="Die Adminnachricht wurde erfolgreich an alle Spieler aus Holy-Wars 2 versandt.";
     		}
     		else {
-    			//Nur an Ordensgründer(Clanfounder) 
-    			$playerids = do_mysql_query("SELECT id FROM player WHERE clanstatus=63");
+    			//Nur an Ordensgrï¿½nder(Clanfounder) 
+    			$playerids = do_mysqli_query("SELECT id FROM player WHERE clanstatus=63");
     			$header = "(AN) ".htmlentities($msgheader,ENT_QUOTES);
-    			while ($get_playerids = mysql_fetch_assoc($playerids)) {
-    				do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".TEAM_SENDER."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_ADMINMSG.")");
-    				do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
+    			while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    				do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".TEAM_SENDER."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_ADMINMSG.")");
+    				do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     			}
     			$player->incSentMessages();
-    			$msgnoerror="Die Adminnachricht wurde erfolgreich an alle Ordensgründer in Holy-Wars 2 versandt.";
+    			$msgnoerror="Die Adminnachricht wurde erfolgreich an alle Ordensgrï¿½nder in Holy-Wars 2 versandt.";
     		}
     	}
     	else {
@@ -492,13 +492,13 @@ if($msgnoerror) {
 <tr>
 	<td class="tblbody" width="200">
 		<b>Empf&auml;nger</b><br></br>
-		<span style="font-size: 10px;">Mehrere Empänger können durch Komma getrennt werden</span>
+		<span style="font-size: 10px;">Mehrere Empï¿½nger kï¿½nnen durch Komma getrennt werden</span>
 	</td>
 	<td class="tblbody">
 		<input type="text" name="msgrecipient" value="<? echo $msgrecipient; ?>" style="width:100%;">
   		<br>
   		<select onChange="addRecipient(this.value)" name="addressbook" size="1" stlye="width:100%;">
- 		<option value="">bitte wählen</option>
+ 		<option value="">bitte wï¿½hlen</option>
 <?
 if (is_premium_adressbook()) {
   echo "<option value=\"\">  <- Eigenes Adressbuch -></option>\n";
@@ -515,7 +515,7 @@ if (is_premium_adressbook()) {
 }
 else {	
   echo "<option value=\"\">Adressbuch nur</option>\n";  
-  echo "<option value=\"\">für Besitzer eines</option>\n";  
+  echo "<option value=\"\">fï¿½r Besitzer eines</option>\n";  
   echo "<option value=\"\">Premium-Accounts.</option>\n";  
 }
 ?>
@@ -558,7 +558,7 @@ if ($player->isAdmin()) {
   </tr>
   <tr>
       <td class="tblbody" width="150" colspan="2">
-     <input type="checkbox" name="onlycf" value="1"> <b>nur Ordensgründer</b>&nbsp;
+     <input type="checkbox" name="onlycf" value="1"> <b>nur Ordensgrï¿½nder</b>&nbsp;
       </td>
   </tr>
   <tr>
@@ -572,10 +572,10 @@ if ($player->isAdmin()) {
   <? } ?>
 <tr><td colspan="2" class="tblbody"><textarea id="theText" name="msgbody" cols="50" rows="14" style="width:100%;"><? echo $msgbody; ?></textarea></td></tr>
 <?php insertBBForm(2) ?>
-<tr><td class="tblhead" align="center" colspan="2"><input onClick="openPreview()" type="submit" name="msgpreview" value=" Vorschau "> <input type="submit" name="msgsend" value=" Nachricht versenden (ALT+S)" accesskey="s" onClick="document.form.target ='main'; if(pvw) pvw.close();"> <input onClick="document.form.target ='main'; return confirm('Nachricht wirklich zurücksetzen?')" type="reset" value=" Zurücksetzen "></td></tr>
+<tr><td class="tblhead" align="center" colspan="2"><input onClick="openPreview()" type="submit" name="msgpreview" value=" Vorschau "> <input type="submit" name="msgsend" value=" Nachricht versenden (ALT+S)" accesskey="s" onClick="document.form.target ='main'; if(pvw) pvw.close();"> <input onClick="document.form.target ='main'; return confirm('Nachricht wirklich zurï¿½cksetzen?')" type="reset" value=" Zurï¿½cksetzen "></td></tr>
 </table>
 <br>
-<a target="main" href="messages.php"><b>zurück</b></a>
+<a target="main" href="messages.php"><b>zurï¿½ck</b></a>
 </td>
 <td>
 <? skyscraper(); ?>
@@ -621,10 +621,10 @@ function showMessage($preview=false) {
 <td width="100" class="tblhead" rowspan="5" style="padding: 0;" align="center">
 
 <?php
-  $resA=do_mysql_query("SELECT id, avatar FROM player WHERE name='".$db_msg['sender']."'");
-  if(mysql_num_rows($resA) > 0) 
+  $resA=do_mysqli_query("SELECT id, avatar FROM player WHERE name='".$db_msg['sender']."'");
+  if(mysqli_num_rows($resA) > 0) 
     {
-      $avatar=mysql_fetch_assoc($resA);
+      $avatar=mysqli_fetch_assoc($resA);
       if($avatar['avatar']==2) {
         echo "<img title=\"Avatar\" src=\"avatar.php?id=".$avatar['id']."\" />"; 
       }
@@ -688,7 +688,7 @@ function showMessage($preview=false) {
     if($db_msg['sender'] != TEAM_SENDER) {  
         echo "<input type='submit' name='msgre' value=' antworten '> ";              
     }
-    echo "<input type='submit' name='msgfw' value=' weiterleiten '> <input type='submit' name='msgdel' value=' löschen '>\n";
+    echo "<input type='submit' name='msgfw' value=' weiterleiten '> <input type='submit' name='msgdel' value=' lï¿½schen '>\n";
   }
   echo "</td></tr>";
   echo "</form>\n";
@@ -703,7 +703,7 @@ if (!is_premium_noads()) {
 <?
 }
   if (!$preview) {
-    echo "<br><a target=\"main\" href=\"messages.php\"><b>zurück</b></a>\n\n";
+    echo "<br><a target=\"main\" href=\"messages.php\"><b>zurï¿½ck</b></a>\n\n";
   }
   echo "</td></tr></table>";
 ?>

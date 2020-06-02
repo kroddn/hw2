@@ -63,6 +63,11 @@ if(!$_SESSION['player']->clanstatus) {
   exit;
 }
 
+// set Clan to in session saved clan of user due to globals deprecation 
+$clan = NULL;
+if($_SESSION['player']->clan) {
+  $clan = $_SESSION['clan'];
+}
 
 if( $_GET['activity']==true) {
   if($_SESSION['player']->clan) {

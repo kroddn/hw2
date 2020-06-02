@@ -124,8 +124,10 @@ define("FIGHTSIM_NEED_POINTS", 10);
 define("AVATAR_TOP_POINTS", 2000000);
 
 // Bonuspunkte fuer Click alle X Sekunden
-define("CLICK_BONUSPOINTS", 1);
-define("CLICK_BONUSPOINTS_TIME", 3600);
+//define("CLICK_BONUSPOINTS", 1);
+//define("CLICK_BONUSPOINTS_TIME", 3600);
+define("CLICK_BONUSPOINTS", 2);
+define("CLICK_BONUSPOINTS_TIME", 1800);
 
 // Belagerung aktivieren
 define("ENABLE_SIEGE", 1);
@@ -159,4 +161,6 @@ define("DISABLE_SETTLEAREA_ATTACK", 1);
 define("REGISTER_RATIO_LIMIT_HARD", 2.8);
 define("REGISTER_RATIO_LIMIT_MEDIUM", 1.6);
 define("REGISTER_RATIO_LIMIT_LIGHT", 1.3);
+
+define("CLAN_PAYOUT_MIN_MEMBER", 5);
 ?>

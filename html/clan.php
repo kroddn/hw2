@@ -271,7 +271,7 @@ function bbCode(start,end,ext) {
 $_SESSION['clan']->update();
 
 if ($askpromote && ($status == 63) && intval($clanmember) ) {
-  $res = do_mysqli_query("SELECT name FROM player WHERE id=".mysqli_real_escape_string($clanmember) );
+  $res = do_mysqli_query("SELECT name FROM player WHERE id=".mysqli_real_escape_string($GLOBALS['con'], $clanmember) );
   if ($data = mysqli_fetch_assoc($res)) {
     echo "Sie wollen ".$data['name'].' zum Ordensleiter erheben, ist dies wirlich euer Wille? Bestätigen sie dies bitte mit einem Klick <a href="'.$_SERVER['PHP_SELF'].'?promote=1&status=63&clanmember='.$clanmember.'"><u>zu bestätigen</u></a> oder <a href="'.$_SERVER['PHP_SELF'].'"><u>abzulehnen</u></a>';
     exit;
@@ -346,11 +346,12 @@ if ($error_string != null)
     echo '<tr class="tblbody"><td width="75">Steuern</td><td width="225">'.intval($data2['tax']*100).'%</td></tr>';
     if ($clan->getStatus() & 1) {
 		$member = mysqli_fetch_assoc(do_mysqli_query("SELECT count(*) as c FROM player WHERE clan = ".$clan->getID()));
-	 	if ($member['c'] >= 5) {
+		$minmember = defined("CLAN_PAYOUT_MIN_MEMBER") && CLAN_PAYOUT_MIN_MEMBER > 0 ? CLAN_PAYOUT_MIN_MEMBER : 5;
+	 	if ($member['c'] >= $minmember) {
 	    	echo '<tr class="tblbody"><td width="75">Auszahlen</td><td width="225"><input type="text" name="payOut" size="5"></td></tr>';
 	 	}
 	 	else {
-	    	echo '<tr class="tblbody"><td colspan="2">Auszahlen erst ab 5 Mitgliedern möglich!</td></tr>';
+	    	echo '<tr class="tblbody"><td colspan="2">Auszahlen erst ab '.$minmember.' Mitgliedern möglich!</td></tr>';
 	    }
 		echo '<tr class="tblbody"><td width="75">Steuerfuss</td><td width="225"><input type="text" name="setTax" size="3" value="'.intval($data2['tax']*100).'"></td></tr>';
 	}

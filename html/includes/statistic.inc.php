@@ -1399,7 +1399,7 @@ function stat_troopoverview($id) {
         '    <td>Gesamt</td>'.
         '  </tr>' );
 
-  if(sizeof($units) > 0) {
+  if(is_array($units) && sizeof($units) > 0) {
     foreach($units AS $unit=>$cnt) {    
       if (strlen($unit) == 0) {
         echo "\n<!-- Error -->\n";

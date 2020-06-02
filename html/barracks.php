@@ -235,7 +235,7 @@ for($i=0;$i<sizeof($units);++$i) {
   echo $possible." (".$maxpossible.")</a></td>";
   
   $res1 = do_mysql_query("SELECT count FROM cityunit WHERE unit=".$units[$i]['id']." AND city=".$_SESSION['cities']->getActiveCity()." AND owner=".$_SESSION['player']->getID());
-  $data1 = mysqli_fetch_assoc($res1);
+  $data1 = do_mysql_fetch_assoc($res1);
   echo "<td align='right' width='40'><b>";
   if ($data1['count']) {
     echo $data1['count'];
@@ -324,7 +324,7 @@ if($old_code) {
     $sumcount = 0;
     $sumcost = 0;
     $num = 1;
-    while ($data1 = mysqli_fetch_assoc($res1)) {
+    while ($data1 = do_mysql_fetch_assoc($res1)) {
       $img = getUnitImage($data1);
       $href= getUnitLibLink($data1);
 

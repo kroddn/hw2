@@ -206,7 +206,7 @@ function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
   if($prem) {
     if (mysqli_num_rows($prem) > 0) {
       $num = 0;
-      while($premium = mysqli_fetch_assoc($prem)) {
+      while($premium = do_mysql_fetch_assoc($prem)) {
 	$sql = sprintf("INSERT INTO premiumacc ".
 		       " (player, type, expire, payd, paydtime,paytext) ".
 		       " VALUES (%d, %d, %d, 0, UNIX_TIMESTAMP(), '%s')",
@@ -233,7 +233,7 @@ function activate_from_booking($nr = 1) {
   $bookdata = do_mysql_query("SELECT * FROM booking WHERE status = 0 ORDER BY bookid LIMIT $nr");
 
   $i = 0;
-  while ($book = mysqli_fetch_assoc($bookdata)) {
+  while ($book = do_mysql_fetch_assoc($bookdata)) {
     echo "Lege Spieler <b>".$book['name']."</b> an. ";
     $p['pid']      = null;
     $p['pos']      = $book['zone'];

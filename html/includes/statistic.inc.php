@@ -24,7 +24,7 @@ function getTimer($id) {
   static $timerid=1;
   $tick = TICK;
   $last_res=do_mysql_query("SELECT lastres FROM player WHERE id = ".$id);
-  if ($last=mysqli_fetch_assoc($last_res)) {
+  if ($last=do_mysql_fetch_assoc($last_res)) {
     $next = ($last['lastres']+$tick)-time();
     return "<b>Verbleibende Zeit bis zum n&auml;chsten Tick:</b>&nbsp;<span class=\"noerror\" id=\"1\"><script type=\"text/javascript\">addTimer(".$next.",".$timerid.");</script></span>&nbsp;";
     $timerid++;
@@ -78,7 +78,7 @@ function stat_gold($id) {
   echo "</tr>";
 
   $res4= do_mysql_query("SELECT gold,clan FROM player WHERE id=".$id);
-  $data4 = mysqli_fetch_assoc($res4);
+  $data4 = do_mysql_fetch_assoc($res4);
   $gold = $data4['gold'];
   $tottax = 0;
   $totincgold = 0;
@@ -88,7 +88,7 @@ function stat_gold($id) {
 
   $ucost = get_ucost($id);
 
-  while ($data1 = mysqli_fetch_assoc($res1)) {
+  while ($data1 = do_mysql_fetch_assoc($res1)) {
     $horse = get_inc_wep($gold-$ucost, $data1['inchorse'], HORSE_COST,  $data1['storage'], $data1['reserve_horse'], $data1['horse'], HORSE_PRODFACTOR*$res_eff, $data1['max_horse']);
 
     $attr = $data1['attr'] + 1000;
@@ -278,7 +278,7 @@ function stat_cities($id) {
   $totfood = 0;
   $totfoodstorage = 0;
 
-  while ($data1 = mysqli_fetch_assoc($res1)) {
+  while ($data1 = do_mysql_fetch_assoc($res1)) {
     $city_siege = getSiegeTime($data1['id']);
     $siege_factor = getSiegeFactor($city_siege);
 
@@ -498,7 +498,7 @@ function stat_terrain($id) {
   $cities=do_mysql_query("SELECT city.id,name,x,y FROM city LEFT JOIN map USING(id) ".
 			 " WHERE city.owner = ".$id.
 			 " ORDER BY city.capital DESC, city.id ASC");
-  while($c = mysqli_fetch_assoc($cities)) {
+  while($c = do_mysql_fetch_assoc($cities)) {
     $citysum = 0;
 
     echo "<tr class=\"tblbody\" align=\"center\">\n";
@@ -648,7 +648,7 @@ FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN buildi
 
   $totstorage = 0;
 
-  while ($data1 = mysqli_fetch_assoc($res1)) {
+  while ($data1 = do_mysql_fetch_assoc($res1)) {
     $siege_factor = getSiegeFactor($city_siege);
 
     if ($siege_factor < 1) {
@@ -753,7 +753,7 @@ function stat_weapons($id) {
   global $imagepath;
   $id = intval($id);
   $res1=do_mysql_query("SELECT id, lastres, religion, wood, iron, stone, gold, clan FROM player WHERE id = ".$id);
-  $data1=mysqli_fetch_assoc($res1);
+  $data1=do_mysql_fetch_assoc($res1);
 
   $res2=do_mysql_query("SELECT
 			sum(citybuilding.count * building.res_shortrange) AS incshortrange,
@@ -858,7 +858,7 @@ function stat_weapons($id) {
   echo "</tr>\n";
 
 
-  while($data2=mysqli_fetch_assoc($res2)) {
+  while($data2=do_mysql_fetch_assoc($res2)) {
     $storage = $data2['storage'];
 
     //wood
@@ -902,7 +902,7 @@ function stat_weapons($id) {
     echo "<td>".($totiron-$armor['raw'])."</td>\n";
     echo "<td>".($gold-$horse['raw'])."</td>\n";
     $res3 = do_mysql_query("SELECT sum(longrange) as costlong, sum(shortrange) as costshort, sum(armor) as costarmor, sum(horse) as costhorse FROM city WHERE id=".$data2['id']);
-    $data3 = mysqli_fetch_assoc($res3);
+    $data3 = do_mysql_fetch_assoc($res3);
     echo "<td>".number_format($data3['costshort'],0,",",".")."</td>\n";
     echo "<td>".number_format($data3['costlong'],0,",",".")."</td>\n";
     echo "<td>".number_format($data3['costarmor'],0,",",".")."</td>\n";
@@ -1026,7 +1026,7 @@ function stat_building_ordered($id, $sort) {
   $buildings_res = do_mysql_query("SELECT building.name AS bname,citybuilding_ordered.time AS time,citybuilding_ordered.count AS count,city.name AS name,city.id FROM building,city,citybuilding_ordered WHERE citybuilding_ordered.city=city.id AND building.id=citybuilding_ordered.building AND city.owner=".$id);
 
   $build = array();
-  while ($buildings = mysqli_fetch_assoc($buildings_res)) {
+  while ($buildings = do_mysql_fetch_assoc($buildings_res)) {
     $still = ($buildings['time']-time());
     array_push($build, array('id' => $buildings['id'],'name'=>$buildings['name'],'bname'=>$buildings['bname'],'count'=>$buildings['count'],'still'=>$still));
     $count++;
@@ -1121,7 +1121,7 @@ function stat_troop_ordered($id,$sort) {
   $troops_res = do_mysql_query("SELECT cityunit_ordered.count AS count,cityunit_ordered.time AS time,unit.name AS uname,city.name AS name,city.id as id FROM cityunit_ordered,city,unit WHERE cityunit_ordered.city=city.id AND cityunit_ordered.unit=unit.id AND city.owner=".$id);
 
   $troop = array();
-  while ($troops = mysqli_fetch_assoc($troops_res)) {
+  while ($troops = do_mysql_fetch_assoc($troops_res)) {
     $still = ($troops['time']-time());
     array_push($troop, array('id'=>$troops['id'],'name'=>$troops['name'],'uname'=>$troops['uname'],'count'=>$troops['count'],'still'=>$still));
     $count++;
@@ -1165,7 +1165,7 @@ function stat_troop_city($id) {
   echo '<td>Stadtbesitzer</td>';
   echo '<td>Anzahl</td></tr>';
 
-  while ($troops = mysqli_fetch_assoc($troops_res)) {
+  while ($troops = do_mysql_fetch_assoc($troops_res)) {
     echo "<tr class='tblbody'>\n";
     echo "<td>".$troops['uname']."</td>\n";
     echo "<td>".$troops['cname']."</td>\n";
@@ -1205,9 +1205,9 @@ function stat_wert($id) {
   echo "<td class=\"tblhead\">R&uuml;st.</td>\n";
   echo "<td class=\"tblhead\">Pferde</td>\n";
   echo "</tr>\n";
-  while($data1 = mysqli_fetch_assoc($res1)) {
+  while($data1 = do_mysql_fetch_assoc($res1)) {
     $res2 = do_mysql_query("SELECT sum(citybuilding.count * gold) as costgold, sum(citybuilding.count * wood) as costwood, sum(citybuilding.count * stone) as coststone FROM citybuilding,building WHERE citybuilding.building=building.id AND city=".$data1['id']);
-    $data2 = mysqli_fetch_assoc($res2);
+    $data2 = do_mysql_fetch_assoc($res2);
     echo "<tr class=\"tblbody\" style=\"text-align:right; padding-right:5px;\">\n";
     echo '<td nowrap class="cityname">'.get_city_htmllink_koords($data1)."</td>";
    // echo "<td style=\"text-align:left;\"><a href=\"info.php?show=town&name=".$data1['name']."\">".$data1['name']."</a></td>\n";
@@ -1218,7 +1218,7 @@ function stat_wert($id) {
     $sumB += $data2['costwood'];
     $sumC += $data2['coststone'];
     $res3 = do_mysql_query("SELECT sum(cityunit.count * gold) as costgold, sum(cityunit.count * longrange) as costlong, sum(cityunit.count * shortrange) as costshort, sum(cityunit.count * armor) as costarmor, sum(cityunit.count * horse) as costhorse FROM cityunit,unit WHERE cityunit.unit=unit.id AND city=".$data1['id']);
-    $data3 = mysqli_fetch_assoc($res3);
+    $data3 = do_mysql_fetch_assoc($res3);
     echo "<td>".number_format($data3['costgold'],0,",",".")."</td>\n";
     echo "<td>".number_format($data3['costshort'],0,",",".")."</td>\n";
     echo "<td>".number_format($data3['costlong'],0,",",".")."</td>\n";
@@ -1230,7 +1230,7 @@ function stat_wert($id) {
     $sumG += $data3['costarmor'];
     $sumH += $data3['costhorse'];
     $res4 = do_mysql_query("SELECT sum(longrange) as costlong, sum(shortrange) as costshort, sum(armor) as costarmor, sum(horse) as costhorse FROM city WHERE id=".$data1['id']);
-    $data4 = mysqli_fetch_assoc($res4);
+    $data4 = do_mysql_fetch_assoc($res4);
     echo "<td>".number_format($data4['costshort'],0,",",".")."</td>\n";
     echo "<td>".number_format($data4['costlong'],0,",",".")."</td>\n";
     echo "<td>".number_format($data4['costarmor'],0,",",".")."</td>\n";
@@ -1285,10 +1285,10 @@ function stat_troop_army($id) {
     echo "<tr><td colspan='6' class='tblbody'>keine Truppenbewegungen</td></tr>";
   }
   $troops_res=do_mysql_query("SELECT armyunit.unit AS unit, army.aid AS aid, unit.name AS name, count FROM unit, armyunit, army WHERE army.aid=armyunit.aid AND unit.id=armyunit.unit AND army.owner=".$id);
-  while ($troops=mysqli_fetch_assoc($troops_res)) {
+  while ($troops=do_mysql_fetch_assoc($troops_res)) {
     $sg[$troops['aid']][$troops['name']] = $troops['count'];
   }
-  while ($armies=mysqli_fetch_assoc($armies_res)) {
+  while ($armies=do_mysql_fetch_assoc($armies_res)) {
     $remaining=$armies['endtime']-time();
     $txt="";
     switch ($armies['mission']) {
@@ -1317,7 +1317,7 @@ function stat_troop_enemy($id) {
   echo '<tr><td class="tblhead"><b>Fremde Angriffe</b></td></tr>';
   $spy_res=do_mysql_query("SELECT army.aid AS aid, army.owner AS owner, army.start AS start, army.end AS end, army.endtime AS endtime, army.mission FROM army, city WHERE army.end = city.id AND city.owner = ".$id." AND city.owner <> army.owner ORDER BY endtime ASC");
   if(mysqli_num_rows($spy_res)>0) {
-    while($spy=mysqli_fetch_assoc($spy_res)) {
+    while($spy=do_mysql_fetch_assoc($spy_res)) {
 
       switch ($spy['mission']) {
       case "settle";  { $missiontext="Siedeln"; break;}
@@ -1339,7 +1339,7 @@ function stat_troop_enemy($id) {
       echo '<tr class="tblbody">';
       echo '<td width="50%" valign="top">Eure Aufklärer konnten folgende Einheiten erspähen:</td>';
       echo '<td valign="top">';
-      while($spy_unit=mysqli_fetch_assoc($spy_unit_res)) {
+      while($spy_unit=do_mysql_fetch_assoc($spy_unit_res)) {
 	echo "<b>".$spy_unit['name']."</b>: ".$spy_unit['count']."<br />";
       }
       echo '</td>';
@@ -1453,7 +1453,7 @@ function stat_troopoverview($id) {
 
   $sth = do_mysql_query( $sql );
 
-  while ( $res = mysqli_fetch_assoc($sth) ) {
+  while ( $res = do_mysql_fetch_assoc($sth) ) {
     $data[$res['cname']]['player'][$res['uowner']][$res['uname']] = $res['count'];
     $data[$res['cname']]['owner']   = $res['cowner'];
     $data[$res['cname']]['ownerid'] = $res['cownerid'];

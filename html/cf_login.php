@@ -65,7 +65,7 @@ else
 
 	$id=$_SESSION['player']->id;
 	$res1=mysqli_query($GLOBALS['con'], "SELECT username, user_password as password FROM clanf_users WHERE user_id='".$id."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$password=$data1['password'];
 	$username=$data1['username'];
 	$HTTP_POST_VARS['login']="true";

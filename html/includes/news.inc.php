@@ -43,7 +43,7 @@ function print_news($limit) {
   }
   else {
     echo "<ul style=\"padding-left: 5px;\">\n";
-    while ($news = mysqli_fetch_assoc($res)) {
+    while ($news = do_mysql_fetch_assoc($res)) {
       echo "<li><b>".$news['topic']."</b> (".$news['time'].")<br>".$news['text'];      
     } // while
     echo "</ul>\n";

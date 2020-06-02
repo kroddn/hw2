@@ -70,9 +70,9 @@ class MapVersion3 {
   function centerOnCapital($ply) {
     $res1=do_mysql_query("SELECT id FROM city WHERE capital=1 AND owner=".$this->activeplayer);
     if (mysqli_num_rows($res1)>0) {
-      $cityid=mysqli_fetch_assoc($res1);
+      $cityid=do_mysql_fetch_assoc($res1);
       $res2=do_mysql_query("SELECT x, y FROM map WHERE id=".$cityid['id']);
-      $mapxy=mysqli_fetch_assoc($res2);
+      $mapxy=do_mysql_fetch_assoc($res2);
       
       $this->actx=$mapxy['x'];
       $this->acty=$mapxy['y'];

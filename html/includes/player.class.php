@@ -100,9 +100,9 @@ class Player {
     $res1=do_mysql_query("SELECT name, login, settings, signature, description, email, sms, religion, gold, wood, iron, stone, rp, bonuspoints, lastclickbonuspoints, round(pointsavg/pointsupd) as avgpoints, points, clan, clanstatus, clanapplication, mapsize, mapversion, gfx_path, hwstatus, regtime, activationtime, nooblevel, recruiter, tutorial FROM player WHERE id=".intval($id) );        
     $res2=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".intval($id)." AND !(status & ".(MSG_RECIPIENT_READ|MSG_RECIPIENT_DELETED).")");
     $res3=do_mysql_query("SELECT lastclick FROM player_online WHERE uid=".intval($id) );
-    $data3=mysqli_fetch_assoc($res3);
+    $data3=do_mysql_fetch_assoc($res3);
     
-    $db_player = mysqli_fetch_assoc($res1);
+    $db_player = do_mysql_fetch_assoc($res1);
 
     if($db_player['religion'] == null || $db_player['name'] == null) {
       die("<html><body><b>religion oder name ist NULL. Dies sollte nicht passieren...</b><br>Deine ID ist <b>".$id."</b></body></html>");
@@ -225,7 +225,7 @@ class Player {
       if (mysqli_num_rows($sms_res) == 1) {
         // Include für Konstanten
         include_once("includes/sms.func.php");
-        $sms_settings = mysqli_fetch_assoc($sms_res);
+        $sms_settings = do_mysql_fetch_assoc($sms_res);
         
         // Es müssen einige Bedingungen erfüllt sein
         // 1. Der Spieler muss Premium Pro haben
@@ -247,7 +247,7 @@ class Player {
 
       $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
       if (mysqli_num_rows($sms_res) == 1) {
-        $sms_settings = mysqli_fetch_assoc($sms_res);
+        $sms_settings = do_mysql_fetch_assoc($sms_res);
         
         if (( is_premium_set_sms_sender() ) &&            
             $sms_settings['sms_nr_verified'] > 0)
@@ -263,7 +263,7 @@ class Player {
       if (mysqli_num_rows($sms_res) == 1) {
         // Include für Konstanten
         include_once("includes/sms.func.php");
-        $sms_settings = mysqli_fetch_assoc($sms_res);
+        $sms_settings = do_mysql_fetch_assoc($sms_res);
         
         // Es müssen einige Bedingungen erfüllt sein
         // 1. Der Spieler muss Premium Pro haben
@@ -332,14 +332,14 @@ class Player {
   // gibt den Punktestand zurück
 	function getPoints() {
 		$sql=mysqli_query($GLOBALS['con'], "SELECT points FROM player WHERE id = ".$this->id);
-		$data=mysqli_fetch_assoc($sql);
+		$data=do_mysql_fetch_assoc($sql);
 		$this->points=$data['points'];
 		return $this->points;
 	}
 	// gibt den Punktestand zurück
 	function getAvgPoints() {
 		$sql=mysqli_query($GLOBALS['con'], "SELECT round(pointsavg/pointsupd) as points FROM player WHERE id = ".$this->getID());
-		$data=mysqli_fetch_assoc($sql);
+		$data=do_mysql_fetch_assoc($sql);
 		$this->avgpoints=$data['points'];
 		return $this->avgpoints;
 	}
@@ -532,7 +532,7 @@ class Player {
 	// Ressourcen aktualisieren
 	function updateResources() {
 		$res1=do_mysql_query("SELECT gold, wood, stone, iron, rp, nooblevel, bonuspoints FROM player WHERE id=".$this->id);
-		$data=mysqli_fetch_assoc($res1);
+		$data=do_mysql_fetch_assoc($res1);
 		$this->gold = $data['gold'];
 		$this->wood = $data['wood'];
 		$this->iron = $data['iron'];
@@ -752,7 +752,7 @@ class Player {
       $adr_res = do_mysql_query($sql);
       $num = $adr_res ? mysqli_num_rows($adr_res) : 0;
       for($i = 0; $i < $num; $i++) {
-        $adr[$i] = mysqli_fetch_assoc($adr_res);
+        $adr[$i] = do_mysql_fetch_assoc($adr_res);
       }
 
       return $num==0 ? null : $adr;
@@ -772,7 +772,7 @@ class Player {
       $adr_res = do_mysql_query($sql);
       $num = $adr_res ? mysqli_num_rows($adr_res) : 0;
       for($i = 0; $i < $num; $i++) {
-        $adr[$i] = mysqli_fetch_assoc($adr_res);
+        $adr[$i] = do_mysql_fetch_assoc($adr_res);
       }
 
       return $num==0 ? null : $adr;
@@ -793,7 +793,7 @@ class Player {
             ($this->clan ? " UNION SELECT id,name,'1' AS clan FROM player WHERE clan = ".$this->clan :"").
             " ORDER BY name";
 	  $allies = do_mysql_query ($sql);
-	  while ($ally = mysqli_fetch_assoc($allies)) {
+	  while ($ally = do_mysql_fetch_assoc($allies)) {
 	    $allied_players[$i][0] = $ally['id'];
 	    $allied_players[$i][1] = $ally['name'];
 	    $allied_players[$i][2] = $ally['clan'];

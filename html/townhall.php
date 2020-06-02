@@ -71,7 +71,7 @@ if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY && $_SESSION['player']->getReli
   $current_loyality = $data ? $data['loyality'] : 0;
 
   if($num_convert_buildings > 0) {
-    $loy = mysqli_fetch_assoc($res_convert_loyality);
+    $loy = do_mysql_fetch_assoc($res_convert_loyality);
     $has_convert_building = true;
     $has_convert_loyality = $current_loyality >= $loy['convert_loyality'];   
   }
@@ -135,7 +135,7 @@ $settlers  = $sett['c'];
 $cd=$_SESSION['cities']->getCityData();
 
 $res1=do_mysql_query("SELECT sum(citybuilding.count * building.res_attraction) AS attr,sum(citybuilding.count * building.res_food) AS incfood,city.id AS id,city.food AS food FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id = ".$cd['id']." GROUP BY id");
-$data1 = mysqli_fetch_assoc($res1);
+$data1 = do_mysql_fetch_assoc($res1);
 //MYSQLd abhänige Änderung -> Vgl. statistic.inc.php
 $data1['attr'] +=1000;
 ?>
@@ -300,7 +300,7 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
 
     if($res) {
       echo "<ul>";
-      while($b = mysqli_fetch_assoc($res)) {
+      while($b = do_mysql_fetch_assoc($res)) {
         printf("\n<li><b>%s</b>, konvertieren ab %d%% Loyalität möglich.", $b['name'], round($b['convert_loyality']/100));
       }
       echo "\n</ul>";

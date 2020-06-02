@@ -86,7 +86,7 @@ if(isset($producem))
   }
   $cityid_res = do_mysql_query("SELECT id FROM map WHERE x = $coordx AND y = $coordy");
   if ($cityid_res && mysqli_num_rows($cityid_res)>0) {
-    $cityid   = mysqli_fetch_assoc($cityid_res);
+    $cityid   = do_mysql_fetch_assoc($cityid_res);
     $markcity = $cityid['id'];
   }
 }
@@ -112,7 +112,7 @@ if (isset($comeback) && is_numeric($comeback)) {
 
   // Na is doch klar, nur was machen wenn der Datensatz überhaupt exisitert
   if (mysqli_num_rows($res_armies) == 1) {
-    $data1=mysqli_fetch_assoc($res_armies);
+    $data1=do_mysql_fetch_assoc($res_armies);
 
     if ( $data1['owner'] != $_SESSION['player']->getID()) {
       $error = "Sire, Ihr könnt doch keine Armee befehligen, über die Ihr kein Kommando habt!";
@@ -134,11 +134,11 @@ if (isset($comeback) && is_numeric($comeback)) {
         // Feststellen wo die Armee denn hinwollte
         $res_back = do_mysql_query("SELECT map.x as x, map.y as y, end, start FROM army LEFT JOIN map ON map.id=army.end WHERE army.aid=".$comeback);
         if(mysqli_num_rows($res_back) == 1) {
-          $data2    = mysqli_fetch_assoc($res_back);
+          $data2    = do_mysql_fetch_assoc($res_back);
 
           // nächstgelegene Stadt bestimmen
           $cit = do_mysql_query ("SELECT city.id, city.name, round(sqrt( (".$data2['x']."-x)*(".$data2['x']."-x)+(".$data2['y']."-y)*(".$data2['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." ORDER BY dist LIMIT 1");
-          if (mysqli_num_rows($cit) && $city = mysqli_fetch_assoc($cit) ) {
+          if (mysqli_num_rows($cit) && $city = do_mysql_fetch_assoc($cit) ) {
             do_mysql_query("UPDATE army SET end = ".$city['id'].", mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$dif." WHERE aid = ".$comeback);
 
             log_fatal_error("Armee kehrt nach ID ".$city['id']." zurück, da die Heimatstadt verloren ist");
@@ -226,7 +226,7 @@ if($error != null && strlen($error) > 0) {
 // Verbündete Stadt ausgewählt
 if(isset($_GET['from'])) {
   $resA=do_mysql_query("SELECT name, x, y from city LEFT JOIN map USING(id) WHERE city.id = ".$_GET['from']);
-  $dataA = mysqli_fetch_assoc($resA);
+  $dataA = do_mysql_fetch_assoc($resA);
   $cityname = $dataA['name']." <i style=\"color: green;\">(verbündete Stadt)</i>";
   $city_x = $dataA['x'];
   $city_y = $dataA['y'];
@@ -310,7 +310,7 @@ else {
     echo "<tr><td colspan='7' class='tblbody'>keine Truppenbewegungen</td></tr>";
   }
   
-  while ($data1=mysqli_fetch_assoc($res_moving)) {
+  while ($data1=do_mysql_fetch_assoc($res_moving)) {
     $remaining=$data1['endtime']-time();
     $unittxt="";
 
@@ -329,7 +329,7 @@ else {
         $res2=do_mysql_query("SELECT armyunit.unit AS unit, unit.name AS name, count, religion, type, level".
                        " FROM armyunit LEFT JOIN unit ON unit.id = armyunit.unit ".
                        " WHERE aid = ".$data1['aid']);
-        while ($data2=mysqli_fetch_assoc($res2)) {
+        while ($data2=do_mysql_fetch_assoc($res2)) {
           $unittxt .= sprintf(UNIT_SPAN_TEMPLATE,
                               $data2['name'], $data2['name'], $data2['name'],
                               $GLOBALS['imagepath'], getUnitImage($data2), $data2['count'] );
@@ -345,7 +345,7 @@ else {
 
         //ende
         $resX=do_mysql_query("SELECT city.id,name,x,y,owner AS cowner FROM city,map WHERE city.id = ".$data1['start']." AND map.id = city.id");
-        $dataX=mysqli_fetch_assoc($resX);
+        $dataX=do_mysql_fetch_assoc($resX);
 
         echo "<tr><td nowrap valign='top' class='tblbody' ".($markcity == $dataX['id'] ? " id='markcity'>" : ">" ).
     '<a '.($dataX['cowner']==$_SESSION['player']->getID() ? 'class="noerror"' : "" ).
@@ -434,7 +434,7 @@ else {
  ORDER BY ".$incorderby );
 
   if(mysqli_num_rows($res_spy)>0) {
-    while($data_spy=mysqli_fetch_assoc($res_spy)) {
+    while($data_spy=do_mysql_fetch_assoc($res_spy)) {
       $res_spy_unit=do_mysql_query("SELECT armyunit.unit, armyunit.unit AS id, count,name,religion,type,level ".
                                    " FROM armyunit LEFT JOIN unit ON armyunit.unit = unit.id ".
                                    " WHERE aid = ".$data_spy['aid']." ORDER BY level");
@@ -476,7 +476,7 @@ else {
       echo '<td valign="top">Eure Aufklärer konnten folgende Einheiten erspähen:</td>';
       echo '<td valign="top" colspan="2" nowrap>';
       $unitcount = 0;
-      while($data_spy_unit = mysqli_fetch_assoc($res_spy_unit)) {
+      while($data_spy_unit = do_mysql_fetch_assoc($res_spy_unit)) {
         $unitcount++;
         //        echo "<b>".$_SESSION['cities']->getUnitName($data_spy_unit['unit'])."</b>: ".$data_spy_unit['count']." ()<br>";
         printf(UNIT_SPAN_TEMPLATE,
@@ -618,7 +618,7 @@ ORDER BY owner != %d, owner, y
     $unitspeeds = "";
     
     // Den ersten Datensatz holen, damit der Stadtname bekannt ist
-    $data1 = mysqli_fetch_assoc($res_cityunits);
+    $data1 = do_mysql_fetch_assoc($res_cityunits);
     echo '<tr><td colspan="3" class="tblhead"><b>Eigene Truppen in '.$data1['cname'].'</b></td></tr>';
     do {
       echo "<tr class='tblbody'>\n";
@@ -634,7 +634,7 @@ ORDER BY owner != %d, owner, y
 
       $unitspeeds .= sprintf("unitspeeds[%d] = %d;\n", $elem_num, $data1['speed']);
       $elem_num++;
-    } while ($data1 = mysqli_fetch_assoc($res_cityunits));
+    } while ($data1 = do_mysql_fetch_assoc($res_cityunits));
   }
   ?>
   <script language="JavaScript">
@@ -648,7 +648,7 @@ if ($from == $_SESSION['cities']->getActiveCity()) {
   $res2 = do_mysql_query("SELECT unit.id AS id,unit.name AS uname,count,owner,player.name AS pname FROM cityunit LEFT JOIN unit ON unit.id=cityunit.unit LEFT JOIN player ON player.id=cityunit.owner WHERE cityunit.city=".$from." AND cityunit.owner<>".$_SESSION['player']->getID()." ORDER BY owner, cityunit.unit");
   if (mysqli_num_rows($res2)>0) {
     echo '<tr class="tblhead"><td colspan="3"><b>Verbündete Truppen</b></td></tr>';
-    while ($data2 = mysqli_fetch_assoc($res2)) {
+    while ($data2 = do_mysql_fetch_assoc($res2)) {
       echo "\n<tr class='tblbody'>\n";
       echo "<td>".$data2['uname']."</td>\n";
       echo "<td>".$data2['pname']."</td>\n";
@@ -712,7 +712,7 @@ $cid = "";
   <tr class="tblbody"><td colspan="3">&nbsp;</td></tr>
   <?php 
   if (mysqli_num_rows($res_garrison) > 0) {
-  	while($data=mysqli_fetch_assoc($res_garrison)) {
+  	while($data=do_mysql_fetch_assoc($res_garrison)) {
   	  if($cid != $data['cid']) {
     	echo '<tr><td colspan="3" class="tblhead">'.
         '<a href="javascript:towninfo(\''.$data['cid'].'\')">'.$data['cname']."</a> ".

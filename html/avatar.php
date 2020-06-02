@@ -72,7 +72,7 @@ function showAvatarAdmin($id) {
     header('Last-Modified: '.gmdate('D, d M Y H:i:s',  time() ).' GMT' ); 
     $im=@imagecreatefromjpeg($filename);
     $res=do_mysql_query("SELECT avatar FROM player WHERE id='".$id."'");
-    $status=mysqli_fetch_assoc($res);
+    $status=do_mysql_fetch_assoc($res);
     if($status['avatar']==1) {
       $color_back = ImageColorAllocate ($im, 255, 255, 255);
       ImageFilledRectangle($im, 0, 78, 100, 100, $color_back); 
@@ -97,7 +97,7 @@ function showAvatar($id) {
   
     $im=@imagecreatefromjpeg($filename);
     $res=do_mysql_query("SELECT avatar FROM player WHERE id='".$id."'");
-    $status=mysqli_fetch_assoc($res);
+    $status=do_mysql_fetch_assoc($res);
     if($status['avatar']==2) {
       imagejpeg($im); 
     }

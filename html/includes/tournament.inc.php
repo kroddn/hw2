@@ -77,7 +77,7 @@ function calc_tournaments() {
   $num_tour = $num;
 
   tDebug("$num Turniere warten auf Durchführung\n<ul>\n");
-  while($t = mysqli_fetch_assoc($tourn)) {
+  while($t = do_mysql_fetch_assoc($tourn)) {
     unset($R);
 
     $start = $t['time'] + TOURNAMENT_DURATION;
@@ -106,7 +106,7 @@ function calc_tournaments() {
 
     $i = 0;
     $ids = "(";
-    while($p = mysqli_fetch_assoc($parts)) {
+    while($p = do_mysql_fetch_assoc($parts)) {
       $ids .= $p['player'].",";
 
       $R[$i] = getRPG($p['player']);
@@ -183,7 +183,7 @@ function calc_tournaments() {
       // Den Verpassern ne Nachricht schicken
       $notparts = do_mysql_query("SELECT player FROM tournament_players ".
 				 " WHERE tid = ".$t['tid']." AND booktime IS NULL");
-      while($pl = mysqli_fetch_assoc($notparts)) {
+      while($pl = do_mysql_fetch_assoc($notparts)) {
         $topic = "Turnier verpasst";
         $body = "[b]Ihr selbst habt das Turnier verpasst[/b], weil Ihr Eure Teilnahme nicht rechtzeitig bestätigt habt.\n\n";
         $body .= $text;
@@ -200,7 +200,7 @@ function calc_tournaments() {
         // Den Verpassern ne Nachricht schicken
         $players = do_mysql_query("SELECT player FROM tournament_players ".
 				  " WHERE tid = ".$t['tid']);
-        while($pl = mysqli_fetch_assoc($players)) {
+        while($pl = do_mysql_fetch_assoc($players)) {
           $topic = "Turnier ausgefallen";
           $body = "Das Turnier ist ausgefallen, weil nicht genügend Teilnehmer bestätigt haben.\n\n";
           $body .= $text;
@@ -221,7 +221,7 @@ function calc_tournaments() {
     /*$tourtodo = do_mysql_query("SELECT * FROM tournament WHERE time + ".TOURNAMENT_DURATION." > unix_timestamp( ) AND time < unix_timestamp( ) + (24*60*60)");
     $numtodo24 = mysqli_num_rows($tourtodo);*/
     $maxtour = do_mysql_query("SELECT max(time) as max FROM tournament");
-    $get_maxtour = mysqli_fetch_assoc($maxtour);
+    $get_maxtour = do_mysql_fetch_assoc($maxtour);
     $maxtour_time = $get_maxtour['max'];
 
     // Wenn weniger als 10 Turniere innerhalb der nächsten 24h
@@ -236,7 +236,7 @@ function calc_tournaments() {
     		$numtodo3 = mysqli_num_rows($tour3);
     		if($numtodo3>0) {
     		  $timenum = 0;
-    		  while($get_tour3 = mysqli_fetch_assoc($tour3)) {
+    		  while($get_tour3 = do_mysql_fetch_assoc($tour3)) {
     		    $time3[$timenum] = $get_tour3['time'];
     		    $timenum++;
     		  }

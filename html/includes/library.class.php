@@ -76,21 +76,21 @@ class Library {
 
     $count=0;
     $res1=do_mysql_query("SELECT id,topic,category FROM library ORDER BY category,topic");
-    while($data1=mysqli_fetch_assoc($res1)) {
+    while($data1=do_mysql_fetch_assoc($res1)) {
 			$elementData = $this->element[0][$data1['category']];
       $temp=is_array($elementData) ? sizeof($elementData) : 0;
       $this->element[0][$data1['category']][$temp][0]=$data1['topic'];
       $this->element[0][$data1['category']][$temp][1]=$data1['id'];
     }
     $res2=do_mysql_query("SELECT id,name,category FROM building ORDER BY category,id");
-    while($data2=mysqli_fetch_assoc($res2)) {
+    while($data2=do_mysql_fetch_assoc($res2)) {
 			$elementData = $this->element[1][$data2['category']];
       $temp=is_array($elementData) ? sizeof($elementData) : 0;
       $this->element[1][$data2['category']][$temp][0]=$data2['name'];
       $this->element[1][$data2['category']][$temp][1]=$data2['id'];
     }
     $res3=do_mysql_query("SELECT id,name,religion AS religion,level,type FROM unit ORDER BY religion,id");
-    while($data3=mysqli_fetch_assoc($res3)) {
+    while($data3=do_mysql_fetch_assoc($res3)) {
 			$elementData = $this->element[2][$data3['religion']-1];
       $temp=is_array($elementData) ? sizeof($elementData) : 0;
       $this->element[2][$data3['religion']-1][$temp][0]=$data3['name'];
@@ -99,7 +99,7 @@ class Library {
       $this->element[2][$data3['religion']-1][$temp][2]=$img;
     }
     $res4=do_mysql_query("SELECT id,name,category FROM research ORDER BY category,typ,typlevel");
-    while($data4=mysqli_fetch_assoc($res4)) {
+    while($data4=do_mysql_fetch_assoc($res4)) {
 			$elementData = $this->element[3][$data4['category']];
 			$temp=is_array($elementData) ? sizeof($elementData) : 0;
       $this->element[3][$data4['category']][$temp][0]=$data4['name'];
@@ -243,7 +243,7 @@ class Library {
         $res1=do_mysql_query("SELECT topic,description FROM library ".
         					 " WHERE id=".$this->element[$this->active[0]][$this->active[1]][$this->active[2]][1]);
       }
-      while($data1=mysqli_fetch_assoc($res1)) {
+      while($data1=do_mysql_fetch_assoc($res1)) {
         $this->topic = $data1['topic'];
         $info['topic']=$data1['topic'];
         $info['description']=$data1['description'];
@@ -261,7 +261,7 @@ class Library {
 
       $res1=do_mysql_query("SELECT * FROM building ".
                            "WHERE id=".intval($bid) );
-      while($data1=mysqli_fetch_assoc($res1)) {
+      while($data1=do_mysql_fetch_assoc($res1)) {
 	$info['topic']=$data1['name'];
 	
 	if ($data1['description']==NULL) $info['description']="kein Beschreibungstext vorhanden";
@@ -302,7 +302,7 @@ class Library {
 	//Forschungen
 	$res_res=do_mysql_query("SELECT id,name,category FROM research WHERE id = ".$data1['req_research']);
 	if(mysqli_num_rows($res_res)>0) {
-	  $research=mysqli_fetch_assoc($res_res);
+	  $research=do_mysql_fetch_assoc($res_res);
 	  if ($this->player==-1) {
 	    $have = true;
 	  }
@@ -346,7 +346,7 @@ class Library {
 	  $res2=do_mysql_query("SELECT id,name,category FROM building WHERE type=".$data1['type']." AND typelevel=".($data1['typelevel']-1));;
 	}
     
-	while($res2 && $build=mysqli_fetch_assoc($res2)) {
+	while($res2 && $build=do_mysql_fetch_assoc($res2)) {
 	  $link = 'library.php?s1=1&s2='.$build['category']."&s3=0&building_id=".$build['id']."&standalone=".$standalone;
 	  $info['description'].= '<a href="'.$link.'">'.$build['name']."</a><br>\n";
 	}
@@ -393,7 +393,7 @@ class Library {
 
 	  $res1=do_mysql_query("SELECT research.id as rid,research.name AS rname,unit.name AS name,unit.description AS description,unit.religion AS religion,type,level,damage,bonus1,bonus2,bonus3,life,speed,unit.time AS time,cost,unit.points AS points,gold,shortrange,longrange,armor,horse FROM unit LEFT JOIN research ON research.id=unit.req_research WHERE unit.id=".intval($uid) );
 
-	  while($data1=mysqli_fetch_assoc($res1)) {
+	  while($data1=do_mysql_fetch_assoc($res1)) {
 	    // Die Grafik für ne Einheit ergibt sich nach folgendem Muster
 	    $img = getUnitImage($data1);
 
@@ -438,7 +438,7 @@ class Library {
       $rid = isset($research_id) ? $research_id : $this->element[$this->active[0]][$this->active[1]][$this->active[2]][1];
       $res1=do_mysql_query("SELECT id,name,description,rp,time,religion,points,management,category FROM research ".
                            " WHERE id = ".intval($rid) );
-      while($data1=mysqli_fetch_assoc($res1)) {
+      while($data1=do_mysql_fetch_assoc($res1)) {
 
 
 	// die Fähigkeiten Anzeigen, die dadurch forschbar werden
@@ -448,7 +448,7 @@ class Library {
 	$rows = mysqli_num_rows($res);
 	if ($rows) {
 	  $info['description'] .="Diese Forschung ermöglicht: <br><b>";
-	  while ($leadsto = mysqli_fetch_assoc($res)) {
+	  while ($leadsto = do_mysql_fetch_assoc($res)) {
 	    $rows--;
 	    $info['description'].='<a href="library.php?s1=3&s2='.$leadsto['category']."&s3=0&research_id=".$leadsto['id']."&standalone=".$standalone.'">'.$leadsto['name'];
 	    
@@ -467,7 +467,7 @@ class Library {
 	$rows = mysqli_num_rows($res);
 	if ($rows) {
 	  $info['description'] .="Ermöglicht die Ausbildung von: <br><b>";
-	  while ($leadsto = mysqli_fetch_assoc($res)) {
+	  while ($leadsto = do_mysql_fetch_assoc($res)) {
 	    $rows--;
             $info['description'] .= '<a href="library.php?s1=2&s2='.$leadsto['religion'].'&s3=0&unit_id='.$leadsto['id']."&standalone=".$standalone.'">';
 
@@ -485,7 +485,7 @@ class Library {
 	$rows = mysqli_num_rows($res);
 	if ($rows > 0) {
 	  $info['description'] .="Ermöglicht die Errichtung von: <br><b>";
-	  while ($leadsto = mysqli_fetch_assoc($res)) {
+	  while ($leadsto = do_mysql_fetch_assoc($res)) {
 	    $rows--;	   
 	    $info['description'].='<a href="library.php?s1=1&s2='.$leadsto['category']."&s3=0&building_id=".$leadsto['id']."&standalone=".$standalone.'">'.$leadsto['name'];
 	    if ($rows)
@@ -514,7 +514,7 @@ class Library {
 	$res2=do_mysql_query("SELECT research.name AS name, research.id AS id, lib_link FROM research, req_research  WHERE research.id = req_research.req_research AND req_research.research_id = ".$data1['id']);
 	if(mysqli_num_rows($res2)>0) {
 	  $info['description'].="<p><b>Benötigte Forschungen:</b><br>";
-	  while($data2=mysqli_fetch_assoc($res2)) {
+	  while($data2=do_mysql_fetch_assoc($res2)) {
 	    if ($this->player==-1) {
 	      $check_have=do_mysql_query("SELECT id as research FROM research WHERE id = ".$data2['id']);
 	    }

@@ -53,7 +53,7 @@ function barracks_disarm_table($from)
     echo '</tr>';
     $sumcount = 0;
     $sumcost = 0;
-    while ($data1 = mysqli_fetch_assoc($cityunit_res)) {
+    while ($data1 = do_mysql_fetch_assoc($cityunit_res)) {
       echo "<tr class='tblbody'>\n";
       $href = getUnitLibLink($data1);
       $img  = getUnitImage($data1);

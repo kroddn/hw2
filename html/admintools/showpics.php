@@ -14,7 +14,7 @@ include_once("includes/db.inc.php");
 
 $hit = $miss = 0;
 $map = do_mysql_query("SELECT pic,type,count(*) AS cnt FROM map GROUP by pic ORDER BY type,pic");
-while($pic = mysql_fetch_assoc($map)) {
+while($pic = do_mysql_fetch_assoc($map)) {
   
   echo '<tr><td>';
   switch ($pic['type']) {

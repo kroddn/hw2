@@ -69,7 +69,7 @@ if($player->isAdmin()) {
 	echo "<tr class=\"tblhead\"><td colspan=\"3\"><b>Passwortkonflikte</b></td></tr>\n";
 	$res1=mysqli_query($GLOBALS['con'], "SELECT clanf_users.user_id as uid, clanf_users.user_password as pwdcf, player.password as pwd, player.id AS id, player.name AS name FROM clanf_users LEFT JOIN player ON player.id=clanf_users.user_id WHERE clanf_users.user_password != player.password");
 	if(mysqli_num_rows($res1) > 0) {
-		while($data1=mysqli_fetch_assoc($res1)) {
+		while($data1=do_mysql_fetch_assoc($res1)) {
 			echo "<tr><td colspan=\"2\" class=\"tblbody\">".$data1['name']."</td>";
 			//echo "<td>".$data1['pwdcf'].":".$data1['pwd']."</td>";
 			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?setsame=pwd&id=".$data1['uid']."&pass=".$data1['pwd']."\">bereinigen</a></td></tr>\n";
@@ -81,7 +81,7 @@ if($player->isAdmin()) {
 	$res1=mysqli_query($GLOBALS['con'], "SELECT clanf_users.user_id as uid, clanf_users.username, player.name, player.name AS name FROM clanf_users LEFT JOIN player ON player.id=clanf_users.user_id WHERE clanf_users.username != player.name");
 	echo "<tr class=\"tblhead\"><td colspan=\"3\"><b>Namenskonflikte</b></td></tr>\n";
 	if(mysqli_num_rows($res1) > 0) {
-		while($data1=mysqli_fetch_assoc($res1)) {
+		while($data1=do_mysql_fetch_assoc($res1)) {
 			echo "<tr><td colspan=\"2\" class=\"tblbody\">".$data1['name']."</td>";
 			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?setsame=name&id=".$data1['uid']."&name=".$data1['name']."\">bereinigen</a></td></tr>\n";
 		}
@@ -92,7 +92,7 @@ if($player->isAdmin()) {
 	$res1=mysqli_query($GLOBALS['con'], "SELECT topic_id as id, topic_replies FROM clanf_topics WHERE topic_poster = '-1'");
 	echo "<tr class=\"tblhead\"><td colspan=\"3\"><b>Fehlerhafte Topics (Anonymous Topics)</b></td></tr>\n";
 	if(mysqli_num_rows($res1) > 0) {
-		while($data1=mysqli_fetch_assoc($res1)) {
+		while($data1=do_mysql_fetch_assoc($res1)) {
 			echo "<tr>";
 			echo "<td class=\"tblhead\">".$data1['id']."</td>";
 			echo "<td class=\"tblbody\">(".$data1['topic_replies'].") Antworte(n)</td>";
@@ -108,7 +108,7 @@ if($player->isAdmin()) {
 	echo "<tr class=\"tblhead\"><td colspan=\"3\"><b>Fehlerhafte Posts (Anonymous Posts)</b></td></tr>\n";
 	if(mysqli_num_rows($res1) > 0) {
 		echo "<b>Bei folgenden Posts ist ein Login-Fehler aufgetreten:</b><br />";
-		while($data1=mysqli_fetch_assoc($res1)) {
+		while($data1=do_mysql_fetch_assoc($res1)) {
 			echo "<tr>";
 			echo "<td class=\"tblbody\" colspan=\"2\">".$data1['id']."</td>";
 			echo "<td class=\"tblhead\"><a href=\"".$_SERVER['PHP_SELF']."?delete=post&id=".$data1['id']."\">bereinigen</a></td>\n";

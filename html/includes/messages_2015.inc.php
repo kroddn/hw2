@@ -56,7 +56,7 @@ function message_read($id)
 	$sql_settings_add =""; 
 	
 	$result_settings = do_mysql_query($sql_settings);
-	$get_settings = mysqli_fetch_assoc($result_settings);
+	$get_settings = do_mysql_fetch_assoc($result_settings);
 	
 	if($get_settings['ignore_read']==1) $sql_settings_add = $sql_settings_add."AND status NOT LIKE '1' ";
 	if($get_settings['show_archive']==0) $sql_settings_add = $sql_settings_add."AND status NOT LIKE '2' ";
@@ -112,7 +112,7 @@ function message_read($id)
 	$select_counter = 0;
 	
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
-	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
+	while ($datensatz = do_mysql_fetch_assoc($datensaetze)) 
 	{
 		$status = ($datensatz['status'] == 0) ? "ungelesen" : "gelesen";
 		$status = ($datensatz['status'] == 4) ? "Favorit " : $status; 
@@ -246,7 +246,7 @@ function get_user_id($name)
 			WHERE player.name = '$name'";
 			
 	$result = do_mysql_query($sql);
-	$getid = mysqli_fetch_assoc($result);
+	$getid = do_mysql_fetch_assoc($result);
 	
 	// echo "PLayerID: ".$getid['playerid']; Testzwecke
 	
@@ -263,7 +263,7 @@ function get_user_name($id)
 			
 			
 	$result = do_mysql_query($sql);
-	$getname = mysqli_fetch_assoc($result);
+	$getname = do_mysql_fetch_assoc($result);
 	
 	return $getname['playername'];
 }
@@ -337,7 +337,7 @@ function message_archiv($id)
 					WHERE playerid =".$id);
 	
 	$result_settings = do_mysql_query($sql_settings);
-	$get_settings = mysqli_fetch_assoc($result_settings);
+	$get_settings = do_mysql_fetch_assoc($result_settings);
 	
 	// SQL-Query Base
 	$sql=("SELECT 
@@ -385,7 +385,7 @@ function message_archiv($id)
 	$select_counter = 0;
 	
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
-	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
+	while ($datensatz = do_mysql_fetch_assoc($datensaetze)) 
 	{
 		echo "<tr class='tblbody'>";
 		
@@ -457,7 +457,7 @@ function get_show_fights($id)
 		WHERE playerid =".$id);
 		
 	$result = do_mysql_query($sql);
-	$get_settings = mysqli_fetch_assoc($result);
+	$get_settings = do_mysql_fetch_assoc($result);
 	
 	return $get_settings['show_fights'];
 }
@@ -511,7 +511,7 @@ function message_show_fights($id)
 	$select_counter = 0;
 	
 	// Eigentliche Ausgabe der Nachrichten und Checkboxen
-	while ($datensatz = mysqli_fetch_assoc($datensaetze)) 
+	while ($datensatz = do_mysql_fetch_assoc($datensaetze)) 
 	{
 		echo "<tr class='tblbody'>";
 		
@@ -582,7 +582,7 @@ function message_settings($id)
 		WHERE playerid =".$id);
 		
 	$result = do_mysql_query($sql);
-	$get_settings = mysqli_fetch_assoc($result);
+	$get_settings = do_mysql_fetch_assoc($result);
 	
 	//if($get_settings['show_fights']==1) message_show_fights($id);
 	

@@ -163,7 +163,7 @@ $playerids = do_mysql_query("SELECT player.name, player.id, player.clan, clanlog
                             " FROM clanlog LEFT JOIN player ON playerid=player.id where clanlog.clan=".$clan->getID().
                             " ORDER BY ".$order);
 
-while( $get_playerids = mysqli_fetch_assoc($playerids) ) {
+while( $get_playerids = do_mysql_fetch_assoc($playerids) ) {
   if ( $get_playerids['name'] != null ) {
     echo "<tr class=\"tblbody\" align=\"right\"><td width=\"120\" align=\"left\">".$get_playerids['name'];
     if ($get_playerids['clan']!=$clan->getID()) { echo " *"; }

@@ -39,7 +39,7 @@ if ($getkey) {
   $sql_login = do_mysql_query("SELECT id,email,register_email,status FROM player ".
                                 " WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
   if (mysqli_num_rows($sql_login) > 0) {
-    $db_login = mysqli_fetch_assoc($sql_login);
+    $db_login = do_mysql_fetch_assoc($sql_login);
     if ($email == $db_login['email'] || $email == $db_login['register_email']) {
       $key = createKey();
       do_mysql_query("UPDATE player SET activationkey='$key' WHERE id=".$db_login['id']);
@@ -77,7 +77,7 @@ if ($getkey) {
 elseif ($changepw) {
 	$sql_login = do_mysql_query("SELECT id,activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $pname)."'");
 	if (mysqli_num_rows($sql_login)>0) {
-		$db_login = mysqli_fetch_assoc($sql_login);
+		$db_login = do_mysql_fetch_assoc($sql_login);
 		if ($db_login['status']==NULL) {
 			if (checkPassword($pw1)) {
 				if ($pw1==$pw2) {

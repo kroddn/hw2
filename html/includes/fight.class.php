@@ -81,7 +81,7 @@ class FightClass {
   function AddCityFromDB($cityid) {
     //stadtbesitzer und bevölkerung ermitteln
     $rescityowner = "SELECT city.owner AS id, player.name AS name, population,prosperity FROM city LEFT JOIN player ON player.id = city.owner WHERE city.id=".$cityid;
-    $this->cityowner = mysqli_fetch_assoc($rescityowner);
+    $this->cityowner = do_mysql_fetch_assoc($rescityowner);
     //Stadtbevölkerung setzen
     $this->citypopulation = $this->cityowner['population'];
     $this->cityprosperity = $this->cityowner['prosperity'];
@@ -89,11 +89,11 @@ class FightClass {
     unset ($this->cityowner['population']);
     //alle Verteidiger ermitteln
     $resdefers = do_mysql_query("SELECT DISTINCT owner AS id, player.name AS name FROM cityunit, player WHERE player.id = owner AND city=".$cityid);
-    while ($defender = mysqli_fetch_assoc($resdefers)) {
+    while ($defender = do_mysql_fetch_assoc($resdefers)) {
       //Armee dieses Verteidiger ermitteln
       $cityunits = do_mysql_query("SELECT unit,count FROM cityunit WHERE city=".$cityid." AND owner=".$defender['id']);
       $df = array ();
-      while ($units = mysqli_fetch_assoc($cityunits)) {
+      while ($units = do_mysql_fetch_assoc($cityunits)) {
         $df[]['id'] = $units['unit'];
         $df[]['count'] = $units['count'];
         $df[]['player'] = $defender['id'];
@@ -113,10 +113,10 @@ class FightClass {
   function AddAtterFromDB($armyid) {
     //Name ermitteln
     $resarmyowner = "SELECT army.owner AS id, player.name AS name FROM army, player WHERE player.id = army.owner AND army.aid=".$armyid;
-    $armyowner = mysqli_fetch_assoc($resarmyowner);
+    $armyowner = do_mysql_fetch_assoc($resarmyowner);
     //Armee ermitteln
     $resatter = do_mysql_query("SELECT unit, count FROM armyunit WHERE aid=".$armyid);
-    while ($atter = mysqli_fetch_assoc($resatter)) {
+    while ($atter = do_mysql_fetch_assoc($resatter)) {
       $at[$i]['id'] = $atter['unit'];
       $at[$i]['count'] = $atter['count'];
       $at[$i]['player'] = $armyowner['id'];
@@ -204,7 +204,7 @@ class FightClass {
     
     foreach ($this->attarmys as $id => $onearmy) {
       $res1 = mysqli_query($GLOBALS['con'], "SELECT name FROM unit WHERE id = '".$onearmy['id']."'");
-      $data1 = mysqli_fetch_assoc($res1);
+      $data1 = do_mysql_fetch_assoc($res1);
       $msg .= $data1['name'].": ".$onearmy['count']."\n";
     }
     $msg .= "\n";
@@ -214,7 +214,7 @@ class FightClass {
       $msg .= "Ihr zählt auf Seiten der tapferenen Verteidiger folgendes Heer:\n";
     foreach ($this->defarmys as $id => $onearmy) {
       $res1 = mysqli_query($GLOBALS['con'], "SELECT name FROM unit WHERE id = '".$onearmy['id']."'");
-      $data1 = mysqli_fetch_assoc($res1);
+      $data1 = do_mysql_fetch_assoc($res1);
       $msg .= $data1['name'].": ".$onearmy['count']." von ".$this->defenders[$onearmy['player']]."\n";
     }
     $msg .= "\n";
@@ -260,7 +260,7 @@ class FightClass {
       $msg .= "\n\nFolgende Einheiten überlebten die Schlacht:\n";
       foreach ($survived_armys as $id => $onearmy) {
         $res1 = mysqli_query($GLOBALS['con'], "SELECT name FROM unit WHERE id = '".$onearmy['id']."'");
-        $data1 = mysqli_fetch_assoc($res1);
+        $data1 = do_mysql_fetch_assoc($res1);
         if ($this->result == Fight_AttWin)
           $msg .= $data1['name'].": ".$onearmy['count']."\n";
         else

@@ -32,7 +32,7 @@ function request_exception($notes, $players) {
   foreach ($plist as $p) {
     if (checkBez($p, 4, 40)) {
       $pid_res = do_mysql_query("SELECT id FROM player WHERE name='".trim($p)."'");
-      $pid = mysqli_fetch_assoc($pid_res);
+      $pid = do_mysql_fetch_assoc($pid_res);
       if ($pid['id'] > 0)
 	$ids[] = $pid['id'];
       else {
@@ -132,7 +132,7 @@ function show_own_exceptions() {
   $ex_res = do_mysql_query("SELECT multi_exceptions.id,multi_exceptions.valid FROM multi_exceptions,multi_exceptions_players WHERE multi_exceptions.id=multi_exceptions_players.eid AND multi_exceptions_players.player=".$_SESSION['player']->getID());
   if (!mysqli_num_rows($ex_res))
     return NULL;
-  while ($ex = mysqli_fetch_assoc($ex_res)) {
+  while ($ex = do_mysql_fetch_assoc($ex_res)) {
     $p_res = do_mysql_query("SELECT player.name,multi_exceptions_players.valid FROM player,multi_exceptions_players WHERE player.id=multi_exceptions_players.player AND multi_exceptions_players.eid=".$ex['id']);
     echo "<table><tr><td><b>Exception ".$ex['id']."</b>";
     if (!$ex['valid']) {
@@ -144,7 +144,7 @@ function show_own_exceptions() {
     echo "<br>\n".$ex['comment']."\n";
     
     echo "</td></tr>";
-    while ($p = mysqli_fetch_assoc($p_res)) {
+    while ($p = do_mysql_fetch_assoc($p_res)) {
       echo "<tr><td>&nbsp;&nbsp;".$p['name'];
       if (!$p['valid']) {
         echo " &nbsp;&nbsp;<i><font color='red'>nicht freigeschaltet</font></i>\n";
@@ -164,7 +164,7 @@ function show_mh_exceptions($file, $id=null) {
   $ex_res = do_mysql_query("SELECT DISTINCT multi_exceptions.id,multi_exceptions.valid,multi_exceptions.comment FROM multi_exceptions, multi_exceptions_players WHERE multi_exceptions.id=multi_exceptions_players.eid".($id ? " AND multi_exceptions_players.player=$id": "") );
   if (!mysqli_num_rows($ex_res))
     return NULL;
-  while ($ex = mysqli_fetch_assoc($ex_res)) {
+  while ($ex = do_mysql_fetch_assoc($ex_res)) {
     $p_res = do_mysql_query("SELECT player.name,multi_exceptions_players.valid,multi_exceptions_players.comment,multi_exceptions_players.note,multi_exceptions_players.id FROM player,multi_exceptions_players WHERE player.id=multi_exceptions_players.player AND multi_exceptions_players.eid=".$ex['id']);
     echo "<table><tr><td>Exception ".$ex['id'];
     if ($ex['comment']) {
@@ -180,7 +180,7 @@ function show_mh_exceptions($file, $id=null) {
       echo " &nbsp;&nbsp;<b><font color='green'>genehmigt</font></b>";
     }
     echo "</td></tr>";
-    while ($p = mysqli_fetch_assoc($p_res)) {
+    while ($p = do_mysql_fetch_assoc($p_res)) {
       echo "<tr><td>&nbsp;&nbsp;".$p['name'];
       if (!$p['valid']) {
 	      echo " <b> (<a href='".$file."?pvalidate=".$p['id']."'>zustimmen/bestätigen</a>)</b>";
@@ -224,7 +224,7 @@ function multi_trap($p) {
     
     // Es kann nur einen Eintrag geben (weil code UNIQUE ist)
     if(mysqli_num_rows($res) == 1) {
-      $dbcookie = mysqli_fetch_assoc($res);
+      $dbcookie = do_mysql_fetch_assoc($res);
       // Cookie gibts zumindest mal...
 
       // Hochzählen

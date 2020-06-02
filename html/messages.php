@@ -25,7 +25,7 @@ if(isset($category)) {
 
 $sizecategory = 10000;
 $sizepostfach = get_message_archive_size();
-//Falls Kategory = Gesendete Nachrichten, dann nachprüfen wieviele Nachrichten man max haben darf
+//Falls Kategory = Gesendete Nachrichten, dann nachprï¿½fen wieviele Nachrichten man max haben darf
 if($player->getActiveMsgcategory() == MESSAGECAT_SENT)
 $sizecategory = $sizepostfach;
 
@@ -48,7 +48,7 @@ if(isset($delmarked) && sizeof($mark)>0){
     }
     $sql.=")";
     do_mysql_query($sql);
-    // Wurden welche gelöscht, dann Postausgang neu berechnen
+    // Wurden welche gelï¿½scht, dann Postausgang neu berechnen
     if (mysql_affected_rows() > 0) {
       $player->messages_sent = -1;
     }
@@ -112,7 +112,7 @@ if(isset($mailmarked)){
     $sql0.=") ORDER by date DESC";
     $getsql = do_mysql_query($sql0);
     $i=0;
-    while ($getcat = mysql_fetch_assoc($getsql)) {
+    while ($getcat = do_mysql_fetch_assoc($getsql)) {
       $marked[$i]['cat']=$getcat['cat'];
       if ($getcat['sender']==$_SESSION['player']->getName()) {
       	$marked[$i]['sended']=1;
@@ -140,7 +140,7 @@ if(isset($mailmarked)){
           $mailtext .= "<table bgcolor=".$messagecolors[0].">";
           $mailtext .= "<tr><td colspan=2><b>Kategorie: Spieler</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
-          while ($playermessages = mysql_fetch_assoc($getplayermessages)) {
+          while ($playermessages = do_mysql_fetch_assoc($getplayermessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$playermessages['sender']."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
@@ -172,7 +172,7 @@ if(isset($mailmarked)){
           $mailtext .= "<table bgcolor=".$messagecolors[1].">";
           $mailtext .= "<tr><td colspan=2><b>Kategorie: Orden/Diplomatie</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
-          while ($clandiplomessages = mysql_fetch_assoc($getclandiplomessages)) {
+          while ($clandiplomessages = do_mysql_fetch_assoc($getclandiplomessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$clandiplomessages['sender']."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
@@ -202,7 +202,7 @@ if(isset($mailmarked)){
           $mailtext .= "<table bgcolor=".$messagecolors[2].">";
           $mailtext .= "<tr><td colspan=2><b>Kategorie: Handel</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
-          while ($marketmessages = mysql_fetch_assoc($getmarketmessages)) {
+          while ($marketmessages = do_mysql_fetch_assoc($getmarketmessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$marketmessages['sender']."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
@@ -232,7 +232,7 @@ if(isset($mailmarked)){
           $mailtext .= "<table bgcolor=".$messagecolors[3].">";
           $mailtext .= "<tr><td colspan=2><b>Kategorie: Bau</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
-          while ($buildmessages = mysql_fetch_assoc($getbuildmessages)) {
+          while ($buildmessages = do_mysql_fetch_assoc($getbuildmessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$buildmessages['sender']."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
@@ -246,7 +246,7 @@ if(isset($mailmarked)){
           $mailtext .= "<tr><td colspan=2>&nbsp;</td></tr></table>";
 	}
 
-	// Militärrichten auslesen
+	// Militï¿½rrichten auslesen
 	$warmes = 0;
     $sql5="SELECT sender, date, header, body FROM message WHERE recipient = ".$_SESSION['player']->getID()." AND date>=".$player->getRegTime()." AND id IN (";
     for ($i=0;$i<sizeof($marked);++$i) {
@@ -260,9 +260,9 @@ if(isset($mailmarked)){
 	if ($warmes>0) {
         $getwarmessages = do_mysql_query($sql5);
           $mailtext .= "<table bgcolor=".$messagecolors[4].">";
-          $mailtext .= "<tr><td colspan=2><b>Kategorie: Militär</b></td></tr>";
+          $mailtext .= "<tr><td colspan=2><b>Kategorie: Militï¿½r</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
-          while ($warmessages = mysql_fetch_assoc($getwarmessages)) {
+          while ($warmessages = do_mysql_fetch_assoc($getwarmessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$warmessages['sender']."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
@@ -288,16 +288,16 @@ if(isset($mailmarked)){
     }
     $sql6.=") ORDER by date DESC";
     if ($sendedmes>0) {
-      //mysql_num_rows($getsendedmessages) > 0) {
+      //do_mysql_num_rows($getsendedmessages) > 0) {
       $getsendedmessages = do_mysql_query($sql6);
 
           $mailtext .= "<table bgcolor=".$messagecolors[5].">";
           $mailtext .= "<tr><td colspan=2><b>Kategorie: Gesendete Nachrichten</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
-          while ($sendedmessages = mysql_fetch_assoc($getsendedmessages)) {
+          while ($sendedmessages = do_mysql_fetch_assoc($getsendedmessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$sendedmessages['sender']."</td></tr>";
-            $mailtext .= "<tr><td valign=\"top\"><b>Empfänger</b></td>";
+            $mailtext .= "<tr><td valign=\"top\"><b>Empfï¿½nger</b></td>";
             $mailtext .= "<td>".resolvePlayerName($sendedmessages['recipient'])."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
             $mailtext .= "<td>".date("d.m.Y H:i:s",$sendedmessages['date'])."</td></tr>";
@@ -323,14 +323,14 @@ if(isset($mailmarked)){
 	}
 	if(isset($_SESSION['msg_backup_count']) && $_SESSION['msg_backup_count'] <= 6) {
 	  mail($player->getEMail(), $subject, $mailtext, $headers);
-      $msgnoerror = "Ausgewählte Nachrichten erfolgreich per E-Mail versendet";
+      $msgnoerror = "Ausgewï¿½hlte Nachrichten erfolgreich per E-Mail versendet";
     }
     else {
-      $msgerror = "Max. Anzahl von Backups der Nachrichten pro Session überschritten";
+      $msgerror = "Max. Anzahl von Backups der Nachrichten pro Session ï¿½berschritten";
     }
   }
   else {
-    $msgerror = "Keine Nachrichten ausgewählt";
+    $msgerror = "Keine Nachrichten ausgewï¿½hlt";
   }
  }
 
@@ -421,7 +421,7 @@ $sqlcommand = "SELECT count(id) AS c, category FROM message WHERE recipient=".$p
 
 if ($sizepostfach > 0) {
   $res1 = do_mysql_query($sqlcommand);
-  while ($db_msg = mysql_fetch_assoc($res1)) {
+  while ($db_msg = do_mysql_fetch_assoc($res1)) {
     $arrmsg[$db_msg['category']]=$db_msg['c'];
   }
 }
@@ -432,7 +432,7 @@ $arrmsg[MESSAGECAT_SENT]= $player->getSentMessages();
 $sqlcommand = "SELECT count(id) AS c, category FROM message WHERE recipient=".$player->getID()." AND !(status & ".(MSG_RECIPIENT_DELETED|MSG_RECIPIENT_READ).") GROUP BY category";
 
 $res2 = do_mysql_query($sqlcommand);
-while ($db_unreadmsg = mysql_fetch_assoc($res2)) {
+while ($db_unreadmsg = do_mysql_fetch_assoc($res2)) {
   $arrunreadmsg[$db_unreadmsg['category']]=$db_unreadmsg['c'];
 }
 // Gesendete Nachrichten
@@ -517,28 +517,28 @@ if($sizecategory == 0) {
   echo "<tr><td height='40'colspan='4' class='tblbody'>Diese Feature ist <a href=\"premium.php\">Premium-Accounts</a> vorbehalten.</td></tr>";
 }
 else if(defined("OLD_GAME") && $_SESSION['player']->getActiveMsgcategory() == 5) {
-  echo "<tr><td height='40'colspan='4' class='tblbody'>RPG-Featurities sind nur in den neuen Runden verfügbar.</td></tr>";  
+  echo "<tr><td height='40'colspan='4' class='tblbody'>RPG-Featurities sind nur in den neuen Runden verfï¿½gbar.</td></tr>";  
 }
 else {
   if($_SESSION['player']->getActiveMsgcategory() == 9 && !$_SESSION['player']->isTeamMember()) {
     ?>
     <tr><td height='40'colspan='4' class='tblbody'>
     Hier kommuniziert das Holy-Wars 2 Team. Ihr seid aber leider kein Team-Mitglied.<p>
-    Falls Ihr Interesse habt, Holy-Wars 2 zu unterstützen oder mitzuwirken, dann
-    gibt es mehrere Möglichkeiten:
+    Falls Ihr Interesse habt, Holy-Wars 2 zu unterstï¿½tzen oder mitzuwirken, dann
+    gibt es mehrere Mï¿½glichkeiten:
     <list>
-    <li>Zunächst ist es wichtig, aktiv im Forum und im IRC zu sein.</li>
-    <li>Regelmässiges Voten bringt Holy-Wars 2 voran und sorgt für neue Spieler.</li>
-    <li>Da sich Holy-Wars 2 überwiegend aus Werbung finanziert, sollten <b>Popup-Blocker ausgeschalten</b> werden.
-    <li>Bei regelmässigem und positivem Wirken besteht die Möglichkeit, als HW2-Betatester
+    <li>Zunï¿½chst ist es wichtig, aktiv im Forum und im IRC zu sein.</li>
+    <li>Regelmï¿½ssiges Voten bringt Holy-Wars 2 voran und sorgt fï¿½r neue Spieler.</li>
+    <li>Da sich Holy-Wars 2 ï¿½berwiegend aus Werbung finanziert, sollten <b>Popup-Blocker ausgeschalten</b> werden.
+    <li>Bei regelmï¿½ssigem und positivem Wirken besteht die Mï¿½glichkeit, als HW2-Betatester
         in das HW2-Team einzusteigen. Von dort aus stehen dann mit der Zeit weitere Posten
-        zur Verfügung.
+        zur Verfï¿½gung.
     </list>
     </td></tr>
     <?
   }
   
-  $num_mess = mysql_num_rows($res1);
+  $num_mess = do_mysql_num_rows($res1);
   if ($num_mess == 0) {
     if ($player->getActiveMsgcategory()==-1) {
       echo "<tr><td colspan='4' class='tblbody'>Keine neuen Nachrichten vorhanden</td></tr>";
@@ -553,7 +553,7 @@ else {
     echo '<tr><td colspan="4">&nbsp;</td></tr>';
   }
 
-while ($db_message = mysql_fetch_assoc($res1)) {
+while ($db_message = do_mysql_fetch_assoc($res1)) {
   echo "<tr>";
   if ($db_message['unread']!=0) {
     $fett = "<b>";
@@ -601,25 +601,21 @@ if($num_mess > 0) {
 <tr height="20"><td colspan="4">&nbsp;</td></tr>
 <?php if(!defined("HISPEED") || !HISPEED) { ?>
     <tr><td align="center" colspan="4" style="padding: 10px; background-color: B0B0B0;">
-    <h1>SMS über Holy-Wars 2!</h1>
+    <h1>SMS ï¿½ber Holy-Wars 2!</h1>
     <?
     check_sms_settings(); 
     if ($_SESSION['sms_contingent'] > 0) 
-      echo 'Ihr habt noch <b style="color: red; font-size: 12px;">'.$_SESSION['sms_contingent']." SMS</b> zum Versand zur Verfügung.\n<p>\n<a class=\"green\" href=\"sms.php\">SMS verfassen (hier oder auf das SMS-Symbol klicken)</a>";
+      echo 'Ihr habt noch <b style="color: red; font-size: 12px;">'.$_SESSION['sms_contingent']." SMS</b> zum Versand zur Verfï¿½gung.\n<p>\n<a class=\"green\" href=\"sms.php\">SMS verfassen (hier oder auf das SMS-Symbol klicken)</a>";
     else 
-      echo 'Leider habt ihr derzeit <b style="color: red; font-size: 12px;">kein SMS</b> zum Versand zur Verfügung.';
+      echo 'Leider habt ihr derzeit <b style="color: red; font-size: 12px;">kein SMS</b> zum Versand zur Verfï¿½gung.';
 ?>
 <p>
-<a href="settings.php?show=sms">Hier für SMS-Anmeldung/Verwaltung klicken</a>.
+<a href="settings.php?show=sms">Hier fï¿½r SMS-Anmeldung/Verwaltung klicken</a>.
 </td></tr>
 <?php } // if(!defined("HISPEED") || !HISPEED) ?>
 
 <tr height="20"><td colspan="4">&nbsp;</td></tr>
 <tr><td align="center" colspan="4" style="padding:0px;"><? include("include/vote.inc.php"); ?>
-<? if(!is_premium_noads()) { ?>
-<p>
-<A STYLE="color: blue;" HREF="http://partners.webmasterplan.com/click.asp?ref=241980&site=3602&type=text&tnb=2" TARGET="_top">Deine Chat-Community<br></a><A STYLE="color: blue;" HREF="http://partners.webmasterplan.com/click.asp?ref=241980&site=3602&type=text&tnb=2" TARGET="_top">Mit Spass und Chat zum Traumpartner aus Deiner Umgebung!<br></a><IMG SRC="http://banners.webmasterplan.com/view.asp?site=3602&ref=241980&b=0&type=text&tnb=2" BORDER="0" WIDTH="1" HEIGHT="1">
-<? } ?>
 </td></tr>
 </table>
 </td>
@@ -646,7 +642,7 @@ else {
 }
 ?>
 type="submit" value="per Email sichern" name="mailmarked">
-&nbsp;<input type="submit" value="löschen" name="delmarked">
+&nbsp;<input type="submit" value="lï¿½schen" name="delmarked">
 </td>
 </tr>
 <? } ?>

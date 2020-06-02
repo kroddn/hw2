@@ -66,7 +66,7 @@ $fy = $mapsize['y'];
 $qry_startlocations = do_mysql_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
 
 $locsum = 0;
-while ($res_sl=mysqli_fetch_assoc($qry_startlocations)) {
+while ($res_sl=do_mysql_fetch_assoc($qry_startlocations)) {
   $loc[$res_sl['pos']]=$res_sl['c'];
   $locsum+=$res_sl['c'];
 }

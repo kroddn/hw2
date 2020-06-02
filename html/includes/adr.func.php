@@ -57,7 +57,7 @@ function adr_real_add($name, $nicename = null, $sms = null) {
     $p_res = do_mysql_query("SELECT nicename FROM addressbook WHERE owner = ".$me.
                             " AND sms LIKE '".mysqli_escape_string($GLOBALS['con'], $sms)."'");
     if (mysqli_num_rows($p_res)){
-      $aname = mysqli_fetch_assoc($p_res);
+      $aname = do_mysql_fetch_assoc($p_res);
       $aname = $aname['nicename'];
       return "Diese SMS-Nummer haben Sie bereits in Ihrem Adressbuch ($aname).";
     }
@@ -202,7 +202,7 @@ function print_address_book() {
     
     // Einträge ausgeben
     $i=0;
-    while( $a = mysqli_fetch_assoc($res) ) {
+    while( $a = do_mysql_fetch_assoc($res) ) {
       $nicename = $a['nicename'] ;
       $nick     = $a['nick'] ? $a['nick'] : "-";
 

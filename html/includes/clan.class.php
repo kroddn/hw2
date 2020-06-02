@@ -59,12 +59,12 @@ class Clan {
     $this->player = intval($player);
 
     $res1 = do_mysql_query("SELECT name,clan,clanstatus FROM player WHERE id=".$this->player);
-    if ($data1 = mysqli_fetch_assoc($res1)) {
+    if ($data1 = do_mysql_fetch_assoc($res1)) {
       $this->status = $data1['clanstatus'];	 
       $this->player_name = $data1['name'];
 
       $this->update();
-    } // if ($data1 = mysqli_fetch_assoc($res1))
+    } // if ($data1 = do_mysql_fetch_assoc($res1))
   }
   
 
@@ -88,13 +88,13 @@ class Clan {
 
   function update() {
   	$res = do_mysql_query("SELECT clan,clanstatus FROM player WHERE id=".$this->player);
-  	$data = mysqli_fetch_assoc($res);
+  	$data = do_mysql_fetch_assoc($res);
   	if ($data['clan']> 0) {
   		$this->id=$data['clan'];
   		$this->status=$data['clanstatus'];
 
   		$res2 = do_mysql_query("SELECT name,description FROM clan WHERE id=".$data['clan']);
-  		if ($data2 = mysqli_fetch_assoc($res2)) {
+  		if ($data2 = do_mysql_fetch_assoc($res2)) {
   			$this->description = $data2['description'];
   			$this->name = $data2['name'];
   		}
@@ -118,7 +118,7 @@ class Clan {
    */
   function minister_msg($clanid, $mask, $header, $body) {
     $res1= do_mysql_query("SELECT id FROM player WHERE clan=".$clanid."  AND clanstatus & ".$mask);
-    while($data1 = mysqli_fetch_assoc($res1)) {
+    while($data1 = do_mysql_fetch_assoc($res1)) {
       do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['id'].",".time().",'".$header."','".$body."',1)");
       do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['id']);
     }
@@ -166,7 +166,7 @@ class Clan {
     
   	if(mysqli_num_rows($res1)) {
 	    // Den aktuellen Spieler zur Ordensführung des neuen Clans erheben
-	    if ($data1 = mysqli_fetch_assoc($res1))
+	    if ($data1 = do_mysql_fetch_assoc($res1))
 	      do_mysql_query("UPDATE player SET clan=".$data1['id'].",clanapplication=NULL,clanstatus=63,clanapplicationtext=NULL WHERE id=".$this->player);
 	    $this->id = $data1['id'];
 	    $this->status = 63;
@@ -199,10 +199,10 @@ class Clan {
     }
     
     $res1 = do_mysql_query("SELECT id FROM clan WHERE id=".$id);
-    if (mysqli_fetch_assoc($res1)) {
+    if (do_mysql_fetch_assoc($res1)) {
     	$res2 = do_mysql_query("SELECT religion FROM player WHERE clan=".$id." AND clanstatus=63");
     	$res3 = do_mysql_query("SELECT religion,name FROM player WHERE id=".$this->player);
-    	if (($data2 = mysqli_fetch_assoc($res2)) && ($data3 = mysqli_fetch_assoc($res3))) {
+    	if (($data2 = do_mysql_fetch_assoc($res2)) && ($data3 = do_mysql_fetch_assoc($res3))) {
     		if ($data2['religion'] == $data3['religion']) {
     			do_mysql_query("UPDATE player SET clanapplication=".$id.",clanapplicationtext='".mysqli_escape_string($GLOBALS['con'], $text)."' WHERE id=".$this->player);
     			 
@@ -226,7 +226,7 @@ class Clan {
     } 
     else {
     	$res1 = do_mysql_query("SELECT clanapplication FROM player WHERE id=".$player);
-    	if ($data1 = mysqli_fetch_assoc($res1)) {
+    	if ($data1 = do_mysql_fetch_assoc($res1)) {
     		if (($data1['clanapplication'] == $this->id) && ($this->status & 2)) {
     			do_mysql_query("UPDATE player SET clanapplication=NULL,clanapplicationtext=NULL WHERE id=".$player);
     			do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$player.", UNIX_TIMESTAMP(),'Bewerbung abgelehnt','Eure Bewerbung wurde vom Orden ".mysqli_escape_string($GLOBALS['con'], $this->name)." abgelehnt', 1)");
@@ -252,7 +252,7 @@ class Clan {
     //der letzte Ordensleiter
     if (($this->status == 63) && (mysqli_num_rows($res) == 1) && ($player == $this->player)) {
     	$res = do_mysql_query("SELECT gold FROM clan WHERE id=".$clan);
-    	if($data = mysqli_fetch_assoc($res))
+    	if($data = do_mysql_fetch_assoc($res))
     	  do_mysql_query("UPDATE player SET clan=NULL,gold=gold+".$data['gold'].",cc_resources=1 WHERE id=".$this->player);
     	removeClan($clan);
     }
@@ -265,11 +265,11 @@ class Clan {
 
     	//Nachricht an OL und Innenminister wegen Austritt eines Members
     	$get_leave_name = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-    	$leave_name =  mysqli_fetch_assoc($get_leave_name);
+    	$leave_name =  do_mysql_fetch_assoc($get_leave_name);
     	$msgheader = "Mitglied aus Orden ausgetreten";
     	$msgbody = "Der Spieler <b>".$leave_name['name']."</b> hat soeben Euren Orden verlassen!";
     	$res1= do_mysql_query("SELECT id FROM player WHERE clan=".$this->id." AND clanstatus & 2");
-    	while($data1 = mysqli_fetch_assoc($res1)) {
+    	while($data1 = do_mysql_fetch_assoc($res1)) {
     		do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['id'].", UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $msgheader)."','".mysqli_escape_string($GLOBALS['con'], $msgbody)."',1)");
     		do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['id']);
     	}
@@ -278,20 +278,20 @@ class Clan {
     // Innenminister wirft member raus
     else if (($this->status & 2)) {
     	$res = do_mysql_query("SELECT clan,clanstatus FROM player WHERE id=".$player);
-    	if ($data = mysqli_fetch_assoc($res)) {
+    	if ($data = do_mysql_fetch_assoc($res)) {
     		if (($data['clan'] == $this->id) && ($data['clanstatus'] <63)) {
     			do_mysql_query("UPDATE player SET clan=NULL WHERE id=".$player);
     		}
     		 
     		//Nachricht an OL und Innenminister wegen Austritt eines Members
     		$get_kicker_name = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-    		$kicker_name =  mysqli_fetch_assoc($get_kicker_name);
+    		$kicker_name =  do_mysql_fetch_assoc($get_kicker_name);
     		$get_kicked_name = do_mysql_query("SELECT name FROM player WHERE id=".$player);
-    		$kicked_name =  mysqli_fetch_assoc($get_kicked_name);
+    		$kicked_name =  do_mysql_fetch_assoc($get_kicked_name);
     		$msgheader = "Mitglied aus Orden entlassen";
     		$msgbody = "Der Innenminister <b>".$kicker_name['name']."</b> hat soeben den Spieler  <b>".$kicked_name['name']."</b> aus dem Orden entlassen!";
     		$res1= do_mysql_query("SELECT id FROM player WHERE clan=".$this->id." AND clanstatus & 2");
-    		while($data1 = mysqli_fetch_assoc($res1)) {
+    		while($data1 = do_mysql_fetch_assoc($res1)) {
     			do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['id'].", UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $msgheader)."','".mysqli_escape_string($GLOBALS['con'], $msgbody)."',1)");
     			do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['id']);
     		}
@@ -306,7 +306,7 @@ class Clan {
     $this->update();
     $player = intval($player);
     $res = do_mysql_query("SELECT clanapplication FROM player WHERE id=".$player);
-    if ($data = mysqli_fetch_assoc($res)) {
+    if ($data = do_mysql_fetch_assoc($res)) {
     	if (($data['clanapplication'] == $this->id) && ($this->status & 2))
     		do_mysql_query("UPDATE player SET clan=".$this->id.",clanapplication=NULL,clanapplicationtext=NULL,clanstatus=0 WHERE id=".$player);
     }
@@ -318,12 +318,12 @@ class Clan {
     $gold = intval($gold);
     if ($gold > 0) {
     	$res = do_mysql_query("SELECT gold FROM player WHERE id=".$this->player);
-    	if (($data = mysqli_fetch_assoc($res)) && ($data['gold'] >= $gold)) {
+    	if (($data = do_mysql_fetch_assoc($res)) && ($data['gold'] >= $gold)) {
     		do_mysql_query("UPDATE player SET gold=gold-".$gold.",cc_resources=1 WHERE id=".$this->player);
     		do_mysql_query("UPDATE clan SET gold=gold+".$gold." WHERE id=".$this->id);
     		//clanlog
     		$clanlogdata1 = do_mysql_query("SELECT * from clanlog where playerid=".$this->player." and clan=".$this->id);
-    		if ($get_clanlogdata1 = mysqli_fetch_assoc($clanlogdata1)) {
+    		if ($get_clanlogdata1 = do_mysql_fetch_assoc($clanlogdata1)) {
     			do_mysql_query("UPDATE clanlog set amount=amount+".$gold.", time_amount=".time()." where playerid=".$this->player." and clan=".$this->id);
     		}
     		else {
@@ -346,8 +346,8 @@ class Clan {
     if( $this->status & 1 ) {
     	$res1 = do_mysql_query("SELECT clan FROM player WHERE id=".$player);
     	$res2 = do_mysql_query("SELECT gold FROM clan WHERE id=".$this->id);
-    	if (($data1 = mysqli_fetch_assoc($res1)) &&
-    		($data2 = mysqli_fetch_assoc($res2)) &&
+    	if (($data1 = do_mysql_fetch_assoc($res1)) &&
+    		($data2 = do_mysql_fetch_assoc($res2)) &&
     		($data1['clan'] == $this->id) &&
     		($data2['gold'] >= $gold)
     	){
@@ -360,17 +360,17 @@ class Clan {
 
     		//Nachricht an alle Finanzminister und OL wegen Auszahlung
     		$get_rec_name = do_mysql_query("SELECT name FROM player WHERE id=".$player);
-    		$rec_name =  mysqli_fetch_assoc($get_rec_name);
+    		$rec_name =  do_mysql_fetch_assoc($get_rec_name);
     		$msgheader = "Auszahlung aus Ordenskasse";
     		$msgbody = "Dem Ordensmitglied <b>".$rec_name['name']."</b> wurden soeben ".prettyNumber($gold)." Goldstücke durch den Finanzminister <b>".$this->player_name."</b> ausbezahlt!";
     		$res1= do_mysql_query("SELECT id FROM player WHERE clan=".$this->id."  AND clanstatus & 1");
-    		while($data1 = mysqli_fetch_assoc($res1)) {
+    		while($data1 = do_mysql_fetch_assoc($res1)) {
     			do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['id'].",".time().",'".$msgheader."','".$msgbody."',1)");
     			do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data1['id']);
     		}
     		//clanlog
     		$clanlogdata1 = do_mysql_query("SELECT * from clanlog where playerid=".$player." and clan=".$this->id);
-    		if ($get_clanlogdata1 = mysqli_fetch_assoc($clanlogdata1)) {
+    		if ($get_clanlogdata1 = do_mysql_fetch_assoc($clanlogdata1)) {
     			do_mysql_query("UPDATE clanlog set amount=amount-".$gold.", time_amount=".time()." where playerid=".$player." and clan=".$this->id);
     		}
     		else {
@@ -397,7 +397,7 @@ class Clan {
     $mask = intval($mask);
 
     $res = do_mysql_query("SELECT name,clan,clanstatus FROM player WHERE id=".$player);
-    if (($data = mysqli_fetch_assoc($res)) && ($data['clan'] == $this->id)) {
+    if (($data = do_mysql_fetch_assoc($res)) && ($data['clan'] == $this->id)) {
     	// returns null if player is able to "lead"
     	$can = $this->canLeadClan($player);
 
@@ -421,7 +421,7 @@ class Clan {
     $mask = intval($mask);
     $mask = $mask & 7;
     $res = do_mysql_query("SELECT clan,clanstatus FROM player WHERE id=".$player);
-    if (($data = mysqli_fetch_assoc($res)) && ($data['clan'] == $this->id) && ($data['clanstatus'] < 8)) {
+    if (($data = do_mysql_fetch_assoc($res)) && ($data['clan'] == $this->id) && ($data['clanstatus'] < 8)) {
       $mask = $mask & $this->status;
       $mask = $mask ^ $data['clanstatus'];
       $mask = $mask & $data['clanstatus'];
@@ -457,7 +457,7 @@ class Clan {
   //diplomacy part
   function diploMessage($id, $header, $text) {
     $res = do_mysql_query("SELECT id FROM player WHERE clan=".intval($id)." AND clanstatus & 4");
-    while($data = mysqli_fetch_assoc($res)) {
+    while($data = do_mysql_fetch_assoc($res)) {
       do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data['id'].", UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $header)."','".mysqli_escape_string($GLOBALS['con'], $text)."',1)");
       do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$data['id']);
     }
@@ -466,9 +466,9 @@ class Clan {
   function neutral($clan) {
   	$clan = intval($clan);
   	$res1 = do_mysql_query("SELECT id,name FROM clan WHERE id=".$clan);
-  	if (($this->id != $clan) && ($this->status & 4) && ($data1 = mysqli_fetch_assoc($res1))) {
+  	if (($this->id != $clan) && ($this->status & 4) && ($data1 = do_mysql_fetch_assoc($res1))) {
   		$res2 = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")") or die(mysqli_error($GLOBALS['con']));
-  		if ($data2 = mysqli_fetch_assoc($res2)) {
+  		if ($data2 = do_mysql_fetch_assoc($res2)) {
   			if ($data2['type'] == 0) {
   				$res3 = do_mysql_query("SELECT type FROM req_clanrel WHERE id1=".$this->id." AND id2=".$clan) ;
   				if (mysqli_num_rows($res3)) {
@@ -504,7 +504,7 @@ class Clan {
     $res1 = do_mysql_query("SELECT p1.name AS p1name,p2.name AS p2name,c1.name AS c1name,c2.name AS c2name FROM player AS p1, clan AS c1, player AS p2,clan AS c2,relation WHERE p1.clan=c1.id AND p2.clan=c2.id AND relation.type=2 AND ((relation.id1=p1.id AND relation.id2 = p2.id) OR (relation.id1=p2.id AND relation.id2=p1.id)) AND c1.id=".$id1." AND c2.id=".$id2);
     if (mysqli_num_rows($res1)) {
     	$msg = "Kriege:\n\n";
-    	while ($data1 = mysqli_fetch_assoc($res1)) {
+    	while ($data1 = do_mysql_fetch_assoc($res1)) {
     		$msg .= "Bündnis zwischen ".$data1['p1name']." (".$data1['c1name'].") und ".$data1['p2name']." (".$data1['c2name'].")\n";
     	}
     }
@@ -512,7 +512,7 @@ class Clan {
     $res2 = do_mysql_query("SELECT unit.name AS uname,cityunit.count,city.name AS cname, p1.name AS p1name, p2.name AS p2name,c1.name AS c1name, c2.name AS c2name FROM unit,cityunit,city,player AS p1,clan AS c1,player AS p2,clan AS c2 WHERE unit.id=cityunit.unit AND cityunit.city=city.id AND p1.id=cityunit.owner AND p2.id=city.owner AND ((p1.clan=".$id1." AND p2.clan=".$id2.") OR (p1.clan=".$id2." AND p2.clan=".$id1.")) AND p1.clan=c1.id AND p2.clan=c2.id");
     if (mysqli_num_rows($res2)) {
     	$msg .= "\nStadtbesatzung:\n\n";
-    	while ($data2 = mysqli_fetch_assoc($res2)) {
+    	while ($data2 = do_mysql_fetch_assoc($res2)) {
     		$msg .= $data2['count']." ".$data2['uname']." von ".$data2['p1name']." (".$data2['c1name'].") in ".$data['cname']." von ".$data2['p2name']."(".$data2['c2name'].")\n";
     	}
     	return $msg;
@@ -523,7 +523,7 @@ class Clan {
   function hostile($clan) {
   	$clan = intval($clan);
   	$res1 = do_mysql_query("SELECT id,name FROM clan WHERE id=".$clan);
-  	if (($this->id != $clan) && ($this->status & 4) && ($data1 = mysqli_fetch_assoc($res1))) {
+  	if (($this->id != $clan) && ($this->status & 4) && ($data1 = do_mysql_fetch_assoc($res1))) {
   		if ($msg = $this->canNotWar($this->id, $clan)) {
   			$this->diploMessage($this->id, "Kriegserklärung an ".$data1['name']." fehlgeschlagen", $this->player_name." hat versucht ".$data1['name']." den Krieg zuer erklären folgende Hindernisse stellen sich dem noch in den Weg:\n\n".$msg);
   		}
@@ -544,7 +544,7 @@ class Clan {
   	$res1 = do_mysql_query("SELECT p1.name AS p1name,p2.name AS p2name,c1.name AS c1name,c2.name AS c2name FROM player AS p1, clan AS c1, player AS p2,clan AS c2,relation WHERE p1.clan=c1.id AND p2.clan=c2.id AND relation.type=0 AND ((relation.id1=p1.id AND relation.id2 = p2.id) OR (relation.id1=p2.id AND relation.id2=p1.id)) AND c1.id=".$id1." AND c2.id=".$id2);
   	if (mysqli_num_rows($res1)) {
   		$msg = "Kriege:\n\n";
-  		while ($data1 = mysqli_fetch_assoc($res1)) {
+  		while ($data1 = do_mysql_fetch_assoc($res1)) {
   			$msg .= "Krieg zwischen ".$data1['p1name']." (".$data1['c1name'].") und ".$data1['p2name']." (".$data1['c2name'].")\n";
   		}
   	}
@@ -552,7 +552,7 @@ class Clan {
   	$res2 = do_mysql_query("SELECT city.name AS cname,p1.name AS pname, p2.name AS defname, clan.name AS clanname FROM city,army,clan,player AS p1, player AS p2 WHERE city.id=army.end AND p1.id=city.owner AND p2.id=army.aid AND ((p1.clan=".$id1." AND p2.clan=".$id2.") OR (p1.clan=".$id2." AND p2.clan=".$id1.")) AND army.mission IN ('attack', 'despoil', 'burndown') AND clan.id=p2.clan");
   	if (mysqli_num_rows($res2)) {
   		$msg .= "\nAngriffe:\n\n";
-  		while ($data2 = mysqli_fetch_assoc($res2)) {
+  		while ($data2 = do_mysql_fetch_assoc($res2)) {
   			$msg .= "Angriff von ".$data2['pname']." (".$data2['clanname'].") auf ".$data2['cname']." von ".$data2['defname']."\n";
   		}
   	}
@@ -563,7 +563,7 @@ class Clan {
   	$clan = intval($clan);
   		
   	$res1 = do_mysql_query("SELECT name FROM clan WHERE id=".$clan);
-  	if ($data1 = mysqli_fetch_assoc($res1)) {
+  	if ($data1 = do_mysql_fetch_assoc($res1)) {
   		if ($msg = $this->canNotNAP_BND($clan,$this->id)) {
   			$this->diploMessage($this->id, "NAP Angebot an ".$data1['name']." fehlgeschlagen", $this->player_name." wollte dem Orden ".$data1['name']." NAP Angebot unterbreiten, Hindernisse stehen dem noch entgegen:\n\n".$msg);
   		}
@@ -579,9 +579,9 @@ class Clan {
     $clan = intval($clan);
     
     $res1 = do_mysql_query("SELECT id,name FROM clan WHERE id=".$clan) or die(mysqli_error($GLOBALS['con']));
-    if (($this->id != $clan) && ($this->status & 4) && ($data1 = mysqli_fetch_assoc($res1))) {
+    if (($this->id != $clan) && ($this->status & 4) && ($data1 = do_mysql_fetch_assoc($res1))) {
     	$res2 = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")") or die(mysqli_error($GLOBALS['con']));
-    	if ($data2 = mysqli_fetch_assoc($res2)) {
+    	if ($data2 = do_mysql_fetch_assoc($res2)) {
     		if ($data2['type']>2) {
     			do_mysql_query("UPDATE clanrel SET type=2 WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")") or die(mysqli_error($GLOBALS['con']));
     			$this->diploMessage($clan, $this->name."hat Bündnis in NAP umgewandelt", "Der Orden ".$this->name." euer Bündnis gekündigt, will aber trotzem weiterhin in Frieden mit euch leben.");
@@ -614,7 +614,7 @@ class Clan {
   	$res1 = do_mysql_query("SELECT name FROM clan WHERE id=".$clan);
   	$res2 = do_mysql_query("SELECT religion FROM player WHERE clan=".$this->id." AND clanstatus=63");
   	$res3 = do_mysql_query("SELECT religion FROM player WHERE clan=".$clan." AND clanstatus=63");
-  	if (($data1 = mysqli_fetch_assoc($res1)) && ($data2 = mysqli_fetch_assoc($res2)) && ($data3 = mysqli_fetch_assoc($res3))) {
+  	if (($data1 = do_mysql_fetch_assoc($res1)) && ($data2 = do_mysql_fetch_assoc($res2)) && ($data3 = do_mysql_fetch_assoc($res3))) {
   		if ($data2['religion'] == $data3['religion']) {
   			if ($msg = $this->canNotNAP_BND($clan,$this->id)) {
   				$this->diploMessage($this->id, "Bündnisangebot an ".$data1['name']." fehlgeschlagen", $this->player_name." wollte dem Orden ".$data1['name']." ein Bündnisangebot unterbreiten, Hindernisse stehen dem noch entgegen:\n\n".$msg);
@@ -635,9 +635,9 @@ class Clan {
     $clan = intval($clan);
 
     $res1 = do_mysql_query("SELECT id,name FROM clan WHERE id=".$clan) or die(mysqli_error($GLOBALS['con']));
-    if (($this->id != $clan) && ($this->status & 4) && ($data1 = mysqli_fetch_assoc($res1))) {
+    if (($this->id != $clan) && ($this->status & 4) && ($data1 = do_mysql_fetch_assoc($res1))) {
     	$res2 = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")") or die(mysqli_error($GLOBALS['con']));
-    	if ($data2 = mysqli_fetch_assoc($res2)) {
+    	if ($data2 = do_mysql_fetch_assoc($res2)) {
     		if ($data2['type'] <3) {
     			$res3 = do_mysql_query("SELECT type FROM req_clanrel WHERE id1=".$this->id." AND id2=".$clan) or die(mysqli_error($GLOBALS['con']));
     			if ($data2['type'] == 0) {
@@ -662,14 +662,14 @@ class Clan {
   	$clan = intval($clan);
 
   	$res1 = do_mysql_query("SELECT id,name FROM clan WHERE id=".$clan);
-  	if (($this->id != $clan) && ($data1 = mysqli_fetch_assoc($res1)) && ($this->status & 4)) {
+  	if (($this->id != $clan) && ($data1 = do_mysql_fetch_assoc($res1)) && ($this->status & 4)) {
   		$res2 = do_mysql_query("SELECT type FROM req_clanrel WHERE (id1=".$clan.") AND (id2=".$this->id.")") or die(mysqli_error($GLOBALS['con']));
   		$res3 = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")");
-  		if ($data2 = mysqli_fetch_assoc($res2)) {
-  			if ($data3 = mysqli_fetch_assoc($res3)) {
+  		if ($data2 = do_mysql_fetch_assoc($res2)) {
+  			if ($data3 = do_mysql_fetch_assoc($res3)) {
   				if ($data2['type'] > $data3['type']) {
   					$res4 = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")");
-  					if ($data4 = mysqli_fetch_assoc($res4)) {
+  					if ($data4 = do_mysql_fetch_assoc($res4)) {
   						do_mysql_query("UPDATE clanrel SET type=".$data2['type']." WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")");
   					}
   					else {
@@ -703,7 +703,7 @@ class Clan {
   	$clan = intval($clan);
   	
   	$res1 = do_mysql_query("SELECT id,name FROM clan WHERE id=".$clan);
-  	if (($this->status & 4) && ($data1=mysqli_fetch_assoc($res1))) {
+  	if (($this->status & 4) && ($data1=do_mysql_fetch_assoc($res1))) {
   		do_mysql_query("DELETE FROM req_clanrel WHERE (id1=".$clan." AND id2=".$this->id.") OR (id1=".$this->id." AND id2=".$clan.")") or die(mysqli_error($GLOBALS['con']));
   		if ($type== 1) {
   			$this->diploMessage($clan, "Friedensangebot von ".$this->name." abgelehnt", "Der Orden ".$this->name." hat euer Angebot um Frieden ausgeschlagen.");
@@ -738,7 +738,7 @@ class Clan {
   		return "Ungültiger Ordensname";
   	}
   	$res = do_mysql_query("SELECT id FROM clan WHERE name='".mysqli_escape_string($GLOBALS['con'], $clanname)."'");
-  	if (($data = mysqli_fetch_assoc($res)) && ($this->status & 4)) {
+  	if (($data = do_mysql_fetch_assoc($res)) && ($this->status & 4)) {
   		$type = intval($type);
   		if ($type == 0)
   		  $this->hostile($data['id']);

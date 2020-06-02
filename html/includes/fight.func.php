@@ -39,7 +39,7 @@
 function fight($at, $df, $defensebonus, $tactic) {
     // Einheitsdaten einlesen
     $res1 = mysqli_query($GLOBALS['con'], "SELECT id, type, damage, bonus1, bonus2, bonus3, life FROM unit");
-    while ($data1 = mysqli_fetch_assoc($res1)) {
+    while ($data1 = do_mysql_fetch_assoc($res1)) {
       // 0 = Offensiv
       if ($tactic == 0) {
         //$data1['damage'] = ceil($data1['damage'] * 1.1);
@@ -245,7 +245,7 @@ function compute_despoil($city, $army) {
     /*************Computes the despoil value**************/
     //Playerdata
     $res1 = do_mysql_query("SELECT gold, wood, iron, stone, clan, clanstatus FROM player WHERE id = ".$city['owner']);
-    $data1 = mysqli_fetch_assoc($res1);
+    $data1 = do_mysql_fetch_assoc($res1);
 
     //Hitpoints computing
     for ($i = 0; $i < sizeof($army); $i ++) {
@@ -260,10 +260,10 @@ function compute_despoil($city, $army) {
     //Building Data
 
     $worth_res = do_mysql_query("SELECT sum(gold*count) as gold, sum(wood*count) as wood, sum(stone*count) as stone FROM building, citybuilding WHERE building.id = citybuilding.building AND citybuilding.city = ".$city['cid']);
-    $worth = mysqli_fetch_assoc($worth_res);
+    $worth = do_mysql_fetch_assoc($worth_res);
 
     $res2 = do_mysql_query("SELECT gold*count as gold, wood*count as wood, stone*count as stone, (points*count) AS pts FROM building, citybuilding WHERE building.id = citybuilding.building AND citybuilding.city = ".$city['cid']." HAVING pts < ".$hitpoints." ORDER BY RAND()");
-    while (($data2 = mysqli_fetch_assoc($res2)) && ($hitpoints > 0)) {
+    while (($data2 = do_mysql_fetch_assoc($res2)) && ($hitpoints > 0)) {
         $hitpoints -= $data2['pts'];
         $price['gold']  += $data2['gold'] * 2;
         $price['wood']  += $data2['wood'] * 2;
@@ -277,7 +277,7 @@ function compute_despoil($city, $army) {
     $prop['iron'] = ($prop['wood'] + $prop['stone']) / 2.0;
 
     $market_res = do_mysql_query("SELECT id,hasType,hasQuant,ratio,wantsQuant FROM market WHERE player=".$city['owner']);
-    while ($market = mysqli_fetch_assoc($market_res)) {
+    while ($market = do_mysql_fetch_assoc($market_res)) {
       $price["m".$market['hasType']] += floor($market['hasQuant'] * $prop[$market['hasType']]);
       $market['hasQuant'] -= floor($market['hasQuant'] * $prop[$market['hasType']]);
       $market['wantsQuant'] = $market['hasQuant'] * $market['ratio'];
@@ -290,7 +290,7 @@ function compute_despoil($city, $army) {
     if ($data1['clan'] > 0) {
         if ($data1['clanstatus'] & 1) {
             $clan_res = do_mysql_query("SELECT clan.gold,count(*) as finance FROM clan,player WHERE clan.id=player.clan AND player.clanstatus & 1 AND clan.id=".$data1['clan']." GROUP BY clan.id");
-            if ($clan_data = mysqli_fetch_assoc($clan_res)) {
+            if ($clan_data = do_mysql_fetch_assoc($clan_res)) {
                 $price['cgold'] = floor(($prop['gold'] / $clan_data['finance']) * $clan_data['gold']);
                 
                 // Plünderung aus OK beschränken
@@ -464,7 +464,7 @@ function compute_despoil_new($city, $army, $burn = false) {
       $settler_num = mysqli_num_rows($get_settler_data);
       $settler_sum_new2 = 0;
       $count_settler_units = 0;
-      while ($settler_data = mysqli_fetch_assoc($get_settler_data)) {
+      while ($settler_data = do_mysql_fetch_assoc($get_settler_data)) {
         // Prozentzahl der sterbenden Siedler pro Trupp
         $settler_percentage = $settler_data['settler']/$settler_sum_old;
         $new_settler_amount = floor($settler_percentage * $settler_sum_new);
@@ -507,7 +507,7 @@ function compute_despoil_new($city, $army, $burn = false) {
     if ( $data1['clan'] > 0 && $data1['clanstatus'] & 1 ) {
       $clan_res = do_mysql_query("SELECT clan.gold,count(*) as finance FROM clan,player WHERE clan.id=player.clan AND player.clanstatus & 1 AND clan.id=".$data1['clan']." GROUP BY clan.id");
     
-      if ($clan_data = mysqli_fetch_assoc($clan_res)) {
+      if ($clan_data = do_mysql_fetch_assoc($clan_res)) {
         printf("%d Finanziminster, %d Gold in der OK\n", $clan_data['finance'], $clan_data['gold']);
       
         // Wir nehmen an, dass jeder Finanzminister die gleiche Menge Gold gelagert hat
@@ -572,7 +572,7 @@ function attackSiege($cityid) {
 
   // Die Einheitennamen in einen array legen
   $unit_res = mysqli_query($GLOBALS['con'], "SELECT id, type, name FROM unit");
-  while ($unit = mysqli_fetch_assoc($unit_res)) {
+  while ($unit = do_mysql_fetch_assoc($unit_res)) {
     $arr_units[$unit['id']] = $unit['name'];
   }
   
@@ -603,7 +603,7 @@ function attackSiege($cityid) {
                           " FROM cityunit LEFT JOIN player ON player.id = cityunit.owner ".
                           " WHERE city = ".$cityid." ORDER BY owner != ".$cityowner.", owner");
     $i = 0;
-    while ($citydef = mysqli_fetch_assoc($res)) {
+    while ($citydef = do_mysql_fetch_assoc($res)) {
       $arr_citydef[$i]['id']     = $citydef['unit'];
       $arr_citydef[$i]['count']  = $citydef['count'];
       $arr_citydef[$i]['player'] = $citydef['owner'];
@@ -619,14 +619,14 @@ function attackSiege($cityid) {
      * Die "Verteidiger" aus den Armeen bestimmen
      */
     $i = 0;
-    while ($siege_army = mysqli_fetch_assoc($siege_res)) {
+    while ($siege_army = do_mysql_fetch_assoc($siege_res)) {
       $arr_players[$siege_army['owner']] = $siege_army['playername'];
 
       $siege_army_text .= "\neiner Armee unter dem Kommando von <b>".$siege_army['playername']."</b>, die aus folgenden Einheiten bestand:\n";
       $siege_army_count ++;
 
       $siege_armyunits = do_mysql_query("SELECT unit,count FROM armyunit WHERE aid = ".$siege_army['aid']);
-      while ($unit = mysqli_fetch_assoc($siege_armyunits)) {
+      while ($unit = do_mysql_fetch_assoc($siege_armyunits)) {
         $arr_siege[$i]['aid']    = $siege_army['aid'];
         $arr_siege[$i]['id']     = $unit['unit'];
         $arr_siege[$i]['count']  = $unit['count'];

@@ -68,7 +68,7 @@ if (isset($send) && isset($recipient)) {
     else {
       $rec_res = do_mysql_query("SELECT * FROM player WHERE name LIKE '".mysqli_escape_string($GLOBALS['con'], $recipient)."'");
       if(mysqli_num_rows($rec_res) == 1) {
-        $rec = mysqli_fetch_assoc($rec_res);
+        $rec = do_mysql_fetch_assoc($rec_res);
       }
     }
   }

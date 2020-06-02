@@ -29,7 +29,7 @@ include_once("./includes/session.inc.php");
 
 function checkRights($id) {
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$clan_cat=$data1['cat_id'];
 	
 	if($_GET['p'])
@@ -41,7 +41,7 @@ function checkRights($id) {
 		                  " FROM `clanf_topics` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_topics.forum_id ".
 		                  " WHERE clanf_topics.topic_id = '".mysqli_escape_string($GLOBALS['con'], $_GET['t'])."'");
 
-	$data2=mysqli_fetch_assoc($res2);
+	$data2=do_mysql_fetch_assoc($res2);
 	
 	$forum_cat=$data2['cat_id'];
 	if($clan_cat != $forum_cat) {
@@ -59,7 +59,7 @@ function checkRights($id) {
 		$res3=mysqli_query($GLOBALS['con'], "SELECT DISTINCT clanf_forums.cat_id AS cat_id, clanf_forums.forum_status AS forum_status ".
 		                  " FROM `clanf_topics` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_topics.forum_id ".
 		                  " WHERE clanf_topics.topic_id = '".mysqli_escape_string($GLOBALS['con'], $_GET['t'])."'");
-	$data3=mysqli_fetch_assoc($res3);
+	$data3=do_mysql_fetch_assoc($res3);
 
 	if($data3['forum_status']<2) {
 		$viewf=true;
@@ -620,7 +620,7 @@ if ( $userdata['session_logged_in'] )
 // Load templates
 //
 $res1=mysqli_query($GLOBALS['con'], "SELECT clanstatus FROM player WHERE id = '".$_SESSION['player']->id."'");
-$data1=mysqli_fetch_assoc($res1);
+$data1=do_mysql_fetch_assoc($res1);
 if($data1['clanstatus']==63 || $data1['clanstatus']==2 || $data1['clanstatus']==6 || $data1['clanstatus']==7) {
 	$template->set_filenames(array(
 		'body' => 'viewtopic_body.tpl')
@@ -1228,7 +1228,7 @@ for($i = 0; $i < $total_posts; $i++)
 
 	$res1=mysqli_query($GLOBALS['con'], "SELECT id, avatar, lastseen, points, pointsavg, clanstatus, clanapplication ".
 	                  " FROM player WHERE name = '".$poster."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$lastseen=date("d.m.Y H:i",$data1['lastseen']);
 	$points=$data1['points'];
 	$pointsavg=$data1['pointsavg'];
@@ -1240,7 +1240,7 @@ for($i = 0; $i < $total_posts; $i++)
 	}
 
 	$res2=mysqli_query($GLOBALS['con'], "SELECT user_lastvisit FROM clanf_users WHERE username='".$poster."'");
-	$data2=mysqli_fetch_assoc($res2);
+	$data2=do_mysql_fetch_assoc($res2);
 	$lastseen=date("d.m.Y H:i",$data2['user_lastvisit']);
 	$clanstatus=" Member ";
 	if ($data1['clanstatus'] == 63)

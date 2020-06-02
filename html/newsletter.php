@@ -352,7 +352,7 @@ function print_mail_info() {
 
   printf("<table><tr><td>Domain</td><td>Vorkommnis</td></tr>\n");
   $res = do_mysql_query($sql);
-  while($d = mysqli_fetch_assoc($res)) {
+  while($d = do_mysql_fetch_assoc($res)) {
     printf("<tr><td>%s</td><td>%s</td></tr>\n", $d['domain'], $d['cnt']);
   }
   echo "</table>\n";

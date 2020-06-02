@@ -74,7 +74,7 @@ class Cities {
         die("<html><body>Ausnahmefehler: Keine Position mehr frei. Melden Sie sich bei einem Admin!</body></html>");
       }
     }
-    while ($db_city = mysqli_fetch_assoc($res1)) {
+    while ($db_city = do_mysql_fetch_assoc($res1)) {
       $this->cities[$counter]['id'] = $db_city['id'];
       $this->cities[$counter]['name'] = $db_city['name'];
       $this->cities[$counter]['capital'] = $db_city['capital'];
@@ -92,7 +92,7 @@ class Cities {
     $bid = intval($bid);
     $res1 = do_mysql_query("SELECT gold,wood,stone,citybuilding_ordered.count AS count,building.name AS bname FROM building,citybuilding_ordered ".
                            " WHERE citybuilding_ordered.building=building.id AND citybuilding_ordered.city=".$this->activecity." AND citybuilding_ordered.bid=".$bid);
-    if ($data = mysqli_fetch_assoc($res1)) {
+    if ($data = do_mysql_fetch_assoc($res1)) {
       $gold  = floor($data['gold']  * $data['count'] / 2);
       $wood  = floor($data['wood']  * $data['count'] / 2);
       $stone = floor($data['stone'] * $data['count'] / 2);
@@ -120,7 +120,7 @@ class Cities {
                            " FROM cityunit_ordered co LEFT JOIN unit u ON co.unit=u.id ".
                            "WHERE city=".$this->activecity." AND uid=".$uid);
 
-    if ($data1 = mysqli_fetch_assoc($res1)) {
+    if ($data1 = do_mysql_fetch_assoc($res1)) {
       $gold = floor($data1['gold'] * $data1['count'] / 2);
       $sr = $data1['shortrange'] * $data1['count'];
       $lr = $data1['longrange'] * $data1['count'];
@@ -151,7 +151,7 @@ class Cities {
     }
     
     $res2 = do_mysql_query("SELECT gold, wood, stone, time, makescapital FROM building WHERE id=".$building);
-    $data2 = mysqli_fetch_assoc($res2);
+    $data2 = do_mysql_fetch_assoc($res2);
     
     // Nachschauen, ob bereits ein Hauptstadtgebäude in Bau.
     if($data2['makescapital']) {
@@ -171,7 +171,7 @@ class Cities {
     if ($pbld >= $count) {
       // Sind genügend Ressourcen da
       $res1 = do_mysql_query("SELECT gold, wood, stone FROM player WHERE id=".$this->player);
-      $data1 = mysqli_fetch_assoc($res1);
+      $data1 = do_mysql_fetch_assoc($res1);
       if ($data2) {
         if (($data1['gold'] >= $data2['gold'] * $count) && ($data1['wood'] >= $data2['wood'] * $count) && ($data1['stone'] >= $data2['stone'] * $count)) {
           // bauen
@@ -219,7 +219,7 @@ class Cities {
   function getScoutTime($id) {
     $id = intval($id);
     $res_scout = do_mysql_query("SELECT max(res_scouttime) AS scouttime FROM building, citybuilding"." WHERE building.res_scouttime IS NOT NULL"." AND building.id = citybuilding.building "." AND citybuilding.city = ".$id);
-    $data_scout = mysqli_fetch_assoc($res_scout);
+    $data_scout = do_mysql_fetch_assoc($res_scout);
 
     if ($data_scout['scouttime'] > 0)
       return $data_scout['scouttime'];
@@ -258,7 +258,7 @@ class Cities {
       return $ret;
     }
     
-    $data_city = mysqli_fetch_assoc($res_city);    
+    $data_city = do_mysql_fetch_assoc($res_city);    
     $scouttime = $this->getScoutTime($cityid);
 
     //Falls es nicht unsere Stadt ist, scouttime runtersetzen da nachrichten von verbündeten eine gewisse zeit brauchen
@@ -282,7 +282,7 @@ class Cities {
     $res_armies = do_mysql_query("SELECT army.aid, army.owner AS owner FROM army WHERE army.end = ".$cityid." AND army.owner <> ".$data_city['owner']." AND army.endtime <= UNIX_TIMESTAMP() + ".$scouttime);
     
     //alle armeen durchgehen und nach warrel sortieren
-    while($data_armies = mysqli_fetch_assoc($res_armies))
+    while($data_armies = do_mysql_fetch_assoc($res_armies))
     {
       $ret[intval(getWarRel($data_city['owner'],$data_armies['owner']))] += 1;
     }
@@ -336,13 +336,13 @@ class Cities {
       $count--;
       $res1 = do_mysql_query("SELECT building.id as id,gold,wood,stone,building.res_foodstorage as foodstorage, building.res_storage as storage, city.reserve_longrange as reslong, city.reserve_shortrange as resshort, city.reserve_armor as resarmor, city.reserve_horse as reshorse, building.name as bname,citybuilding.count AS count FROM building, citybuilding, city ".
                              " WHERE citybuilding.building=building.id AND city=".$this->activecity." AND citybuilding.building=".$bld);
-      if ($data = mysqli_fetch_assoc($res1)) {
+      if ($data = do_mysql_fetch_assoc($res1)) {
         $gold = floor($data['gold'] / 2);
         $wood = floor($data['wood'] / 2);
         $stone = floor($data['stone'] / 2);
         if ($data['storage'] > 0) {
           $resX = do_mysql_query("SELECT sum( citybuilding.count * building.res_storage )  AS scndstorage, count( citybuilding.count )  AS count, sum( city.reserve_shortrange )  AS resshort, sum( city.reserve_longrange )  AS reslong, sum( city.reserve_armor )  AS resarmor, sum( city.reserve_horse )  AS reshorse, city.id AS id FROM city LEFT  JOIN citybuilding ON city.id = citybuilding.city LEFT  JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP  BY id");
-          $dataX = mysqli_fetch_assoc($resX);
+          $dataX = do_mysql_fetch_assoc($resX);
           // Lagergebäude
           if (($dataX['scndstorage'] - $data['storage']) < ($dataX['reslong'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshort'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['ressarmor'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshorse'] / $dataX['count'])) {
             return "<b class=\"error\">Geb&auml;de wird benötigt!</b>";
@@ -357,7 +357,7 @@ class Cities {
         }
         if ($data['storage'] > 0) {
           $res2 = do_mysql_query("SELECT sum( citybuilding.count * building.res_storage ) AS storage, sum( citybuilding.count * building.res_foodstorage ) AS foodstorage, city.id AS id, city.population AS pop, city.food AS food, city.religion AS religion, city.rawwood AS rawwood, city.rawiron AS rawiron, city.rawstone AS rawstone, city.shortrange AS shortrange, city.longrange AS longrange, city.armor AS armor, city.horse AS horse, city.reserve_shortrange AS reserve_shortrange, city.reserve_longrange AS reserve_longrange, city.reserve_armor AS reserve_armor, city.reserve_horse AS reserve_horse, city.max_shortrange AS max_shortrange, city.max_longrange AS max_longrange, city.max_armor AS max_armor, city.max_horse AS max_horse, city.populationlimit AS poplimit FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP BY id");
-          $data2 = mysqli_fetch_assoc($res2);
+          $data2 = do_mysql_fetch_assoc($res2);
           $data2['storage'] = ($data2['storage'] > 0) ? $data2['storage'] : 0;
           // Lagerbestände dem Lagerplatz anpassen
           if ($data2['storage'] < $data2['shortrange']) {
@@ -375,9 +375,9 @@ class Cities {
         }
         else if ($data['foodstorage'] > 0) {
           $res2 = do_mysql_query("SELECT sum( citybuilding.count * building.res_foodstorage ) AS foodstorage, sum( citybuilding.count * building.res_foodstorage ) AS foodstorage, city.id AS id, city.population AS pop, city.food AS food, city.religion AS religion, city.rawwood AS rawwood, city.rawiron AS rawiron, city.rawstone AS rawstone, city.shortrange AS shortrange, city.longrange AS longrange, city.armor AS armor, city.horse AS horse, city.reserve_shortrange AS reserve_shortrange, city.reserve_longrange AS reserve_longrange, city.reserve_armor AS reserve_armor, city.reserve_horse AS reserve_horse, city.max_shortrange AS max_shortrange, city.max_longrange AS max_longrange, city.max_armor AS max_armor, city.max_horse AS max_horse, city.populationlimit AS poplimit FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP BY id");
-          $data2 = mysqli_fetch_assoc($res2);
+          $data2 = do_mysql_fetch_assoc($res2);
           $res3 = do_mysql_query("SELECT food AS overallfood FROM city WHERE city.id =".$this->activecity);
-          $data3 = mysqli_fetch_assoc($res3);
+          $data3 = do_mysql_fetch_assoc($res3);
           //echo "is food ".$data2['foodstorage']." < ".$data3['overallfood']." ->";
           if ($data2['foodstorage'] < $data3['overallfood']) {
             do_mysql_query("UPDATE city SET food = ". ($data2['foodstorage'] > 0 ? $data2['foodstorage'] : 0)." WHERE id = ".$this->activecity);
@@ -402,13 +402,13 @@ class Cities {
     $pdst = $this->checkDestroyableUninvented($bld);
     if ($pdst == true) {
       $res1 = do_mysql_query("SELECT building.id as id,gold,wood,stone,building.res_foodstorage as foodstorage, building.res_storage as storage, city.reserve_longrange as reslong, city.reserve_shortrange as resshort, city.reserve_armor as resarmor, city.reserve_horse as reshorse, building.name as bname,citybuilding.count AS count FROM building, citybuilding, city WHERE citybuilding.building=building.id AND city=".$this->activecity." AND citybuilding.building=".$bld);
-      if ($data = mysqli_fetch_assoc($res1)) {
+      if ($data = do_mysql_fetch_assoc($res1)) {
         $gold = floor($data['gold'] / 4);
         $wood = floor($data['wood'] / 4);
         $stone = floor($data['stone'] / 4);
         if ($data['storage'] > 0) {
           $resX = do_mysql_query("SELECT sum( citybuilding.count * building.res_storage )  AS scndstorage, count( citybuilding.count )  AS count, sum( city.reserve_shortrange )  AS resshort, sum( city.reserve_longrange )  AS reslong, sum( city.reserve_armor )  AS resarmor, sum( city.reserve_horse )  AS reshorse, city.id AS id FROM city LEFT  JOIN citybuilding ON city.id = citybuilding.city LEFT  JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP  BY id");
-          $dataX = mysqli_fetch_assoc($resX);
+          $dataX = do_mysql_fetch_assoc($resX);
           if (($dataX['scndstorage'] - $data['storage']) < ($dataX['reslong'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshort'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['ressarmor'] / $dataX['count']) || ($dataX['scndstorage'] - $data['storage']) < ($dataX['resshorse'] / $dataX['count'])) {
             return "<b class=\"error\">Geb&auml;de wird benötigt!</b>";
           }
@@ -420,7 +420,7 @@ class Cities {
         }
         if ($data['storage'] > 0) {
           $res2 = do_mysql_query("SELECT sum( citybuilding.count * building.res_storage ) AS storage, sum( citybuilding.count * building.res_foodstorage ) AS foodstorage, city.id AS id, city.population AS pop, city.food AS food, city.religion AS religion, city.rawwood AS rawwood, city.rawiron AS rawiron, city.rawstone AS rawstone, city.shortrange AS shortrange, city.longrange AS longrange, city.armor AS armor, city.horse AS horse, city.reserve_shortrange AS reserve_shortrange, city.reserve_longrange AS reserve_longrange, city.reserve_armor AS reserve_armor, city.reserve_horse AS reserve_horse, city.max_shortrange AS max_shortrange, city.max_longrange AS max_longrange, city.max_armor AS max_armor, city.max_horse AS max_horse, city.populationlimit AS poplimit FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP BY id");
-          $data2 = mysqli_fetch_assoc($res2);
+          $data2 = do_mysql_fetch_assoc($res2);
           $data2['storage'] = ($data2['storage'] > 0) ? $data2['storage'] : 0;
           if ($data2['storage'] < $data2['shortrange']) {
             do_mysql_query("UPDATE city SET shortrange = ".$data2['storage']." WHERE id = ".$this->activecity);
@@ -437,9 +437,9 @@ class Cities {
         }
         else if ($data['foodstorage'] > 0) {
           $res2 = do_mysql_query("SELECT sum( citybuilding.count * building.res_foodstorage ) AS foodstorage, sum( citybuilding.count * building.res_foodstorage ) AS foodstorage, city.id AS id, city.population AS pop, city.food AS food, city.religion AS religion, city.rawwood AS rawwood, city.rawiron AS rawiron, city.rawstone AS rawstone, city.shortrange AS shortrange, city.longrange AS longrange, city.armor AS armor, city.horse AS horse, city.reserve_shortrange AS reserve_shortrange, city.reserve_longrange AS reserve_longrange, city.reserve_armor AS reserve_armor, city.reserve_horse AS reserve_horse, city.max_shortrange AS max_shortrange, city.max_longrange AS max_longrange, city.max_armor AS max_armor, city.max_horse AS max_horse, city.populationlimit AS poplimit FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id =".$this->activecity." GROUP BY id");
-          $data2 = mysqli_fetch_assoc($res2);
+          $data2 = do_mysql_fetch_assoc($res2);
           $res3 = do_mysql_query("SELECT food AS overallfood FROM city WHERE city.id =".$this->activecity);
-          $data3 = mysqli_fetch_assoc($res3);
+          $data3 = do_mysql_fetch_assoc($res3);
           //echo "is food ".$data2['foodstorage']." < ".$data3['overallfood']." ->";
           if ($data2['foodstorage'] < $data3['overallfood']) {
             do_mysql_query("UPDATE city SET food = ". ($data2['foodstorage'] > 0 ? $data2['foodstorage'] : 0)." WHERE id = ".$this->activecity);
@@ -485,21 +485,21 @@ class Cities {
     // hack -> wurde stadt gerade erobert können die gebäude dennoch abgerissen werden.
     // wird hier verhindert
     $resA = do_mysql_query("SELECT owner FROM city WHERE id=".$this->activecity);
-    $dataA = mysqli_fetch_assoc($resA);
+    $dataA = do_mysql_fetch_assoc($resA);
     if ($dataA['owner'] != $this->player) {
       echo "<b class=\"error\">Dies ist nicht mehr Eure Stadt. Bitte loggt Euch erneut ein!</b><p>";
       exit;
     }
 
-    $data = mysqli_fetch_assoc($res5);
+    $data = do_mysql_fetch_assoc($res5);
     $res1 = do_mysql_query("SELECT building, count, type, typelevel FROM citybuilding LEFT JOIN building ON citybuilding.building=building.id WHERE city=".$this->activecity);
-    while ($def1 = mysqli_fetch_assoc($res1)) {
+    while ($def1 = do_mysql_fetch_assoc($res1)) {
       $bld1[$def1['building']] += $def1['count'];
       $typ1[$def1['type']][0] += $def1['count'];
       $typ1[$def1['type']][$def1['typelevel']] += $def1['count'];
     }
     $res2 = do_mysql_query("SELECT building, count, type, typelevel FROM citybuilding_ordered LEFT JOIN building ON citybuilding_ordered.building=building.id WHERE city=".$this->activecity);
-    while ($def2 = mysqli_fetch_assoc($res2)) {
+    while ($def2 = do_mysql_fetch_assoc($res2)) {
       $bld2[$def2['building']] += $def2['count'];
       $typ2[$def2['type']][0] += $def2['count'];
       $typ2[$def2['type']][$def2['typelevel']] += $def2['count'];
@@ -688,7 +688,7 @@ class Cities {
 
     $res1 = do_mysql_query("SELECT id,population,populationlimit FROM city WHERE id=".$this->activecity);
 
-    $data1 = mysqli_fetch_assoc($res1);
+    $data1 = do_mysql_fetch_assoc($res1);
     $d['population'] = $data1['population'];
     if ($data1['populationlimit'] == NULL)
       $d['populationlimit'] = "-------";
@@ -715,7 +715,7 @@ class Cities {
     $id = $id == null ? $this->activecity : intval($id);
     $res1 = mysqli_query($GLOBALS['con'], "SELECT unit, count, unit.speed,religion,type,level,name FROM cityunit, unit WHERE cityunit.city='".$id."' AND cityunit.owner='".$this->player."' AND unit.id = cityunit.unit ORDER BY unit");
     $i = 1;
-    while ($data1 = mysqli_fetch_assoc($res1)) {
+    while ($data1 = do_mysql_fetch_assoc($res1)) {
       $data[$i][0] = $data1['unit'];
       $data[$i][1] = $data1['count'];
       $data[$i][2] = $data1['speed'];
@@ -731,7 +731,7 @@ class Cities {
   function getInBuild() {
     $res1 = do_mysql_query("SELECT bid,count,citybuilding_ordered.time AS time,name FROM citybuilding_ordered,building WHERE building.id=citybuilding_ordered.building AND city=".$this->activecity." ORDER BY time");
     $count = 0;
-    while ($data = mysqli_fetch_assoc($res1)) {
+    while ($data = do_mysql_fetch_assoc($res1)) {
       $ib[$count]['bid'] = $data['bid'];
       $ib[$count]['name'] = $data['name'];
       $ib[$count]['count'] = $data['count'];
@@ -744,7 +744,7 @@ class Cities {
   function getInRecruit() {
     $res1 = do_mysql_query("SELECT uid,count,cityunit_ordered.time AS time,name FROM cityunit_ordered,unit WHERE unit.id=cityunit_ordered.unit AND city=".$this->activecity." ORDER BY time");
     $count = 0;
-    while ($data = mysqli_fetch_assoc($res1)) {
+    while ($data = do_mysql_fetch_assoc($res1)) {
       $ir[$count]['uid'] = $data['uid'];
       $ir[$count]['name'] = $data['name'];
       $ir[$count]['count'] = $data['count'];
@@ -763,12 +763,12 @@ class Cities {
     $res1 = do_mysql_query("SELECT id, type, name, gold, shortrange, longrange, armor, horse, time, cost, level, unit.religion as religion, player, research FROM unit, playerresearch WHERE (religion=".$this->player_religion." OR religion IS NULL) AND req_research = research AND player = '".$this->player."'");
     $res2 = do_mysql_query("SELECT sum(count*res_training1) AS t1, sum(count*res_training2) AS t2, sum(count*res_training3) AS t3,city.shortrange AS shortrange, city.longrange AS longrange, city.armor AS armor, city.horse AS horse, population FROM  building,citybuilding,city WHERE citybuilding.city=".$this->activecity." AND citybuilding.building=building.id AND citybuilding.city=city.id GROUP by city.id");
     $res3 = do_mysql_query("SELECT gold FROM player WHERE id=".$this->player);
-    $data2 = mysqli_fetch_assoc($res2);
-    $data3 = mysqli_fetch_assoc($res3);
+    $data2 = do_mysql_fetch_assoc($res2);
+    $data3 = do_mysql_fetch_assoc($res3);
 
     // Bereits in Ausbildung befindliche Einheiten
     $res4 = do_mysql_query("SELECT count,level FROM unit, cityunit_ordered WHERE unit.id=cityunit_ordered.unit AND city=".$this->activecity);
-    while ($data4 = mysqli_fetch_assoc($res4)) {
+    while ($data4 = do_mysql_fetch_assoc($res4)) {
       switch ($data4['level']) {
         case 0 :
           {
@@ -808,7 +808,7 @@ class Cities {
     //$level3 = $data2['t3'] - $lvl3  -   max(0, $lvl2 - $data2['t2'])   -   max(0, $lvl1+$lvl0 - $data2['t1']);
 
 
-    while ($data1 = mysqli_fetch_assoc($res1)) {
+    while ($data1 = do_mysql_fetch_assoc($res1)) {
       $u[$count]['id'] = $data1['id'];
       $u[$count]['name'] = $data1['name'];
       $u[$count]['level'] = $data1['level'];
@@ -904,7 +904,7 @@ class Cities {
     if ($punit >= $count) {
       // Sind genügend Ressourcen da
       $res1 = do_mysql_query("SELECT gold, shortrange, longrange, armor, horse, time FROM unit WHERE id=".$unit);
-      if ($data1 = mysqli_fetch_assoc($res1)) {
+      if ($data1 = do_mysql_fetch_assoc($res1)) {
         if ( defined("ENABLE_LOYALITY") && ENABLE_LOYALITY ) {
           $this->setActiveCity($this->activecity);
           $cost = $data1['gold'] * $count * getLoyalityCostFactor( round($this->city_loyality/100) );
@@ -927,7 +927,7 @@ class Cities {
 
     $res1 = do_mysql_query("SELECT x, y, religion, loyality, name FROM city,map WHERE city.id=map.id AND city.id=".$input_city." AND owner=".$this->player);
     if (mysqli_num_rows($res1) > 0) {
-      $city = mysqli_fetch_assoc($res1);
+      $city = do_mysql_fetch_assoc($res1);
       $this->activecity = $input_city;
       $this->activecityname = $city['name'];
       $this->city_x = $city['x'];
@@ -947,7 +947,7 @@ class Cities {
       $this->city_s7 = 0;
       $this->city_s8 = 0;
       $res2 = do_mysql_query("SELECT m1.type,m1.special FROM map AS m1, map AS m2 WHERE m2.id =".$input_city." AND m1.x >= m2.x - 2 AND m1.x <= m2.x + 2 AND m1.y >= m2.y - 2 AND m1.y <= m2.y + 2 AND ( m1.id <> m2.id )");
-      while ($field = mysqli_fetch_assoc($res2)) {
+      while ($field = do_mysql_fetch_assoc($res2)) {
         switch ($field['type']) {
           case 1 :
             ++ $this->city_water;
@@ -1049,8 +1049,8 @@ class Cities {
     $bcount = 1;
     $res1 = do_mysql_query("SELECT gold, wood, stone FROM player WHERE id=".$this->player);
     $res2 = do_mysql_query("SELECT gold, wood, stone, time FROM building WHERE id=".$building);
-    $data1 = mysqli_fetch_assoc($res1);
-    if ($cost = mysqli_fetch_assoc($res2)) {
+    $data1 = do_mysql_fetch_assoc($res1);
+    if ($cost = do_mysql_fetch_assoc($res2)) {
       if( $data1['gold'] >= $cost['gold'] * $bcount && $data1['wood'] >= $cost['wood'] * $bcount && $data1['stone'] >= $cost['stone'] * $bcount ) {
         // Res werden später abgezogen
       }
@@ -1060,7 +1060,7 @@ class Cities {
 
     // FIXME: kann man das nicht durch $cities->getCityUnits() ersetzen?
     $res1 = do_mysql_query("SELECT unit,count,speed FROM cityunit LEFT JOIN unit ON unit.id = cityunit.unit WHERE city=".$this->activecity." AND owner=".$this->player);
-    while ($data1 = mysqli_fetch_assoc($res1)) {
+    while ($data1 = do_mysql_fetch_assoc($res1)) {
       $g[$data1['unit']]['count'] = $data1['count'];
       $g[$data1['unit']]['speed'] = $data1['speed'];
     }
@@ -1113,7 +1113,7 @@ class Cities {
     do_mysql_query("UPDATE player SET gold=gold-".$cost['gold'] * $bcount.", wood=wood-".$cost['wood'] * $bcount.", stone=stone-".$cost['stone'] * $bcount.",cc_resources=1 WHERE id=".$this->player);
 
     $res2 = do_mysql_query("SELECT id FROM map WHERE x=".$x." AND y=".$y);
-    $data2 = mysqli_fetch_assoc($res2);
+    $data2 = do_mysql_fetch_assoc($res2);
     do_mysql_query("UPDATE city SET population=population-".$s." WHERE id=".$this->activecity);
     $curr_time = time();
     do_mysql_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata) ".
@@ -1189,7 +1189,7 @@ class Cities {
                            " FROM city LEFT JOIN player ON city.owner=player.id LEFT JOIN map ON map.id = city.id".
                            " WHERE city.id = ".$from);
     
-    if (!($check = mysqli_fetch_assoc($res)) || !$check['owner']  ) {
+    if (!($check = do_mysql_fetch_assoc($res)) || !$check['owner']  ) {
       return "Ausgangsstadt ungültig";
     }
     
@@ -1212,7 +1212,7 @@ class Cities {
                            " WHERE x=".$x." AND y=".$y);
     
 
-    if (!($data1 = mysqli_fetch_assoc($res1)) ) {
+    if (!($data1 = do_mysql_fetch_assoc($res1)) ) {
       return "Zielstadt ungültig";
     }
 
@@ -1252,7 +1252,7 @@ class Cities {
       
       if(defined("START_POS_NEW") && START_POS_NEW) {
         $resB = do_mysql_query("SELECT x,y FROM map WHERE id= ".$from);
-        $dataB = mysqli_fetch_assoc($resB);
+        $dataB = do_mysql_fetch_assoc($resB);
         $tox = $dataB['x'];
         $toy = $dataB['y'];
         
@@ -1275,7 +1275,7 @@ class Cities {
       
       if ($_SESSION['player']->isMultihunter() && !$_SESSION['player']->isAdmin()) {
         $status_res = do_mysql_query("SELECT status FROM player WHERE id=".$data1['owner']);
-        if (($status = mysqli_fetch_assoc($status_res)) &&
+        if (($status = do_mysql_fetch_assoc($status_res)) &&
              $status['status'] == 2 ) {
           return "Multihunter können keine Gesperrten angreifen bzw. Truppen verlegen.";
         }
@@ -1333,7 +1333,7 @@ class Cities {
       if($unitcount <= 0) return "Keine Einheiten ausgewählt.";
       
       $resB = do_mysql_query("SELECT x,y FROM map WHERE id= ".$from);
-      $dataB = mysqli_fetch_assoc($resB);
+      $dataB = do_mysql_fetch_assoc($resB);
       $wt = computeWalktime($x, $y, $dataB['x'], $dataB['y'], $speed, $unitcount);
 
       do_mysql_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata,tactic) VALUES ( '".$this->player."', '".$from."', '".$data1['id']."', '".time()."', '". (time() + $wt)."', 'move', 0, '".$tactic."')");
@@ -1429,7 +1429,7 @@ class Cities {
     }
 
     $resB = do_mysql_query("SELECT x,y FROM map WHERE id= ".$from);
-    $dataB = mysqli_fetch_assoc($resB);
+    $dataB = do_mysql_fetch_assoc($resB);
     $wt = computeWalktime($x, $y, $dataB['x'], $dataB['y'], $speed, $unitcount);
 
     do_mysql_query("INSERT INTO army (owner,start,end,starttime,endtime,mission,missiondata,tactic) VALUES ( '".$this->player."', '".$from."', '".$data1['id']."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + ".$wt.", '".$type."', 0, '".$tactic."')");
@@ -1488,7 +1488,7 @@ class Cities {
       // mit anderen Skripten auftreten?
     }
       
-    while ($db_city = mysqli_fetch_assoc($res1)) {
+    while ($db_city = do_mysql_fetch_assoc($res1)) {
       $this->cities[$counter]['id'] = $db_city['id'];
       $this->cities[$counter]['name'] = $db_city['name'];
       $this->cities[$counter]['capital'] = $db_city['capital'];
@@ -1540,7 +1540,7 @@ class Cities {
   
   function getUnitName($id) {
     $res = do_mysql_query("SELECT name FROM unit WHERE id = ".$id);
-    $data = mysqli_fetch_assoc($res);
+    $data = do_mysql_fetch_assoc($res);
     return $data['name'];
   }
 
@@ -1657,7 +1657,7 @@ class Cities {
 
     $res1 = do_mysql_query("SELECT population FROM city WHERE id=".$this->activecity);
     $res2 = do_mysql_query("SELECT gold FROM player WHERE id=".$this->player);
-    if (($data1 = mysqli_fetch_assoc($res1)) && ($data2 = mysqli_fetch_assoc($res2))) {
+    if (($data1 = do_mysql_fetch_assoc($res1)) && ($data2 = do_mysql_fetch_assoc($res2))) {
       if ($data2['gold'] < floor($data1['population'] / 100 * $ratio * $convertcost)) {
         return "Zu wenig Gold";
       }
@@ -1665,7 +1665,7 @@ class Cities {
 
       do_mysql_query("DELETE FROM citybuilding_ordered WHERE city=".$this->activecity);
       $relbld = do_mysql_query("SELECT citybuilding.building AS bld FROM citybuilding,building WHERE citybuilding.building=building.id AND building.religion IS NOT NULL AND citybuilding.city=".$this->activecity);
-      while ($relblddata = mysqli_fetch_assoc($relbld)) {
+      while ($relblddata = do_mysql_fetch_assoc($relbld)) {
         do_mysql_query("DELETE FROM citybuilding WHERE city=".$this->activecity." AND building=".$relblddata['bld']);
       }
 
@@ -1674,7 +1674,7 @@ class Cities {
 
         $res3 = do_mysql_query("SELECT unit,count FROM cityunit WHERE city=".$this->activecity." AND owner=".$this->player);
         $i = 0;
-        while ($data3 = mysqli_fetch_assoc($res3)) {
+        while ($data3 = do_mysql_fetch_assoc($res3)) {
           $at[$i]['id'] = $data3['unit'];
           $at[$i]['count'] = $data3['count'];
           $at[$i]['player'] = $this->player;
@@ -1700,7 +1700,7 @@ class Cities {
             $msg = "Die Stadt ".$this->activecityname." wurde erfolgreich konvertiert. Die Aktion hat ". (floor($data1['population'] / 100 * $ratio) * $convertcost)." Gold gekostet, von ".$data1['population']." Einwohnern haben ". ($data1['population'] - $cit_fight)." überlebt.\n\n<b>Folgende Einheiten überlebten den Kampf:</b>\n";
             for ($i = 0; $i < sizeof($erg); $i ++) {
               $ures = do_mysql_query("SELECT name FROM unit WHERE id = '".$erg[$i]['id']."'");
-              $udata = mysqli_fetch_assoc($ures);
+              $udata = do_mysql_fetch_assoc($ures);
               $msg .= $udata['name'].": ".$erg[$i]['count']."\n";
             }
             do_mysql_query("UPDATE city SET population=". (max(1,$data1['population'] - $cit_fight)).",religion=".$this->player_religion." WHERE id=".$this->activecity);
@@ -1710,10 +1710,10 @@ class Cities {
             do_mysql_query("DELETE FROM cityunit WHERE city = ".$this->activecity." AND owner=".$this->player);
 
             $res4 = do_mysql_query("SELECT sum(count) AS numbld FROM citybuilding WHERE city=".$this->activecity);
-            $data4 = mysqli_fetch_assoc($res4);
+            $data4 = do_mysql_fetch_assoc($res4);
             $res5 = do_mysql_query("SELECT building, count FROM citybuilding WHERE city=".$this->activecity." ORDER BY RAND()");
             $destory = $data4['numbld'] / 4;
-            while ($data5 = mysqli_fetch_assoc($res5)) {
+            while ($data5 = do_mysql_fetch_assoc($res5)) {
               if ($destory > 0) {
                 if ($data5['count'] > 0) {
                   do_mysql_query("UPDATE citybuilding SET count=". (floor($data5['count'] / 2))." WHERE city=".$this->activecity." AND building=".$data5['building']);
@@ -1772,11 +1772,11 @@ class Cities {
                    
     $res = do_mysql_query($sql);
     if(mysqli_num_rows($res) == 1) {
-      $cu = mysqli_fetch_assoc($res);
+      $cu = do_mysql_fetch_assoc($res);
       $noc = getNearestOwnCity($this->city_x, $this->city_y, $owner);
       $cid = $noc[0];
       $to_res = do_mysql_query("SELECT name FROM city WHERE id= ".$cid);
-      $to = mysqli_fetch_assoc($to_res);
+      $to = do_mysql_fetch_assoc($to_res);
       //printf("SendBack nach %s <a href='map.php?gox=%d&goy=%d'>%d:%d</a><br>\n", $to['name'], $noc[2], $noc[3], $noc[2], $noc[3]);
       
       $wt = computeWalktime($this->city_x, $this->city_y, $noc[2], $noc[3], $cu['speed']);

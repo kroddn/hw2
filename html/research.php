@@ -177,7 +177,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
   
   $res1 = do_mysql_query("SELECT rid,starttime,endtime FROM researching WHERE player = '".$_SESSION['player']->id."' AND rid = '".$rs[$i]['content']['id']."'");
   $count1 = mysqli_num_rows($res1);
-  $data1 = mysqli_fetch_assoc($res1);
+  $data1 = do_mysql_fetch_assoc($res1);
   
   if($count1) {
     $remaining=$data1['endtime'] - time();
@@ -185,7 +185,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
   }
   else {		
     $res2 = do_mysql_query("SELECT research FROM playerresearch WHERE player = '".$_SESSION['player']->id."' AND research = '".$rs[$i]['content']['id']."'");
-    $data2 = mysqli_fetch_assoc($res2);
+    $data2 = do_mysql_fetch_assoc($res2);
     
     if($data2['research'] == $rs[$i]['content']['id']) {
       echo "<td width=\"15\" class=\"tblhead\" align=\"center\">";

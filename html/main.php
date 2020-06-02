@@ -116,16 +116,16 @@ function getNewClanfTopics($player) {
 	$string="<a href=\"cf_index.php\" style=\"color:black;\" onclick=\"updateframe();\" target=\"_self\" class=\"statusline\">Keine neuen Forenbeitr&auml;ge</a>";
 	//get players last forum visit
 	$res2=mysqli_query($GLOBALS['con'], "SELECT user_lastvisit FROM clanf_users WHERE username='".intval($player)."'");
-	$data2=mysqli_fetch_assoc($res2);
+	$data2=do_mysql_fetch_assoc($res2);
 	$lastseen=date("d.m.Y H:i",$data2['user_lastvisit']);
 
 	//get cat_id of players clan (put it in session next review)
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$clan_cat=$data1['cat_id'];
 
 	$res3=mysqli_query($GLOBALS['con'], "SELECT clanf_posts.post_time as lastpost FROM `clanf_posts` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_posts.forum_id WHERE clanf_forums.cat_id='".$clan_cat."' AND clanf_posts.post_time > '".$data2['user_lastvisit']."'");
-	$data3=mysqli_fetch_assoc($res3);
+	$data3=do_mysql_fetch_assoc($res3);
 	if(mysqli_num_rows($res3)>0)
 		$string="<a href=\"cf_search.php?search_id=newposts\" target=\"_self\" onclick=\"updateframe();\" style=\"color:black;\" class=\"statusline\">Neue Forenbeitr&auml;ge</a>";
 	return $string;
@@ -246,7 +246,7 @@ if($_GET['news']) {
 else {
   $resnews=do_mysql_query("SELECT topic,text FROM news ORDER BY time DESC");
 }
-$dataNews=mysqli_fetch_assoc($resnews);
+$dataNews=do_mysql_fetch_assoc($resnews);
 
 echo "<tr><td colspan=\"2\" style=\"padding: 0px;\">\n";
 
@@ -255,7 +255,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n"
 echo "<tr class=\"tblhead\" height=\"25\"><td width=\"210\" style=\"font-weight: bold; font-size:16px; color: #AF4080;\">Neuigkeiten</td><td align=\"center\" style=\"font-weight: bold; font-size:16px;\"><u>".$dataNews['topic']."</u></td></tr>\n";
 echo "<tr valign=\"top\" class=\"tblhead\"><td style=\"padding: 3px; \">\n";
 $resN=do_mysql_query("SELECT id, time, topic FROM news ORDER BY id DESC");
-while($dataN=mysqli_fetch_assoc($resN)) {
+while($dataN=do_mysql_fetch_assoc($resN)) {
   echo "<span style=\"float:left;\"><a href=\"".$_SERVER['PHP_SELF']."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">".date("d.m.Y",$dataN['time'])."</span><br>";
 }
 echo "</td><td class=\"tblbody\" style=\"padding: 3px;\">";
@@ -278,7 +278,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 // toplist player
 	echo "<tr><td class=\"tblbody\" height=\"25\" colspan=\"2\">\n";
 	$restoplist=do_mysql_query("SELECT toplist FROM player WHERE id='".$_SESSION['player']->id."'");
-	$toplist=mysqli_fetch_assoc($restoplist);
+	$toplist=do_mysql_fetch_assoc($restoplist);
 	$pos=$toplist['toplist'];
 	if($pos != NULL || $pos != 0) {
 		if($pos == 1) {echo "MyLord! Ihr seid <b>der Beste!</b> Seht selbst in der <a href=\"toplist.php\">Toplist</a>!";}
@@ -294,7 +294,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 // toplist clan
 	echo "<tr><td class=\"tblbody\" height=\"25\" colspan=\"2\">\n";
 	$restoplist=do_mysql_query("SELECT toplist FROM clan WHERE id='".$_SESSION['player']->clan."'");
-	$toplist=mysqli_fetch_assoc($restoplist);
+	$toplist=do_mysql_fetch_assoc($restoplist);
 	$pos = $toplist['toplist'];
 	if($pos != NULL || $pos != 0) {
 		if($pos == 1) {echo "MyLord! Ihr geh&ouml;rt <b>dem Besten Orden</b> an! Seht selbst in der <a href=\"toplist.php?show=clan\">Toplist</a>!";}
@@ -336,7 +336,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 	echo "<tr class=\"tblbody\"><td colspan=\"2\">\n";
 // population
 		$resP=do_mysql_query("SELECT sum(population) as population FROM city WHERE owner='".$_SESSION['player']->id."'");
-		$dataP=mysqli_fetch_assoc($resP);
+		$dataP=do_mysql_fetch_assoc($resP);
 	echo $dataP['population']." Einwohner bewohnen Eure St&auml;dte!\n";
 	echo "</td></tr>\n";
 	echo "<tr class=\"tblhead\"><td colspan=\"2\" height=\"20\"><b>Truppenaufkl&auml;rung</b></td></tr>\n";
@@ -355,7 +355,7 @@ if($scouttime > 0) {
 			    " GROUP BY army.aid, res_scouttime HAVING army.endtime <= (UNIX_TIMESTAMP() + max(res_scouttime)) ".
 			    " ORDER BY endtime ASC" );
   if(mysqli_num_rows($res_spy)>0) {
-    while($data_spy=mysqli_fetch_assoc($res_spy)) {
+    while($data_spy=do_mysql_fetch_assoc($res_spy)) {
       $res_spy_unit=mysqli_query($GLOBALS['con'], "SELECT unit, count FROM armyunit WHERE aid = ".$data_spy['aid']);
       $remaining = $data_spy['endtime'] - time();
       $timerline = "<span class='noerror' id='".$data_spy['aid']."'><script type=\"text/javascript\">addTimer(".$remaining.",".$data_spy['aid'].");</script></span>";
@@ -410,7 +410,7 @@ function user_online_table() {
   if($_SESSION['player']->clan > 0) {
     echo "<tr class=\"tblhead\"><td height=\"20\" valign=\"middle\" colspan=\"3\"><b>Folgende Ordensbr&uuml;der sind online</td></tr>";
 	  
-    while($data1=mysqli_fetch_assoc($res1)) {
+    while($data1=do_mysql_fetch_assoc($res1)) {
       if($data1['clan']==$_SESSION['player']->clan && $data1['id'] != $_SESSION['player']->getID()) {
         echo "<tr class=\"tblbody\">\n";
         echo "<td class=\"tblhead\">".get_info_link($data1['name'], "player",1)."</td>\n";
@@ -437,14 +437,14 @@ function user_online_table() {
       $res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= (UNIX_TIMESTAMP() - 300) ORDER BY player.clanstatus DESC");
       $enemy=0;
       $friend=0;
-      while($data1=mysqli_fetch_assoc($res1)) {
+      while($data1=do_mysql_fetch_assoc($res1)) {
         if($data1['clan'] != $_SESSION['player']->clan) {
           $output.="<tr class=\"tblbody\">\n";
           $output.="<td class=\"tblhead\">".get_info_link($data1['name'], "player",1)."</a></td>\n";
           $res3=do_mysql_query("SELECT type FROM relation WHERE id1='".$_SESSION['player']->id."' AND id2='".$data1['id']."'");
           $res4=do_mysql_query("SELECT type FROM relation WHERE id2='".$_SESSION['player']->id."' AND id1='".$data1['id']."'");
-          if(mysqli_num_rows($res3)>0) {$data5=mysqli_fetch_assoc($res3);}
-          if(mysqli_num_rows($res4)>0) {$data5=mysqli_fetch_assoc($res4);}
+          if(mysqli_num_rows($res3)>0) {$data5=do_mysql_fetch_assoc($res3);}
+          if(mysqli_num_rows($res4)>0) {$data5=do_mysql_fetch_assoc($res4);}
           $output.="<td width=\"80\">";
           if(mysqli_num_rows($res3)>0 || mysqli_num_rows($res4)>0) {
             if($data5['type']==0) {

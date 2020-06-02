@@ -217,7 +217,7 @@ if (isset($gox) && isset($goy) && $gox != null && $goy != null) {
 else {
   $cd = $_SESSION['cities']->getCityData();
   $res1=do_mysql_query("SELECT x,y FROM map WHERE id = '".$cd['id']."'");
-  $data1 = mysqli_fetch_assoc($res1);  
+  $data1 = do_mysql_fetch_assoc($res1);  
   $coy = $data1['y'];
   $cox = $data1['x'];
 }
@@ -252,7 +252,7 @@ elseif (isset($gox) && isset($goy) && $gox != null && $goy != null) {
 else {
   $cd=$_SESSION['cities']->getCityData();
   $res1=do_mysql_query("SELECT x,y FROM map WHERE id = '".$cd['id']."'");
-  $data1 = mysqli_fetch_assoc($res1);  
+  $data1 = do_mysql_fetch_assoc($res1);  
   $map->moveXY($data1['x'],$data1['y']);
 }
 

@@ -954,7 +954,7 @@ include($phpbb_root_path . 'includes/page_header.'.$phpEx);
 
 $is_mod=false;
 $res1=mysqli_query($GLOBALS['con'], "SELECT group_id FROM clanf_user_group WHERE user_id='".$_SESSION['player']->id."'");
-$data1=mysqli_fetch_assoc($res1);
+$data1=do_mysql_fetch_assoc($res1);
 if($data1['group_id']==3) {
 	$is_mod=true;
 }

@@ -168,10 +168,10 @@ function top_town () {
   $res1 = do_mysql_query("SELECT id,owner,name,population,prosperity,capital,loyality,religion FROM city ORDER BY population DESC LIMIT 100");
 
   $i=0;
-  while ($data1 = mysqli_fetch_assoc($res1)) {
+  while ($data1 = do_mysql_fetch_assoc($res1)) {
     if($data1['owner']) {
       $res2 = do_mysql_query("SELECT player.name, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE player.id=".$data1['owner']);
-      $data2 = mysqli_fetch_assoc($res2);
+      $data2 = do_mysql_fetch_assoc($res2);
     }
     else {
       $data2 = null;
@@ -205,7 +205,7 @@ function top_player() {
   $res3 = do_mysql_query("SELECT player.id as id, player.avatar as avatar, player.status as locked, player.name AS name, (player.points) AS points, player.religion AS religion, clan.name AS clan, clan.id AS clanid FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
   
   $i=0;
-  while ($data3 = mysqli_fetch_assoc($res3)) {
+  while ($data3 = do_mysql_fetch_assoc($res3)) {
     $i++;
     echo "<tr class=\"tblbody\">";
     echo "<td>".$i.".</td>";
@@ -237,7 +237,7 @@ function top_player_avg() {
   $res3 = do_mysql_query("SELECT player.id, player.avatar, player.status as locked, player.name, round(player.pointsavg/player.pointsupd) AS points, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
   
   $i=0;
-  while ($data3 = mysqli_fetch_assoc($res3)) {
+  while ($data3 = do_mysql_fetch_assoc($res3)) {
     $i++;
     echo "<tr class=\"tblbody\">";
     echo "<td>".$i.".</td>";
@@ -273,7 +273,7 @@ function top_population() {
   // $res1 = do_mysql_query("SELECT player.id AS id, player.name AS name, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id");
   $pos = 1;
 
-  while ($data1 = mysqli_fetch_assoc($res)) {
+  while ($data1 = do_mysql_fetch_assoc($res)) {
 //    if ($data1['religion'] == 1)
 //      $religion = "Christ";
 //    else
@@ -334,7 +334,7 @@ function top_clan(){
 
   $res = do_mysql_query("SELECT clan.name, clan.id AS clanid, clan.points, player.religion,count(*) AS num, floor( clan.points / count( * ) ) AS
 medium FROM clan LEFT JOIN player ON clan.id=player.clan GROUP BY player.clan ORDER BY ".$orderby." LIMIT 100");
-  while ($data = mysqli_fetch_assoc($res)) {
+  while ($data = do_mysql_fetch_assoc($res)) {
     $i++;
     echo "<tr class=\"tblbody\">";
     echo "<td>".$i.".</td>";
@@ -359,7 +359,7 @@ medium FROM clan LEFT JOIN player ON clan.id=player.clan GROUP BY player.clan OR
       echo "<td class=\"tblhead\" width=\"20%\"><strong>Religion</strong></td>\n";
       echo "<td class=\"tblhead\" width=\"20%\"><strong>Punkte</strong></td>\n";
       echo "</tr>\n";
-      while ($data2 = mysqli_fetch_assoc($res2)) {
+      while ($data2 = do_mysql_fetch_assoc($res2)) {
 	if($data2['religion'] == 1) { $religion = "Christentum"; } else { $religion = "Islam"; }
 			
 	if ($data2['clanstatus'] > 0) {
@@ -416,7 +416,7 @@ function top_honor() {
     " WHERE activationkey IS NULL AND player.name IS NOT NULL AND (player.settings & ".$disable_bonus_flag.") = 0 GROUP BY player.name ORDER BY points DESC LIMIT 100");
   
   $i=0;
-  while ($data3 = mysqli_fetch_assoc($res3)) {
+  while ($data3 = do_mysql_fetch_assoc($res3)) {
     if($data3['points'] <= 0) break;
     $i++;
     echo "<tr class=\"tblbody\">";

@@ -157,9 +157,9 @@ $res1 = do_mysql_query("(SELECT player.name AS name FROM relation LEFT JOIN play
 //$res2 = do_mysql_query("SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
 //                       " WHERE relation.type=0 AND relation.id1=".$_SESSION['player']->getID());
 
-while ($data1 = mysqli_fetch_assoc($res1))
+while ($data1 = do_mysql_fetch_assoc($res1))
   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>\n";
-  //while ($data2 = mysqli_fetch_assoc($res2))
+  //while ($data2 = do_mysql_fetch_assoc($res2))
   //  echo '<option value="'.$data2['name'].'">'.$data2['name']."</option>";
 echo "</select>";
 echo "</td><td>";
@@ -175,9 +175,9 @@ $res1 = do_mysql_query("(SELECT player.name AS name FROM relation LEFT JOIN play
 
 //$res2 = do_mysql_query("SELECT player.name AS name FROM relation LEFT JOIN player ON relation.id2=player.id ".
 //" WHERE relation.type=2 AND relation.id1=".$_SESSION['player']->getID());
-while ($data1 = mysqli_fetch_assoc($res1))
+while ($data1 = do_mysql_fetch_assoc($res1))
   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>";
-//while ($data2 = mysqli_fetch_assoc($res2))
+//while ($data2 = do_mysql_fetch_assoc($res2))
 //  echo '<option value="'.$data2['name'].'">'.$data2['name']."</option>";
 echo "</select>";
 echo "</td></tr>";
@@ -189,12 +189,12 @@ echo '<tr class="tblhead"><td>fremde Friedensangebote</td><td>fremde B&uuml;ndni
 echo '<tr class="tblbody"><td>';
 echo '<select size="5" name="neut">';
 $res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id1=player.id WHERE req_relation.type=1 AND req_relation.id2=".$_SESSION['player']->getID());
-while ($data3 = mysqli_fetch_assoc($res3))
+while ($data3 = do_mysql_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td><td>';
 echo '<select size="5" name="bnd">';
 $res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id1=player.id WHERE req_relation.type=2 AND req_relation.id2=".$_SESSION['player']->getID());
-while ($data3 = mysqli_fetch_assoc($res3))
+while ($data3 = do_mysql_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td></tr>';
 echo '<tr class="tblbody">';
@@ -207,12 +207,12 @@ echo '<tr class="tblhead"><td>eigene Friedensangebote</td><td>eigene B&uuml;ndni
 echo '<tr class="tblbody"><td>';
 echo '<select size="5" name="reqneut">';
 $res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id2=player.id WHERE req_relation.type=1 AND req_relation.id1=".$_SESSION['player']->getID());
-while ($data3 = mysqli_fetch_assoc($res3))
+while ($data3 = do_mysql_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td><td>';
 echo '<select size="5" name="reqbnd">';
 $res3 = do_mysql_query("SELECT player.name AS name, player.id AS id FROM req_relation LEFT JOIN player ON req_relation.id2=player.id WHERE req_relation.type=2 AND req_relation.id1=".$_SESSION['player']->getID());
-while ($data3 = mysqli_fetch_assoc($res3))
+while ($data3 = do_mysql_fetch_assoc($res3))
   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 echo '</select></td></tr>';
 echo '<tr class="tblbody">';

@@ -47,7 +47,7 @@ include_once("includes/diplomacy.common.php");
 
 function getCityName($id) {
 	$res = do_mysql_query("SELECT name FROM city WHERE id=".$id);
-	$data = mysqli_fetch_assoc($res);
+	$data = do_mysql_fetch_assoc($res);
 	$cityname = $data['name'];
 	return $cityname;
 }
@@ -95,7 +95,7 @@ class Market {
   function Market($id) {
     $this->player = $id;
     $player_db_res = do_mysql_query("SELECT name,hwstatus FROM player WHERE id=".$id);
-    $player_db = mysqli_fetch_assoc($player_db_res);
+    $player_db = do_mysql_fetch_assoc($player_db_res);
     $this->playername = $player_db['name'];
     $this->playerstatus = $player_db['hwstatus'];
     $this->start = 0;
@@ -186,7 +186,7 @@ class Market {
       return "Mein Herr! ".$type." kennt man hier nicht.";
     if (in_array($type, $this->cityres)) {
       $res = do_mysql_query("SELECT sum(count * res_storage) AS storage FROM building LEFT JOIN citybuilding ON citybuilding.building = building.id WHERE citybuilding.city = ".$city);
-      $data = mysqli_fetch_assoc($res);
+      $data = do_mysql_fetch_assoc($res);
       if ($quant > $data['storage'])
 	return "Mein Herr! Euer Lagermeister meldet, dass das Lager um ".($quant-$data[$type])." Einheiten zu klein ist";
       //auskommentiert, da diese Funktion noch für reines input checking benutzt wird
@@ -220,13 +220,13 @@ class Market {
     
     if (in_array($type, $this->cityres)) {
       $res = do_mysql_query("SELECT ".$type." FROM city WHERE id = ".$city);
-      $data = mysqli_fetch_assoc($res);
+      $data = do_mysql_fetch_assoc($res);
       if ($quant > $data[$type])
       return "Mein Herr! Ihr habt nur ".$data[$type]." ".$this->gerres[$type]." statt ".$quant." auf Lager.";
     }
     else {
       $res = do_mysql_query("SELECT ".$type." FROM player WHERE id = ".$player);
-      $data = mysqli_fetch_assoc($res);
+      $data = do_mysql_fetch_assoc($res);
       if ($quant > $data[$type])
       return "Mein Herr! Ihr habt nur ".$data[$type]." ".$this->gerres[$type]." statt ".$quant.".";
     }
@@ -291,7 +291,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
 
 	if($wantsType == "shortrange" || $wantsType == "longrange" || $wantsType == "armor" || $wantsType == "horse") {
       $resA = do_mysql_query("SELECT id,".$wantsType.",reserve_".$wantsType." FROM city WHERE id =".$_SESSION['cities']->activecity."");
-      $dataA = mysqli_fetch_assoc($resA);
+      $dataA = do_mysql_fetch_assoc($resA);
       $dataweapons = getWeapons($dataA['id']);
       if(($dataweapons['storagelimit']-$dataA['reserve_'.$wantsType]) < ($dataA[$wantsType] + $wantsQuant)) {
         echo "<b class=\"error\">MyLord! So viele ".$this->gerres[$wantsType]." k&ouml;nnt Ihr in ".$_SESSION['cities']->activecityname." nicht lagern! Baut euer Lager aus!<br>";
@@ -305,7 +305,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
 	}
 	if($hasType == "shortrange" || $hasType == "longrange" || $hasType == "armor" || $hasType == "horse") {
       $res = do_mysql_query("SELECT ".$hasType." AS ress FROM city WHERE owner=".$this->player." AND id = ".$_SESSION['cities']->activecity);
-      $data = mysqli_fetch_assoc($res);
+      $data = do_mysql_fetch_assoc($res);
       if($data['ress'] < $hasQuant) {
         echo '<b class="error">Ihr habt zu wenige '.$this->gerres[$hasType].' in '.$_SESSION['cities']->activecityname.' um euer Angebot aufzugeben.<b><br>';
         echo '<b class="error">Es befinden sich lediglich '.$data['ress'].' Einheiten im Lager!';
@@ -325,7 +325,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
       $hasQuant = intval($hasQuant);
       if (($wantsQuant > 0) && ($hasQuant > 0) && in_array($wantsType, $this->resarray) && in_array($hasType, $this->resarray)) {
         $res = do_mysql_query("SELECT ".$hasType." FROM player WHERE id=".$this->player);
-        $data = mysqli_fetch_assoc($res);
+        $data = do_mysql_fetch_assoc($res);
         if ($data[$hasType]>=$hasQuant) {
           do_mysql_query("UPDATE player SET ".$hasType."=".$hasType."-".($hasQuant).",cc_resources=1 WHERE id=".$this->player);
           do_mysql_query("INSERT INTO market (player,wantsType,wantsQuant,hasType,hasQuant,ratio,timestamp,city) VALUES (".$this->player.",'".$wantsType."',".$wantsQuant.",'".$hasType."',".$hasQuant.",".($wantsQuant/$hasQuant).",".time().",".$_SESSION['cities']->activecity.")");
@@ -345,7 +345,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
    */
   function accept($id) {
     $res1 = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,player,timestamp,city FROM market WHERE id=".$id);
-    if ($data1 = mysqli_fetch_assoc($res1)) {
+    if ($data1 = do_mysql_fetch_assoc($res1)) {
 
       //input checking, (co2)
       if (($msg = $this->validateSubRes($data1['wantsQuant'], $data1['wantsType'], $_SESSION['player']->getID(), $_SESSION['cities']->activecity)) || ($msg = $this->validateAddRes($data1['hasQuant'], $data1['hasType'], $_SESSION['player']->getID(), $_SESSION['cities']->getActiveCity()))) {
@@ -357,7 +357,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
       if($data1['hasType'] == "shortrange" || $data1['hasType'] == "longrange" || $data1['hasType'] == "armor" || $data1['hasType'] == "horse") {
         $cityname = $_SESSION['cities']->activecityname;
         $res2 = do_mysql_query("SELECT id,".$data1['hasType']." FROM city WHERE name='".$cityname."'");
-        $data2 = mysqli_fetch_assoc($res2);        
+        $data2 = do_mysql_fetch_assoc($res2);        
 
         $dataweapons = getWeapons($data2['id']);
         if(($data2[$data1['hasType']]+$data1['hasQuant']) <= $dataweapons['storagelimit']) {
@@ -367,9 +367,9 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
             do_mysql_query("UPDATE city SET reserve_".$data1['wantsType']." = reserve_".$data1['wantsType']."-".$data1['wantsQuant']." WHERE id = '".$data1['city']."'");
             do_mysql_query("UPDATE city SET ".$data1['wantsType']." = ".$data1['wantsType']."+".round(($data1['wantsQuant']*$this->steuer),0)." WHERE id = '".$data1['city']."'");
             $res3 = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-            if ($data3 = mysqli_fetch_assoc($res3)) {
+            if ($data3 = do_mysql_fetch_assoc($res3)) {
               $res4 = do_mysql_query("SELECT name FROM city WHERE id=".$data1['city']);
-              $data4 = mysqli_fetch_assoc($res4);
+              $data4 = do_mysql_fetch_assoc($res4);
               do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['player'].",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Der Spieler [b]".$data3['name']."[/b] hat ihr Angebot [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] gegen [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] angenommen.\nNach Steuern wurden euch [b]".round(($data1['wantsQuant']*$this->steuer),0)." ".$this->gerres[$data1['wantsType']]."[/b] gutgeschrieben. Die Waffen wurden in Eurer Stadt [b]".$data4['name']."[/b] eingelagert.',2)");
               do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$_SESSION['player']->getID().",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Ihr habt soeben ein Angebot von [b]".resolvePlayerName($data1['player'])."[/b] angenommen. Ihr habt [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] an Euren Handelspartner gesendet und im Gegenzug [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] erhalten. Die Waffen wurden in Eurer Stadt [b]".$_SESSION['cities']->activecityname."[/b] eingelagert.',2)");
               do_mysql_query("UPDATE player SET cc_resources=1,cc_messages=1 WHERE id=".$data1['player']);
@@ -383,7 +383,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
             do_mysql_query("UPDATE player SET ".$data1['wantsType']." = ".$data1['wantsType']."+".round(($data1['wantsQuant']*$this->steuer),0)." WHERE id = ".$data1['player']);
             do_mysql_query("INSERT INTO log_market_accept (offerer,acceptor,wantsType,wantsQuant,hasType,hasQuant,acctime,offtime,city) VALUES (".$data1['player'].",".$this->player.",'".$data1['wantsType']."',".round(($data1['wantsQuant']*$this->steuer),0).",'".$data1['hasType']."',".$data1['hasQuant'].",".time().",".$data1['timestamp'].", ".$data1['city'].")");
             $res3 = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-            if ($data3 = mysqli_fetch_assoc($res3)) {
+            if ($data3 = do_mysql_fetch_assoc($res3)) {
               do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['player'].",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Der Spieler ".$data3['name']." hat ihr Angebot ".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]." gegen ".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]." angenommen. Nach Steuern wurden euch ".round(($data1['wantsQuant']*$this->steuer),0)." ".$this->gerres[$data1['wantsType']]." gutgeschrieben.',2)");
               do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$_SESSION['player']->getID().",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Ihr habt soeben ein Angebot von [b]".resolvePlayerName($data1['player'])."[/b] angenommen. Ihr habt [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] an Euren Handelspartner gesendet und im Gegenzug [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] erhalten. Die Waffen wurden in Eurer Stadt [b]".$_SESSION['cities']->activecityname."[/b] eingelagert.',2)");
               do_mysql_query("UPDATE player SET cc_resources=1,cc_messages=1 WHERE id=".$data1['player']);
@@ -401,7 +401,7 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
       // FALL 2: Spieler bietet normale Resourcen, SUCHT aber Rüstungsgüter
       else if($data1['wantsType'] == "shortrange" || $data1['wantsType'] == "longrange" || $data1['wantsType'] == "armor" || $data1['wantsType'] == "horse") {
         $res2 = do_mysql_query("SELECT id,".$data1['wantsType']." FROM city WHERE name='".$_SESSION['cities']->activecityname."'");
-        $data2 = mysqli_fetch_assoc($res2);
+        $data2 = do_mysql_fetch_assoc($res2);
         $cityname = $_SESSION['cities']->activecityname;
         $dataweapons = getWeapons($data2['id']);
 
@@ -414,9 +414,9 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
           do_mysql_query("INSERT INTO log_market_accept (offerer,acceptor,wantsType,wantsQuant,hasType,hasQuant,acctime,offtime,city) VALUES (".$data1['player'].",".$this->player.",'".$data1['wantsType']."',".round(($data1['wantsQuant']*$this->steuer),0).",'".$data1['hasType']."',".$data1['hasQuant'].",".time().",".$data1['timestamp'].", ".$data1['city'].")");
 
           $res3 = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-          if ($data3 = mysqli_fetch_assoc($res3)) {
+          if ($data3 = do_mysql_fetch_assoc($res3)) {
             $res4 = do_mysql_query("SELECT name FROM city WHERE id=".$data1['city']);
-            $data4 = mysqli_fetch_assoc($res4);
+            $data4 = do_mysql_fetch_assoc($res4);
             do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['player'].",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Der Spieler [b]".$data3['name']."[/b] hat ihr Angebot [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] gegen [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] angenommen. Nach Steuern wurden euch [b]".round(($data1['wantsQuant']*$this->steuer),0)." ".$this->gerres[$data1['wantsType']]."[/b] gutgeschrieben. Die Waffen wurden in Eurer Stadt [b]".$data4['name']."[/b] eingelagert.',2)");
             do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$_SESSION['player']->getID().",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Ihr habt soeben ein Angebot von [b]".resolvePlayerName($data1['player'])."[/b] angenommen. Ihr habt [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] an Euren Handelspartner gesendet und im Gegenzug [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] erhalten.',2)");
             do_mysql_query("UPDATE player SET cc_resources=1,cc_messages=1 WHERE id=".$data1['player']);
@@ -432,14 +432,14 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
       // FALL 3: Resourcen gegen Resourcen
       else {
         $res2 = do_mysql_query("SELECT ".$data1['wantsType']." FROM player WHERE id=".$this->player);
-        $data2 = mysqli_fetch_assoc($res2);
+        $data2 = do_mysql_fetch_assoc($res2);
         if ($data2[$data1['wantsType']]>=$data1['wantsQuant']) {
           do_mysql_query("UPDATE player SET ".$data1['hasType']."=".$data1['hasType']."+".($data1['hasQuant']).",".$data1['wantsType']."=".$data1['wantsType']."-".$data1['wantsQuant'].",cc_resources=1 WHERE id=".$this->player);
           do_mysql_query("UPDATE player SET ".$data1['wantsType']."=".$data1['wantsType']."+".round(($data1['wantsQuant']*$this->steuer),0).",cc_resources=1,cc_messages=1 WHERE id=".$data1['player']);
           do_mysql_query("DELETE FROM market WHERE id=".$id);
           do_mysql_query("INSERT INTO log_market_accept (offerer,acceptor,wantsType,wantsQuant,hasType,hasQuant,acctime,offtime,city) VALUES (".$data1['player'].",".$this->player.",'".$data1['wantsType']."',".round(($data1['wantsQuant']*$this->steuer),0).",'".$data1['hasType']."',".$data1['hasQuant'].",".time().",".$data1['timestamp'].",".$data1['city'].")");
           $res2 = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-          if ($data2 = mysqli_fetch_assoc($res2)) {
+          if ($data2 = do_mysql_fetch_assoc($res2)) {
             do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['player'].",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Der Spieler [b]".$data2['name']."[/b] hat ihr Angebot [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] gegen [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] angenommen. Nach Steuern wurden euch [b]".round(($data1['wantsQuant']*$this->steuer),0)." ".$this->gerres[$data1['wantsType']]."[/b] gutgeschrieben.',2)");
             do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$_SESSION['player']->getID().",".time().",'Angenommen: ".$this->gerres[$data1['hasType']]." gegen ".$this->gerres[$data1['wantsType']]."','Ihr habt soeben ein Angebot von [b]".resolvePlayerName($data1['player'])."[/b] angenommen. Ihr habt [b]".$data1['wantsQuant']." ".$this->gerres[$data1['wantsType']]."[/b] an Euren Handelspartner gesendet und im Gegenzug [b]".$data1['hasQuant']." ".$this->gerres[$data1['hasType']]."[/b] erhalten.',2)");
             do_mysql_query("UPDATE player SET cc_resources=1,cc_messages=1 WHERE id=".$data1['player']);
@@ -456,10 +456,10 @@ function put($wantsType, $wantsQuant, $hasType, $hasQuant) {
 //assumes clean input
 function takeBack($id) {
     $res = do_mysql_query("SELECT id,wantsType,wantsQuant,hasType,hasQuant,player,city FROM market WHERE id=".$id);
-    if ($data = mysqli_fetch_assoc($res)) {
+    if ($data = do_mysql_fetch_assoc($res)) {
 		if($data['hasType'] == "shortrange" || $data['hasType'] == "longrange" || $data['hasType'] == "armor" || $data['hasType'] == "horse") {
    			$res2 = do_mysql_query("SELECT ".$data['hasType']." FROM city WHERE id=".$data['city']);
-			$data2 = mysqli_fetch_assoc($res2);
+			$data2 = do_mysql_fetch_assoc($res2);
 			$exists = mysqli_num_rows($res2);
 			if ($exists == 1) {
 				$dataweapons = getWeapons($data['city']);
@@ -470,7 +470,7 @@ function takeBack($id) {
 			} else {
 				echo "<b class=\"error\">Die Stadt von der das Angebot abgegeben wurde existiert nicht mehr!</b><br />";
 				$resA = do_mysql_query("SELECT id,name,".$data['hasType']." FROM city WHERE capital = 1 AND owner =".$_SESSION['player']->id);
-				$dataA = mysqli_fetch_assoc($resA);
+				$dataA = do_mysql_fetch_assoc($resA);
 				$dataweapons = getWeapons($dataA['id']);
 				$cityname = $dataA['name'];
 				echo "<b class=\"error\">Die Markth&auml;ndler liefern das Angebot daher nur in Ihre Hauptstadt ".$cityname."!</b><br />";
@@ -503,7 +503,7 @@ function takeBack($id) {
 			// Reservierten Lagerplatz wieder frei geben
 			// Problem wenn die Stadt nicht mehr existiert! bzw. nicht mehr in seinem Eigentum ist
 			$resB = do_mysql_query("SELECT id,wantsType,wantsQuant,hasType,hasQuant,player,city FROM market WHERE id=".$id);
-			$dataB = mysqli_fetch_assoc($resB);
+			$dataB = do_mysql_fetch_assoc($resB);
 			if($dataB['wantsType'] == "shortrange" || $dataB['wantsType'] == "longrange" || $dataB['wantsType'] == "armor" || $dataB['wantsType'] == "horse") {
 				do_mysql_query("UPDATE city SET reserve_".$dataB['wantsType']."= reserve_".$dataB['wantsType']."-".$dataB['wantsQuant']." WHERE owner=".$this->player." AND id ='".$dataB['city']."'");
 				echo "<b class=\"noerror\">Der reservierte Lagerplatz wurde wieder frei gegeben!</b>\n";
@@ -522,7 +522,7 @@ function takeBack($id) {
   function click($id) {
     $id = intval($id);
     $res = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,player,city FROM market WHERE id=".$id);
-    if ($data = mysqli_fetch_assoc($res)) {
+    if ($data = do_mysql_fetch_assoc($res)) {
       // Falls das Angebot dem aktuellen Spieler gehört, ziehe es zurück
       if ($data['player'] == $this->player) {
         $this->takeBack($id);
@@ -554,14 +554,14 @@ function takeBack($id) {
     
     if (in_array($type, $this->resarray)) {      
       $res1 = do_mysql_query("SELECT id FROM player WHERE name='".mysqli_escape_string($GLOBALS['con'], $to)."'");
-      if($data1 = mysqli_fetch_assoc($res1)) {
+      if($data1 = do_mysql_fetch_assoc($res1)) {
         // Prüfen, ob die handeln dürfen
         if(null != ($error = $this->checkMayTrade($this->player, $data1['id']))) {
           return $error;
         }
         
         $res2 = do_mysql_query("SELECT ".$type." FROM player WHERE id=".$this->player);
-        $data2 = mysqli_fetch_assoc($res2);
+        $data2 = do_mysql_fetch_assoc($res2);
         if ($data2[$type]>=$quant) {
           do_mysql_query("UPDATE player SET ".$type."=".$type."-".$quant.",cc_messages=1,cc_resources=1 WHERE id=".$this->player);
           do_mysql_query("UPDATE player SET ".$type."=".$type."+".floor($quant*0.97).",cc_messages=1,cc_resources=1 WHERE id=".$data1['id']);
@@ -571,7 +571,7 @@ function takeBack($id) {
 
           //MULTILOG ENDE
           $res3 = do_mysql_query("SELECT name FROM player WHERE id=".$this->player);
-          if ($data3 = mysqli_fetch_assoc($res3)) {
+          if ($data3 = do_mysql_fetch_assoc($res3)) {
             // Nachrichten an beide Spieler
             do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$data1['id'].",".time().",'".$quant." ".$this->gerres[$type]." VON ".$data3['name']."','Der Spieler ".$data3['name']." hat euch ".$quant." ".$this->gerres[$type]." gesandt. Nach Steuern wurden euch ".floor($quant*0.97)." gutgeschrieben.',2)");
             do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$this->player.",".time().",'".$quant." ".$this->gerres[$type]." AN ".$to."','Ihr habt dem Spieler ".$to." ".$quant." ".$this->gerres[$type]." gesandt.',2)");
@@ -599,7 +599,7 @@ function takeBack($id) {
     global $player;
     if ($this->playerstatus & 4) {
       $offer_res = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,player,City,timestamp FROM market WHERE id=".$id);
-      if ($offer = mysqli_fetch_assoc($offer_res)) {
+      if ($offer = do_mysql_fetch_assoc($offer_res)) {
         // Admins dürfen alles. Marktmoderatoren nicht, wenn Sie befeindet sind mit diesem Spieler
         if ($player->isAdmin() || !((getRel($offer['player'], $this->player) == 0) || (getClanRel($offer['player'], $this->player) == 0))) {
           do_mysql_query("INSERT INTO log_marketmod(modid,player,type,wantsType,wantsQuant,hasType,hasQuant,City,timeOffer,time,rel,clanrel) VALUES (".$this->player.",".$offer['player'].",'return','".$offer['wantsType']."',".$offer['wantsQuant'].",'".$offer['hasType']."',".$offer['hasQuant'].",".$offer['City'].",".$offer['timestamp'].",".time().",".(getRel($offer['player'], $this->player)).",".(getClanRel($offer['player'], $this->player)).")");
@@ -632,7 +632,7 @@ function takeBack($id) {
     if ($this->playerstatus & 4) {
       $offer_res = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,player,City,timestamp FROM market WHERE id=".$id);
       
-      if ($offer = mysqli_fetch_assoc($offer_res)) {
+      if ($offer = do_mysql_fetch_assoc($offer_res)) {
         // Admins dürfen alles. Marktmoderatoren nicht, wenn Sie befeindet sind mit diesem Spieler
         if ($player->isAdmin() || !((getRel($offer['player'], $this->player) == 0) || (getClanRel($offer['player'], $this->player) == 0))) {
           do_mysql_query("INSERT INTO log_marketmod(modid,player,type,wantsType,wantsQuant,hasType,hasQuant,City,timeOffer,time,rel,clanrel) VALUES (".$this->player.",".$offer['player'].",'delete','".$offer['wantsType']."',".$offer['wantsQuant'].",'".$offer['hasType']."',".$offer['hasQuant'].",".$offer['City'].",".$offer['timestamp'].",".time().",".(getRel($offer['player'], $this->player)).",".(getClanRel($offer['player'], $this->player)).")");
@@ -666,7 +666,7 @@ function takeBack($id) {
 
     if ($this->playerstatus & 4) {
       $offer_res = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,player,ratio,City,timestamp FROM market WHERE id=".$id);
-      if ($offer = mysqli_fetch_assoc($offer_res)) {
+      if ($offer = do_mysql_fetch_assoc($offer_res)) {
         
         // Admins dürfen alles. Marktmoderatoren nicht, wenn Sie befeindet sind mit diesem Spieler
         if ($player->isAdmin() || !((getRel($offer['player'], $this->player) == 0) || (getClanRel($offer['player'], $this->player) == 0))) {

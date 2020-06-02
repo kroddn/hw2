@@ -35,11 +35,11 @@ include($phpbb_root_path . 'common.'.$phpEx);
 
 function checkRights($id) {
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$clan_cat=$data1['cat_id'];
 
 	$res2=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_forums WHERE forum_id='".mysqli_escape_string($GLOBALS['con'], $_GET['f'])."'");
-	$data2=mysqli_fetch_assoc($res2);
+	$data2=do_mysql_fetch_assoc($res2);
 	$forum_cat=$data2['cat_id'];
 
 	if($clan_cat != $forum_cat) {
@@ -50,7 +50,7 @@ function checkRights($id) {
 	// intern forum hack
 	$viewf=false;
 	$res3=mysqli_query($GLOBALS['con'], "SELECT forum_status FROM clanf_forums WHERE forum_id='".mysqli_escape_string($GLOBALS['con'], $_GET['f'])."'");
-	$data3=mysqli_fetch_assoc($res3);
+	$data3=do_mysql_fetch_assoc($res3);
 
 	if($data3['forum_status']<2) {
 		$viewf=true;

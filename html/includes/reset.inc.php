@@ -104,7 +104,7 @@ function reset_players($delete = false) {
   
   // Gesperrte Spieler löschen
   $res = do_mysql_query("SELECT id,login FROM player WHERE status = 2");
-  while($p = mysqli_fetch_assoc($res)) {
+  while($p = do_mysql_fetch_assoc($res)) {
     echo "Lösche Spieler '".$p['login']."' <br>\n";
     RemovePlayer_old($p['id']);
   }

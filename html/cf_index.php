@@ -34,7 +34,7 @@ function checkRegistered($id) {
   // Falls Account noch nicht existiert, lege ihn an.
   if(mysqli_num_rows($res1) < 1) {
     $res2=mysqli_query($GLOBALS['con'], "SELECT password FROM player WHERE id='".$_SESSION['player']->id."'");
-    $data2=mysqli_fetch_assoc($res2);
+    $data2=do_mysql_fetch_assoc($res2);
     $query="INSERT INTO clanf_users ".
            " (user_id,user_active,username,user_password,user_level,user_timezone,user_lang,user_dateformat,user_allowbbcode,user_allowsmile) ".
            " VALUES ('".$_SESSION['player']->id."','1','".$_SESSION['player']->name."','".$data2['password']."','0','0:00','0','d M Y h:i a','1','1')";
@@ -129,9 +129,9 @@ if($_GET['unprivforum']) {
 }
 if($_POST['fname']) {
 	$res0=mysqli_query($GLOBALS['con'], "SELECT max( forum_id ) as newfid FROM clanf_forums");
-	$data0=mysqli_fetch_assoc($res0);
+	$data0=do_mysql_fetch_assoc($res0);
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	// echo "Forum erstellt";
 	$res2=mysqli_query($GLOBALS['con'], "INSERT INTO clanf_forums (forum_id, cat_id, forum_name, forum_desc) VALUES ('".($data0['newfid']+1)."','".$data1['cat_id']."','".$_POST['fname']."','".$_POST['fdesc']."')");
 	mysqli_query($GLOBALS['con'], "INSERT INTO clanf_auth_access (group_id, forum_id, auth_view, auth_read, auth_post, auth_reply, auth_edit, auth_delete, auth_sticky, auth_announce, auth_vote, auth_pollcreate, auth_attachments, auth_mod) VALUES ('3', '".($data0['newfid']+1)."', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1')");
@@ -393,10 +393,10 @@ if($_GET['setup']) {
 	} else {
 		echo "<tr><td colspan=\"5\" class=\"tblhead\" height=\"30\" valign=\"middle\"><b>Internes Forum Administrieren</b></td></tr>";
 		$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-		$data1=mysqli_fetch_assoc($res1);
+		$data1=do_mysql_fetch_assoc($res1);
 		echo "<tr><td colspan=\"5\" class=\"tblhead\"><b>Forenliste</b></td></tr>";
 		$res2=mysqli_query($GLOBALS['con'], "SELECT forum_id, forum_status, forum_name FROM clanf_forums WHERE cat_id = '".$data1['cat_id']."' ORDER BY forum_order ASC");
-		while($data2=mysqli_fetch_assoc($res2)) {
+		while($data2=do_mysql_fetch_assoc($res2)) {
 			echo "<tr><td class=\"tblbody\" width=\"250\">\n";
 			if($data2['forum_status']==1)
 				echo $data2['forum_name']."</td><td class=\"tblbody\" width=\"100\"><a href=\"".$_SERVER['PHP_SELF']."?unlockforum=".$data2['forum_id']."\">entsperren</a></td><td class=\"tblbody\" width=\"100\">";
@@ -436,7 +436,7 @@ if($_GET['deleteqry']) {
 if($_GET['deleteforum']) {
 	checkLeaderRights();
 	$res1=mysqli_query($GLOBALS['con'], "SELECT post_id FROM clanf_posts WHERE forum_id='".$_GET['deleteforum']."'");
-	while($data1=mysqli_fetch_assoc($res1)) {
+	while($data1=do_mysql_fetch_assoc($res1)) {
 		mysqli_query($GLOBALS['con'], "DELETE FROM clanf_posts_text WHERE post_id='".$data1['post_id']."'");
 	}
 	mysqli_query($GLOBALS['con'], "DELETE FROM clanf_posts WHERE forum_id='".$_GET['deleteforum']."'");
@@ -452,7 +452,7 @@ if($_GET['makemod']) {
 if($_GET['removemod']) {
 	checkLeaderRights();
 	$res1=mysqli_query($GLOBALS['con'], "SELECT clanstatus FROM player WHERE id='".mysqli_escape_string($GLOBALS['con'], $_GET['removemod'])."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	if($data1['clanstatus'] != 63) {
 		mysqli_query($GLOBALS['con'], "DELETE FROM clanf_user_group WHERE group_id='3' AND user_id='".mysqli_escape_string($GLOBALS['con'], $_GET['removemod'])."'");
 		header_redirect("".$_SERVER['PHP_SELF']."?setmod=true");
@@ -466,7 +466,7 @@ if($_GET['setmod']) {
 	echo "<table width=\"550\" style=\"font-size:12px;\">\n";
 	echo "<tr><td colspan=\"4\" class=\"tblhead\" height=\"30\" valign=\"middle\"><b>Internes Forum Administrieren</b></td></tr>";
 	echo "<tr><td colspan=\"2\" height=\"30\" valign=\"middle\" class=\"tblbody\"><b>Moderatoren verwalten</b></td></tr>";
-	while($data1=mysqli_fetch_assoc($res1)) {
+	while($data1=do_mysql_fetch_assoc($res1)) {
 		$res2=mysqli_query($GLOBALS['con'], "SELECT user_id FROM clanf_user_group WHERE group_id = '3' AND user_id='".$data1['id']."'");
 		if(mysqli_num_rows($res2) > 0)
 			echo "<tr><td class=\"tblhead\" width=\"300\"><b>".$data1['name']."</b></td><td class=\"tblbody\"><a href=\"".$_SERVER['PHP_SELF']."?removemod=".$data1['id']."\">Moderatorenrechte entziehen</a></td></tr>";
@@ -481,10 +481,10 @@ if($_GET['editforum']) {
 	checkLeaderRights();
 
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$clan_cat=$data1['cat_id'];
 	$res2=mysqli_query($GLOBALS['con'], "SELECT forum_name, forum_desc, forum_order, cat_id FROM clanf_forums WHERE forum_id='".$_GET['editforum']."'");
-	$data2=mysqli_fetch_assoc($res2);
+	$data2=do_mysql_fetch_assoc($res2);
 
 	if($data2['cat_id'] != $data1['cat_id'])
 		exit;
@@ -651,7 +651,7 @@ if( ( $total_categories = count($category_rows) ) )
 	//
 
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	$clanforumid=$data1['cat_id'];
 
 			$sql = "SELECT f.*, p.post_time, p.post_username, u.username, u.user_id

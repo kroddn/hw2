@@ -58,12 +58,19 @@ if (!$GLOBALS['con']) {
 mysqli_select_db( $GLOBALS['con'], DBSELECT );
 
 function do_mysql_query_fetch_array($sql) {
-  return mysqli_fetch_assoc(do_mysql_query($sql));
+  return do_mysql_fetch_assoc(do_mysql_query($sql));
 }
 
+function do_mysql_fetch_assoc($result) {
+  return mysqli_fetch_assoc($result);
+}
 
 function do_mysql_query_fetch_assoc($sql) {
-  return mysqli_fetch_assoc(do_mysql_query($sql));
+  return do_mysql_fetch_assoc(do_mysql_query($sql));
+}
+
+function do_mysql_num_rows($result) {
+  return mysqli_num_rows($result);
 }
 
 

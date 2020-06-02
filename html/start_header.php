@@ -92,7 +92,7 @@ if (isset($recruiter)) {
 
   $recruiter_res = do_mysql_query("SELECT name FROM player WHERE id = ".mysqli_escape_string($GLOBALS['con'], $recruiter) );
   if (mysqli_num_rows($recruiter_res)) {
-    $recruiter_name = mysqli_fetch_assoc($recruiter_res);
+    $recruiter_name = do_mysql_fetch_assoc($recruiter_res);
     $recruiter_name = $recruiter_name['name'];
     setcookie ("hw2_recruiter", $recruiter, time() + 28*24*60*60, "/", $serverhost, false );   
   }
@@ -291,7 +291,7 @@ function print_news_table() {
     $resnews=do_mysql_query("SELECT topic,text FROM news WHERE id=".intval($_GET['news']));
   else
     $resnews=do_mysql_query("SELECT topic,text FROM news ORDER BY time DESC");
-  $dataNews=mysqli_fetch_assoc($resnews);
+  $dataNews=do_mysql_fetch_assoc($resnews);
 
   $resN=do_mysql_query("SELECT id, time, topic FROM news ORDER BY id DESC");
   
@@ -306,7 +306,7 @@ function print_news_table() {
     
     if(mysqli_num_rows($resN)>1) {
       echo "<tr class=\"tblbody\"><td valign=\"middle\" height=\"30\">\n";
-      while($dataN=mysqli_fetch_assoc($resN)) {
+      while($dataN=do_mysql_fetch_assoc($resN)) {
 	echo "<span style=\"float:left;\"><a href=\"".$_SERVER['PHP_SELF']."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">(".date("d.m.Y",$dataN['time']).")</span><br>";
       }
       echo "</td></tr>";
@@ -340,7 +340,7 @@ function bestplayer_table() {
   $res2=do_mysql_query("SELECT name, religion FROM player WHERE toplist > 0 ORDER BY toplist ASC LIMIT 0,5");
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\"><b>Top-5 Spieler</b>&nbsp;&nbsp;<a style=\"font-size:10px;\" href=\"toplist.php\">&gt;(Top 100 hier)&lt;</a></td></tr>\n";
-  while($data2=mysqli_fetch_assoc($res2)) {
+  while($data2=do_mysql_fetch_assoc($res2)) {
     echo "<tr class=\"tblbody\"><td height=\"20\" valign=\"middle\" width=\"98%\">";
     echo $data2['name']."</td><td width=\"15\" align=\"center\">";
     
@@ -354,7 +354,7 @@ function bestclan_table() {
   $res2=do_mysql_query("SELECT clan.name, player.religion AS religion FROM clan LEFT JOIN player ON player.clan = clan.id WHERE clan.toplist > 0 GROUP BY player.clan ORDER BY clan.toplist ASC LIMIT 0,5");
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"25\" valign=\"middle\" colspan=\"3\"><b>Top-5 Orden</b>&nbsp;&nbsp;<a href=\"toplist.php?show=clan\" style=\"font-size:10px;\">&gt;(Top 100 hier)&lt;</a></td></tr>\n";
-  while($data2=mysqli_fetch_assoc($res2)) {
+  while($data2=do_mysql_fetch_assoc($res2)) {
     echo "<tr class=\"tblbody\"><td height=\"20\" valign=\"middle\" width=\"98%\">";
     echo $data2['name']."</td><td width=\"15\" align=\"center\">";
     
@@ -370,7 +370,7 @@ function zitat_table() {
   $zitat=do_mysql_query("SELECT player.name as player, text FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active='1' ORDER BY RAND() LIMIT 1");
 
   if(mysqli_num_rows($zitat) > 0) {
-    $zitat=mysqli_fetch_assoc($zitat);
+    $zitat=do_mysql_fetch_assoc($zitat);
     echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\">";
     
     if($zitat['player']) {
@@ -397,7 +397,7 @@ function zitat_table() {
 function print_you_know_table() {
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   $present=do_mysql_query("SELECT player.name as name, (player.points) AS points, sum(city.population) AS population, count(city.id) as citycount, clan.name as clan, player.clanstatus as clanstatus, player.toplist AS toplistplayer, player.religion AS religion FROM player LEFT JOIN clan ON player.clan=clan.id LEFT JOIN city ON city.owner=player.id WHERE player.toplist<='50' GROUP BY player.name ORDER BY RAND() LIMIT 1");
-  $present=mysqli_fetch_assoc($present);
+  $present=do_mysql_fetch_assoc($present);
   
   echo "<tr class=\"tblhead\"><td height=\"25\" valign=\"middle\" colspan=\"3\">";
   

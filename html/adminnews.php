@@ -65,7 +65,7 @@ if(!$_GET['edit']) {
 	echo "</form>\n";
 } else {
 	$edit=do_mysql_query("SELECT topic,text FROM news WHERE id='".$_GET['edit']."'");
-	$edit=mysqli_fetch_assoc($edit);
+	$edit=do_mysql_fetch_assoc($edit);
 	echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">\n";
 	echo "<table width=\"300\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n";
 	echo "<tr><td class=\"error\">\n";
@@ -95,7 +95,7 @@ if(!$_GET['edit']) {
 	echo "<td>Text</td>\n";
 	echo "</tr>";
 	$news=do_mysql_query("SELECT * FROM news WHERE 1 order by id desc limit 0,10");
-	while($get_news=mysqli_fetch_assoc($news)) {
+	while($get_news=do_mysql_fetch_assoc($news)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
 		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_news['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
 		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?edit=".$get_news['id']."\"><img src=\"".$imagepath."/ad_fixed.png\" border=\"0\" alt=\"Bearbeiten\"></a></td>\n";

@@ -49,7 +49,7 @@ $res1=do_mysql_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coale
                      " FROM player WHERE id=".$_SESSION['player']->getID());
 
 
-if ($cc=mysqli_fetch_assoc($res1)) {
+if ($cc=do_mysql_fetch_assoc($res1)) {
   if ($cc['cc_towns']==1) {
     $_SESSION['cities']->updateCities();
     reloadBottom();

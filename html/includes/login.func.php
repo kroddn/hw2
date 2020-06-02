@@ -63,7 +63,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   
   if (checkBez($loginname, 2, 40)) {
     $sql_login = do_mysql_query("SELECT id, login, name, password, status, hwstatus, statusdescription, activationkey, holiday FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
-    if ($db_login = mysqli_fetch_assoc($sql_login)) {
+    if ($db_login = do_mysql_fetch_assoc($sql_login)) {
       if ($db_login['status'] == "") { $db_login['status'] = 0; }
       $agent  = getenv('HTTP_USER_AGENT');
       do_mysql_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".

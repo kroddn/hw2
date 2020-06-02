@@ -206,7 +206,7 @@ if (!isset($takecoloursby))
  * - owner (name)
  * - x und y
  */
-while( null != ($city = mysqli_fetch_assoc($worldcities)) || $clancities != null && null != ($city =  mysqli_fetch_assoc($clancities))  ) {  
+while( null != ($city = do_mysql_fetch_assoc($worldcities)) || $clancities != null && null != ($city =  do_mysql_fetch_assoc($clancities))  ) {  
   if($city[$takecoloursby] == null) {
     $i = 10;
   }

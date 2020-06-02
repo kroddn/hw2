@@ -53,7 +53,7 @@ if(isset($show)) {
     do_mysql_query("UPDATE message SET status=status|".MSG_RECIPIENT_READ." WHERE id=".$show." AND recipient=".$player->getID());
     do_mysql_query("UPDATE message SET status=status|".MSG_SENDER_READ." WHERE id=".$show." AND sender='".$player->getName()."' AND date>=".$player->getRegTime());
     do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID());
-    $db_msg=mysqli_fetch_assoc($res1);
+    $db_msg=do_mysql_fetch_assoc($res1);
     $showmsg=1;
   }
 }
@@ -123,7 +123,7 @@ if (isset($msgsend)) {
       			$rcp_name = trim($rcp_name);
       			$res1=do_mysql_query("SELECT id FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'],$rcp_name)."'");      		      			
       			if (mysqli_num_rows($res1)>0) {
-      				$rec_id = mysqli_fetch_assoc($res1);
+      				$rec_id = do_mysql_fetch_assoc($res1);
       				array_push($rcp_ids, $rec_id['id']);
       				$cachercp = $rcp_name;      			
       			}
@@ -157,7 +157,7 @@ if (isset($msgsend)) {
     if ($clanbroadcast=="1" && isset($msgsend)) {
      	$playerids = do_mysql_query("SELECT id,name FROM player WHERE clan=".$clan->getID()." ORDER BY name ASC");
     	$header = "(ON) ".htmlentities($msgheader,ENT_QUOTES);
-    	while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    	while ($get_playerids = do_mysql_fetch_assoc($playerids)) {
     		do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".$player->getName()."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANMSG.")");
     		do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     	}
@@ -172,7 +172,7 @@ if (isset($msgsend)) {
     if ($minbroadcast=="1" and isset($msgsend)) {
     	$playerids = do_mysql_query("SELECT id,name FROM player WHERE clan=".$clan->getID()." AND clanstatus > '0' ORDER BY name ASC");
     	$header = "(MN) ".htmlentities($msgheader,ENT_QUOTES);
-    	while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    	while ($get_playerids = do_mysql_fetch_assoc($playerids)) {
     		do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".$player->getName()."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANMINISTERMSG.")");
     		do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     	}
@@ -218,7 +218,7 @@ if (isset($msgsend)) {
     		if (!isset($onlycf)) {
     			$playerids = do_mysql_query("SELECT id FROM player WHERE 1");
     			$header = "(AN) ".htmlentities($msgheader,ENT_QUOTES);
-    			while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    			while ($get_playerids = do_mysql_fetch_assoc($playerids)) {
     				do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".TEAM_SENDER."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_CLANFOUNDERMSG.")");
     				do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     			}
@@ -229,7 +229,7 @@ if (isset($msgsend)) {
     			//Nur an Ordensgr�nder(Clanfounder) 
     			$playerids = do_mysql_query("SELECT id FROM player WHERE clanstatus=63");
     			$header = "(AN) ".htmlentities($msgheader,ENT_QUOTES);
-    			while ($get_playerids = mysqli_fetch_assoc($playerids)) {
+    			while ($get_playerids = do_mysql_fetch_assoc($playerids)) {
     				do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,status) VALUES ('".TEAM_SENDER."',".$get_playerids['id'].",".time().",'".$header."','".$msgbody."',".MSG_ADMINMSG.")");
     				do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     			}
@@ -624,7 +624,7 @@ function showMessage($preview=false) {
   $resA=do_mysql_query("SELECT id, avatar FROM player WHERE name='".$db_msg['sender']."'");
   if(mysqli_num_rows($resA) > 0) 
     {
-      $avatar=mysqli_fetch_assoc($resA);
+      $avatar=do_mysql_fetch_assoc($resA);
       if($avatar['avatar']==2) {
         echo "<img title=\"Avatar\" src=\"avatar.php?id=".$avatar['id']."\" />"; 
       }
@@ -696,14 +696,11 @@ if (!is_premium_noads()) {
 ?>
   <tr><td align='center' colspan='3'>
 <br>
-  <!-- BEGIN PARTNER PROGRAM - DO NOT CHANGE THE PARAMETERS OF THE HYPERLINK -->
-  <A style="color: blue" HREF="http://partners.webmasterplan.com/click.asp?ref=241980&site=3749&type=text&tnb=14" TARGET="_top">BASE.de - hier gibts die Flatrate f&uuml;rs Handy<br></a><IMG SRC="http://banners.webmasterplan.com/view.asp?site=3749&ref=241980&b=0&type=text&tnb=14" BORDER="0" WIDTH="1" HEIGHT="1">
-  <!-- END PARTNER PROGRAM -->
   
 <?
 }
   if (!$preview) {
-    echo "<br><a target=\"main\" href=\"messages.php\"><b>zur�ck</b></a>\n\n";
+    echo "<br><a target=\"main\" href=\"messages.php\"><b>zurück</b></a>\n\n";
   }
   echo "</td></tr></table>";
 ?>

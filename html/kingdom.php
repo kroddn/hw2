@@ -47,7 +47,7 @@ echo "<!-- TICK: $tick; -->";
 
 $upt=time();
 $res5=do_mysql_query("SELECT lastres FROM player WHERE id = ".$_SESSION['player']->getID());
-while ($data5=mysqli_fetch_assoc($res5)) {
+while ($data5=do_mysql_fetch_assoc($res5)) {
   $next = ($data5['lastres']+$tick)-$upt;
   $ticker = "<b>Verbleibende Zeit bis zum n&auml;chsten Tick: ".$next."</b>&nbsp;<span class=\"noerror\" id=\"1\"><script type=\"text/javascript\">addTimer(".$next.",1);</script></span>&nbsp;";
 }

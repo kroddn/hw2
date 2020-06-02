@@ -56,7 +56,7 @@ if($player->isNamehunter()) {
     }
     
 	$ava1=do_mysql_query($sql);
-	while($avatar=mysql_fetch_assoc($ava1)) {
+	while($avatar=do_mysql_fetch_assoc($ava1)) {
 		echo "<tr class=\"tblbody\">\n";
 		echo "<td>";
 		echo "<img src=\"avatar.php?id=".$avatar['id']."\" />";
@@ -82,7 +82,7 @@ if($player->isNamehunter()) {
 	echo "<td>&nbsp;</td>\n";
 	echo "</tr>\n";
 	$ava1=do_mysql_query("SELECT id, name FROM player WHERE avatar='2'");
-	while($avatar=mysql_fetch_assoc($ava1)) {
+	while($avatar=do_mysql_fetch_assoc($ava1)) {
 		echo "<tr class=\"tblbody\">\n";
 		echo "<td>";
 		echo "<img src=\"avatar.php?id=".$avatar['id']."\" />";

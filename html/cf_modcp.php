@@ -43,19 +43,19 @@ include($phpbb_root_path . 'includes/bbcode.'.$phpEx);
 include($phpbb_root_path . 'includes/functions_admin.'.$phpEx);
 
 $res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
-$data1=mysqli_fetch_assoc($res1);
+$data1=do_mysql_fetch_assoc($res1);
 $clanforumid=$data1['cat_id'];
 
 if($_GET['t']) {
 	$res1=mysqli_query($GLOBALS['con'], "SELECT clanf_forums.cat_id FROM clanf_topics LEFT JOIN clanf_forums ON clanf_forums.forum_id=clanf_topics.forum_id WHERE topic_id = '".mysqli_escape_string($GLOBALS['con'], $_GET['t'])."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	if($data1['cat_id'] != $clanforumid) {
 		header_redirect("cf_index.php");
 		exit;
 	}
 } elseif($_GET['f']) {
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_forums WHERE forum_id = '".mysqli_escape_string($GLOBALS['con'], $_GET['f'])."'");
-	$data1=mysqli_fetch_assoc($res1);
+	$data1=do_mysql_fetch_assoc($res1);
 	if($data1['cat_id'] != $clanforumid) {
 		header_redirect("cf_index.php");
 		exit;

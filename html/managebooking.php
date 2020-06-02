@@ -52,7 +52,7 @@ if(isset($getoldpremiumacc) && isset($bookid)) {
 $book = do_mysql_query("SELECT * FROM booking ORDER BY bookid");
 
 $i = 0;
-while ($b = mysql_fetch_assoc($book)) {
+while ($b = do_mysql_fetch_assoc($book)) {
   echo '<tr class="book'.$i.'">';
   foreach($b as $k => $v) {
     if($k == 'booktime')
@@ -63,7 +63,7 @@ while ($b = mysql_fetch_assoc($book)) {
   
   $res2 = do_mysql_query("SELECT * FROM player p LEFT JOIN premiumacc pa ON pa.player = p.id WHERE name LIKE '".$b['name']."' AND pa.id IS NOT NULL");
 
-  if (mysql_num_rows($res2) == 0)
+  if (do_mysql_num_rows($res2) == 0)
     echo "<td><a href=\"managebooking.php?bookid=".$b['bookid']."&getoldpremiumacc=1\">Premium</a></td>\n";
   echo "</tr>\n";
 

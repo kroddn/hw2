@@ -39,7 +39,7 @@ $csspath = "images/ingame/css";
 if($activate) {
   $sql_login = do_mysql_query("SELECT id, status, activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
   if(mysqli_num_rows($sql_login)>0) {
-    $db_login = mysqli_fetch_assoc($sql_login);
+    $db_login = do_mysql_fetch_assoc($sql_login);
     if ($db_login['status']==1) {
       if ($activationcode == $db_login['activationkey']) {
         do_mysql_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']);

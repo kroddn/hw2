@@ -38,7 +38,7 @@ if($ext_startpos) {
 
   echo "<h2>".mysqli_num_rows($startpos)." Konflikt-Positionen gefunden:</h2>\n";
   $tmp = "<h3>SQL Befehle:</h3>\n";
-  while($S = mysqli_fetch_assoc($startpos)) {
+  while($S = do_mysql_fetch_assoc($startpos)) {
     echo "Startpos ".$S['sx'].":".$S['sy']." nahe ".$S['cname']." (".$S['cx'].":".$S['cy'].")<br>";
     $tmp .= "DELETE FROM startpositions WHERE x = ".$S['sx']." AND y = ".$S['sy'].";<br>\n";
   }
@@ -97,7 +97,7 @@ $res_buildings = do_mysql_query("SELECT city,building FROM citybuilding LEFT JOI
 $num_buildings = mysqli_num_rows($res_buildings);
 // Gebäude ohne zugehörige Städte löschen
 if (isset($deletebuildings)) {  
-  while ($del = mysqli_fetch_assoc($res_buildings)) {
+  while ($del = do_mysql_fetch_assoc($res_buildings)) {
     $sql =  "DELETE FROM citybuilding WHERE city = ".$del['city']." AND building=".$del['building'];
     echo $sql."<br>";
     do_mysql_query($sql);

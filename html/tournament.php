@@ -148,7 +148,7 @@ if(isset($tid) && isset($part) &&
 			 "  ON tp.tid=t.tid AND tp.player = ".$pid.
 			 " WHERE t.tid = $tid");
   if(mysqli_num_rows($tres) == 1) {
-    $t = mysqli_fetch_assoc($tres);
+    $t = do_mysql_fetch_assoc($tres);
 
     if($t['t_over']) {
       $error = "Turnier vorüber.";
@@ -183,7 +183,7 @@ if(isset($tid) && isset($part) &&
             if($_SESSION['player']->isAdmin()) {
               echo $actsql;
             }
-            $act = mysqli_fetch_assoc($actres);
+            $act = do_mysql_fetch_assoc($actres);
              
             if($act['cnt'] >= $part_max) {
               $error = "Maximal ".TOURNAMENT_MAX_PART." (".(TOURNAMENT_MAX_PART_PREMIUM)." für Premium-User) Voranmeldungen für Turniere erlaubt.";
@@ -411,7 +411,7 @@ $tourn = do_mysql_query("SELECT t.tid,t.gold,t.time,t.calctime,t.maxplayers,o.na
 $i=0;
 $isover = true;
 
-while($t = mysqli_fetch_assoc($tourn)) {
+while($t = do_mysql_fetch_assoc($tourn)) {
   $starttime = $t['time'];
   $endtime   = $t['time']+TOURNAMENT_DURATION;
 

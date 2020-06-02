@@ -350,7 +350,7 @@ function do_upload($upload_dir, $upload_url) {
   }
   // Alle Namehunter Informieren
   $nhs = do_mysql_query("SELECT id FROM player WHERE hwstatus&8");
-  while($nh = mysqli_fetch_assoc($nhs)) {
+  while($nh = do_mysql_fetch_assoc($nhs)) {
     $sql = sprintf("INSERT INTO message (recipient,date,header,body,category) ".
                    "VALUES (%d,UNIX_TIMESTAMP(),'%s','%s',9)",
                    $nh['id'],
@@ -907,7 +907,7 @@ insertBBForm(2);
       echo "<div style=\"float:left; margin-right:20px;\"><img src=\"avatar.php?id=".$_SESSION['player']->id."\"></div>";
       echo "Dein Avatar wurde hochgeladen";
       $res=do_mysql_query("SELECT avatar FROM player WHERE id = '".$_SESSION['player']->id."'");
-      $img=mysqli_fetch_assoc($res);
+      $img=do_mysql_fetch_assoc($res);
       if($img['avatar']==1) {
         echo ".<p><b class=\"error\">Dein Avatar muss erst von einem Namehunter freigeschalten werden!</b><p>";
         echo "<a href=\"".$_SERVER['PHP_SELF']."?delete=avatar\">Avatar l&ouml;schen</a>\n";

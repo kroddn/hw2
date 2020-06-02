@@ -52,7 +52,7 @@ $sql = sprintf("SELECT inform.* FROM inform LEFT JOIN inform_player ".
                $_SESSION['player']->getID() );
 $res = do_mysql_query($sql);
 if(mysqli_num_rows($res) > 0 ) {
-  $inform = mysqli_fetch_assoc($res);
+  $inform = do_mysql_fetch_assoc($res);
  
   show_inform($inform);
   exit();

@@ -105,7 +105,7 @@ function getNewClanfTopics($pid) {
 	//get players last forum visit
 	$res2=mysqli_query($GLOBALS['con'], "SELECT user_lastvisit FROM clanf_users WHERE username='".$pid."'");
         if ($res2) {
-          $data2=mysqli_fetch_assoc($res2);
+          $data2=do_mysql_fetch_assoc($res2);
           $lastseen=date("d.m.Y H:i",$data2['user_lastvisit']);
         }
         else {
@@ -115,13 +115,13 @@ function getNewClanfTopics($pid) {
 	//get cat_id of players clan (put it in session next review)
 	$res1=mysqli_query($GLOBALS['con'], "SELECT cat_id FROM clanf_categories WHERE cat_order = '".$_SESSION['player']->clan."'");
         if ($res1) {
-          $data1=mysqli_fetch_assoc($res1);
+          $data1=do_mysql_fetch_assoc($res1);
           $clan_cat=$data1['cat_id'];
         }
 
 	$res3=mysqli_query($GLOBALS['con'], "SELECT clanf_posts.post_time as lastpost FROM `clanf_posts` LEFT JOIN clanf_forums ON clanf_forums.forum_id = clanf_posts.forum_id WHERE clanf_forums.cat_id='".$clan_cat."' AND clanf_posts.post_time > '".$data2['user_lastvisit']."'");
         if ($res3) {
-          $data3=mysqli_fetch_assoc($res3);
+          $data3=do_mysql_fetch_assoc($res3);
           if(mysqli_num_rows($res3)>0)
             $string="<a href=\"cf_index.php\" onclick=\"updateframe();\" target=\"main\" class=\"statusline\">Neue Forenbeitr&auml;ge</a>";
         }

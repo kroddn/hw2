@@ -182,7 +182,7 @@ function log_clan_tax($pid, $clan, $gold) {
   $pid = intval($pid);
   
   $clanlogdata1 = do_mysql_query("SELECT * from clanlog where playerid=".$pid." and clan=".$clan);
-  if ($get_clanlogdata1 = mysqli_fetch_assoc($clanlogdata1)) {
+  if ($get_clanlogdata1 = do_mysql_fetch_assoc($clanlogdata1)) {
     do_mysql_query("UPDATE clanlog SET tax=tax+".$gold.", time_tax=UNIX_TIMESTAMP() WHERE playerid=".$pid." AND clan=".$clan);
   } else {
     do_mysql_query("INSERT INTO `clanlog` (`playerid`,`clan`, `tax`, `time_tax`) VALUES (".$pid.",".$clan.",".$gold.", UNIX_TIMESTAMP() )");

@@ -40,14 +40,14 @@ class Research {
     $this->player   = $input_playerid;
     $this->religion = $input_playerreligion;
     $res1 = do_mysql_query("SELECT research FROM playerresearch WHERE player=".$input_playerid) ;
-    while ($db_res = mysqli_fetch_assoc($res1)) {
+    while ($db_res = do_mysql_fetch_assoc($res1)) {
       $this->research[$db_res['research']]=true;
     }
   }
 	
   function update() {
     $res1 = do_mysql_query("SELECT research FROM playerresearch WHERE player=".$this->player) ;
-    while ($db_res = mysqli_fetch_assoc($res1)) {
+    while ($db_res = do_mysql_fetch_assoc($res1)) {
       $this->research[$db_res['research']]=true;
     }
   }
@@ -60,7 +60,7 @@ class Research {
     $res1 = do_mysql_query("SELECT * FROM req_research WHERE research_id = ".intval($rs) );
     $rows = mysqli_num_rows($res1);
     $hits=0;
-    while ($req=mysqli_fetch_assoc($res1)) {
+    while ($req=do_mysql_fetch_assoc($res1)) {
       if ($this->isResearched($req['req_research'])) {
         $hits++;
       }
@@ -74,7 +74,7 @@ class Research {
   function isResearching() {
     $res1 = do_mysql_query("SELECT rid, starttime, endtime FROM researching WHERE player = '".$this->player."'");
     if(mysqli_num_rows($res1)==1) {
-      $res = mysqli_fetch_assoc($res1);
+      $res = do_mysql_fetch_assoc($res1);
       return $res;
     }
     else return FALSE;
@@ -84,7 +84,7 @@ class Research {
     $res2 = do_mysql_query("SELECT id, name, rp, time, religion, typ, typlevel, category, lib_link FROM research WHERE (religion = '".$this->religion."' OR religion is NULL) ORDER BY category, typ, typlevel");
     $i=0;
 
-    while ($rs=mysqli_fetch_assoc($res2)) {
+    while ($rs=do_mysql_fetch_assoc($res2)) {
       if ($this->checkRequirements($rs['id']) == true) {
 	$out[$i]['content']=$rs;
 	
@@ -137,8 +137,8 @@ class Research {
       
       $res1 = do_mysql_query("SELECT rp FROM player WHERE id = '".$this->player."'");
       $res2 = do_mysql_query("SELECT rp,time,management FROM research WHERE id = '".$rid."'");
-      $data = mysqli_fetch_assoc($res1);
-      $rdata = mysqli_fetch_assoc($res2);
+      $data = do_mysql_fetch_assoc($res1);
+      $rdata = do_mysql_fetch_assoc($res2);
 
       if( defined("RESEARCH_SCHOOL") && defined("RESEARCH_BIGSCHOOL") ) {
         $sql =
@@ -178,12 +178,12 @@ class Research {
 	
   function abortResearching() {
     $res1 = do_mysql_query("SELECT rid, player FROM researching WHERE player = '".$this->player."'");
-    $res2 = mysqli_fetch_assoc($res1);
+    $res2 = do_mysql_fetch_assoc($res1);
     
     if (mysqli_num_rows($res1)==1) {
       $rid = $res2['rid'];
       $res2 = do_mysql_query("SELECT rp, name FROM research WHERE id = '".$rid."'");
-      $rdata = mysqli_fetch_assoc($res2);
+      $rdata = do_mysql_fetch_assoc($res2);
       $nrp = floor($rdata['rp']/2);
       do_mysql_query("UPDATE player SET rp= (rp + '".$nrp."'), cc_messages=1,cc_resources=1 WHERE id = '".$this->player."'");
       do_mysql_query("DELETE FROM researching WHERE player = '".$this->player."'");

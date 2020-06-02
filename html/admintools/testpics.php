@@ -11,7 +11,7 @@ include("includes/db.inc.php");
 
 $hit = $miss = 0;
 $map = do_mysql_query("SELECT DISTINCT pic FROM map ORDER BY pic");
-while($pic = mysql_fetch_assoc($map)) {
+while($pic = do_mysql_fetch_assoc($map)) {
   if(!file_exists("images/ingame/".$pic['pic'].".gif")) {
     echo $pic['pic'].".gif\n";
     $miss++;

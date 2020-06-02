@@ -137,7 +137,7 @@ class DB {
   }
 
   function fetch_assoc ($res) {
-    return mysqli_fetch_assoc ($res);
+    return do_mysql_fetch_assoc ($res);
   }
 
   function fetch_object ($res) {

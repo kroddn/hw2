@@ -306,7 +306,7 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
 function check_sms_settings() {
   $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$_SESSION['player']->getID());
   if (mysqli_num_rows($sms_res) == 1) {
-    $sms_settings = mysqli_fetch_assoc($sms_res);
+    $sms_settings = do_mysql_fetch_assoc($sms_res);
     $_SESSION['sms_may_send']   = true;
     $_SESSION['sms_contingent'] = $sms_settings['contingent'];
     if ( $_SESSION['sms_contingent'] < 0 ) {

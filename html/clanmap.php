@@ -9,6 +9,6 @@
  include_once("includes/clan.class.php");
  include_once("includes/db.inc.php");
  include_once("includes/session.inc.php");
- $what = "WHERE clan = ".$clan->getID();
+ $what = "WHERE clan = ".$_SESSION['clan']->getID();
  include_once("includes/worldmap.inc.php");
 ?>

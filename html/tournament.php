@@ -81,7 +81,7 @@ $max_organize = is_premium_tournament() ? TOURNAMENT_MAX_ORGANIZE_PREMIUM : TOUR
 $part_max = is_premium_tournament() ? TOURNAMENT_MAX_PART_PREMIUM : TOURNAMENT_MAX_PART;
 
 if(isset($newtournament) && is_numeric($gold) && is_numeric($maxp) && is_numeric($stime)) {
-  $count_tournaments = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM tournament ".
+  $count_tournaments = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM tournament ".
 						  "WHERE organizer = $pid AND time > unix_timestamp()");
 
   if($gold < TOURNAMENT_MIN_GOLD) {
@@ -109,7 +109,7 @@ if(isset($newtournament) && is_numeric($gold) && is_numeric($maxp) && is_numeric
     $error = "Mehr als ".(60*24*7)." Stunden (7 Tage) im Vorraus können keine Turniere angesetzt werden.";
   }
   else {
-    do_mysqli_query("UPDATE player SET gold = gold - $gold,cc_resources=1 WHERE id = $pid AND gold >= $gold");
+    do_mysql_query("UPDATE player SET gold = gold - $gold,cc_resources=1 WHERE id = $pid AND gold >= $gold");
     if(mysqli_affected_rows($GLOBALS['con']) > 0) {
       $sql = sprintf("INSERT INTO tournament (organizer, gold, maxplayers, time) ".
 		     "VALUES (%d, %d, %d, round((unix_timestamp() + 60*%d)/%d)*%d )",
@@ -117,7 +117,7 @@ if(isset($newtournament) && is_numeric($gold) && is_numeric($maxp) && is_numeric
       if($_SESSION['player']->isAdmin())
       echo $sql;
 
-      do_mysqli_query($sql);
+      do_mysql_query($sql);
     }
   }
 }
@@ -140,7 +140,7 @@ if(isset($tid) && isset($part) &&
   $tid = intval($tid);
   $part= intval($part);
 
-  $tres = do_mysqli_query("SELECT t.*,tp.player AS part,".
+  $tres = do_mysql_query("SELECT t.*,tp.player AS part,".
 			 " unix_timestamp() > time+".TOURNAMENT_DURATION." AS t_over,".
 			 " unix_timestamp() > time AND unix_timestamp() < time+".TOURNAMENT_DURATION." AS now".
 			 " FROM tournament t ".
@@ -161,7 +161,7 @@ if(isset($tid) && isset($part) &&
           }
           else if($t['part']) {
             $inform = "Rückzieher."; 
-            do_mysqli_query("DELETE FROM tournament_players WHERE tid=$tid AND player=$pid");
+            do_mysql_query("DELETE FROM tournament_players WHERE tid=$tid AND player=$pid");
           }
           else {
             $error  = "Nicht angemeldet.";
@@ -179,7 +179,7 @@ if(isset($tid) && isset($part) &&
             " FROM tournament_players LEFT JOIN tournament USING(tid) ".
             " WHERE player = $pid AND time + ".TOURNAMENT_DURATION."> UNIX_TIMESTAMP()";
 
-            $actres = do_mysqli_query($actsql);
+            $actres = do_mysql_query($actsql);
             if($_SESSION['player']->isAdmin()) {
               echo $actsql;
             }
@@ -192,7 +192,7 @@ if(isset($tid) && isset($part) &&
               $error = "Bereits ein Turnier parallel.";
             }
             else {
-              do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints-".TOURNAMENT_PART_BONUSPOINT.
+              do_mysql_query("UPDATE player SET bonuspoints = bonuspoints-".TOURNAMENT_PART_BONUSPOINT.
               " WHERE id = $pid AND bonuspoints >= ".TOURNAMENT_PART_BONUSPOINT);
                             
               $allow_it = true;
@@ -201,7 +201,7 @@ if(isset($tid) && isset($part) &&
               // Für Newbs, die bisher noch an keinem Turnier teilgenommen hatten, wird
               // die Teilnahme gestattet. Einfach schauen, ob es schon eine Anmeldung gab/gibt.
               if(mysqli_affected_rows($GLOBALS['con']) == 0) {                
-                $test_count = do_mysqli_query("SELECT tid FROM tournament_players WHERE player = $pid LIMIT 1");
+                $test_count = do_mysql_query("SELECT tid FROM tournament_players WHERE player = $pid LIMIT 1");
                 if(mysqli_num_rows($test_count) > 0) {
                   $error = "Ihr habt nicht genügend Bonuspunkte!";
                   $allow_it = false;
@@ -211,7 +211,7 @@ if(isset($tid) && isset($part) &&
               if($allow_it) {
                 $inform = "Teilnahme angemeldet. <b>Vergesst nicht</b>: wenn das Turnier beginnt, müsst Ihr Euch".
                 "<br> erneut hier melden und ".TOURNAMENT_CONFIRM_TEXT." bestätigen! (zwischen ".date("d.m.y H:i", $t['time'])." und ".date("H:i", $t['time']+TOURNAMENT_DURATION).")";
-                do_mysqli_query("INSERT INTO tournament_players (tid,player) VALUES ($tid, $pid)");
+                do_mysql_query("INSERT INTO tournament_players (tid,player) VALUES ($tid, $pid)");
                 $_SESSION['player']->updateResources();
               }
             }
@@ -225,10 +225,10 @@ if(isset($tid) && isset($part) &&
           else if($t['part']) {
             $inform = "Turnier jetzt bestreiten";
             
-            do_mysqli_query("UPDATE tournament_players SET booktime=UNIX_TIMESTAMP() ".
+            do_mysql_query("UPDATE tournament_players SET booktime=UNIX_TIMESTAMP() ".
             " WHERE tid=$tid AND player=$pid AND booktime IS NULL");
             if(mysqli_affected_rows($GLOBALS['con']) > 0) {
-              do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints+".TOURNAMENT_PART_BONUSPOINT.
+              do_mysql_query("UPDATE player SET bonuspoints = bonuspoints+".TOURNAMENT_PART_BONUSPOINT.
               " WHERE id = $pid");
               $_SESSION['player']->updateResources();
             }
@@ -394,7 +394,7 @@ echo '<td><a href="#tableDone" id="toggleDone" onClick="toggleVisibility();">Anz
 // Tabelle starten
 printTableHeader(0);
 
-$tourn = do_mysqli_query("SELECT t.tid,t.gold,t.time,t.calctime,t.maxplayers,o.name,p.booktime,".
+$tourn = do_mysql_query("SELECT t.tid,t.gold,t.time,t.calctime,t.maxplayers,o.name,p.booktime,".
 			"  count(tp.player) AS count, count(tp.booktime) AS count_book, ".
 			"  unix_timestamp() > t.time+".TOURNAMENT_DURATION." AS t_over,".
 			"  unix_timestamp() > t.time AND unix_timestamp() < t.time+".TOURNAMENT_DURATION." AS now, ".

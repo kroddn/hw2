@@ -640,7 +640,7 @@ class MapVersion3 {
 	
   // zentriert die Karte auf die Hauptstadt des angegebenen Spielers
   function centerOnCapital($ply) {
-    $res1=do_mysqli_query("SELECT id FROM city WHERE capital=1 AND owner=".$this->activeplayer);
+    $res1=do_mysql_query("SELECT id FROM city WHERE capital=1 AND owner=".$this->activeplayer);
     if (mysqli_num_rows($res1)>0) {
       $cityid=mysqli_fetch_assoc($res1);
       $res2=mysqli_query($GLOBALS['con'], "SELECT x, y FROM map WHERE id=".$cityid['id']) or die(mysqli_error($GLOBALS['con']));
@@ -693,11 +693,11 @@ class MapVersion3 {
   }
 	
   function checkMapID($id) {
-    $res1 = do_mysqli_query( 'SELECT map.id '.
+    $res1 = do_mysql_query( 'SELECT map.id '.
 			 'FROM city,map '.
 			 'WHERE city.id=map.id AND map.x>='.($ax-4).' AND map.x<='.($ax+4).
 			 ' AND map.y>='.($ay-4).' AND map.y<='.($ay+4) );
-    $res2 = do_mysqli_query( 'SELECT id '.
+    $res2 = do_mysql_query( 'SELECT id '.
 			 'FROM map '.
 			 'WHERE x='.$ax.' AND y='.$ay." AND type='2'" );
     if ( (mysqli_num_rows($res1)>0) || (mysqli_num_rows($res2)==0) ) {

@@ -13,10 +13,10 @@ include_once("includes/session.inc.php");
 
 if($player->isNamehunter()) {
   if($_GET['delete']) {
-	do_mysqli_query("DELETE FROM zitate WHERE id='".$_GET['delete']."'");
+	do_mysql_query("DELETE FROM zitate WHERE id='".$_GET['delete']."'");
   }
   if($_GET['activate']) {
-	do_mysqli_query("UPDATE zitate SET active='1', admin='".$_SESSION['player']->id."' WHERE id='".$_GET['activate']."'");
+	do_mysql_query("UPDATE zitate SET active='1', admin='".$_SESSION['player']->id."' WHERE id='".$_GET['activate']."'");
   }
 }
 ?>
@@ -37,7 +37,7 @@ if($player->isNamehunter()) {
 	echo "<td>Text</td>\n";
 	echo "<td width=\"80\">Aktion</td>\n";
 	echo "</tr>";
-	$zitat=do_mysqli_query("SELECT zitate.id as id,active,player.name as player,text,admin FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active != '1' ORDER BY id DESC");
+	$zitat=do_mysql_query("SELECT zitate.id as id,active,player.name as player,text,admin FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active != '1' ORDER BY id DESC");
 	while($get_zitat=mysqli_fetch_assoc($zitat)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
 		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_zitat['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
@@ -57,9 +57,9 @@ if($player->isNamehunter()) {
 	echo "<td>Text</td>\n";
 	echo "<td width=\"80\">Aktiviert</td>\n";
 	echo "</tr>";
-	$zitat=do_mysqli_query("SELECT zitate.id as id,active,player.name as player,text,admin FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active = '1' ORDER BY id ASC");
+	$zitat=do_mysql_query("SELECT zitate.id as id,active,player.name as player,text,admin FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active = '1' ORDER BY id ASC");
 	while($get_zitat=mysqli_fetch_assoc($zitat)) {
-		$res=do_mysqli_query("SELECT name FROM player WHERE id='".$get_zitat['admin']."'");
+		$res=do_mysql_query("SELECT name FROM player WHERE id='".$get_zitat['admin']."'");
 		$admin=mysqli_fetch_assoc($res);
 		echo "<tr class=\"tblbody\" width=\"100%\">";
 		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_zitat['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";

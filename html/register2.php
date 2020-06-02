@@ -56,14 +56,14 @@ $forbidden_emails[14]= "lordsquall@fastem.com"; // http://forum.holy-wars2.de/vi
 $forbidden_emails[15]= "onur_1987@hotmail.com"; // Email am 24.08. um 09:41
 $forbidden_emails[16]= "respeckt52@hotmail.de"; // Email am 20.09. um 10:10
 
-$res0=do_mysqli_query("SELECT id FROM player");
+$res0=do_mysql_query("SELECT id FROM player");
 $erg0=mysqli_num_rows($res0);
 
-$mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
+$mapsize = do_mysql_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
 $fx = $mapsize['x'];
 $fy = $mapsize['y'];
 
-$qry_startlocations = do_mysqli_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
+$qry_startlocations = do_mysql_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
 
 $locsum = 0;
 while ($res_sl=mysqli_fetch_assoc($qry_startlocations)) {
@@ -86,10 +86,10 @@ if (isset($_POST['register'])) {
 
 	if (!checkBez($name, 3, 40)) {$registration=false; $errmsg="Das gewählte Login ist zu kurz, zu lang oder verstößt gegen die Namenskonventionen.";}
 	if ($registration) {
-		$res1=do_mysqli_query("SELECT id FROM player WHERE login LIKE '".trim($name)."'");
+		$res1=do_mysql_query("SELECT id FROM player WHERE login LIKE '".trim($name)."'");
                 // 48 Stunden Anmeldesperre für den gleichen Namen
                 $del_lock_time = 48*3600;
-		$del =do_mysqli_query("SELECT FROM_UNIXTIME( 28800 + deltime - deltime%28800 +".$del_lock_time.") FROM log_player_deleted ".
+		$del =do_mysql_query("SELECT FROM_UNIXTIME( 28800 + deltime - deltime%28800 +".$del_lock_time.") FROM log_player_deleted ".
                                      " WHERE login LIKE '".trim($name)."' AND deltime + ".$del_lock_time." > UNIX_TIMESTAMP()");
 		if (mysqli_num_rows($res1)>0) {$registration=false; $errmsg="Es gibt schon einen Spieler mit diesem Login";}
                 if (mysqli_num_rows($del)>0) {

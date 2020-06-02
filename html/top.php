@@ -152,7 +152,7 @@ if( defined("SMS_SERVICE") && SMS_SERVICE && (!defined("HISPEED") || !HISPEED) )
 }
 else {
   $sql = "SELECT count(*) AS cnt FROM premiumacc WHERE player = ".$_SESSION['player']->getID();
-  $cnt = do_mysqli_query_fetch_assoc($sql);
+  $cnt = do_mysql_query_fetch_assoc($sql);
   
   $cantest = $cnt['cnt'] == 0 ? " Kostenlos testen!" : "";
   

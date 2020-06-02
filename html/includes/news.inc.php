@@ -37,7 +37,7 @@ function print_news($limit) {
     $limit = 8;
     
   echo '<table align="center" border="0" width="90%"><tr><td>';
-  $res = do_mysqli_query ("SELECT id,text,topic,from_unixtime(time) as time FROM news ORDER BY id DESC LIMIT ".$limit);
+  $res = do_mysql_query ("SELECT id,text,topic,from_unixtime(time) as time FROM news ORDER BY id DESC LIMIT ".$limit);
   if (mysqli_num_rows($res)<1) {
     echo "Keine News!";
   }

@@ -66,7 +66,7 @@ if (isset($send) && isset($recipient)) {
       $rec['sms'] = preg_replace("/^0/", "+49", $ismsprefix).$recipient;
     }
     else {
-      $rec_res = do_mysqli_query("SELECT * FROM player WHERE name LIKE '".mysqli_escape_string($GLOBALS['con'], $recipient)."'");
+      $rec_res = do_mysql_query("SELECT * FROM player WHERE name LIKE '".mysqli_escape_string($GLOBALS['con'], $recipient)."'");
       if(mysqli_num_rows($rec_res) == 1) {
         $rec = mysqli_fetch_assoc($rec_res);
       }

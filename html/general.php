@@ -84,7 +84,7 @@ if(isset($producem))
       die("An error Occured while choosing the attack type!");
       break;
   }
-  $cityid_res = do_mysqli_query("SELECT id FROM map WHERE x = $coordx AND y = $coordy");
+  $cityid_res = do_mysql_query("SELECT id FROM map WHERE x = $coordx AND y = $coordy");
   if ($cityid_res && mysqli_num_rows($cityid_res)>0) {
     $cityid   = mysqli_fetch_assoc($cityid_res);
     $markcity = $cityid['id'];
@@ -105,7 +105,7 @@ if (isset($comeback) && is_numeric($comeback)) {
   // Die Armee holen
   // Wenn die Armee noch nicht angekommen ist, dann nur die Differenz bilden aus gelaufener und eigentlich zu laufende zeit,
   // ansonsten die volle Laufzeit
-  $res_armies=do_mysqli_query("SELECT LEAST(UNIX_TIMESTAMP(), endtime) - starttime AS dif, army.owner, army.end, start, starttime, endtime, city.id AS city, city.name AS cityname, map.x, map.y ".
+  $res_armies=do_mysql_query("SELECT LEAST(UNIX_TIMESTAMP(), endtime) - starttime AS dif, army.owner, army.end, start, starttime, endtime, city.id AS city, city.name AS cityname, map.x, map.y ".
                        " FROM army LEFT JOIN city ON army.start=city.id LEFT JOIN map ON army.start=map.id WHERE army.aid=".$comeback );
 
 
@@ -124,7 +124,7 @@ if (isset($comeback) && is_numeric($comeback)) {
     else {
       if ( $data1['mission'] != 'return' ) {
         // Einfach Ziel auf Ursprung setzen
-        do_mysqli_query("UPDATE army SET end = start, mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$data1['dif']." WHERE aid = ".$comeback);
+        do_mysql_query("UPDATE army SET end = start, mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$data1['dif']." WHERE aid = ".$comeback);
       }
       // Wenn die Ursprungsstadt nicht mehr existiert, dann abdrehen und
       // zur nächstgelegenen Stadt laufen
@@ -132,14 +132,14 @@ if (isset($comeback) && is_numeric($comeback)) {
         $dif = $data1['dif'];
 
         // Feststellen wo die Armee denn hinwollte
-        $res_back = do_mysqli_query("SELECT map.x as x, map.y as y, end, start FROM army LEFT JOIN map ON map.id=army.end WHERE army.aid=".$comeback);
+        $res_back = do_mysql_query("SELECT map.x as x, map.y as y, end, start FROM army LEFT JOIN map ON map.id=army.end WHERE army.aid=".$comeback);
         if(mysqli_num_rows($res_back) == 1) {
           $data2    = mysqli_fetch_assoc($res_back);
 
           // nächstgelegene Stadt bestimmen
-          $cit = do_mysqli_query ("SELECT city.id, city.name, round(sqrt( (".$data2['x']."-x)*(".$data2['x']."-x)+(".$data2['y']."-y)*(".$data2['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." ORDER BY dist LIMIT 1");
+          $cit = do_mysql_query ("SELECT city.id, city.name, round(sqrt( (".$data2['x']."-x)*(".$data2['x']."-x)+(".$data2['y']."-y)*(".$data2['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." ORDER BY dist LIMIT 1");
           if (mysqli_num_rows($cit) && $city = mysqli_fetch_assoc($cit) ) {
-            do_mysqli_query("UPDATE army SET end = ".$city['id'].", mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$dif." WHERE aid = ".$comeback);
+            do_mysql_query("UPDATE army SET end = ".$city['id'].", mission = 'return', starttime=UNIX_TIMESTAMP(), endtime=UNIX_TIMESTAMP() + ".$dif." WHERE aid = ".$comeback);
 
             log_fatal_error("Armee kehrt nach ID ".$city['id']." zurück, da die Heimatstadt verloren ist");
           }
@@ -225,7 +225,7 @@ if($error != null && strlen($error) > 0) {
 
 // Verbündete Stadt ausgewählt
 if(isset($_GET['from'])) {
-  $resA=do_mysqli_query("SELECT name, x, y from city LEFT JOIN map USING(id) WHERE city.id = ".$_GET['from']);
+  $resA=do_mysql_query("SELECT name, x, y from city LEFT JOIN map USING(id) WHERE city.id = ".$_GET['from']);
   $dataA = mysqli_fetch_assoc($resA);
   $cityname = $dataA['name']." <i style=\"color: green;\">(verbündete Stadt)</i>";
   $city_x = $dataA['x'];
@@ -302,7 +302,7 @@ else {
     <td>Aktion</td>
   </tr>
   <?
-  $res_moving = do_mysqli_query("SELECT aid,start,end,army.owner,map.id,x,y,starttime,endtime,mission,missiondata,".
+  $res_moving = do_mysql_query("SELECT aid,start,end,army.owner,map.id,x,y,starttime,endtime,mission,missiondata,".
                      " city.name as cityname,city.owner AS cowner ".
 		     "FROM army LEFT JOIN map ON map.id=army.end LEFT JOIN city ON map.id=city.id ".
 		     "WHERE army.owner=".$_SESSION['player']->getID()." ORDER BY ".$orderby);
@@ -326,7 +326,7 @@ else {
     }
 
 
-        $res2=do_mysqli_query("SELECT armyunit.unit AS unit, unit.name AS name, count, religion, type, level".
+        $res2=do_mysql_query("SELECT armyunit.unit AS unit, unit.name AS name, count, religion, type, level".
                        " FROM armyunit LEFT JOIN unit ON unit.id = armyunit.unit ".
                        " WHERE aid = ".$data1['aid']);
         while ($data2=mysqli_fetch_assoc($res2)) {
@@ -344,7 +344,7 @@ else {
         }
 
         //ende
-        $resX=do_mysqli_query("SELECT city.id,name,x,y,owner AS cowner FROM city,map WHERE city.id = ".$data1['start']." AND map.id = city.id");
+        $resX=do_mysql_query("SELECT city.id,name,x,y,owner AS cowner FROM city,map WHERE city.id = ".$data1['start']." AND map.id = city.id");
         $dataX=mysqli_fetch_assoc($resX);
 
         echo "<tr><td nowrap valign='top' class='tblbody' ".($markcity == $dataX['id'] ? " id='markcity'>" : ">" ).
@@ -420,7 +420,7 @@ else {
   // dann wird geschaut ob es innerhalb der Aufklärungszeit ankommt.
   // Datensätze von Armeen, die zu Städten unterwegs sind in denen noch keine solches
   // Gebäude errichtet ist (NULL-JOINS) fallen also sofort heraus.
-  $res_spy = do_mysqli_query("SELECT
+  $res_spy = do_mysql_query("SELECT
  army.aid AS aid, army.owner AS owner, player.name AS ownername, army.start AS start, city.name as cityname,
  army.end AS end, army.endtime AS endtime, army.missiondata AS missiondata, army.mission AS mission 
  FROM army
@@ -435,7 +435,7 @@ else {
 
   if(mysqli_num_rows($res_spy)>0) {
     while($data_spy=mysqli_fetch_assoc($res_spy)) {
-      $res_spy_unit=do_mysqli_query("SELECT armyunit.unit, armyunit.unit AS id, count,name,religion,type,level ".
+      $res_spy_unit=do_mysql_query("SELECT armyunit.unit, armyunit.unit AS id, count,name,religion,type,level ".
                                    " FROM armyunit LEFT JOIN unit ON armyunit.unit = unit.id ".
                                    " WHERE aid = ".$data_spy['aid']." ORDER BY level");
       $remaining = $data_spy['endtime'] - time();
@@ -532,7 +532,7 @@ ORDER BY owner != %d, owner, y
 ", 
       $me, $me, $me, $me);
 
-      $cres = do_mysqli_query($sql);
+      $cres = do_mysql_query($sql);
       $pos = 0;
       while($c = mysqli_fetch_object($cres)) {
         printf("   <option value=\"%d\">%s %s</option>\n", $pos, $c->name, $c->owner != $me ? "(".$c->pname.")" : "(eigene)");
@@ -605,7 +605,7 @@ ORDER BY owner != %d, owner, y
   </tr>
   <?php
   echo '<input type="hidden" name="from" value="'.$from.'">';
-  $res_cityunits = do_mysqli_query("SELECT unit.id AS id,unit.name AS name,city.name AS cname, unit.cost as cost,count,speed,unit.type,unit.level,unit.religion ".
+  $res_cityunits = do_mysql_query("SELECT unit.id AS id,unit.name AS name,city.name AS cname, unit.cost as cost,count,speed,unit.type,unit.level,unit.religion ".
   						          " FROM cityunit,unit,city ".
   						          " WHERE unit.id=cityunit.unit AND city.id=cityunit.city AND cityunit.city=".$from." AND cityunit.owner=".$_SESSION['player']->getID().
   						          " ORDER BY cityunit.unit");
@@ -645,7 +645,7 @@ ORDER BY owner != %d, owner, y
 <?
 // Aktuelle Stadt gewählt, verbündete stationierte Truppen anzeigen
 if ($from == $_SESSION['cities']->getActiveCity()) {
-  $res2 = do_mysqli_query("SELECT unit.id AS id,unit.name AS uname,count,owner,player.name AS pname FROM cityunit LEFT JOIN unit ON unit.id=cityunit.unit LEFT JOIN player ON player.id=cityunit.owner WHERE cityunit.city=".$from." AND cityunit.owner<>".$_SESSION['player']->getID()." ORDER BY owner, cityunit.unit");
+  $res2 = do_mysql_query("SELECT unit.id AS id,unit.name AS uname,count,owner,player.name AS pname FROM cityunit LEFT JOIN unit ON unit.id=cityunit.unit LEFT JOIN player ON player.id=cityunit.owner WHERE cityunit.city=".$from." AND cityunit.owner<>".$_SESSION['player']->getID()." ORDER BY owner, cityunit.unit");
   if (mysqli_num_rows($res2)>0) {
     echo '<tr class="tblhead"><td colspan="3"><b>Verbündete Truppen</b></td></tr>';
     while ($data2 = mysqli_fetch_assoc($res2)) {
@@ -696,7 +696,7 @@ if ($from == $_SESSION['cities']->getActiveCity()) {
 
 <?php
 // Fremdstationierungen anzeigen
-$res_garrison = do_mysqli_query("SELECT x,y,cityunit.owner AS uowner, unit.id AS unitid, unit.name AS uname, unit.cost, cityunit.count,city.name AS cname, p1.name AS pname, city.id AS cid, city.owner AS cowner ".
+$res_garrison = do_mysql_query("SELECT x,y,cityunit.owner AS uowner, unit.id AS unitid, unit.name AS uname, unit.cost, cityunit.count,city.name AS cname, p1.name AS pname, city.id AS cid, city.owner AS cowner ".
                       " FROM unit,cityunit,city,map,player AS p1,player AS p2 ".                     
                       " WHERE map.id=city.id AND unit.id=cityunit.unit AND cityunit.city=city.id AND p1.id=city.owner AND p1.id<>p2.id AND p2.id=cityunit.owner AND p2.id=".$_SESSION['player']->getID().
                       " ORDER BY city.id,unitid");

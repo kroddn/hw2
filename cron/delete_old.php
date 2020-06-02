@@ -69,7 +69,7 @@ else {
 echo "\nStarte. Lösche inaktive (länger als ".round($max_inactive/(3600*24), 2)." Tage)\n\n";
 
 // Zunächst die ganz alten Spieler löschen
-$players = do_mysqli_query(
+$players = do_mysql_query(
 "SELECT *,unix_timestamp()-lastseen AS inactive
  FROM player
  WHERE (
@@ -110,7 +110,7 @@ function deleteResult($p) {
   }
   else {
     echo "Player '".$p['name']." [".$p['login']."]"."' inaktiv ".round($p['inactive'] / (3600*24), 2)." Tagen\n";
-    $login = do_mysqli_query("SELECT *,from_unixtime(time) AS zeit, unix_timestamp()-time AS inactive ".
+    $login = do_mysql_query("SELECT *,from_unixtime(time) AS zeit, unix_timestamp()-time AS inactive ".
                           " FROM log_login ".
                           " WHERE id = ".$p['id']." AND inputpw = dbpw AND inputseccode = dbseccode".
                           " ORDER BY time DESC LIMIT 1");

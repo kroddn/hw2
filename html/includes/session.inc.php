@@ -77,7 +77,7 @@ if ( isset($banner) || isset($magic) && $ad->magic == $magic) {
 
 // FIXME: den kram dorthin, wo er gebraucht wird! Nicht jedesmal machen...
 // status = 3 bedeutet verdächtige Spieler, die aber nicht gesperrt sind.
-$res = do_mysqli_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
+$res = do_mysql_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
 
 // Ein Array mit den Anzahlen zusammenbauen
 $registered[0] = mysqli_fetch_array($res);

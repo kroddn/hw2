@@ -71,7 +71,7 @@ function showAvatarAdmin($id) {
   if(is_file($filename)) {
     header('Last-Modified: '.gmdate('D, d M Y H:i:s',  time() ).' GMT' ); 
     $im=@imagecreatefromjpeg($filename);
-    $res=do_mysqli_query("SELECT avatar FROM player WHERE id='".$id."'");
+    $res=do_mysql_query("SELECT avatar FROM player WHERE id='".$id."'");
     $status=mysqli_fetch_assoc($res);
     if($status['avatar']==1) {
       $color_back = ImageColorAllocate ($im, 255, 255, 255);
@@ -96,7 +96,7 @@ function showAvatar($id) {
     header('Last-Modified: '.gmdate('D, d M Y H:i:s',  filemtime($filename)).' GMT' ); 
   
     $im=@imagecreatefromjpeg($filename);
-    $res=do_mysqli_query("SELECT avatar FROM player WHERE id='".$id."'");
+    $res=do_mysql_query("SELECT avatar FROM player WHERE id='".$id."'");
     $status=mysqli_fetch_assoc($res);
     if($status['avatar']==2) {
       imagejpeg($im); 

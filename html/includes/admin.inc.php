@@ -24,22 +24,22 @@
 
 
 function reset_clanforum_now() {
-  do_mysqli_query("TRUNCATE clanf_forums");
-  do_mysqli_query("TRUNCATE clanf_auth_access");
-  do_mysqli_query("TRUNCATE clanf_posts");
-  do_mysqli_query("TRUNCATE clanf_posts_text");
-  do_mysqli_query("TRUNCATE clanf_topics");
-  do_mysqli_query("TRUNCATE clanf_user_group");
-  do_mysqli_query("TRUNCATE clanf_users");
-  do_mysqli_query("TRUNCATE clanf_sessions");
-  do_mysqli_query("TRUNCATE clanf_categories");
-  do_mysqli_query("TRUNCATE clanf_search_wordlist");
-  do_mysqli_query("TRUNCATE clanf_search_wordmatch");
-  do_mysqli_query("TRUNCATE clanf_vote_desc");
-  do_mysqli_query("TRUNCATE clanf_vote_results");
-  do_mysqli_query("TRUNCATE clanf_vote_voters");
+  do_mysql_query("TRUNCATE clanf_forums");
+  do_mysql_query("TRUNCATE clanf_auth_access");
+  do_mysql_query("TRUNCATE clanf_posts");
+  do_mysql_query("TRUNCATE clanf_posts_text");
+  do_mysql_query("TRUNCATE clanf_topics");
+  do_mysql_query("TRUNCATE clanf_user_group");
+  do_mysql_query("TRUNCATE clanf_users");
+  do_mysql_query("TRUNCATE clanf_sessions");
+  do_mysql_query("TRUNCATE clanf_categories");
+  do_mysql_query("TRUNCATE clanf_search_wordlist");
+  do_mysql_query("TRUNCATE clanf_search_wordmatch");
+  do_mysql_query("TRUNCATE clanf_vote_desc");
+  do_mysql_query("TRUNCATE clanf_vote_results");
+  do_mysql_query("TRUNCATE clanf_vote_voters");
 
-  do_mysqli_query("INSERT INTO `clanf_users` VALUES (-1, 1, 'Cheater', '', 0, 0, 0, 0, 0, 6302, 2.00, NULL, NULL, 'd.M.Y H:i', 0, 0, 0, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, 'Das hier solltest du nie sehen...\r\n\r\nACHTUNG!\r\nPostet dieser User liegt ein Bug vor!\r\nBitte melde diesen Beitrag einen Admin.\r\n(Zuständig: morlock)\r\nDanke!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)");
+  do_mysql_query("INSERT INTO `clanf_users` VALUES (-1, 1, 'Cheater', '', 0, 0, 0, 0, 0, 6302, 2.00, NULL, NULL, 'd.M.Y H:i', 0, 0, 0, NULL, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, 'Das hier solltest du nie sehen...\r\n\r\nACHTUNG!\r\nPostet dieser User liegt ein Bug vor!\r\nBitte melde diesen Beitrag einen Admin.\r\n(Zuständig: morlock)\r\nDanke!', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)");
 }
 
 
@@ -57,7 +57,7 @@ function list_player_not_activated () {
  lastseen                   AS lastseen_unixtime
 FROM player WHERE activationkey IS NOT NULL AND status = 1
 ORDER BY id";
-  $players = do_mysqli_query($sql);
+  $players = do_mysql_query($sql);
   $num = mysqli_num_rows($players);
 
   $i = 0;
@@ -102,7 +102,7 @@ function list_player_locked () {
   echo "<p><table>\n";
   echo " <tr class=\"tblhead\"><td>[ID] Spielername</td><td>Act.Key</td><td>eMail</td><td>Regtime</td><td>Lastseen</td><td>Inaktiv<br>in Stunden</td><td>Aktion</td></tr>\n";
 
-  $players = do_mysqli_query("SELECT id, name, email, activationkey, status, ".
+  $players = do_mysql_query("SELECT id, name, email, activationkey, status, ".
                             "  unix_timestamp() - lastseen AS inactive_seconds,".
                             "  from_unixtime(regtime)      AS regtime_time,".
                             "  from_unixtime(lastseen)     AS lastseen_time,".
@@ -146,7 +146,7 @@ function list_player_new ($hours = 48) {
   echo "<p><table>\n";
   echo " <tr class=\"tblhead\"><td>[ID] Spielername</td><td>Act.Key</td><td>eMail</td><td>Regtime</td><td>Lastseen</td><td>Inaktiv<br>in Stunden</td><td>Aktion</td></tr>\n";
 
-  $players = do_mysqli_query("SELECT id, name, email, activationkey, status, ".
+  $players = do_mysql_query("SELECT id, name, email, activationkey, status, ".
                             "  unix_timestamp() - lastseen AS inactive_seconds,".
                             "  from_unixtime(regtime)      AS regtime_time,".
                             "  from_unixtime(lastseen)     AS lastseen_time,".
@@ -213,7 +213,7 @@ function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
 		       $pid, $premium['type'] ,$premium['expire'],                        
 		       "Premium-Account ".$premium['name']." aus alter Runde übernommen."
 		       );
-	do_mysqli_query($sql);
+	do_mysql_query($sql);
 	$num++;
       }
       echo "<b>Ja</b>. $num Stück übernommen<br>";
@@ -230,7 +230,7 @@ function get_old_premiumacc($pid, $oldpid, $oldtable = "premiumacc") {
 
 function activate_from_booking($nr = 1) {
   $nr = intval($nr);
-  $bookdata = do_mysqli_query("SELECT * FROM booking WHERE status = 0 ORDER BY bookid LIMIT $nr");
+  $bookdata = do_mysql_query("SELECT * FROM booking WHERE status = 0 ORDER BY bookid LIMIT $nr");
 
   $i = 0;
   while ($book = mysqli_fetch_assoc($bookdata)) {
@@ -247,7 +247,7 @@ function activate_from_booking($nr = 1) {
     $result = insert_new_player($p);
     
     if ($result==null) {
-      do_mysqli_query("UPDATE booking SET status=1 WHERE bookid = ".$book['bookid']);
+      do_mysql_query("UPDATE booking SET status=1 WHERE bookid = ".$book['bookid']);
       echo "done. ";
       get_old_premiumacc($p['pid'], $book['oldpid']);
     }

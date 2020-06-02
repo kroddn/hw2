@@ -88,10 +88,10 @@ class FightClass {
     //Stadtbevölkerung aus cityowner wieder löschen ;)
     unset ($this->cityowner['population']);
     //alle Verteidiger ermitteln
-    $resdefers = do_mysqli_query("SELECT DISTINCT owner AS id, player.name AS name FROM cityunit, player WHERE player.id = owner AND city=".$cityid);
+    $resdefers = do_mysql_query("SELECT DISTINCT owner AS id, player.name AS name FROM cityunit, player WHERE player.id = owner AND city=".$cityid);
     while ($defender = mysqli_fetch_assoc($resdefers)) {
       //Armee dieses Verteidiger ermitteln
-      $cityunits = do_mysqli_query("SELECT unit,count FROM cityunit WHERE city=".$cityid." AND owner=".$defender['id']);
+      $cityunits = do_mysql_query("SELECT unit,count FROM cityunit WHERE city=".$cityid." AND owner=".$defender['id']);
       $df = array ();
       while ($units = mysqli_fetch_assoc($cityunits)) {
         $df[]['id'] = $units['unit'];
@@ -103,7 +103,7 @@ class FightClass {
       if (DEBUG)
         echo " Defender:".$defender['name']." ";
       //Defbonus ermitteln
-      $resdeffbonus = do_mysqli_query("SELECT sum(res_defense) FROM citybuilding,building WHERE citybuilding.building=building.id AND city=".$end);
+      $resdeffbonus = do_mysql_query("SELECT sum(res_defense) FROM citybuilding,building WHERE citybuilding.building=building.id AND city=".$end);
       if ($deffbonus = mysqli_fetch_array($resdeffbonus))
         $this->defbonus = $deffbonus[0] ? $deffbonus[0] : 0;
       else
@@ -115,7 +115,7 @@ class FightClass {
     $resarmyowner = "SELECT army.owner AS id, player.name AS name FROM army, player WHERE player.id = army.owner AND army.aid=".$armyid;
     $armyowner = mysqli_fetch_assoc($resarmyowner);
     //Armee ermitteln
-    $resatter = do_mysqli_query("SELECT unit, count FROM armyunit WHERE aid=".$armyid);
+    $resatter = do_mysql_query("SELECT unit, count FROM armyunit WHERE aid=".$armyid);
     while ($atter = mysqli_fetch_assoc($resatter)) {
       $at[$i]['id'] = $atter['unit'];
       $at[$i]['count'] = $atter['count'];

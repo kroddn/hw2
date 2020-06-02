@@ -64,10 +64,10 @@ if(defined("ENABLE_LOYALITY") && ENABLE_LOYALITY && $_SESSION['player']->getReli
   $sql = sprintf("SELECT convert_loyality,name FROM citybuilding LEFT JOIN building ON building.id = citybuilding.building".
   " WHERE city = %d AND convert_loyality IS NOT NULL AND religion = %d ".
   " ORDER BY convert_loyality ASC", $_SESSION['cities']->getActiveCity(), $_SESSION['player']->getReligion() ) ;
-  $res_convert_loyality = do_mysqli_query($sql);
+  $res_convert_loyality = do_mysql_query($sql);
   $num_convert_buildings = mysqli_num_rows($res_convert_loyality);
 
-  $data = do_mysqli_query_fetch_assoc("SELECT loyality FROM city WHERE id = ".$_SESSION['cities']->getActiveCity());
+  $data = do_mysql_query_fetch_assoc("SELECT loyality FROM city WHERE id = ".$_SESSION['cities']->getActiveCity());
   $current_loyality = $data ? $data['loyality'] : 0;
 
   if($num_convert_buildings > 0) {
@@ -127,14 +127,14 @@ if ($inform!=null && strlen($inform) > 0) {
 }
 
 $maxcities = $fpcost[get_adm_level($player->getID())][0];
-$act       = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM city WHERE owner = ".$player->getID() );
+$act       = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM city WHERE owner = ".$player->getID() );
 $actcities = $act['c'];
-$sett      = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM army WHERE owner = ".$player->getID()." AND mission='settle'");
+$sett      = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM army WHERE owner = ".$player->getID()." AND mission='settle'");
 $settlers  = $sett['c'];
 
 $cd=$_SESSION['cities']->getCityData();
 
-$res1=do_mysqli_query("SELECT sum(citybuilding.count * building.res_attraction) AS attr,sum(citybuilding.count * building.res_food) AS incfood,city.id AS id,city.food AS food FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id = ".$cd['id']." GROUP BY id");
+$res1=do_mysql_query("SELECT sum(citybuilding.count * building.res_attraction) AS attr,sum(citybuilding.count * building.res_food) AS incfood,city.id AS id,city.food AS food FROM city LEFT JOIN citybuilding ON city.id = citybuilding.city LEFT JOIN building ON building.id = citybuilding.building WHERE city.id = ".$cd['id']." GROUP BY id");
 $data1 = mysqli_fetch_assoc($res1);
 //MYSQLd abhänige Änderung -> Vgl. statistic.inc.php
 $data1['attr'] +=1000;
@@ -193,7 +193,7 @@ $maySettle = false;
   if(defined("START_POS_NEW") && START_POS_NEW) {
     printf('<tr><td colspan="2" class="tblbody">Die <font color="#FF0000">Regeln zum Gründen neuer Städte</font> wurden geändert. Weiter Informationen <a href="library.php?topic=Stadtgr">hier in der Bibliothek</b>.</td></tr>');
   }
-  $ackerbau = do_mysqli_query("SELECT * FROM playerresearch WHERE player=".$_SESSION['player']->getID()." AND research=5");
+  $ackerbau = do_mysql_query("SELECT * FROM playerresearch WHERE player=".$_SESSION['player']->getID()." AND research=5");
 
   if(mysqli_num_rows($ackerbau) == 0) {
     echo "<tr><td colspan='2' class='tblbody' style='padding: 10px;'>Ihr müsst zunächst <b>Ackerbau erforschen</b>, um neue Siedlungen errichten zu können. <a href='research.php'>Hier gehts zur Forschung</a>.</td></tr>";
@@ -272,7 +272,7 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
   </td>
 </tr>
     <?
-    //$possible_loy_buildings = do_mysqli_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality IS NOT NULL ORDER BY convert_loyality DESC");
+    //$possible_loy_buildings = do_mysql_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality IS NOT NULL ORDER BY convert_loyality DESC");
 
     if($has_convert_building) {
       printf('<tr class="tblbody"><td colspan="2">Ihr <b>benötigt %s %d%% Loyalität</b> zum Konvertieren dieser Stadt, %s &quot;%s&quot;.<br>', 
@@ -285,7 +285,7 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
       }
       
       if(!$has_convert_loyality)  {
-        $possible_loy_buildings = do_mysqli_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality < ".$loy['convert_loyality']." ORDER BY convert_loyality DESC");
+        $possible_loy_buildings = do_mysql_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality < ".$loy['convert_loyality']." ORDER BY convert_loyality DESC");
         if(mysqli_num_rows($possible_loy_buildings) > 0) {
           echo " Ihr könnt den Wert Senken, indem Ihr Folgendes errichtet:\n";
           $res = $possible_loy_buildings;
@@ -295,7 +295,7 @@ if ($_SESSION['player']->getReligion() != $_SESSION['cities']->getACReligion()) 
     }
     else {
       printf('<tr class="tblbody"><td colspan="2">Ihr könnt die Einwohner dieser Stadt nicht konvertieren. Baut zunächst eines der Gebäude:');
-      $res = do_mysqli_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality IS NOT NULL ORDER BY convert_loyality DESC");
+      $res = do_mysql_query("SELECT * FROM building WHERE religion = ".$_SESSION['player']->getReligion()." AND convert_loyality IS NOT NULL ORDER BY convert_loyality DESC");
     }
 
     if($res) {

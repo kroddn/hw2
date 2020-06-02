@@ -57,13 +57,13 @@ if (!$GLOBALS['con']) {
 }
 mysqli_select_db( $GLOBALS['con'], DBSELECT );
 
-function do_mysqli_query_fetch_array($sql) {
-  return mysqli_fetch_assoc(do_mysqli_query($sql));
+function do_mysql_query_fetch_array($sql) {
+  return mysqli_fetch_assoc(do_mysql_query($sql));
 }
 
 
-function do_mysqli_query_fetch_assoc($sql) {
-  return mysqli_fetch_assoc(do_mysqli_query($sql));
+function do_mysql_query_fetch_assoc($sql) {
+  return mysqli_fetch_assoc(do_mysql_query($sql));
 }
 
 
@@ -77,7 +77,7 @@ function do_mysqli_query_fetch_assoc($sql) {
  *                queries, die abgearbeitet werden MÜSSEN, um keinen Fehler in der DB zu erzeugen)
  * @return Rückgabewert entspricht dem der Funktion mysql_query
  */
-function do_mysqli_query($string, $conn=null, $abort = true) {
+function do_mysql_query($string, $conn=null, $abort = true) {
   global $HTTP_SERVER_VARS, $_GET, $_POST, $player;
   $conn = $GLOBALS["con"];
 

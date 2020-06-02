@@ -233,7 +233,7 @@ function computeWalktime($startx, $starty, $endx, $endy, $speed, $unitcount = -1
 
 if(!function_exists("getNearestOwnCity")) {
   function getNearestOwnCity($x,$y,$pid) {
-    $res1=do_mysqli_query("SELECT city.id AS id,x,y FROM city,map WHERE city.id=map.id AND city.owner=".intval($pid) );
+    $res1=do_mysql_query("SELECT city.id AS id,x,y FROM city,map WHERE city.id=map.id AND city.owner=".intval($pid) );
     $dif=9999999999;
     $n[0]=0;
     while ($data1=mysqli_fetch_assoc($res1)) {
@@ -255,7 +255,7 @@ if(!function_exists("getNxNy")) {
   function getNxNy($sX, $sY, $wt, $aid, $end)
   {
     global $speedmatrix;
-    $res=do_mysqli_query("SELECT speed, end FROM army, armyunit WHERE armyunit.aid=army.aid AND army.aid = '".intval($aid)."'");
+    $res=do_mysql_query("SELECT speed, end FROM army, armyunit WHERE armyunit.aid=army.aid AND army.aid = '".intval($aid)."'");
     $speed=10;
     if(@mysqli_num_rows($res)==0)
     {
@@ -268,7 +268,7 @@ if(!function_exists("getNxNy")) {
         if($data1['speed'] < $speed) $speed=$data1['speed'];
       }
     }
-    $endXY = mysqli_fetch_assoc(do_mysqli_query("SELECT x, y FROM map WHERE id = ".intval($end)) );
+    $endXY = mysqli_fetch_assoc(do_mysql_query("SELECT x, y FROM map WHERE id = ".intval($end)) );
     $n=ceil($wt / 3600 / $speedmatrix[$speed]);
     $A['x'] = $sX;
     $A['y'] = $sY;
@@ -288,7 +288,7 @@ if(!function_exists("getNxNy")) {
 
 if(!function_exists("checkSettle")) {
   function checkSettle($ax,$ay,$plr) {
-    $res1=do_mysqli_query("SELECT id FROM army,map WHERE x=".intval($ax)." AND y=".intval($ay)." AND army.end=map.id AND army.owner = ".intval($plr)." AND mission = 'settle'");
+    $res1=do_mysql_query("SELECT id FROM army,map WHERE x=".intval($ax)." AND y=".intval($ay)." AND army.end=map.id AND army.owner = ".intval($plr)." AND mission = 'settle'");
     if (mysqli_num_rows($res1)>0) return false;
     else return true;
   }
@@ -301,28 +301,28 @@ if(!function_exists("checkSettle")) {
  * @return null bei Erfolg
  */
 function RemovePlayer_old($id) {  
-  $delplayer_res = do_mysqli_query("SELECT * FROM player WHERE id=".$id);
+  $delplayer_res = do_mysql_query("SELECT * FROM player WHERE id=".$id);
   if ($delplayer = mysqli_fetch_assoc($delplayer_res)) {
     //Spieler löschen
     remove_player_armies($id);
-    do_mysqli_query("DELETE FROM market WHERE player = ".$id);
+    do_mysql_query("DELETE FROM market WHERE player = ".$id);
     //Nachrichten löschen
-    do_mysqli_query("DELETE FROM message WHERE recipient  = ".$id);
+    do_mysql_query("DELETE FROM message WHERE recipient  = ".$id);
     //Forschende Forschungen löschen
-    do_mysqli_query("DELETE FROM researching WHERE player = ".$id);
+    do_mysql_query("DELETE FROM researching WHERE player = ".$id);
     // Namensänderungen löschen
-    do_mysqli_query("DELETE FROM namechange WHERE id = ".$id);
+    do_mysql_query("DELETE FROM namechange WHERE id = ".$id);
     //Forschungen löschen
-    do_mysqli_query("DELETE FROM playerresearch WHERE player = ".$id);
+    do_mysql_query("DELETE FROM playerresearch WHERE player = ".$id);
     //Beziehungen löschen
-    do_mysqli_query("DELETE FROM relation WHERE id1=".$id." OR id2=".$id);
-    do_mysqli_query("DELETE FROM req_relation WHERE id1=".$id." OR id2=".$id);
+    do_mysql_query("DELETE FROM relation WHERE id1=".$id." OR id2=".$id);
+    do_mysql_query("DELETE FROM req_relation WHERE id1=".$id." OR id2=".$id);
     // Turnierteilnahmen löschen
-    do_mysqli_query("DELETE FROM tournament_players WHERE player = ".$id.
+    do_mysql_query("DELETE FROM tournament_players WHERE player = ".$id.
              " AND tid IN (SELECT tid FROM tournament WHERE calctime IS NULL)");
 
     //Städte löschen
-    $cty_res = do_mysqli_query("SELECT id FROM city WHERE owner=".$id);
+    $cty_res = do_mysql_query("SELECT id FROM city WHERE owner=".$id);
     while ($cty = mysqli_fetch_assoc($cty_res)) {
       removeCity($cty['id']);
     }
@@ -334,33 +334,33 @@ function RemovePlayer_old($id) {
       $recruiter = "NULL";
     }
     // Spieler im internen Forum nicht l&ouml;schen, sondern Eintr&auml;ge auf Spieler "Gel&ouml;schter Spieler" umbiegen
-    $check_deleted_forums_user_res = do_mysqli_query("SELECT * FROM `clanf_users` WHERE user_id = -2");
+    $check_deleted_forums_user_res = do_mysql_query("SELECT * FROM `clanf_users` WHERE user_id = -2");
     if ($check_deleted_forums_user=mysqli_fetch_assoc($check_deleted_forums_user_res)) {
-      do_mysqli_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
-      do_mysqli_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
-      do_mysqli_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+      do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+      do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+      do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
     }
     else {
-      do_mysqli_query("INSERT INTO `clanf_users` (`user_id`, `user_active`, `username`, `user_password`, `user_session_time`, `user_session_page`, `user_lastvisit`, `user_regdate`, `user_level`, `user_posts`, `user_timezone`, `user_style`, `user_lang`, `user_dateformat`, `user_new_privmsg`, `user_unread_privmsg`, `user_last_privmsg`, `user_emailtime`, `user_viewemail`, `user_attachsig`, `user_allowhtml`, `user_allowbbcode`, `user_allowsmile`, `user_allowavatar`, `user_allow_pm`, `user_allow_viewonline`, `user_notify`, `user_notify_pm`, `user_popup_pm`, `user_rank`, `user_avatar`, `user_avatar_type`, `user_email`, `user_icq`, `user_website`, `user_from`, `user_sig`, `user_sig_bbcode_uid`, `user_aim`, `user_yim`, `user_msnm`, `user_occ`, `user_interests`, `user_actkey`, `user_newpasswd`) VALUES ('-2', '1', 'Gelöschter Spieler', MD5('bla'), '0', '0', '0', '0', '0', '0', '1.00', NULL, NULL, 'd M Y H:i', '0', '0', '0', NULL, NULL, NULL, '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
-      do_mysqli_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
-      do_mysqli_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
-      do_mysqli_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+      do_mysql_query("INSERT INTO `clanf_users` (`user_id`, `user_active`, `username`, `user_password`, `user_session_time`, `user_session_page`, `user_lastvisit`, `user_regdate`, `user_level`, `user_posts`, `user_timezone`, `user_style`, `user_lang`, `user_dateformat`, `user_new_privmsg`, `user_unread_privmsg`, `user_last_privmsg`, `user_emailtime`, `user_viewemail`, `user_attachsig`, `user_allowhtml`, `user_allowbbcode`, `user_allowsmile`, `user_allowavatar`, `user_allow_pm`, `user_allow_viewonline`, `user_notify`, `user_notify_pm`, `user_popup_pm`, `user_rank`, `user_avatar`, `user_avatar_type`, `user_email`, `user_icq`, `user_website`, `user_from`, `user_sig`, `user_sig_bbcode_uid`, `user_aim`, `user_yim`, `user_msnm`, `user_occ`, `user_interests`, `user_actkey`, `user_newpasswd`) VALUES ('-2', '1', 'Gelöschter Spieler', MD5('bla'), '0', '0', '0', '0', '0', '0', '1.00', NULL, NULL, 'd M Y H:i', '0', '0', '0', NULL, NULL, NULL, '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
+      do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+      do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+      do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
     }
 
     // Jetzt den Spieler löschen
-    do_mysqli_query("DELETE FROM player WHERE id = ".$id);
+    do_mysql_query("DELETE FROM player WHERE id = ".$id);
 
     # Defaults for SQL
     $playername  = $delplayer['name'] ? "'".$delplayer['name']."'" : "NULL";
     $reli_string = $delplayer['religion'] ? $delplayer['religion'] : "NULL";
     $clan_int = $delplayer['clan'] ? $delplayer['clan'] : 0;
 
-    do_mysqli_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysqli_escape_string($GLOBALS['con'], $delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$clan_int."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysqli_escape_string($GLOBALS['con'], $delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
+    do_mysql_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysqli_escape_string($GLOBALS['con'], $delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$clan_int."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysqli_escape_string($GLOBALS['con'], $delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
 
     // Bonuspunkte wieder abziehen
     if ($delplayer['recruiter']) {
       $bonus = RECRUIT_BONUSPOINTS;
-      do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints - ".$bonus." WHERE id = ".$recruiter);
+      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints - ".$bonus." WHERE id = ".$recruiter);
     }
   } // if
 } // Remove_old()
@@ -373,29 +373,29 @@ function RemovePlayer_old($id) {
  * @return unknown_type
  */
 function RemovePlayerAbandoneCities($id) {
-  $delplayer_res = do_mysqli_query("SELECT * FROM player WHERE id=".$id);
+  $delplayer_res = do_mysql_query("SELECT * FROM player WHERE id=".$id);
   if ($delplayer = mysqli_fetch_assoc($delplayer_res)) {
     //Spieler löschen
     remove_player_armies($id);
 
-    do_mysqli_query("DELETE FROM market WHERE player = ".$id);
+    do_mysql_query("DELETE FROM market WHERE player = ".$id);
     //Nachrichten löschen
-    do_mysqli_query("DELETE FROM message WHERE recipient  = ".$id);
+    do_mysql_query("DELETE FROM message WHERE recipient  = ".$id);
     //Forschende Forschungen löschen
-    do_mysqli_query("DELETE FROM researching WHERE player = ".$id);
+    do_mysql_query("DELETE FROM researching WHERE player = ".$id);
     // Namensänderungen löschen
-    do_mysqli_query("DELETE FROM namechange WHERE id = ".$id);
+    do_mysql_query("DELETE FROM namechange WHERE id = ".$id);
     //Forschungen löschen
-    do_mysqli_query("DELETE FROM playerresearch WHERE player = ".$id);
+    do_mysql_query("DELETE FROM playerresearch WHERE player = ".$id);
     //Beziehungen löschen
-    do_mysqli_query("DELETE FROM relation WHERE id1=".$id." OR id2=".$id);
-    do_mysqli_query("DELETE FROM req_relation WHERE id1=".$id." OR id2=".$id);
+    do_mysql_query("DELETE FROM relation WHERE id1=".$id." OR id2=".$id);
+    do_mysql_query("DELETE FROM req_relation WHERE id1=".$id." OR id2=".$id);
     // Turnierteilnahmen löschen
-    do_mysqli_query("DELETE FROM tournament_players WHERE player = ".$id.
+    do_mysql_query("DELETE FROM tournament_players WHERE player = ".$id.
              " AND tid IN (SELECT tid FROM tournament WHERE calctime IS NULL)");
 
     //Städte löschen
-    $cty_res = do_mysqli_query("SELECT id FROM city WHERE owner=".$id);
+    $cty_res = do_mysql_query("SELECT id FROM city WHERE owner=".$id);
     while ($cty = mysqli_fetch_assoc($cty_res)) {
       abandoneCity($cty['id']);
     }
@@ -410,17 +410,17 @@ function RemovePlayerAbandoneCities($id) {
     anonymizePlayerClanforumPostings($id);
 
     // Jetzt den Spieler löschen
-    do_mysqli_query("DELETE FROM player WHERE id = ".$id);
+    do_mysql_query("DELETE FROM player WHERE id = ".$id);
 
     $playername  = $delplayer['name'] ? "'".$delplayer['name']."'" : "NULL";
     $reli_string = $delplayer['religion'] ? $delplayer['religion'] : "NULL";
 
-    do_mysqli_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysqli_escape_string($GLOBALS['con'], $delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$delplayer['clan']."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysqli_escape_string($GLOBALS['con'], $delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
+    do_mysql_query("INSERT INTO log_player_deleted(id,login,name,recruiter,description,password,email,register_email, ip,lastseen,religion,gold,wood,iron,stone,rp,points,clan,clanstatus,status,statusdescription,lastres,deltime,regtime) VALUES (".$delplayer['id'].",'".$delplayer['login']."',".$playername.",".$recruiter.",'".mysqli_escape_string($GLOBALS['con'], $delplayer['description'])."','".$delplayer['password']."','".$delplayer['email']."', '".$delplayer['register_email']."', '".$delplayer['ip']."',".$delplayer['lastseen'].",".$reli_string.",".$delplayer['gold'].",".$delplayer['wood'].",".$delplayer['iron'].",".$delplayer['stone'].",".$delplayer['rp'].",".$delplayer['points'].",'".$delplayer['clan']."','".$delplayer['clanstatus']."','".$delplayer['status']."','".mysqli_escape_string($GLOBALS['con'], $delplayer['statusdescritiption'])."',".$delplayer['lastres'].",".time().",".$delplayer['regtime'].")");
 
     // Bonuspunkte wieder abziehen
     if ($delplayer['recruiter']) {
       $bonus = RECRUIT_BONUSPOINTS;
-      do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints - ".$bonus." WHERE id = ".$recruiter);
+      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints - ".$bonus." WHERE id = ".$recruiter);
     }
   } // if
 }
@@ -435,33 +435,33 @@ function RemovePlayerAbandoneCities($id) {
  */
 function anonymizePlayerClanforumPostings($id) {
   // Spieler im internen Forum nicht l&ouml;schen, sondern Eintr&auml;ge auf Spieler "Gel&ouml;schter Spieler" umbiegen
-  $check_deleted_forums_user_res = do_mysqli_query("SELECT * FROM `clanf_users` WHERE user_id = -2");
+  $check_deleted_forums_user_res = do_mysql_query("SELECT * FROM `clanf_users` WHERE user_id = -2");
   if ($check_deleted_forums_user=mysqli_fetch_assoc($check_deleted_forums_user_res)) {
-    do_mysqli_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
-    do_mysqli_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
-    do_mysqli_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+    do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+    do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+    do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
   }
   else {
     // Falls es den "Gelöschte Postings" User noch nicht gibt, lege ihn an
-    do_mysqli_query("INSERT INTO `clanf_users` (`user_id`, `user_active`, `username`, `user_password`, `user_session_time`, `user_session_page`, `user_lastvisit`, `user_regdate`, `user_level`, `user_posts`, `user_timezone`, `user_style`, `user_lang`, `user_dateformat`, `user_new_privmsg`, `user_unread_privmsg`, `user_last_privmsg`, `user_emailtime`, `user_viewemail`, `user_attachsig`, `user_allowhtml`, `user_allowbbcode`, `user_allowsmile`, `user_allowavatar`, `user_allow_pm`, `user_allow_viewonline`, `user_notify`, `user_notify_pm`, `user_popup_pm`, `user_rank`, `user_avatar`, `user_avatar_type`, `user_email`, `user_icq`, `user_website`, `user_from`, `user_sig`, `user_sig_bbcode_uid`, `user_aim`, `user_yim`, `user_msnm`, `user_occ`, `user_interests`, `user_actkey`, `user_newpasswd`) VALUES ('-2', '1', 'Gelöschter Spieler', MD5('bla'), '0', '0', '0', '0', '0', '0', '1.00', NULL, NULL, 'd M Y H:i', '0', '0', '0', NULL, NULL, NULL, '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
-    do_mysqli_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
-    do_mysqli_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
-    do_mysqli_query("DELETE FROM clanf_users WHERE user_id = ".$id);
+    do_mysql_query("INSERT INTO `clanf_users` (`user_id`, `user_active`, `username`, `user_password`, `user_session_time`, `user_session_page`, `user_lastvisit`, `user_regdate`, `user_level`, `user_posts`, `user_timezone`, `user_style`, `user_lang`, `user_dateformat`, `user_new_privmsg`, `user_unread_privmsg`, `user_last_privmsg`, `user_emailtime`, `user_viewemail`, `user_attachsig`, `user_allowhtml`, `user_allowbbcode`, `user_allowsmile`, `user_allowavatar`, `user_allow_pm`, `user_allow_viewonline`, `user_notify`, `user_notify_pm`, `user_popup_pm`, `user_rank`, `user_avatar`, `user_avatar_type`, `user_email`, `user_icq`, `user_website`, `user_from`, `user_sig`, `user_sig_bbcode_uid`, `user_aim`, `user_yim`, `user_msnm`, `user_occ`, `user_interests`, `user_actkey`, `user_newpasswd`) VALUES ('-2', '1', 'Gelöschter Spieler', MD5('bla'), '0', '0', '0', '0', '0', '0', '1.00', NULL, NULL, 'd M Y H:i', '0', '0', '0', NULL, NULL, NULL, '1', '1', '1', '1', '1', '1', '1', '0', '0', '0', NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);");
+    do_mysql_query("UPDATE `clanf_posts` set poster_id = -2 WHERE poster_id=".$id);
+    do_mysql_query("UPDATE `clanf_topics` set topic_poster = -2 WHERE topic_poster=".$id);
+    do_mysql_query("DELETE FROM clanf_users WHERE user_id = ".$id);
   }
 }
 
         
 function remove_player_armies($id) {
-  $res1=do_mysqli_query("SELECT aid FROM army WHERE owner = ".intval($id) );
+  $res1=do_mysql_query("SELECT aid FROM army WHERE owner = ".intval($id) );
   if(mysqli_num_rows($res1)) {
     while($data1=mysqli_fetch_assoc($res1)) {
-      do_mysqli_query("DELETE FROM armyunit WHERE aid=".$data1['aid']);
-      do_mysqli_query("DELETE FROM army WHERE aid=".$data1['aid']);
+      do_mysql_query("DELETE FROM armyunit WHERE aid=".$data1['aid']);
+      do_mysql_query("DELETE FROM army WHERE aid=".$data1['aid']);
     }
   }
 
   //Stadttruppen löschen
-  do_mysqli_query("DELETE FROM cityunit WHERE owner = ".intval($id) );
+  do_mysql_query("DELETE FROM cityunit WHERE owner = ".intval($id) );
 }
 
 
@@ -474,20 +474,20 @@ function remove_player_armies($id) {
 function removeCity($id) {
     $id = intval($id);
     marketRetractionForCity($id);
-    do_mysqli_query("DELETE FROM citybuilding WHERE city = ".$id);
-    do_mysqli_query("DELETE FROM citybuilding_ordered WHERE city = ".$id);
-    do_mysqli_query("DELETE FROM cityunit WHERE city = ".$id);
-    do_mysqli_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
-    do_mysqli_query("DELETE FROM city WHERE id = ".$id);
+    do_mysql_query("DELETE FROM citybuilding WHERE city = ".$id);
+    do_mysql_query("DELETE FROM citybuilding_ordered WHERE city = ".$id);
+    do_mysql_query("DELETE FROM cityunit WHERE city = ".$id);
+    do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
+    do_mysql_query("DELETE FROM city WHERE id = ".$id);
 
 
-    $xy=mysqli_fetch_assoc(do_mysqli_query("SELECT x, y FROM map WHERE id = ".$id));
+    $xy=mysqli_fetch_assoc(do_mysql_query("SELECT x, y FROM map WHERE id = ".$id));
     // Nur einfügen wenn es die Startpos noch nicht gibt
     if ($xy['x'] != NULL && $xy['y'] != NULL &&
-    mysqli_num_rows(do_mysqli_query("SELECT x, y FROM startpositions ".
+    mysqli_num_rows(do_mysql_query("SELECT x, y FROM startpositions ".
                                      "WHERE x = ".$xy['x']." AND y = ".$xy['y'])) == 0 ) 
     {
-      do_mysqli_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
+      do_mysql_query("INSERT INTO startpositions(x,y) VALUES (".$xy['x'].", ".$xy['y'].")");
     }
 } // function removeCity($id)
 
@@ -505,17 +505,17 @@ function abandoneCity($id) {
   marketRetractionForCity($id);
   
   
-  $city_res = do_mysqli_query("SELECT owner FROM city WHERE id = ".$id);
+  $city_res = do_mysql_query("SELECT owner FROM city WHERE id = ".$id);
   if( $city = mysqli_fetch_assoc($city_res) ) {
     // Alle Truppen löschen, die nicht dem Spieler gehört haben
-    do_mysqli_query("DELETE FROM cityunit WHERE owner != ".$city['owner']." AND city = ".$id);
+    do_mysql_query("DELETE FROM cityunit WHERE owner != ".$city['owner']." AND city = ".$id);
     
     // Alle restlichen Truppen herrenlos machen
-    do_mysqli_query("UPDATE cityunit SET owner = NULL WHERE city = ".$id);
-    do_mysqli_query("UPDATE city SET owner = NULL, capital = 0, populationlimit = NULL  WHERE id = ".$id);
+    do_mysql_query("UPDATE cityunit SET owner = NULL WHERE city = ".$id);
+    do_mysql_query("UPDATE city SET owner = NULL, capital = 0, populationlimit = NULL  WHERE id = ".$id);
 
     // In Auftrag gegebene Einheiten löschen.
-    do_mysqli_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
+    do_mysql_query("DELETE FROM cityunit_ordered WHERE city = ".$id);
   }
   else {
     // Dies darf eigentlich nicht passieren
@@ -547,11 +547,11 @@ if(!function_exists("removeClan")) {
   //assumes clean and trusted input
   function removeClan ($clan) {
     $clan = intval($clan);
-    do_mysqli_query("UPDATE player SET clan=NULL WHERE clan=".$clan);
-    do_mysqli_query("UPDATE player SET clanapplication=NULL WHERE clan=".$clan);
-    do_mysqli_query("DELETE FROM req_clanrel WHERE id1=".$clan." OR id2=".$clan);
-    do_mysqli_query("DELETE FROM clanrel WHERE id1=".$clan." OR id2=".$clan);
-    do_mysqli_query("DELETE FROM clan WHERE id=".$clan);
+    do_mysql_query("UPDATE player SET clan=NULL WHERE clan=".$clan);
+    do_mysql_query("UPDATE player SET clanapplication=NULL WHERE clan=".$clan);
+    do_mysql_query("DELETE FROM req_clanrel WHERE id1=".$clan." OR id2=".$clan);
+    do_mysql_query("DELETE FROM clanrel WHERE id1=".$clan." OR id2=".$clan);
+    do_mysql_query("DELETE FROM clan WHERE id=".$clan);
   }
 }
 
@@ -560,7 +560,7 @@ if(!function_exists("resolveCityName")) {
   function resolveCityName($id)
   {
     $id = intval($id);
-    $res=do_mysqli_query("SELECT name FROM city WHERE id = ".$id);
+    $res=do_mysql_query("SELECT name FROM city WHERE id = ".$id);
     if(mysqli_num_rows($res)==0)
     {
       return false;
@@ -579,7 +579,7 @@ if(!function_exists("resolvePlayerName")) {
   function resolvePlayerName($id)
   {
     $id = intval($id);
-    $res=do_mysqli_query(
+    $res=do_mysql_query(
       "SELECT name FROM player WHERE id = ".$id."
        UNION
        SELECT name FROM log_player_deleted WHERE id = ".$id);
@@ -600,7 +600,7 @@ if(!function_exists("resolvePlayerName")) {
 if (!function_exists("player_exists")) {
   function player_exists($id) {
     $id = intval($id);
-    $res = do_mysqli_query("SELECT id FROM player WHERE id = ".$id);
+    $res = do_mysql_query("SELECT id FROM player WHERE id = ".$id);
     return mysqli_num_rows($res);
   }
 }
@@ -638,7 +638,7 @@ if(!function_exists("save_html")) {
 if(!function_exists("get_city_htmllink")) {
   function get_city_htmllink($data, $printid = true) {
     // Coord of actual city
-    $res_coord = do_mysqli_query("SELECT x,y FROM map WHERE id=".$data['id']);
+    $res_coord = do_mysql_query("SELECT x,y FROM map WHERE id=".$data['id']);
     $coord = mysqli_fetch_assoc($res_coord);
     return "<a ".($data['capital'] ? 'class="red"' :'')." href=\"javascript:towninfo('".$data['id']."')\">".$data['name']."</a>".( ($printid && $data['id']) ? (" ( ".$data['id']." )") : "");
   }
@@ -647,7 +647,7 @@ if(!function_exists("get_city_htmllink")) {
 if(!function_exists("get_city_htmllink_koords")) {
   function get_city_htmllink_koords($data) {
     // Coord of actual city
-    $res_coord = do_mysqli_query("SELECT religion, x,y FROM city LEFT JOIN map USING(id) WHERE city.id=".$data['id']);
+    $res_coord = do_mysql_query("SELECT religion, x,y FROM city LEFT JOIN map USING(id) WHERE city.id=".$data['id']);
     $coord = mysqli_fetch_assoc($res_coord);
     return getReliImage($coord['religion'])." <a ".($data['capital'] ? 'class="red"' :'')." href=\"javascript:towninfo('".$data['id']."')\">".$data['name']."</a> <a href=\"map.php?gox=".$coord['x']."&goy=".$coord['y']."\">(".$coord['x'].":".$coord['y'].")</a> [ ".$data['id']." ]";
   }
@@ -655,7 +655,7 @@ if(!function_exists("get_city_htmllink_koords")) {
 
 
 function getMapSize(&$x, &$y) {
-  $mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
+  $mapsize = do_mysql_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
   $x = $mapsize['x'];
   $y = $mapsize['y'];
 }
@@ -666,17 +666,17 @@ if(!function_exists("restart_player")) {
     $id = intval($id);
     if($id == null || $id == 0) log_fatal_error("RestartPlayer failed: id null\n");
 
-    $res6=do_mysqli_query("SELECT id FROM research r ".
+    $res6=do_mysql_query("SELECT id FROM research r ".
 			 " LEFT JOIN playerresearch pr ON (r.id=pr.research AND pr.player=$id) ".
 			 " WHERE rp = 0 AND pr.player IS NULL");
 
     // Startforschungen (jene mit 0 Forschungspunkten) einfügen
     while($data6=mysqli_fetch_assoc($res6)) {
-      do_mysqli_query("INSERT INTO playerresearch (player,research) VALUES (".$id.", ".$data6['id'].")");
+      do_mysql_query("INSERT INTO playerresearch (player,research) VALUES (".$id.", ".$data6['id'].")");
     }
 
 
-    $citys = do_mysqli_query("SELECT id FROM city WHERE owner=".$id);
+    $citys = do_mysql_query("SELECT id FROM city WHERE owner=".$id);
 
     if ( mysqli_num_rows($citys) == 0) 
     {
@@ -693,7 +693,7 @@ if(!function_exists("restart_player")) {
 
       // Ist noch eine Startpos frei?
       if($where != null && $where['id']) {
-        $player_res = do_mysqli_query("SELECT pos,nooblevel,religion,name FROM player WHERE id=".$id);
+        $player_res = do_mysql_query("SELECT pos,nooblevel,religion,name FROM player WHERE id=".$id);
         $p = mysqli_fetch_assoc($player_res);
 
         // Wenn der Spieler noch keinen Namen/Religion gewählt hat
@@ -714,9 +714,9 @@ if(!function_exists("restart_player")) {
         insertCity($where['id'], $id, $p['religion'], $capital);
           
         // Nun Updaten
-        do_mysqli_query("UPDATE player SET pos = NULL, cc_messages=1, cc_towns=1, lastres=UNIX_TIMESTAMP() WHERE id = ".$id);
+        do_mysql_query("UPDATE player SET pos = NULL, cc_messages=1, cc_towns=1, lastres=UNIX_TIMESTAMP() WHERE id = ".$id);
 
-        do_mysqli_query("UPDATE player SET gold = gold+6000, wood=wood+100, stone=stone+100, cc_resources = 1 WHERE gold <= 30000 AND id = ".$id);
+        do_mysql_query("UPDATE player SET gold = gold+6000, wood=wood+100, stone=stone+100, cc_resources = 1 WHERE gold <= 30000 AND id = ".$id);
 
         $_SESSION['player']->newmessages++;
         
@@ -768,7 +768,7 @@ function checkSettleRadius() {
     for($p = 0; $p < 3; $p++) {
 
       $where = getStartPosWhere($p, $reli);
-      $c = do_mysqli_query_fetch_assoc("SELECT count(*) as c FROM startpositions WHERE ".$where);
+      $c = do_mysql_query_fetch_assoc("SELECT count(*) as c FROM startpositions WHERE ".$where);
       
       $i = ($reli-1)*3 + $p;
       $pos[$i] = $c['c'];
@@ -969,7 +969,7 @@ function getStartPos($pos, $reli, $radius=null, $fx=null, $fy=null) {
 
 function searchStartPosNew($pid) {
   $pid = intval($pid);
-  $player_res = do_mysqli_query("SELECT religion,pos,nooblevel FROM player WHERE id=".$pid);
+  $player_res = do_mysql_query("SELECT religion,pos,nooblevel FROM player WHERE id=".$pid);
 
   if ($p = mysqli_fetch_assoc($player_res)) {
     if ($p['pos'] != null) {
@@ -987,7 +987,7 @@ function searchStartPosNew($pid) {
     while ($tries++ < 5) 
       {
         $where  = getStartPosWhere($pos, $p['religion']);
-        $res = do_mysqli_query("SELECT * FROM startpositions WHERE ".$where);
+        $res = do_mysql_query("SELECT * FROM startpositions WHERE ".$where);
         
         $num = mysqli_num_rows($res);
         if($num == 0) {
@@ -997,7 +997,7 @@ function searchStartPosNew($pid) {
         else {
           // printf("<html><body>%s<br>\nStartPositions: %d<br>\n</body></html>\n", $where, $num );
 
-          $res = do_mysqli_query("SELECT * FROM startpositions WHERE ".$where." ORDER BY rand() LIMIT 1");
+          $res = do_mysql_query("SELECT * FROM startpositions WHERE ".$where." ORDER BY rand() LIMIT 1");
 
           if($res && ($s = mysqli_fetch_assoc($res))) {
             $x = $s['x'];
@@ -1012,19 +1012,19 @@ function searchStartPosNew($pid) {
              
             
             // Kontlikt-Positionen auflösen und löschen.
-            $conflict = do_mysqli_query($sql);
+            $conflict = do_mysql_query($sql);
             $num = mysqli_num_rows($conflict);
             if($num > 0) {
               $msg = sprintf("%d conflicting cities for startpos (%d,%d)\n", $num, $x, $y);
               log_fatal_error($msg);
-              do_mysqli_query("DELETE FROM startpos WHERE x = $x AND y = $y");
+              do_mysql_query("DELETE FROM startpos WHERE x = $x AND y = $y");
 
               // Weitersuchen
               continue;
             }
 
 
-            $xy = do_mysqli_query_fetch_assoc("SELECT id FROM map WHERE x = $x AND y = $y");
+            $xy = do_mysql_query_fetch_assoc("SELECT id FROM map WHERE x = $x AND y = $y");
             if($xy) {
               $ret['id'] = $xy['id'];
               $ret['x']  = $x;
@@ -1050,7 +1050,7 @@ function searchStartPosNew($pid) {
 function searchStartPos($pid) {
   getMapSize($fx, $fy);
   $pid = intval($pid);
-  $player_res = do_mysqli_query("SELECT religion,pos,nooblevel FROM player WHERE id=".$pid);
+  $player_res = do_mysql_query("SELECT religion,pos,nooblevel FROM player WHERE id=".$pid);
 
   if ($p = mysqli_fetch_assoc($player_res)) {
     if ($p['pos'] != null) {
@@ -1086,15 +1086,15 @@ function searchStartPos($pid) {
 
     $search = true;
     while ($search) {
-      $startpos_res=do_mysqli_query("SELECT x,y FROM startpositions WHERE y>=".$ystart." AND y<=".$yend." ORDER BY RAND() LIMIT 1");
+      $startpos_res=do_mysql_query("SELECT x,y FROM startpositions WHERE y>=".$ystart." AND y<=".$yend." ORDER BY RAND() LIMIT 1");
       // sollte nur sehr sehr selten eintreten
       if (mysqli_num_rows($startpos_res)==0) {
         log_fatal_error("Startpositionen ausgegangen ystart:".$ystart.", yend:".$yend);
         return;
       }
       $xy = mysqli_fetch_assoc($startpos_res);
-      $cityid_res = do_mysqli_query("SELECT id FROM map WHERE x=".$xy['x']." AND y=".$xy['y']." AND type = 2");
-      $inway = do_mysqli_query("SELECT city.id FROM city LEFT JOIN map USING(id) ".
+      $cityid_res = do_mysql_query("SELECT id FROM map WHERE x=".$xy['x']." AND y=".$xy['y']." AND type = 2");
+      $inway = do_mysql_query("SELECT city.id FROM city LEFT JOIN map USING(id) ".
                                   " WHERE x >= ".max(0, $xy['x']-4)." AND x <= ".min($fx-1, $xy['x']+4)." ".
                                   " AND y >= ".max(0, $xy['y']-4)." AND y <= ".min($fy-1, $xy['y']+4) );
 
@@ -1118,25 +1118,25 @@ function searchStartPos($pid) {
  * Neue Stadt einfügen
  */
 function insertCity($mapid, $owner, $reli, $capital = false) {
-  do_mysqli_query("INSERT INTO city (id,name,capital,religion,owner,prosperity) VALUES (".$mapid.",'Startstadt ".$mapid."',".( $capital ? "1" : "0" ).",".$reli.",".$owner.",".($capital ? 2000 : 1000).")");
+  do_mysql_query("INSERT INTO city (id,name,capital,religion,owner,prosperity) VALUES (".$mapid.",'Startstadt ".$mapid."',".( $capital ? "1" : "0" ).",".$reli.",".$owner.",".($capital ? 2000 : 1000).")");
 
   // Bei der ERSTEN Startstadt ein paar Extra Gebäude gewähren
   if ($capital) {
     if (defined("BUILDING_HS_LVL1")) {
-      do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mapid.", ".BUILDING_HS_LVL1.", 1)");
+      do_mysql_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mapid.", ".BUILDING_HS_LVL1.", 1)");
     }
     //if (defined("BUILDING_SCHOOL"))
-    //  do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mid['id'].", ".BUILDING_SCHOOL.", 1)");
+    //  do_mysql_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mid['id'].", ".BUILDING_SCHOOL.", 1)");
   }
   else {
     // Farm nur einfügen, wenn es nicht die Startstadt ist und bereits ne Residenz erhalten hat
-    do_mysqli_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mapid.",1,1)");
+    do_mysql_query("INSERT INTO citybuilding (city,building,count) VALUES (".$mapid.",1,1)");
   }
 
-  $xy = do_mysqli_query_fetch_assoc("SELECT x,y FROM map WHERE id = ".$mapid);
-  do_mysqli_query("DELETE FROM startpositions WHERE x=".$xy['x']." and y=".$xy['y']);
+  $xy = do_mysql_query_fetch_assoc("SELECT x,y FROM map WHERE id = ".$mapid);
+  do_mysql_query("DELETE FROM startpositions WHERE x=".$xy['x']." and y=".$xy['y']);
    
-  do_mysqli_query("INSERT INTO message (category, recipient, sender, date, header, body) VALUES (3, ".$owner.", 'SERVER', UNIX_TIMESTAMP(), 'Startstadt umbenennen!', 'Ihnen wurde ein automatischer Name für die Startstadt generiert. Benennt diese Stadt im Rathaus um!')");
+  do_mysql_query("INSERT INTO message (category, recipient, sender, date, header, body) VALUES (3, ".$owner.", 'SERVER', UNIX_TIMESTAMP(), 'Startstadt umbenennen!', 'Ihnen wurde ein automatischer Name für die Startstadt generiert. Benennt diese Stadt im Rathaus um!')");
 }
 
 
@@ -1372,7 +1372,7 @@ if(!function_exists("quote")) {
 
 if(!function_exists("getClanStatusByName")) {
   function getClanStatusByName($name) {
-    $res0=do_mysqli_query("SELECT clanstatus,points,religion FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'], $name)."'");
+    $res0=do_mysql_query("SELECT clanstatus,points,religion FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'], $name)."'");
     $data0 = mysqli_fetch_assoc($res0);
     $status = $data0['clanstatus'];
     $points = number_format($data0['points'],0,",",".");
@@ -1593,7 +1593,7 @@ if(!function_exists("bbCode")) {
 if(!function_exists("MapFactory")) {
   function &MapFactory($player) {
     getMapSize($fx, $fy);
-    //    $mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
+    //    $mapsize = do_mysql_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
     //    $fx = $mapsize['x'];
     //    $fy = $mapsize['y'];
 
@@ -1629,7 +1629,7 @@ if(!function_exists("MapFactory")) {
  *  return: Ordenbezeichnung */
 if(!function_exists("get_clan_name")) {
   function get_clan_name($id) {
-    $res = do_mysqli_query( 'SELECT name '.
+    $res = do_mysql_query( 'SELECT name '.
 			   'FROM clan '.
 			   'WHERE id = '.intval($id) );
     $res = mysqli_fetch_assoc($res);
@@ -1660,7 +1660,7 @@ function get_info_link($name, $type, $avatar=0) {
       else {
         $string = "<a href=\"info.php?show=player&exactmatch=1&name=".urlencode($name)."\">".$name_text."</a>";
 
-        $res1 = do_mysqli_query("SELECT id,avatar FROM player WHERE name='".$name."'");
+        $res1 = do_mysql_query("SELECT id,avatar FROM player WHERE name='".$name."'");
         $data1 = mysqli_fetch_assoc($res1);
         if($data1['avatar']==2) {
           $string = "<a href=\"info.php?show=player&exactmatch=1&name=".urlencode($name)."\"  onMouseOver=\"showWMTT('".$data1['id']."')\" onMouseOut=\"hideWMTT()\">".$name_text.' <img src="'.$imagepath."/avatar_exists.gif\" border=\"0\"></a>\n";
@@ -1689,7 +1689,7 @@ function printActive($name) {
  * -1 wird returniert, falls die Stadt nicht unter Belagerung steht
  */
 function getSiegeTime ($id) {
-  $res = do_mysqli_query("SELECT max(UNIX_TIMESTAMP()-endtime) AS maxtime ".
+  $res = do_mysql_query("SELECT max(UNIX_TIMESTAMP()-endtime) AS maxtime ".
                         " FROM army WHERE endtime < UNIX_TIMESTAMP() AND army.mission='siege' AND army.end = ".intval($id) );
   if (mysqli_num_rows($res) == 0) {
     return -1;
@@ -1729,7 +1729,7 @@ function getSiegeFactor ($time) {
 // dieser muss frei gegeben werden. außerdem müssen die waffen wieder zurück in die stadt
 // wenn jemand ne function dafür schreiben will... gerne
 function marketRetractionForCity($cityid) {
-  $resA = do_mysqli_query("SELECT id,wantsType,wantsQuant,hasType,hasQuant,player,timestamp,city FROM market WHERE city=".intval($cityid) );
+  $resA = do_mysql_query("SELECT id,wantsType,wantsQuant,hasType,hasQuant,player,timestamp,city FROM market WHERE city=".intval($cityid) );
 
   while ($dataA = mysqli_fetch_assoc($resA)) {
     if ($dataA['wantsType'] == "shortrange" ||
@@ -1738,24 +1738,24 @@ function marketRetractionForCity($cityid) {
         $dataA['wantsType'] == "horse")
     {
       // lager wantsQuant Type frei geben
-      //do_mysqli_query("UPDATE city SET reserve_".$dataA['wantsType']." = reserve_".$dataA['wantsType']."-".$dataA['wantsQuant']." WHERE id = '".$data1['end']."'");
+      //do_mysql_query("UPDATE city SET reserve_".$dataA['wantsType']." = reserve_".$dataA['wantsType']."-".$dataA['wantsQuant']." WHERE id = '".$data1['end']."'");
       if ($dataA['hasType'] == "shortrange" ||
       $dataA['hasType'] == "longrange" ||
       $dataA['hasType'] == "armor" ||
       $dataA['hasType'] == "horse") {
-        do_mysqli_query("UPDATE city SET reserve_".$dataA['hasType']." = reserve_".$dataA['hasType']."-".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
-        do_mysqli_query("UPDATE city SET ".$dataA['hasType']." = ".$dataA['hasType']."+".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
+        do_mysql_query("UPDATE city SET reserve_".$dataA['hasType']." = reserve_".$dataA['hasType']."-".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
+        do_mysql_query("UPDATE city SET ".$dataA['hasType']." = ".$dataA['hasType']."+".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
       }
       else {
-        do_mysqli_query("UPDATE player SET ".$dataA['hasType']." = ".$dataA['hasType']."+".$dataA['hasQuant']." WHERE id = '".$dataA['player']."'");
-        $resB = do_mysqli_query("SELECT name FROM city WHERE id = ".$dataA['city']);
+        do_mysql_query("UPDATE player SET ".$dataA['hasType']." = ".$dataA['hasType']."+".$dataA['hasQuant']." WHERE id = '".$dataA['player']."'");
+        $resB = do_mysql_query("SELECT name FROM city WHERE id = ".$dataA['city']);
         $dataB = mysqli_fetch_assoc($resB);
         $gerres = array ('gold' => 'Gold', 'wood' => 'Holz', 'iron' => 'Eisen', 'stone' => 'Stein', 'shortrange' => 'Nahkampfwaffen', 'longrange' => 'Fernkampfwaffen', 'armor' => 'Rüstungen', 'horse' => 'Pferde');
         $message = "Sie haben die Stadt ".$dataB['name']." verloren!<br>Das dort Aufgegebene Angebot [Gesucht: ".$dataA['wantsQuant']." ".$gerres[$dataA['wantsType']]." | Geboten: ".$dataA['hasQuant']." ".$gerres[$dataA['hasType']]."] wurde vom Markt genommen.<br>Die Markth&auml;ndler refundieren euch ".$dataA['hasQuant']." ".$gerres[$dataA['hasType']]."!";
-        do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$dataA['player'].",".time().",'Rückerstattung','".$message."',2)");
+        do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$dataA['player'].",".time().",'Rückerstattung','".$message."',2)");
       }
       
-      do_mysqli_query("DELETE FROM market WHERE id=".$dataA['id']);
+      do_mysql_query("DELETE FROM market WHERE id=".$dataA['id']);
     } // wantsType
     else {
       if ($dataA['hasType'] == "shortrange" ||
@@ -1763,9 +1763,9 @@ function marketRetractionForCity($cityid) {
           $dataA['hasType'] == "armor" ||
           $dataA['hasType'] == "horse")
       {
-        do_mysqli_query("UPDATE city SET reserve_".$dataA['hasType']." = reserve_".$dataA['hasType']."-".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
-        do_mysqli_query("UPDATE city SET ".$dataA['hasType']." = ".$dataA['hasType']."+".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
-        $resB = do_mysqli_query("SELECT name FROM city WHERE id = ".$dataA['city']);
+        do_mysql_query("UPDATE city SET reserve_".$dataA['hasType']." = reserve_".$dataA['hasType']."-".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
+        do_mysql_query("UPDATE city SET ".$dataA['hasType']." = ".$dataA['hasType']."+".$dataA['hasQuant']." WHERE id = '".$data1['end']."'");
+        $resB = do_mysql_query("SELECT name FROM city WHERE id = ".$dataA['city']);
         $dataB = mysqli_fetch_assoc($resB);
         $gerres = array ('gold' => 'Gold', 'wood' => 'Holz', 'iron' => 'Eisen', 'stone' => 'Stein', 'shortrange' => 'Nahkampfwaffen', 'longrange' => 'Fernkampfwaffen', 'armor' => 'Rüstungen', 'horse' => 'Pferde');
         $message = "Sie haben die Stadt ".$dataB['name'].
@@ -1773,8 +1773,8 @@ function marketRetractionForCity($cityid) {
             " ".$gerres[$dataA['wantsType']]." | Geboten: ".$dataA['hasQuant']." ".
         $gerres[$dataA['hasType']].
             "] wurde vom Markt genommen.<br>Die Markth&auml;ndler refundieren euch nichts!";
-        do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$dataA['player'].",".time().",'Rückerstattung','".$message."',2)");
-        do_mysqli_query("DELETE FROM market WHERE id=".$dataA['id']);
+        do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$dataA['player'].",".time().",'Rückerstattung','".$message."',2)");
+        do_mysql_query("DELETE FROM market WHERE id=".$dataA['id']);
       }
     }    
   } // while
@@ -1790,13 +1790,13 @@ function checkSettleCoords($ax,$ay) {
   $ax = intval($ax);
   $ay = intval($ay);
   
-  $res2 = do_mysqli_query( 'SELECT id '.
+  $res2 = do_mysql_query( 'SELECT id '.
                           'FROM map '.
                           'WHERE x='.$ax.' AND y='.$ay." AND type='2'");
   if (mysqli_num_rows($res2) == 0)
   return "Es handelt sich nicht um ein Wiesenfeld";
 
-  $res1 = do_mysqli_query('SELECT city.name, city.id, map.x, map.y '.
+  $res1 = do_mysql_query('SELECT city.name, city.id, map.x, map.y '.
                          'FROM map LEFT JOIN city ON city.id = map.id '.
                          'WHERE map.x>='.max(0,$ax-4).' AND map.x<='.min($fx-1, $ax+4).
                          ' AND map.y>='.max(0, $ay-4).' AND map.y<='.min($fx-1, $ay+4).
@@ -1829,7 +1829,7 @@ function getPlayerClanFunctions($clanstatus) {
 
 
 function getPlayerScoutTime($pid) {
-  $res_scout = do_mysqli_query("SELECT max(res_scouttime) AS scouttime FROM building, citybuilding, city ".
+  $res_scout = do_mysql_query("SELECT max(res_scouttime) AS scouttime FROM building, citybuilding, city ".
                               " WHERE building.res_scouttime IS NOT NULL".
                               " AND building.id = citybuilding.building ".
                               " AND citybuilding.city = city.id AND city.owner = ".$pid );
@@ -1844,7 +1844,7 @@ function getPlayerScoutTime($pid) {
 
 function getAttacksAgainstPlayer($pid) {
   $num=0;
-  $res_spy = do_mysqli_query("
+  $res_spy = do_mysql_query("
 SELECT 
 army.aid AS aid, army.owner AS owner, army.start AS start, army.end AS end,
 army.endtime AS endtime, army.missiondata AS missiondata
@@ -1884,7 +1884,7 @@ function dateDiff($t1,$t2) {
 
 
 function getConfigTimes($name, &$createtime, &$updatetime) {
-  $res = do_mysqli_query("SELECT updatetime, creationtime FROM config ".
+  $res = do_mysql_query("SELECT updatetime, creationtime FROM config ".
                         " WHERE name='".mysqli_escape_string($GLOBALS['con'], $name)."'");
   if(mysqli_num_rows($res) == 0 || !($val = mysqli_fetch_assoc($res))) {
       $createtime = $updatetime = null;
@@ -1899,7 +1899,7 @@ function getConfigTimes($name, &$createtime, &$updatetime) {
 
 
 function getConfig($name, $default = null) {
-  $res = do_mysqli_query("SELECT value FROM config WHERE name='".mysqli_escape_string($GLOBALS['con'], $name)."'");
+  $res = do_mysql_query("SELECT value FROM config WHERE name='".mysqli_escape_string($GLOBALS['con'], $name)."'");
   if(mysqli_num_rows($res) == 0 || !($val = mysqli_fetch_assoc($res))) {
     return $default;
   }
@@ -1912,18 +1912,18 @@ function getConfig($name, $default = null) {
 function setConfig($name, $val) {
   if($val == null || strlen($val) < 1) return false;
   
-  $res = do_mysqli_query("SELECT value FROM config WHERE name='".mysqli_escape_string($GLOBALS['con'], $name)."'");
+  $res = do_mysql_query("SELECT value FROM config WHERE name='".mysqli_escape_string($GLOBALS['con'], $name)."'");
   if(mysqli_num_rows($res) == 0) {
     $sql = sprintf("INSERT INTO config (name, value, creationtime, updatetime) ".
 				   " VALUES ('%s', '%s', UNIX_TIMESTAMP(), UNIX_TIMESTAMP())",
                    mysqli_escape_string($GLOBALS['con'], $name), mysqli_escape_string($GLOBALS['con'], $val));
-    do_mysqli_query($sql);
+    do_mysql_query($sql);
   }
   else {
     $sql = sprintf("UPDATE config SET value = '%s', updatetime = UNIX_TIMESTAMP() ".
 				   " WHERE name LIKE '%s'",
                    mysqli_escape_string($GLOBALS['con'], $val), mysqli_escape_string($GLOBALS['con'], $name));
-    do_mysqli_query($sql);
+    do_mysql_query($sql);
   }
 }
 
@@ -2006,14 +2006,14 @@ function isInSettleArea($x, $y)
 
 function getRoundStartTime()
 {
-  $starttime = do_mysqli_query_fetch_assoc("SELECT value FROM config WHERE name='starttime'");
+  $starttime = do_mysql_query_fetch_assoc("SELECT value FROM config WHERE name='starttime'");
   return intval( ($starttime && $starttime['value']) ? $starttime['value'] : 0 );
 }
 
 
 function getRoundEndTime()
 {
-  $starttime = do_mysqli_query_fetch_assoc("SELECT value FROM config WHERE name='endtime'");
+  $starttime = do_mysql_query_fetch_assoc("SELECT value FROM config WHERE name='endtime'");
   return intval( ($starttime && $starttime['value']) ? $starttime['value'] : 0 );
 }
 
@@ -2065,7 +2065,7 @@ function printRoundTimes()
            " LEFT JOIN multi_exceptions_players e2 ON (e2.player = $id2 AND e1.eid=e2.eid) ".
            " LEFT JOIN multi_exceptions ex ON (e1.eid=ex.id) ".
            " WHERE e1.player = $id1 AND e2.player = $id2";
-    $res = do_mysqli_query($sql);
+    $res = do_mysql_query($sql);
     while($ex = mysqli_fetch_assoc($res)) {
       // Falls wir hier reinkommen ist eine entsprechende Exception vorhanden
       

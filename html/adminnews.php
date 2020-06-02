@@ -25,15 +25,15 @@ if (!isset($topic) and !isset($text) and isset($input)) {
 
 if (isset($topic) and isset($text) and isset($input)) {
 	if(!$_POST['change']) {
-		do_mysqli_query("INSERT INTO news (time, topic, text) VALUES (".time().", '".$topic."','".$text."')") or die(mysqli_error($GLOBALS['con']));
+		do_mysql_query("INSERT INTO news (time, topic, text) VALUES (".time().", '".$topic."','".$text."')") or die(mysqli_error($GLOBALS['con']));
 		$err = "Die News wurde erfolgreich in die Datenbank eingetragen!";
 	} else {
-		do_mysqli_query("UPDATE news SET topic='".$topic."', text='".$text."' WHERE id='".$_POST['change']."'") or die(mysqli_error($GLOBALS['con']));
+		do_mysql_query("UPDATE news SET topic='".$topic."', text='".$text."' WHERE id='".$_POST['change']."'") or die(mysqli_error($GLOBALS['con']));
 		$err = "Die News wurde erfolgreich ge&auml;ndert!";
 	}
 }
 if($_GET['delete']) {
-	do_mysqli_query("DELETE FROM news WHERE id='".$_GET['delete']."'") or die(mysqli_error($GLOBALS['con']));
+	do_mysql_query("DELETE FROM news WHERE id='".$_GET['delete']."'") or die(mysqli_error($GLOBALS['con']));
 	$err = "Die Nachricht wurde erfolgreich gel&ouml;scht!";
 }
 ?>
@@ -64,7 +64,7 @@ if(!$_GET['edit']) {
 	echo "</table>\n";
 	echo "</form>\n";
 } else {
-	$edit=do_mysqli_query("SELECT topic,text FROM news WHERE id='".$_GET['edit']."'");
+	$edit=do_mysql_query("SELECT topic,text FROM news WHERE id='".$_GET['edit']."'");
 	$edit=mysqli_fetch_assoc($edit);
 	echo "<form action=\"".$_SERVER['PHP_SELF']."\" method=\"POST\">\n";
 	echo "<table width=\"300\" cellspacing=\"1\" cellpadding=\"1\" border=\"0\">\n";
@@ -94,7 +94,7 @@ if(!$_GET['edit']) {
 	echo "<td>Topic</td>\n";
 	echo "<td>Text</td>\n";
 	echo "</tr>";
-	$news=do_mysqli_query("SELECT * FROM news WHERE 1 order by id desc limit 0,10");
+	$news=do_mysql_query("SELECT * FROM news WHERE 1 order by id desc limit 0,10");
 	while($get_news=mysqli_fetch_assoc($news)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
 		echo "<td width=\"16\"><a href=\"".$_SERVER['PHP_SELF']."?delete=".$get_news['id']."\"><img src=\"".$imagepath."/ad_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
@@ -114,5 +114,5 @@ if(!$_GET['edit']) {
 // Insert Into DB the execution time of this script
 list($START_MICRO, $START_SEC) = explode(" ",$START_TIME);
 list($END_MICRO, $END_SEC) = explode(" ",microtime());
-do_mysqli_query("INSERT INTO log_cputime (file,start,time) VALUES ('".__FILE__."', ".$START_SEC.",".round(($END_MICRO+$END_SEC-$START_MICRO-$START_SEC)*1000).")");
+do_mysql_query("INSERT INTO log_cputime (file,start,time) VALUES ('".__FILE__."', ".$START_SEC.",".round(($END_MICRO+$END_SEC-$START_MICRO-$START_SEC)*1000).")");
 ?>

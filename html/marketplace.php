@@ -259,7 +259,7 @@ else {
 echo "</tr>";
 
 if ($market->getOwn() == 1) {
-  $res1 = do_mysqli_query("SELECT wantsType,wantsQuant,hasType,hasQuant,market.id AS id,ratio,player,city.name AS cname".
+  $res1 = do_mysql_query("SELECT wantsType,wantsQuant,hasType,hasQuant,market.id AS id,ratio,player,city.name AS cname".
 			 " FROM market LEFT JOIN player ON market.player=player.id LEFT JOIN city ON city.id=market.city".
 			 " WHERE player=".$player->getID()." LIMIT ".$market->getStart().",".$market->getNum());
 }
@@ -276,7 +276,7 @@ else {
     $qry .= "WHERE hasType='".$market->getWantsType()."'";
   }
   $qry .= " ORDER BY ratio ".$market->getSort()." LIMIT ".$market->getStart().",".$market->getNum();
-  $res1 = do_mysqli_query($qry);
+  $res1 = do_mysql_query($qry);
 }
 
 while ($data1=mysqli_fetch_array($res1)) {

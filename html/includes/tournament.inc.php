@@ -48,10 +48,10 @@ function create_tournament($time, $maxplayers) {
   $time2 = date("H",$time);
   //$gold = (($maxplayers - ($maxplayers % 8)) / 8) * 5000;
   if(($time2 >= 14) && ($time2 <= 24)) {
-      do_mysqli_query("INSERT INTO tournament (time,maxplayers,gold) VALUES (".$time.",".$maxplayers.",2500)");
+      do_mysql_query("INSERT INTO tournament (time,maxplayers,gold) VALUES (".$time.",".$maxplayers.",2500)");
   }
   else {
-      do_mysqli_query("INSERT INTO tournament (time,maxplayers,gold) VALUES (".$time.",".$maxplayers.",1000)");
+      do_mysql_query("INSERT INTO tournament (time,maxplayers,gold) VALUES (".$time.",".$maxplayers.",1000)");
   }
 }
 
@@ -68,7 +68,7 @@ function calc_tournaments() {
 
   tDebug("<h2 style=\"color: red;\">Starte Turniere</h2>\n");
 
-  $tourn = do_mysqli_query("SELECT t.*,p.name FROM tournament t LEFT JOIN player p ON p.id = t.organizer ".
+  $tourn = do_mysql_query("SELECT t.*,p.name FROM tournament t LEFT JOIN player p ON p.id = t.organizer ".
 			  " WHERE t.calctime IS NULL ".
 			  " AND unix_timestamp() > t.time+".TOURNAMENT_DURATION.
 			  " ORDER BY t.time,tid");
@@ -88,7 +88,7 @@ function calc_tournaments() {
 
 
     // Teilnehmer berechnen
-    $parts = do_mysqli_query("SELECT tp.*,p.name FROM tournament_players tp ".
+    $parts = do_mysql_query("SELECT tp.*,p.name FROM tournament_players tp ".
 			    " LEFT JOIN player p ON p.id = tp.player ".
 			    " WHERE tid = ".$t['tid']." AND booktime IS NOT NULL ORDER BY rand()");
     $num = mysqli_num_rows($parts);
@@ -119,7 +119,7 @@ function calc_tournaments() {
     }
     $ids .= "0)";
 
-    do_mysqli_query("UPDATE rpg SET tournaments = tournaments+1 WHERE player IN $ids");
+    do_mysql_query("UPDATE rpg SET tournaments = tournaments+1 WHERE player IN $ids");
 
     tDebug("</ul><!-- Teilnehmer -->\n");
     $text .= "\n[/list]\n";
@@ -145,9 +145,9 @@ function calc_tournaments() {
       $text .= "\n[*] ".$result['first']['name'].", erhält $firstgold Gold Prämie";
       $text .= "\n[*] ".$result['second']['name'].", erhält $secondgold Gold Prämie\n[/list]";
 
-      do_mysqli_query("UPDATE player SET gold=gold+$firstgold,cc_resources=1".
+      do_mysql_query("UPDATE player SET gold=gold+$firstgold,cc_resources=1".
 		     " WHERE id = ".$result['first']['player']);
-      do_mysqli_query("UPDATE player SET gold=gold+$secondgold,cc_resources=1".
+      do_mysql_query("UPDATE player SET gold=gold+$secondgold,cc_resources=1".
 		     " WHERE id = ".$result['second']['player']);
 
       tDebug("</ol><!-- Winners -->\n");
@@ -181,7 +181,7 @@ function calc_tournaments() {
       tDebug($R);
 
       // Den Verpassern ne Nachricht schicken
-      $notparts = do_mysqli_query("SELECT player FROM tournament_players ".
+      $notparts = do_mysql_query("SELECT player FROM tournament_players ".
 				 " WHERE tid = ".$t['tid']." AND booktime IS NULL");
       while($pl = mysqli_fetch_assoc($notparts)) {
         $topic = "Turnier verpasst";
@@ -198,7 +198,7 @@ function calc_tournaments() {
       else {
         // Turnier findet nicht statt: Teilnehmermangel
         // Den Verpassern ne Nachricht schicken
-        $players = do_mysqli_query("SELECT player FROM tournament_players ".
+        $players = do_mysql_query("SELECT player FROM tournament_players ".
 				  " WHERE tid = ".$t['tid']);
         while($pl = mysqli_fetch_assoc($players)) {
           $topic = "Turnier ausgefallen";
@@ -209,18 +209,18 @@ function calc_tournaments() {
       }
     }
 
-    do_mysqli_query("UPDATE tournament SET calctime = UNIX_TIMESTAMP() WHERE tid = ".$t['tid']);
+    do_mysql_query("UPDATE tournament SET calctime = UNIX_TIMESTAMP() WHERE tid = ".$t['tid']);
     if($t['organizer']) {
-      do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints + $bonus WHERE id = ".$t['organizer']);
+      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints + $bonus WHERE id = ".$t['organizer']);
     }
 
 
     /*define("TOURNAMENT_MIN_PLAYERS", 4);
      define("TOURNAMENT_MAX_PLAYERS", 64);*/
     // Test wieviel Turniere noch ausgeschrieben sind
-    /*$tourtodo = do_mysqli_query("SELECT * FROM tournament WHERE time + ".TOURNAMENT_DURATION." > unix_timestamp( ) AND time < unix_timestamp( ) + (24*60*60)");
+    /*$tourtodo = do_mysql_query("SELECT * FROM tournament WHERE time + ".TOURNAMENT_DURATION." > unix_timestamp( ) AND time < unix_timestamp( ) + (24*60*60)");
     $numtodo24 = mysqli_num_rows($tourtodo);*/
-    $maxtour = do_mysqli_query("SELECT max(time) as max FROM tournament");
+    $maxtour = do_mysql_query("SELECT max(time) as max FROM tournament");
     $get_maxtour = mysqli_fetch_assoc($maxtour);
     $maxtour_time = $get_maxtour['max'];
 
@@ -232,7 +232,7 @@ function calc_tournaments() {
       create_tournament($maxtour_time + 7200, $max_players);
       	
       // Sonderbehandlung, noch schnell ein weiteres Turnier innerhalb der nächsten 3h einführen (falls möglich) 
-      $tour3 = do_mysqli_query("SELECT * FROM tournament WHERE time > unix_timestamp( ) AND time < unix_timestamp( ) + (3*60*60)");
+      $tour3 = do_mysql_query("SELECT * FROM tournament WHERE time > unix_timestamp( ) AND time < unix_timestamp( ) + (3*60*60)");
     		$numtodo3 = mysqli_num_rows($tour3);
     		if($numtodo3>0) {
     		  $timenum = 0;
@@ -284,8 +284,8 @@ function inform_tournament_player($pl, $topic, $body) {
     $sql = sprintf("INSERT INTO message (date,category,recipient,sender,header,body) ".
 		   " VALUES (UNIX_TIMESTAMP(), 5, %d, '%s', '%s', '%s')",
     $pl, "Der Turnierbote", $topic, $body);
-    do_mysqli_query($sql);
-    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id = ".$pl);
+    do_mysql_query($sql);
+    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id = ".$pl);
   }
   else {
     echo "Fehler: pl not numeric\n";
@@ -294,10 +294,10 @@ function inform_tournament_player($pl, $topic, $body) {
 
 
 function getRPG($pid) {
-  $rpg = do_mysqli_query_fetch_assoc("SELECT * FROM rpg WHERE player = ".$pid);
+  $rpg = do_mysql_query_fetch_assoc("SELECT * FROM rpg WHERE player = ".$pid);
   if(!$rpg) {
-    do_mysqli_query("INSERT INTO rpg (player, createtime) VALUES (".$pid.", UNIX_TIMESTAMP())");
-    $rpg = do_mysqli_query_fetch_assoc("SELECT * FROM rpg WHERE player = ".$pid);   
+    do_mysql_query("INSERT INTO rpg (player, createtime) VALUES (".$pid.", UNIX_TIMESTAMP())");
+    $rpg = do_mysql_query_fetch_assoc("SELECT * FROM rpg WHERE player = ".$pid);   
     if(!$rpg)
 	die("Konnte Ihren RPG-Charakter nicht anlegen.</body></html>");
   }
@@ -361,7 +361,7 @@ function tournament_fight(&$OR, &$text) {
         $RN[$j++] = $a;
 
         // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
-        do_mysqli_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$b['player']);
+        do_mysql_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$b['player']);
       }
       else {
         $OR[$a['nr']]['defeats']++;
@@ -372,7 +372,7 @@ function tournament_fight(&$OR, &$text) {
         $RN[$j++] = $b;
 
         // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
-        do_mysqli_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$a['player']);
+        do_mysql_query("UPDATE rpg SET fights = fights + $round WHERE player = ".$a['player']);
       }
       tDebug($ret['first']['name']." besiegt ".$ret['second']['name']);
       $text .= "[b]".$ret['first']['name']."[/b] besiegt [b]".$ret['second']['name']."[/b]";
@@ -386,7 +386,7 @@ function tournament_fight(&$OR, &$text) {
   $text .= "\n[/list]\n";
 
   // Den Datensatz des Verlieres updaten, der nun $round Kämpfe ausgetragen hat
-  do_mysqli_query("UPDATE rpg SET fights = fights + $round,victories=victories+1 WHERE player = ".$ret['first']['player']);
+  do_mysql_query("UPDATE rpg SET fights = fights + $round,victories=victories+1 WHERE player = ".$ret['first']['player']);
 
   return $ret;
 }

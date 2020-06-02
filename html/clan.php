@@ -53,7 +53,7 @@ if (isset($gotomarket) && isset($clanmember)) {
 }
 if (isset($writemsgbew) && isset($clanapplicant) && strlen($clanapplicant) > 1) {
   
-  $text = do_mysqli_query_fetch_assoc("SELECT clanapplicationtext FROM player WHERE name='".resolvePlayerName($clanapplicant)."'");
+  $text = do_mysql_query_fetch_assoc("SELECT clanapplicationtext FROM player WHERE name='".resolvePlayerName($clanapplicant)."'");
   
   header("Location:messages2.php?msgrecipient=".resolvePlayerName($clanapplicant).
 	 "&msgbody=".urlencode("\n\n[quote]".$text['clanapplicationtext'])."[/quote]");
@@ -172,7 +172,7 @@ if (isset($desc) && isset($setdesc)) {
 }
 
 if($clan->getID()) {
-  $res = do_mysqli_query("SELECT * FROM clan WHERE id=".$clan->getID());    
+  $res = do_mysql_query("SELECT * FROM clan WHERE id=".$clan->getID());    
   $myclan = mysqli_fetch_assoc($res);
 }
 
@@ -271,7 +271,7 @@ function bbCode(start,end,ext) {
 $_SESSION['clan']->update();
 
 if ($askpromote && ($status == 63) && intval($clanmember) ) {
-  $res = do_mysqli_query("SELECT name FROM player WHERE id=".mysqli_real_escape_string($GLOBALS['con'], $clanmember) );
+  $res = do_mysql_query("SELECT name FROM player WHERE id=".mysqli_real_escape_string($GLOBALS['con'], $clanmember) );
   if ($data = mysqli_fetch_assoc($res)) {
     echo "Sie wollen ".$data['name'].' zum Ordensleiter erheben, ist dies wirlich euer Wille? Bestätigen sie dies bitte mit einem Klick <a href="'.$_SERVER['PHP_SELF'].'?promote=1&status=63&clanmember='.$clanmember.'"><u>zu bestätigen</u></a> oder <a href="'.$_SERVER['PHP_SELF'].'"><u>abzulehnen</u></a>';
     exit;
@@ -297,7 +297,7 @@ if ($error_string != null)
 	
 	
 	echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
-	$res1 = do_mysqli_query("SELECT id,name,points,clanstatus FROM player WHERE clan=".$clan->getID()." ORDER BY clanstatus DESC,name ASC");
+	$res1 = do_mysql_query("SELECT id,name,points,clanstatus FROM player WHERE clan=".$clan->getID()." ORDER BY clanstatus DESC,name ASC");
 
 	// ORDENSGESCHEHEN
 	
@@ -339,13 +339,13 @@ if ($error_string != null)
 	echo "<tr id=\"ok\" style=\"display:none;\"><td>\n";
     // ----------- Ordenskasse ------------- // 
     echo "<table width=\"300\">";
-    $res2 = do_mysqli_query("SELECT gold,tax FROM clan WHERE id=".$clan->getID());
+    $res2 = do_mysql_query("SELECT gold,tax FROM clan WHERE id=".$clan->getID());
     $data2 = mysqli_fetch_assoc($res2) or die("Das Gold des Ordens wurde geraubt!");
     echo '<tr class="tblbody"><td width="75">Verm&ouml;gen</td><td width="225">'.number_format($data2['gold'],0,",",".").'</td></tr>';
     echo '<tr class="tblbody"><td width="75">Einzahlen</td><td width="225"><input type="text" name="pay" size="5"></td></tr>';
     echo '<tr class="tblbody"><td width="75">Steuern</td><td width="225">'.intval($data2['tax']*100).'%</td></tr>';
     if ($clan->getStatus() & 1) {
-		$member = mysqli_fetch_assoc(do_mysqli_query("SELECT count(*) as c FROM player WHERE clan = ".$clan->getID()));
+		$member = mysqli_fetch_assoc(do_mysql_query("SELECT count(*) as c FROM player WHERE clan = ".$clan->getID()));
 		$minmember = defined("CLAN_PAYOUT_MIN_MEMBER") && CLAN_PAYOUT_MIN_MEMBER > 0 ? CLAN_PAYOUT_MIN_MEMBER : 5;
 	 	if ($member['c'] >= $minmember) {
 	    	echo '<tr class="tblbody"><td width="75">Auszahlen</td><td width="225"><input type="text" name="payOut" size="5"></td></tr>';
@@ -356,7 +356,7 @@ if ($error_string != null)
 		echo '<tr class="tblbody"><td width="75">Steuerfuss</td><td width="225"><input type="text" name="setTax" size="3" value="'.intval($data2['tax']*100).'"></td></tr>';
 	}
 	echo "<tr class=\"tblbody\"><td width=\"120\" valign=\"top\">\n";
-	$res9=do_mysqli_query("SELECT player.name as name, player.id as id, player.clan as clan, clanlog.tax as tax, clanlog.amount as amount FROM clanlog LEFT JOIN player ON playerid=player.id WHERE player.id='".$_SESSION['player']->id."' AND clanlog.clan='".$clan->getID()."'");
+	$res9=do_mysql_query("SELECT player.name as name, player.id as id, player.clan as clan, clanlog.tax as tax, clanlog.amount as amount FROM clanlog LEFT JOIN player ON playerid=player.id WHERE player.id='".$_SESSION['player']->id."' AND clanlog.clan='".$clan->getID()."'");
 	$data9=mysqli_fetch_assoc($res9);
 	$perc_in=0;
 	echo "Eure Einzahlungen<br /><i>&nbsp;&nbsp;&nbsp;(inkl. Steuern)</i></td><td>".number_format($data9['amount'],0,",",".")." - ";
@@ -415,7 +415,7 @@ if ($error_string != null)
 	 	echo '<tr class="tblhead"><td colspan="2">Bewerber</td></tr>';
 	 	echo '<tr class="tblbody"><td>';
 	 	echo '<select size="5" style="width:200px;" name="clanapplicant">';
-	 	$resapp = do_mysqli_query("SELECT id,name,points FROM player WHERE clanapplication=".$clan->getID()." ORDER BY points DESC");
+	 	$resapp = do_mysql_query("SELECT id,name,points FROM player WHERE clanapplication=".$clan->getID()." ORDER BY points DESC");
 	 	while ($dataapp = mysqli_fetch_assoc($resapp))
 	   		echo '<option value="'.$dataapp['id'].'">'.$dataapp['name']."(".$dataapp['points'].")".'</option>';
 	 	echo "</select>";
@@ -447,8 +447,8 @@ if ($error_string != null)
 		echo '<td colspan="2">';
 		echo '<select  style="width:100%;" size="5" name="enemy">';
 
-	 $res1 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$clan->getID());
-	 $res2 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$clan->getID());
+	 $res1 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$clan->getID());
+	 $res2 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$clan->getID());
 	 while ($data1 = mysqli_fetch_assoc($res1))
 	   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>";
 	 while ($data2 = mysqli_fetch_assoc($res2))
@@ -456,8 +456,8 @@ if ($error_string != null)
 	 echo "</select>";
 	 echo '</td><td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="nap">';
-	 $res1 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$clan->getID());
-	 $res2 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$clan->getID());
+	 $res1 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$clan->getID());
+	 $res2 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$clan->getID());
 	 while ($data1 = mysqli_fetch_assoc($res1))
 	   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>";
 	 while ($data2 = mysqli_fetch_assoc($res2))
@@ -465,8 +465,8 @@ if ($error_string != null)
 	 echo "</select>";
 	 echo '</td><td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="friend">';
-	 $res1 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$clan->getID());
-	 $res2 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$clan->getID());
+	 $res1 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$clan->getID());
+	 $res2 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$clan->getID());
 	 while ($data1 = mysqli_fetch_assoc($res1))
 	   echo '<option value="'.$data1['name'].'">'.$data1['name']."</option>";
 	 while ($data2 = mysqli_fetch_assoc($res2))
@@ -482,18 +482,18 @@ if ($error_string != null)
 	 echo '<tr class="tblhead" id="min2" style="display:none"><td colspan="2" width="33%">Friedensangebote</td><td colspan="2" width="33%">NAP-Angebote</td><td colspan="2" width="33%">B&uuml;ndnisangebote</td>';
 	 echo '<tr class="tblbody" id="mis2" style="display:none"><td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="neut">';
-	 $res3 = do_mysqli_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id1=clan.id WHERE req_clanrel.type=1 AND req_clanrel.id2=".$clan->getID());
+	 $res3 = do_mysql_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id1=clan.id WHERE req_clanrel.type=1 AND req_clanrel.id2=".$clan->getID());
 	 while ($data3 = mysqli_fetch_assoc($res3))
 	   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 	 echo '<td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="nap">';
-	 $res3 = do_mysqli_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id1=clan.id WHERE req_clanrel.type=2 AND req_clanrel.id2=".$clan->getID());
+	 $res3 = do_mysql_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id1=clan.id WHERE req_clanrel.type=2 AND req_clanrel.id2=".$clan->getID());
 	 while ($data3 = mysqli_fetch_assoc($res3))
 	   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 	 echo '</select></td>';
 	 echo '</select></td><td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="bnd">';
-	 $res3 = do_mysqli_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id1=clan.id WHERE req_clanrel.type=3 AND req_clanrel.id2=".$clan->getID());
+	 $res3 = do_mysql_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id1=clan.id WHERE req_clanrel.type=3 AND req_clanrel.id2=".$clan->getID());
 	 while ($data3 = mysqli_fetch_assoc($res3))
 	   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 	 echo '</select></td></tr>';
@@ -508,18 +508,18 @@ if ($error_string != null)
 	 echo '<tr class="tblhead" id="min3" style="display:none"><td colspan="2" width="33%">Friedensangebote</td><td colspan="2" width="33%">NAP-Angebote</td><td colspan="2" width="33%">B&uuml;ndnisangebote</td>';
 	 echo '<tr class="tblbody" id="mis3" style="display:none"><td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="reqneut">';
-	 $res3 = do_mysqli_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id2=clan.id WHERE req_clanrel.type=1 AND req_clanrel.id1=".$clan->getID());
+	 $res3 = do_mysql_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id2=clan.id WHERE req_clanrel.type=1 AND req_clanrel.id1=".$clan->getID());
 	 while ($data3 = mysqli_fetch_assoc($res3))
 	   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 	 echo '<td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="reqnap">';
-	 $res3 = do_mysqli_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id2=clan.id WHERE req_clanrel.type=2 AND req_clanrel.id1=".$clan->getID());
+	 $res3 = do_mysql_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id2=clan.id WHERE req_clanrel.type=2 AND req_clanrel.id1=".$clan->getID());
 	 while ($data3 = mysqli_fetch_assoc($res3))
 	   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 	 echo '</select></td>';
 	 echo '</select></td><td colspan="2">';
 	 echo '<select style="width:100%;" size="5" name="reqbnd">';
-	 $res3 = do_mysqli_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id2=clan.id WHERE req_clanrel.type=3 AND req_clanrel.id1=".$clan->getID());
+	 $res3 = do_mysql_query("SELECT clan.name AS name, clan.id AS id FROM req_clanrel LEFT JOIN clan ON req_clanrel.id2=clan.id WHERE req_clanrel.type=3 AND req_clanrel.id1=".$clan->getID());
 	 while ($data3 = mysqli_fetch_assoc($res3))
 	   echo '<option value="'.$data3['id'].'">'.$data3['name']."</option>";
 	 echo '</select></td></tr>';
@@ -533,8 +533,8 @@ if ($error_string != null)
 	// echo "<td><input type='text' name='clanname' size='12'></td>";
 	 
 	 echo "<td width=\"150\"><select name=\"clanname\" style=\"width:150px;\">\n";
-         //	 $resX = do_mysqli_query("SELECT DISTINCT clan.id,clan.name,player.religion FROM clan LEFT JOIN player ON clan.id=player.clan WHERE player.religion=".$player->getReligion()." ORDER BY name DESC") or die(mysqli_error($GLOBALS['con']));
-	 $resX = do_mysqli_query("SELECT DISTINCT clan.id,clan.name FROM clan ORDER BY name");
+         //	 $resX = do_mysql_query("SELECT DISTINCT clan.id,clan.name,player.religion FROM clan LEFT JOIN player ON clan.id=player.clan WHERE player.religion=".$player->getReligion()." ORDER BY name DESC") or die(mysqli_error($GLOBALS['con']));
+	 $resX = do_mysql_query("SELECT DISTINCT clan.id,clan.name FROM clan ORDER BY name");
 	   while ($dataX = mysqli_fetch_assoc($resX))
 	     echo '<option value="'.$dataX['name'].'">'.$dataX['name'].'</option>';
 	 echo "</select>\n";
@@ -560,8 +560,8 @@ if ($error_string != null)
 	 echo '<tr class="tblbody">';
 	 echo '<td>';
 
-	 $res1 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$clan->getID());
-	 $res2 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$clan->getID());
+	 $res1 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$clan->getID());
+	 $res2 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$clan->getID());
 	 while ($data1 = mysqli_fetch_assoc($res1))
 	   echo '<a href="info.php?show=clan&name='.$data1['name'].'">'.$data1['name']."</a><br/>";
 	 while ($data2 = mysqli_fetch_assoc($res2))
@@ -569,8 +569,8 @@ if ($error_string != null)
 
 	 echo '</td><td>';
 
-	 $res1 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
-	 $res2 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
+	 $res1 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
+	 $res2 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
 	 while ($data1 = mysqli_fetch_assoc($res1))
 	   echo '<a href="info.php?show=clan&name='.$data1['name'].'">'.$data1['name']."</a><br/>";
 	 while ($data2 = mysqli_fetch_assoc($res2))
@@ -578,8 +578,8 @@ if ($error_string != null)
 
 	 echo '</td><td>';
 
-	 $res1 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
-	 $res2 = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
+	 $res1 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
+	 $res2 = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$clan->getID()) or die(mysqli_error($GLOBALS['con']));
 	 while ($data1 = mysqli_fetch_assoc($res1))
 	   echo '<a href="info.php?show=clan&name='.$data1['name'].'">'.$data1['name']."</a><br/>";
 	 while ($data2 = mysqli_fetch_assoc($res2))
@@ -605,10 +605,10 @@ if ($error_string != null)
      } 
      else {
        echo '<form action="'.$_SERVER['PHP_SELF'].'" method="POST">';
-       $res1 = do_mysqli_query("SELECT clanapplication FROM player WHERE id=".$player->getID());
+       $res1 = do_mysql_query("SELECT clanapplication FROM player WHERE id=".$player->getID());
        if ($data1 = mysqli_fetch_assoc($res1))
 	 if ($data1['clanapplication'] > 0) {
-	   $res2 = do_mysqli_query("SELECT name FROM clan WHERE id=".$data1['clanapplication']);
+	   $res2 = do_mysql_query("SELECT name FROM clan WHERE id=".$data1['clanapplication']);
 	   if ($data2 = mysqli_fetch_assoc($res2))
 	     echo "Sie bewerben sich um die Mitgliedschaft im Orden ".$data2['name']. '(<a href="'.$_SERVER['PHP_SELF'].'?dropApp=1&clanapplicant='.$player->getID().'">Abbrechen</a>)';
 	   else
@@ -626,7 +626,7 @@ if ($error_string != null)
 	   echo "</tr>\n";
 	   echo '<tr class="tblbody" valign="top"><td>';
 	   echo '<select size="6" name="clanID">';
-	   $res = do_mysqli_query("SELECT DISTINCT clan.id,clan.name,player.religion FROM clan LEFT JOIN player ON clan.id=player.clan WHERE player.religion=".$player->getReligion()." ORDER BY name DESC") or die(mysqli_error($GLOBALS['con']));
+	   $res = do_mysql_query("SELECT DISTINCT clan.id,clan.name,player.religion FROM clan LEFT JOIN player ON clan.id=player.clan WHERE player.religion=".$player->getReligion()." ORDER BY name DESC") or die(mysqli_error($GLOBALS['con']));
 	   while ($data = mysqli_fetch_assoc($res))
 	     echo '<option value="'.$data['id'].'">'.$data['name'].'</option>';
 	   echo "</select></td>\n";

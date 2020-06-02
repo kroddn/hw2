@@ -26,14 +26,14 @@
 function delDBrel($table, $id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
-  do_mysqli_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
+  do_mysql_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
   return mysqli_affected_rows($GLOBALS['con']);
 }
 
 function delDBreq_rel($table, $id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
-  do_mysqli_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id2=".$id1." AND id1=".$id2.")");
+  do_mysql_query("DELETE FROM ".$table." WHERE (id1=".$id1." AND id2=".$id2.") OR (id2=".$id1." AND id1=".$id2.")");
   return mysqli_affected_rows($GLOBALS['con']);
 }
 
@@ -43,7 +43,7 @@ function setDBrel($table, $id1, $id2, $type) {
   $type = intval($type);
   
   delDBrel($table, $id1, $id2);
-  do_mysqli_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
+  do_mysql_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
   return mysqli_affected_rows($GLOBALS['con']);
 }
 
@@ -53,7 +53,7 @@ function setDBreq_rel($table, $id1, $id2, $type) {
   $type = intval($type);
   
   delDBreq_rel($table, $id1, $id2);
-  do_mysqli_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
+  do_mysql_query("INSERT INTO ".$table." (id1,id2,type) VALUES (".$id1.",".$id2.",".$type.")");
   return mysqli_affected_rows($GLOBALS['con']);
 }
 
@@ -65,7 +65,7 @@ function getRel($id1, $id2) {
   $id1 = intval($id1);
   $id2 = intval($id2);
   
-  $res = do_mysqli_query("SELECT type FROM relation WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
+  $res = do_mysql_query("SELECT type FROM relation WHERE (id1=".$id1." AND id2=".$id2.") OR (id1=".$id2." AND id2=".$id1.")");
   if ($data = mysqli_fetch_assoc($res))
     return $data['type'];
   else 
@@ -82,9 +82,9 @@ function getClanRel($id1,$id2) {
   $id2 = intval($id2);
   
   if ($id1 > 0 && $id2 > 0) {
-    $clans_res = do_mysqli_query("SELECT clan FROM player WHERE id=".$id1." OR id=".$id2);
+    $clans_res = do_mysql_query("SELECT clan FROM player WHERE id=".$id1." OR id=".$id2);
     if (($clan1 = mysqli_fetch_assoc($clans_res)) && ($clan2 = mysqli_fetch_assoc($clans_res)) && $clan1['clan'] && $clan2['clan']) {
-      $res = do_mysqli_query("SELECT type FROM clanrel WHERE (id1=".$clan1['clan']." AND id2=".$clan2['clan'].") OR (id1=".$clan2['clan']." AND id2=".$clan1['clan'].")");
+      $res = do_mysql_query("SELECT type FROM clanrel WHERE (id1=".$clan1['clan']." AND id2=".$clan2['clan'].") OR (id1=".$clan2['clan']." AND id2=".$clan1['clan'].")");
       if ($data = mysqli_fetch_assoc($res))
 	return $data['type'];
       else 
@@ -169,7 +169,7 @@ function getPlayerRelation($id1, $id2) {
   if($rel == 1)
   {
     // Orden der Spieler ermitteln
-    $ressameclan = do_mysqli_query( 'SELECT player1.clan=player2.clan as type '.
+    $ressameclan = do_mysql_query( 'SELECT player1.clan=player2.clan as type '.
            'FROM player as player1, player as player2 '.
            'WHERE player1.id ='.$id1.' AND player2.id='.$id2 );
     $sameclan = mysqli_fetch_assoc($ressameclan);    

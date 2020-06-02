@@ -234,7 +234,7 @@ for($i=0;$i<sizeof($units);++$i) {
   echo "<a class='pos' onclick=\"javascript:document.getElementById('unit".$units[$i]['id']."').value = '".$possible."'; return true;\" >";
   echo $possible." (".$maxpossible.")</a></td>";
   
-  $res1 = do_mysqli_query("SELECT count FROM cityunit WHERE unit=".$units[$i]['id']." AND city=".$_SESSION['cities']->getActiveCity()." AND owner=".$_SESSION['player']->getID());
+  $res1 = do_mysql_query("SELECT count FROM cityunit WHERE unit=".$units[$i]['id']." AND city=".$_SESSION['cities']->getActiveCity()." AND owner=".$_SESSION['player']->getID());
   $data1 = mysqli_fetch_assoc($res1);
   echo "<td align='right' width='40'><b>";
   if ($data1['count']) {
@@ -304,7 +304,7 @@ if(!is_premium_noads()) {
 <?php
 if($old_code) {
   // Code deaktiviert
-  $res1 = do_mysqli_query("SELECT unit.id AS uid,unit.name AS uname,city.name AS cname, unit.cost as cost,count,type,unit.level AS level,unit.religion AS religion ".
+  $res1 = do_mysql_query("SELECT unit.id AS uid,unit.name AS uname,city.name AS cname, unit.cost as cost,count,type,unit.level AS level,unit.religion AS religion ".
                        " FROM cityunit,unit,city ".
                        " WHERE unit.id=cityunit.unit AND city.id=cityunit.city AND cityunit.city=".$_SESSION['cities']->getActiveCity()." AND cityunit.owner=".$_SESSION['player']->getID().
                        " ORDER BY cityunit.unit");

@@ -441,13 +441,13 @@ function logBrowser() {
   $browser = browser_detection( 'browser' );
   $number  = browser_detection( 'number' );
 
-  $res=do_mysqli_query("SELECT id FROM log_browser WHERE browser='".mysqli_escape_string($GLOBALS['con'], $browser)."' AND version='".mysqli_escape_string($GLOBALS['con'], $number)."' AND timestamp='".$today."'");
+  $res=do_mysql_query("SELECT id FROM log_browser WHERE browser='".mysqli_escape_string($GLOBALS['con'], $browser)."' AND version='".mysqli_escape_string($GLOBALS['con'], $number)."' AND timestamp='".$today."'");
 
   if(mysqli_num_rows($res) > 0) {
-    do_mysqli_query("UPDATE log_browser set logins=logins+1 WHERE browser='".mysqli_escape_string($GLOBALS['con'], $browser)."' AND version='".mysqli_escape_string($GLOBALS['con'], $number)."' AND timestamp='".$today."'");
+    do_mysql_query("UPDATE log_browser set logins=logins+1 WHERE browser='".mysqli_escape_string($GLOBALS['con'], $browser)."' AND version='".mysqli_escape_string($GLOBALS['con'], $number)."' AND timestamp='".$today."'");
   } 
   else {
-    do_mysqli_query("INSERT INTO log_browser (browser, version, timestamp, logins) VALUES ('".mysqli_escape_string($GLOBALS['con'], $browser).
+    do_mysql_query("INSERT INTO log_browser (browser, version, timestamp, logins) VALUES ('".mysqli_escape_string($GLOBALS['con'], $browser).
                    "', '".mysqli_escape_string($GLOBALS['con'], $number)."','".$today."','1')");
     // or die ("error");
   }

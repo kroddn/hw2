@@ -165,12 +165,12 @@ function top_town () {
   echo "<td>Besitzer</td>";
   //echo "<td>Orden</td>";
 
-  $res1 = do_mysqli_query("SELECT id,owner,name,population,prosperity,capital,loyality,religion FROM city ORDER BY population DESC LIMIT 100");
+  $res1 = do_mysql_query("SELECT id,owner,name,population,prosperity,capital,loyality,religion FROM city ORDER BY population DESC LIMIT 100");
 
   $i=0;
   while ($data1 = mysqli_fetch_assoc($res1)) {
     if($data1['owner']) {
-      $res2 = do_mysqli_query("SELECT player.name, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE player.id=".$data1['owner']);
+      $res2 = do_mysql_query("SELECT player.name, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE player.id=".$data1['owner']);
       $data2 = mysqli_fetch_assoc($res2);
     }
     else {
@@ -202,7 +202,7 @@ function top_player() {
   }
   echo "</tr>";
 
-  $res3 = do_mysqli_query("SELECT player.id as id, player.avatar as avatar, player.status as locked, player.name AS name, (player.points) AS points, player.religion AS religion, clan.name AS clan, clan.id AS clanid FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
+  $res3 = do_mysql_query("SELECT player.id as id, player.avatar as avatar, player.status as locked, player.name AS name, (player.points) AS points, player.religion AS religion, clan.name AS clan, clan.id AS clanid FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
   
   $i=0;
   while ($data3 = mysqli_fetch_assoc($res3)) {
@@ -234,7 +234,7 @@ function top_player_avg() {
   //echo "<td>Religion</td>";
   echo "<td>Orden</td>";  
 
-  $res3 = do_mysqli_query("SELECT player.id, player.avatar, player.status as locked, player.name, round(player.pointsavg/player.pointsupd) AS points, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
+  $res3 = do_mysql_query("SELECT player.id, player.avatar, player.status as locked, player.name, round(player.pointsavg/player.pointsupd) AS points, player.religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id WHERE activationkey IS NULL AND player.name IS NOT NULL ORDER BY points DESC LIMIT 100");
   
   $i=0;
   while ($data3 = mysqli_fetch_assoc($res3)) {
@@ -263,14 +263,14 @@ function top_population() {
 //  echo "<td>Religion</td>";
   echo "<td>Orden</td>";
 
-  $res = do_mysqli_query("SELECT sum(population) as population, player.id, player.name, ".
+  $res = do_mysql_query("SELECT sum(population) as population, player.id, player.name, ".
 			" player.religion, clan.name as clan ".
 			" FROM city LEFT JOIN player ON player.id = city.owner ".
 			" LEFT JOIN clan ON player.clan = clan.id ".
             " WHERE city.owner IS NOT NULL ".
 			" GROUP BY owner ORDER BY population DESC LIMIT 100"); 
 
-  // $res1 = do_mysqli_query("SELECT player.id AS id, player.name AS name, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id");
+  // $res1 = do_mysql_query("SELECT player.id AS id, player.name AS name, player.religion AS religion, clan.name AS clan FROM player LEFT JOIN clan ON player.clan = clan.id");
   $pos = 1;
 
   while ($data1 = mysqli_fetch_assoc($res)) {
@@ -332,7 +332,7 @@ function top_clan(){
     }
   }
 
-  $res = do_mysqli_query("SELECT clan.name, clan.id AS clanid, clan.points, player.religion,count(*) AS num, floor( clan.points / count( * ) ) AS
+  $res = do_mysql_query("SELECT clan.name, clan.id AS clanid, clan.points, player.religion,count(*) AS num, floor( clan.points / count( * ) ) AS
 medium FROM clan LEFT JOIN player ON clan.id=player.clan GROUP BY player.clan ORDER BY ".$orderby." LIMIT 100");
   while ($data = mysqli_fetch_assoc($res)) {
     $i++;
@@ -352,7 +352,7 @@ medium FROM clan LEFT JOIN player ON clan.id=player.clan GROUP BY player.clan OR
     //edit franzl 15.08.04
     if($_GET['clanmembers'] == $data['clanid']) {
       echo "<tr><td colspan=\"7\">\n";
-      $res2 = do_mysqli_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$data['clanid']." ORDER BY points DESC");
+      $res2 = do_mysql_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$data['clanid']." ORDER BY points DESC");
       echo "<table id=\"cl".$data['clanid']."\" cellpadding=\"0\" cellspacing=\"1\" width=\"100%\" border=\"0\">\n";
       echo "<tr><td width=\"40%\"></td>\n";
       echo "<td class=\"tblhead\" width=\"20%\"><strong>Rang</strong></td>\n";
@@ -409,7 +409,7 @@ function top_honor() {
 
 <?
   $disable_bonus_flag = 32;
-  $res3 = do_mysqli_query("SELECT player.name AS name, (player.bonuspoints + coalesce(sum(player_monument.honor),0) ) AS points, player.religion AS religion, clan.name AS clan ".
+  $res3 = do_mysql_query("SELECT player.name AS name, (player.bonuspoints + coalesce(sum(player_monument.honor),0) ) AS points, player.religion AS religion, clan.name AS clan ".
     "FROM player ".
     " LEFT JOIN clan ON player.clan = clan.id ".
     " LEFT JOIN player_monument ON player.id=player_monument.player ".
@@ -455,23 +455,23 @@ function top_div () {
     " FROM player ".
     " WHERE religion IS NOT NULL AND (STATUS IS NULL OR STATUS = 3) GROUP BY religion ORDER BY religion";
 
-  $res = do_mysqli_query($sql);
+  $res = do_mysql_query($sql);
   $christ = mysqli_fetch_array($res);
   $islam  = mysqli_fetch_array($res);
 
   $sql = "SELECT sum(population) AS pop, count(*) AS cnt ".
     " FROM city ".
     " GROUP BY religion ORDER BY religion";
-  $res = do_mysqli_query($sql);
+  $res = do_mysql_query($sql);
   $christcities = mysqli_fetch_array($res);
   $islamcities  = mysqli_fetch_array($res);
   $sumcities = $islamcities['cnt'] + $christcities['cnt'];
  
   getMapSize($mx, $my);
-  $mapsize = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM map WHERE type != 1");
+  $mapsize = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM map WHERE type != 1");
   $density = round( 100 * $sumcities / ($mapsize['c']/25), 2 );
 		    
-  $settle = do_mysqli_query_fetch_assoc("SELECT count(*) AS cnt,sum(missiondata) as settlers FROM army ".
+  $settle = do_mysql_query_fetch_assoc("SELECT count(*) AS cnt,sum(missiondata) as settlers FROM army ".
                                        " WHERE mission = 'settle' ");
   echo "<p>";
   echo "<h2>Herrscher</h2>\n";
@@ -520,7 +520,7 @@ function top_div () {
     
   echo "<h2>Krieg</h2>\n";
 
-  $war = do_mysqli_query_fetch_assoc("SELECT id1, name, count(*) as cnt ".
+  $war = do_mysql_query_fetch_assoc("SELECT id1, name, count(*) as cnt ".
 				    " FROM relation LEFT JOIN player ON id1 = player.id ".
                                     " WHERE type = 0 GROUP BY id1,name ORDER BY cnt DESC LIMIT 1");
   if ($war['name'] != null)
@@ -529,7 +529,7 @@ function top_div () {
     echo "Hm. So wie es scheint gibt es keine Kriege...\n";
     
   
-  $war = do_mysqli_query_fetch_assoc("SELECT id2, name, count(*) as cnt ".
+  $war = do_mysql_query_fetch_assoc("SELECT id2, name, count(*) as cnt ".
 				    " FROM relation LEFT JOIN player ON id2 = player.id ".
                                     " WHERE type = 0 GROUP BY id2,name ORDER BY cnt DESC LIMIT 1");
   if ($war['name'] != null)
@@ -537,9 +537,9 @@ function top_div () {
   else
     echo "<br>Und wie schon gesagt. Komischerweise gibts keine Kriege...\n";
 
-  $siege  = do_mysqli_query_fetch_assoc("SELECT count(*) as cnt FROM army ".
+  $siege  = do_mysql_query_fetch_assoc("SELECT count(*) as cnt FROM army ".
                                        "WHERE mission = 'siege' AND unix_timestamp( ) > endtime");
-  $attack = do_mysqli_query_fetch_assoc("SELECT count(*) as cnt FROM army ".
+  $attack = do_mysql_query_fetch_assoc("SELECT count(*) as cnt FROM army ".
                                        " WHERE mission != 'settle' AND mission != 'move' AND mission != 'return' ".
                                        " AND unix_timestamp( ) < endtime");
 

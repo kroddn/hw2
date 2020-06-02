@@ -30,7 +30,7 @@ require_once("start_header.php");
 
 <tr valign="top" style="padding: 0px; margin: 0px;">
 	<td width="24%" valign="top" style="padding: 0px; margin: 0px;"><?php
-	$res1=do_mysqli_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
+	$res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
 	echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
 	echo "<tr class=\"tblhead\"><td height=\"20\" valign=\"middle\" colspan=\"3\"><b>Spieler online</b></td></tr>\n";
 	echo "<tr class=\"tblbody\"><td height=\"30\" valign=\"middle\" colspan=\"3\">";

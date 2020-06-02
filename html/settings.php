@@ -267,7 +267,7 @@ if(isset($_POST['zitattext']) && isset($_POST['zitat'])) {
     $errormsg = "Zitattext zu kurz.";
   }
   else {
-    do_mysqli_query("INSERT INTO zitate (player,text) VALUES ('".$_SESSION['player']->id."','".mysqli_escape_string($GLOBALS['con'], strip_tags($_POST['zitattext']))."')");
+    do_mysql_query("INSERT INTO zitate (player,text) VALUES ('".$_SESSION['player']->id."','".mysqli_escape_string($GLOBALS['con'], strip_tags($_POST['zitattext']))."')");
   }
 }
 
@@ -280,7 +280,7 @@ if(isset($_GET['delete'])) {
       $del=unlink($filename);
     }
     if($del) {
-      do_mysqli_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
+      do_mysql_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
       $infomsg = "Avatar gelöscht.";
     }
   }
@@ -338,7 +338,7 @@ function do_upload($upload_dir, $upload_url) {
       ImageDestroy($im);
       $path=$upload_dir.$_SESSION['player']->id.".jpg";
       if (ImageJPEG($small,$path,100)) {
-        do_mysqli_query("UPDATE player SET avatar='1' WHERE id='".$_SESSION['player']->id."'");
+        do_mysql_query("UPDATE player SET avatar='1' WHERE id='".$_SESSION['player']->id."'");
       } 
       else {
         return "Fehler beim Umwandeln des Bildes.";
@@ -349,15 +349,15 @@ function do_upload($upload_dir, $upload_url) {
     }
   }
   // Alle Namehunter Informieren
-  $nhs = do_mysqli_query("SELECT id FROM player WHERE hwstatus&8");
+  $nhs = do_mysql_query("SELECT id FROM player WHERE hwstatus&8");
   while($nh = mysqli_fetch_assoc($nhs)) {
     $sql = sprintf("INSERT INTO message (recipient,date,header,body,category) ".
                    "VALUES (%d,UNIX_TIMESTAMP(),'%s','%s',9)",
                    $nh['id'],
                    "Neuer Avatar für ".($_SESSION['player']->getName()),
                    "Es liegt ein Avatar für ".($_SESSION['player']->getName())." zur Freigabe bereit.");
-    do_mysqli_query($sql);
-    do_mysqli_query("UPDATE player SET cc_messages=1 WHERE id = ".$nh['id']);
+    do_mysql_query($sql);
+    do_mysql_query("UPDATE player SET cc_messages=1 WHERE id = ".$nh['id']);
   }
 
   return null;
@@ -802,7 +802,7 @@ klicken und dann &quot;Alle Extrahieren&quot; auswählen.
     settings_check_button_br("disable_toplist_bonuspoints",   "Auftauchen in der Toplist Bonuspunkte unterdrücken.");
 
     if ($_SESSION['player']->isAdmin()) {
-      $setts = do_mysqli_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$_SESSION['player']->getID());
+      $setts = do_mysql_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$_SESSION['player']->getID());
       echo "<pre>";
       printf("%x\n", $setts['settings']);
       var_dump($_SESSION['settings']);
@@ -893,7 +893,7 @@ insertBBForm(2);
     $avatar_top_points = "1000000";    
   }
 
-  $res=do_mysqli_query("SELECT toplist FROM player WHERE toplist <= '100' AND toplist > '0' AND points >='".$avatar_top_points."' AND id='".$_SESSION['player']->id."'");
+  $res=do_mysql_query("SELECT toplist FROM player WHERE toplist <= '100' AND toplist > '0' AND points >='".$avatar_top_points."' AND id='".$_SESSION['player']->id."'");
   
   if(mysqli_num_rows($res)>0 || is_premium_avatar() ) {
     if(!is_file( AVATAR_DIR.$_SESSION['player']->id.".jpg")) {
@@ -906,7 +906,7 @@ insertBBForm(2);
     else {
       echo "<div style=\"float:left; margin-right:20px;\"><img src=\"avatar.php?id=".$_SESSION['player']->id."\"></div>";
       echo "Dein Avatar wurde hochgeladen";
-      $res=do_mysqli_query("SELECT avatar FROM player WHERE id = '".$_SESSION['player']->id."'");
+      $res=do_mysql_query("SELECT avatar FROM player WHERE id = '".$_SESSION['player']->id."'");
       $img=mysqli_fetch_assoc($res);
       if($img['avatar']==1) {
         echo ".<p><b class=\"error\">Dein Avatar muss erst von einem Namehunter freigeschalten werden!</b><p>";
@@ -917,7 +917,7 @@ insertBBForm(2);
         echo "<a href=\"".$_SERVER['PHP_SELF']."?delete=avatar\">Avatar l&ouml;schen</a><p>\n";
       } 
       else {
-        do_mysqli_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
+        do_mysql_query("UPDATE player SET avatar=NULL WHERE id='".$_SESSION['player']->id."'");
       }
     }
   }

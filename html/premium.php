@@ -52,7 +52,7 @@ h2 {  font-size: 14px; color: 202020; }
 if(isset($_SESSION['player'])) {
   $pid = $_SESSION['player']->getID();
   $sql = "SELECT count(*) AS cnt FROM premiumacc WHERE player = ".$pid;
-  $cnt = do_mysqli_query_fetch_assoc($sql);
+  $cnt = do_mysql_query_fetch_assoc($sql);
   
   if($cnt['cnt'] > 0)
   {
@@ -75,7 +75,7 @@ if(isset($_SESSION['player'])) {
       $sql  = sprintf("INSERT INTO premiumacc (player, type, start, expire, paytext) ".
                       "VALUES (%d, %d, UNIX_TIMESTAMP(), UNIX_TIMESTAMP()+%d, 'Premium-Pro KOSTENLOS testen.')",
                       $pid, $type, $days * 3600 * 24);
-      do_mysqli_query($sql);
+      do_mysql_query($sql);
       printf("<h1>Premium-Pro Erfolgreich aktiviert</h1>\nBitte <b>loggen Sie sich neu ein</b>, um den Account zu aktivieren!");
     }
     else 

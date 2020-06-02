@@ -64,7 +64,7 @@ define("XMAS_END", 1135638172);
 function get_premium_row($pid) 
 {
   // Hole den den neuesten gültigen Datensatz
-  $result = do_mysqli_query ("SELECT type,expire,payd FROM premiumacc ".
+  $result = do_mysql_query ("SELECT type,expire,payd FROM premiumacc ".
                             " WHERE player = ".intval($pid)." AND type > 0 AND start < UNIX_TIMESTAMP() ".
                             "   AND (expire > UNIX_TIMESTAMP() OR expire = 0) ".
                             " ORDER BY type DESC, expire!=0, expire DESC LIMIT 1");

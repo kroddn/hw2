@@ -70,13 +70,13 @@ if(!is_premium_noads()) {
 }
 echo "</div>";
 
-$worldcities = do_mysqli_query($sql);
+$worldcities = do_mysql_query($sql);
 
 //  echo "\n<!-- ".$sql."-->\n";
 // SQL-String für Clan-Diplomatie-Karte
 echo "\n<!-- ".$clan_sql."-->\n";
 if(!isset($_REQUEST['clan_sql']) && isset($GLOBALS['clan_sql'])) {
-  $clancities = do_mysqli_query($GLOBALS['clan_sql']);
+  $clancities = do_mysql_query($GLOBALS['clan_sql']);
 }
 else {
   $clancities = null;

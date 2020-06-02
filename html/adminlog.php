@@ -15,21 +15,21 @@ include_once("includes/session.inc.php");
 if ($delete_log_mysqlerr=="1") {
         if (isset($id_log_mysqlerr)) {
 	  foreach ($id_log_mysqlerr as $error)
-	    do_mysqli_query("DELETE FROM log_mysqlerr WHERE id=".$error);
+	    do_mysql_query("DELETE FROM log_mysqlerr WHERE id=".$error);
 	}
 	if (isset($fixed_log_mysqlerr)) {
 	  foreach ($fixed_log_mysqlerr as $error)
-	    do_mysqli_query("UPDATE log_mysqlerr SET fixed=".$player->getID()." WHERE id=".$error);
+	    do_mysql_query("UPDATE log_mysqlerr SET fixed=".$player->getID()." WHERE id=".$error);
 	}
 }
 if ($delete_log_err=="1") {
 	if (isset($id_log_err)) {
 	  foreach ($id_log_err as $error)
-	    do_mysqli_query("DELETE FROM log_err WHERE id=".$error);
+	    do_mysql_query("DELETE FROM log_err WHERE id=".$error);
 	}
 	if (isset($fixed_log_err)) {
 	  foreach ($fixed_log_err as $error)
-	    do_mysqli_query("UPDATE log_err SET fixed=".$player->getID()." WHERE id=".$error);
+	    do_mysql_query("UPDATE log_err SET fixed=".$player->getID()." WHERE id=".$error);
 	}
 }
 ?>
@@ -53,7 +53,7 @@ if($player->isMaintainer()) {
 	echo "<td>Zeit</td>\n";
 	echo "<td>Scriptfile und Referer</td>\n";
 	echo "<td>Fixed</td></tr>\n";
-	$log_mysqlerr=do_mysqli_query("SELECT log_mysqlerr.*, player.name as fixed_player FROM log_mysqlerr LEFT JOIN player ON player.id=fixed ORDER BY id DESC LIMIT 0,50");
+	$log_mysqlerr=do_mysql_query("SELECT log_mysqlerr.*, player.name as fixed_player FROM log_mysqlerr LEFT JOIN player ON player.id=fixed ORDER BY id DESC LIMIT 0,50");
     
 	while($get_log_mysqlerr=mysqli_fetch_assoc($log_mysqlerr)) {
 		if ($get_log_mysqlerr['fixed']) {
@@ -82,7 +82,7 @@ if($player->isMaintainer()) {
 	echo "<table width=\"650\">";
 	echo "<tr class=\"tblhead\"><td colspan=7><b>log_err Tabelle (die letzten 50 Einträge)</td></tr>\n";
 	echo "<tr class=\"tblhead\"><td><img src=\"".$imagepath."/ad_del.png\" alt=\"L&ouml;schen\"></td><td><img src=\"".$imagepath."/ad_fixed.png\" alt=\"Fixed\"></td><td>ID</td><td>Error-String</td><td>Zeit</td><td>Referer</td><td>Fixed</td></tr>\n";
-	$log_err=do_mysqli_query("SELECT * FROM log_err WHERE 1 order by id desc limit 0,50");
+	$log_err=do_mysql_query("SELECT * FROM log_err WHERE 1 order by id desc limit 0,50");
 	while($get_log_err=mysqli_fetch_assoc($log_err)) {
 		echo "<tr class=\"tblbody\" width=\"100%\">";
 		echo "<td><input name=\"id_log_err[]\" type=\"checkbox\" value='".$get_log_err['id']."'></td>";

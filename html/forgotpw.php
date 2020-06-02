@@ -36,13 +36,13 @@ $imagepath = "images/ingame";
 $csspath = "images/ingame/css";
 
 if ($getkey) {
-  $sql_login = do_mysqli_query("SELECT id,email,register_email,status FROM player ".
+  $sql_login = do_mysql_query("SELECT id,email,register_email,status FROM player ".
                                 " WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
   if (mysqli_num_rows($sql_login) > 0) {
     $db_login = mysqli_fetch_assoc($sql_login);
     if ($email == $db_login['email'] || $email == $db_login['register_email']) {
       $key = createKey();
-      do_mysqli_query("UPDATE player SET activationkey='$key' WHERE id=".$db_login['id']);
+      do_mysql_query("UPDATE player SET activationkey='$key' WHERE id=".$db_login['id']);
       $body = "Sehr geehrter Teilnehmer,\n
 				Mit dem folgenden Aktivierungscode können Sie ihr Passwort im entsprechenden Menü ändern!\n
 		
@@ -58,13 +58,13 @@ if ($getkey) {
       mail($email, "Holy-Wars 2: Passwort vergessen", $body, "FROM: no-reply@holy-wars2.de");
       if($email != $db_login['register_email']) {
         mail($db_login['register_email'], "Holy-Wars 2: Passwort vergessen", $body, "FROM: no-reply@holy-wars2.de");
-        do_mysqli_query("INSERT INTO log_password_send (player,time,email,ip) ".
+        do_mysql_query("INSERT INTO log_password_send (player,time,email,ip) ".
 			   " VALUES (".$db_login['id'].", UNIX_TIMESTAMP(), '".$db_login['register_email']."', '".$ip."')"
 			   );
       }
 
       // Passwort-Request loggen, um Missbrauch verfolgen zu können
-      do_mysqli_query("INSERT INTO log_password_send (player,time,email,ip) ".
+      do_mysql_query("INSERT INTO log_password_send (player,time,email,ip) ".
                          " VALUES (".$db_login['id'].", UNIX_TIMESTAMP(), '".$email."', '".$ip."')"
                          );
 
@@ -75,7 +75,7 @@ if ($getkey) {
   else {$senderror = "Es existiert kein Account mit diesem Namen!";}
 }
 elseif ($changepw) {
-	$sql_login = do_mysqli_query("SELECT id,activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $pname)."'");
+	$sql_login = do_mysql_query("SELECT id,activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $pname)."'");
 	if (mysqli_num_rows($sql_login)>0) {
 		$db_login = mysqli_fetch_assoc($sql_login);
 		if ($db_login['status']==NULL) {
@@ -85,7 +85,7 @@ elseif ($changepw) {
 				      $changeerror = "Sie haben noch keinen Aktivierungscode beantragt.";
 				    }
 					else if(strlen($activationcode) > 0 && $activationcode == $db_login['activationkey']) {
-					  do_mysqli_query("UPDATE player SET activationkey=NULL, password='".md5(trim($pw1))."' WHERE id=".$db_login['id']) or die(mysqli_error($GLOBALS['con']));
+					  do_mysql_query("UPDATE player SET activationkey=NULL, password='".md5(trim($pw1))."' WHERE id=".$db_login['id']) or die(mysqli_error($GLOBALS['con']));
                               include("forgotpw2.php");
                               die();
 					}

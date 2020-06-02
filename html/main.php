@@ -185,7 +185,7 @@ Der <span style="font-size: 16px; font-weight: bold;">Holy-Wars 2 Bote</span> - 
 ?>
 <?
 if (defined("ENABLE_TOURNAMENT") && ENABLE_TOURNAMENT) {
-  $t = do_mysqli_query_fetch_assoc("SELECT time, time < UNIX_TIMESTAMP() AND time + ".TOURNAMENT_DURATION." > UNIX_TIMESTAMP() AS now ".
+  $t = do_mysql_query_fetch_assoc("SELECT time, time < UNIX_TIMESTAMP() AND time + ".TOURNAMENT_DURATION." > UNIX_TIMESTAMP() AS now ".
 				  " FROM tournament WHERE time + ".TOURNAMENT_DURATION." > UNIX_TIMESTAMP() ORDER BY time ASC LIMIT 1");
     ?>
 
@@ -241,10 +241,10 @@ echo "</tr>";
 
 // table 3
 if($_GET['news']) {
-  $resnews=do_mysqli_query("SELECT topic,text FROM news WHERE id='".intval($_GET['news'])."'");
+  $resnews=do_mysql_query("SELECT topic,text FROM news WHERE id='".intval($_GET['news'])."'");
 }
 else {
-  $resnews=do_mysqli_query("SELECT topic,text FROM news ORDER BY time DESC");
+  $resnews=do_mysql_query("SELECT topic,text FROM news ORDER BY time DESC");
 }
 $dataNews=mysqli_fetch_assoc($resnews);
 
@@ -254,7 +254,7 @@ echo "<tr><td colspan=\"2\" style=\"padding: 0px;\">\n";
 echo "<table width=\"100%\" border=\"0\" cellpadding=\"0\" cellspacing=\"1\">\n";
 echo "<tr class=\"tblhead\" height=\"25\"><td width=\"210\" style=\"font-weight: bold; font-size:16px; color: #AF4080;\">Neuigkeiten</td><td align=\"center\" style=\"font-weight: bold; font-size:16px;\"><u>".$dataNews['topic']."</u></td></tr>\n";
 echo "<tr valign=\"top\" class=\"tblhead\"><td style=\"padding: 3px; \">\n";
-$resN=do_mysqli_query("SELECT id, time, topic FROM news ORDER BY id DESC");
+$resN=do_mysql_query("SELECT id, time, topic FROM news ORDER BY id DESC");
 while($dataN=mysqli_fetch_assoc($resN)) {
   echo "<span style=\"float:left;\"><a href=\"".$_SERVER['PHP_SELF']."?news=".$dataN['id']."\">".$dataN['topic']."</a></span><span style=\"float:right;\">".date("d.m.Y",$dataN['time'])."</span><br>";
 }
@@ -277,7 +277,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 
 // toplist player
 	echo "<tr><td class=\"tblbody\" height=\"25\" colspan=\"2\">\n";
-	$restoplist=do_mysqli_query("SELECT toplist FROM player WHERE id='".$_SESSION['player']->id."'");
+	$restoplist=do_mysql_query("SELECT toplist FROM player WHERE id='".$_SESSION['player']->id."'");
 	$toplist=mysqli_fetch_assoc($restoplist);
 	$pos=$toplist['toplist'];
 	if($pos != NULL || $pos != 0) {
@@ -293,7 +293,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 
 // toplist clan
 	echo "<tr><td class=\"tblbody\" height=\"25\" colspan=\"2\">\n";
-	$restoplist=do_mysqli_query("SELECT toplist FROM clan WHERE id='".$_SESSION['player']->clan."'");
+	$restoplist=do_mysql_query("SELECT toplist FROM clan WHERE id='".$_SESSION['player']->clan."'");
 	$toplist=mysqli_fetch_assoc($restoplist);
 	$pos = $toplist['toplist'];
 	if($pos != NULL || $pos != 0) {
@@ -309,8 +309,8 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 	echo "<tr class=\"tblhead\"><td height=\"20\" colspan=\"2\"><b>Dies solltet Ihr wissen</b></td></tr>";
 	echo "<tr class=\"tblbody\"><td colspan=\"2\">";
 // builing troups and buildings
- 	$buildings_res = do_mysqli_query("SELECT building.name AS bname,citybuilding_ordered.time AS time,citybuilding_ordered.count AS count,city.name AS name,city.id FROM building,city,citybuilding_ordered WHERE citybuilding_ordered.city=city.id AND building.id=citybuilding_ordered.building AND city.owner=".$_SESSION['player']->id);
-  	$troops_res = do_mysqli_query("SELECT cityunit_ordered.count AS count,cityunit_ordered.time AS time,unit.name AS uname,city.name AS name,city.id as id FROM cityunit_ordered,city,unit WHERE cityunit_ordered.city=city.id AND cityunit_ordered.unit=unit.id AND city.owner=".$_SESSION['player']->id);
+ 	$buildings_res = do_mysql_query("SELECT building.name AS bname,citybuilding_ordered.time AS time,citybuilding_ordered.count AS count,city.name AS name,city.id FROM building,city,citybuilding_ordered WHERE citybuilding_ordered.city=city.id AND building.id=citybuilding_ordered.building AND city.owner=".$_SESSION['player']->id);
+  	$troops_res = do_mysql_query("SELECT cityunit_ordered.count AS count,cityunit_ordered.time AS time,unit.name AS uname,city.name AS name,city.id as id FROM cityunit_ordered,city,unit WHERE cityunit_ordered.city=city.id AND cityunit_ordered.unit=unit.id AND city.owner=".$_SESSION['player']->id);
 	$prf_building = "sind";
 	$troops="Truppen";
 	if(mysqli_num_rows($troops_res) == 1)
@@ -335,7 +335,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 	echo "</td></tr>\n";
 	echo "<tr class=\"tblbody\"><td colspan=\"2\">\n";
 // population
-		$resP=do_mysqli_query("SELECT sum(population) as population FROM city WHERE owner='".$_SESSION['player']->id."'");
+		$resP=do_mysql_query("SELECT sum(population) as population FROM city WHERE owner='".$_SESSION['player']->id."'");
 		$dataP=mysqli_fetch_assoc($resP);
 	echo $dataP['population']." Einwohner bewohnen Eure St&auml;dte!\n";
 	echo "</td></tr>\n";
@@ -344,7 +344,7 @@ echo "<table width=\"100%\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n"
 // running troops
 $scouttime = $player->getScoutTime();
 if($scouttime > 0) {
-  $res_spy = do_mysqli_query("SELECT ".
+  $res_spy = do_mysql_query("SELECT ".
 			    " army.aid AS aid, army.owner AS owner, army.end, endtime, mission ".
 			    " FROM army ".
 			    " LEFT JOIN city ON army.end = city.id ".
@@ -401,7 +401,7 @@ function user_online_table() {
   // user online table
   $show_online_list = false;
   $i=0;
-  $res1=do_mysqli_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= (UNIX_TIMESTAMP() - 300) ORDER BY player.clanstatus DESC");
+  $res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= (UNIX_TIMESTAMP() - 300) ORDER BY player.clanstatus DESC");
 
   echo "<table cellpadding=\"2\" cellspacing=\"1\" width=\"100%\">";
   echo "<tr class=\"tblhead\"><td valign=\"middle\" colspan=\"3\"><b>Spieler online</b></td></tr>\n";
@@ -429,20 +429,20 @@ function user_online_table() {
 	
   // wenn geheimdienst errichtet
   if($show_online_list) {
-    $res2=do_mysqli_query("SELECT research FROM playerresearch WHERE player='".$_SESSION['player']->id."' AND research='111'");
+    $res2=do_mysql_query("SELECT research FROM playerresearch WHERE player='".$_SESSION['player']->id."' AND research='111'");
     if(mysqli_num_rows($res2) > 0) {
       echo "<tr class=\"tblhead\"><td height=\"20\" valign=\"middle\" colspan=\"3\"><b>Eurer Geheimdienst berichtet</td></tr>";
       echo "<tr class=\"tblbody\"><td colspan=\"3\" height=\"30\" valign=\"middle\">\n";
       $output="";
-      $res1=do_mysqli_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= (UNIX_TIMESTAMP() - 300) ORDER BY player.clanstatus DESC");
+      $res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= (UNIX_TIMESTAMP() - 300) ORDER BY player.clanstatus DESC");
       $enemy=0;
       $friend=0;
       while($data1=mysqli_fetch_assoc($res1)) {
         if($data1['clan'] != $_SESSION['player']->clan) {
           $output.="<tr class=\"tblbody\">\n";
           $output.="<td class=\"tblhead\">".get_info_link($data1['name'], "player",1)."</a></td>\n";
-          $res3=do_mysqli_query("SELECT type FROM relation WHERE id1='".$_SESSION['player']->id."' AND id2='".$data1['id']."'");
-          $res4=do_mysqli_query("SELECT type FROM relation WHERE id2='".$_SESSION['player']->id."' AND id1='".$data1['id']."'");
+          $res3=do_mysql_query("SELECT type FROM relation WHERE id1='".$_SESSION['player']->id."' AND id2='".$data1['id']."'");
+          $res4=do_mysql_query("SELECT type FROM relation WHERE id2='".$_SESSION['player']->id."' AND id1='".$data1['id']."'");
           if(mysqli_num_rows($res3)>0) {$data5=mysqli_fetch_assoc($res3);}
           if(mysqli_num_rows($res4)>0) {$data5=mysqli_fetch_assoc($res4);}
           $output.="<td width=\"80\">";

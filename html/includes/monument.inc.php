@@ -33,7 +33,7 @@ function print_monuments ($gox, $goy) {
   $width  = 250;
   $height = 250;
 
-  $mons = do_mysqli_query( 'SELECT * '.
+  $mons = do_mysql_query( 'SELECT * '.
                           'FROM player_monument '.
                           'LEFT JOIN monument USING(m_id) '.
                           'LEFT JOIN player ON player.id = player_monument.player '.

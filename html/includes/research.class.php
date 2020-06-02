@@ -39,14 +39,14 @@ class Research {
   function Research($input_playerid, $input_playerreligion) {
     $this->player   = $input_playerid;
     $this->religion = $input_playerreligion;
-    $res1 = do_mysqli_query("SELECT research FROM playerresearch WHERE player=".$input_playerid) ;
+    $res1 = do_mysql_query("SELECT research FROM playerresearch WHERE player=".$input_playerid) ;
     while ($db_res = mysqli_fetch_assoc($res1)) {
       $this->research[$db_res['research']]=true;
     }
   }
 	
   function update() {
-    $res1 = do_mysqli_query("SELECT research FROM playerresearch WHERE player=".$this->player) ;
+    $res1 = do_mysql_query("SELECT research FROM playerresearch WHERE player=".$this->player) ;
     while ($db_res = mysqli_fetch_assoc($res1)) {
       $this->research[$db_res['research']]=true;
     }
@@ -57,7 +57,7 @@ class Research {
   }
 	
   function checkRequirements($rs) {
-    $res1 = do_mysqli_query("SELECT * FROM req_research WHERE research_id = ".intval($rs) );
+    $res1 = do_mysql_query("SELECT * FROM req_research WHERE research_id = ".intval($rs) );
     $rows = mysqli_num_rows($res1);
     $hits=0;
     while ($req=mysqli_fetch_assoc($res1)) {
@@ -72,7 +72,7 @@ class Research {
   }
 	
   function isResearching() {
-    $res1 = do_mysqli_query("SELECT rid, starttime, endtime FROM researching WHERE player = '".$this->player."'");
+    $res1 = do_mysql_query("SELECT rid, starttime, endtime FROM researching WHERE player = '".$this->player."'");
     if(mysqli_num_rows($res1)==1) {
       $res = mysqli_fetch_assoc($res1);
       return $res;
@@ -81,7 +81,7 @@ class Research {
   }
 	
   function getResearches() {
-    $res2 = do_mysqli_query("SELECT id, name, rp, time, religion, typ, typlevel, category, lib_link FROM research WHERE (religion = '".$this->religion."' OR religion is NULL) ORDER BY category, typ, typlevel");
+    $res2 = do_mysql_query("SELECT id, name, rp, time, religion, typ, typlevel, category, lib_link FROM research WHERE (religion = '".$this->religion."' OR religion is NULL) ORDER BY category, typ, typlevel");
     $i=0;
 
     while ($rs=mysqli_fetch_assoc($res2)) {
@@ -111,11 +111,11 @@ class Research {
     $rid = intval($rid);
     if($rid == 0) return FALSE;
 
-    $res1 = do_mysqli_query("SELECT id FROM research WHERE id = ".$rid );
+    $res1 = do_mysql_query("SELECT id FROM research WHERE id = ".$rid );
     if (mysqli_num_rows($res1)) {
-      $res2 = do_mysqli_query("SELECT research FROM playerresearch WHERE player = '".$this->player."' AND research = '".$rid."'");
+      $res2 = do_mysql_query("SELECT research FROM playerresearch WHERE player = '".$this->player."' AND research = '".$rid."'");
       if (!mysqli_num_rows($res2)) {
-        $res2 = do_mysqli_query("SELECT rid FROM researching WHERE player = '".$this->player."' AND rid = '".$rid."'");
+        $res2 = do_mysql_query("SELECT rid FROM researching WHERE player = '".$this->player."' AND rid = '".$rid."'");
         if (!mysqli_num_rows($res2)) {
           return TRUE;
         }
@@ -135,8 +135,8 @@ class Research {
         return "Forschungsvoraussetzungen nicht erfüllt.";
       }
       
-      $res1 = do_mysqli_query("SELECT rp FROM player WHERE id = '".$this->player."'");
-      $res2 = do_mysqli_query("SELECT rp,time,management FROM research WHERE id = '".$rid."'");
+      $res1 = do_mysql_query("SELECT rp FROM player WHERE id = '".$this->player."'");
+      $res2 = do_mysql_query("SELECT rp,time,management FROM research WHERE id = '".$rid."'");
       $data = mysqli_fetch_assoc($res1);
       $rdata = mysqli_fetch_assoc($res2);
 
@@ -146,22 +146,22 @@ class Research {
 	  " WHERE research IN (".RESEARCH_SCHOOL.",".RESEARCH_BIGSCHOOL.") ".
 	  " AND player = ".$_SESSION['player']->id;
 
-        $schools = do_mysqli_query_fetch_assoc($sql);
+        $schools = do_mysql_query_fetch_assoc($sql);
       }
       else {
         $schools['cnt'] = 2;
       }
 
 
-      $resA = do_mysqli_query("SELECT rid FROM researching WHERE player = '".$this->player."'");
+      $resA = do_mysql_query("SELECT rid FROM researching WHERE player = '".$this->player."'");
       if (mysqli_num_rows($resA) < $schools['cnt']+1) {
         if ($data['rp'] >= $rdata['rp']) {
           if($rdata['management'] == 6 && !is_premium_payd ) {
             return "Diese Forschung ist Spielern mit bezahltem Premium-Account vorbehalten.";
           }
           //do_log("Researching ordered. Started researching on rid ".$rid);
-          do_mysqli_query("UPDATE player SET rp = (rp - '".$rdata['rp']."'), cc_messages=1, cc_resources=1 WHERE id = '".$this->player."'");
-          do_mysqli_query("INSERT INTO researching (player,rid,starttime,endtime) VALUES ('".$this->player."', '".$rid."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + ".( max(MIN_RESEARCH_TIME, round($rdata['time'] / RESEARCHSPEED)) )." )");
+          do_mysql_query("UPDATE player SET rp = (rp - '".$rdata['rp']."'), cc_messages=1, cc_resources=1 WHERE id = '".$this->player."'");
+          do_mysql_query("INSERT INTO researching (player,rid,starttime,endtime) VALUES ('".$this->player."', '".$rid."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() + ".( max(MIN_RESEARCH_TIME, round($rdata['time'] / RESEARCHSPEED)) )." )");
           return null; // OK
         }
         else {
@@ -177,17 +177,17 @@ class Research {
   }
 	
   function abortResearching() {
-    $res1 = do_mysqli_query("SELECT rid, player FROM researching WHERE player = '".$this->player."'");
+    $res1 = do_mysql_query("SELECT rid, player FROM researching WHERE player = '".$this->player."'");
     $res2 = mysqli_fetch_assoc($res1);
     
     if (mysqli_num_rows($res1)==1) {
       $rid = $res2['rid'];
-      $res2 = do_mysqli_query("SELECT rp, name FROM research WHERE id = '".$rid."'");
+      $res2 = do_mysql_query("SELECT rp, name FROM research WHERE id = '".$rid."'");
       $rdata = mysqli_fetch_assoc($res2);
       $nrp = floor($rdata['rp']/2);
-      do_mysqli_query("UPDATE player SET rp= (rp + '".$nrp."'), cc_messages=1,cc_resources=1 WHERE id = '".$this->player."'");
-      do_mysqli_query("DELETE FROM researching WHERE player = '".$this->player."'");
-      do_mysqli_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$this->player.", UNIX_TIMESTAMP(),'Abbruch: ".$rdata['name']."','Dieser Forschauftrag wurde auf Euer Geheiß hin abgebrochen.\n\nAbzüglich der Unkosten erhaltet Ihr ".$nrp." Forschungspunkte zurück.',3)");
+      do_mysql_query("UPDATE player SET rp= (rp + '".$nrp."'), cc_messages=1,cc_resources=1 WHERE id = '".$this->player."'");
+      do_mysql_query("DELETE FROM researching WHERE player = '".$this->player."'");
+      do_mysql_query("INSERT INTO message (sender,recipient,date,header,body,category) VALUES ('SERVER',".$this->player.", UNIX_TIMESTAMP(),'Abbruch: ".$rdata['name']."','Dieser Forschauftrag wurde auf Euer Geheiß hin abgebrochen.\n\nAbzüglich der Unkosten erhaltet Ihr ".$nrp." Forschungspunkte zurück.',3)");
       do_log("Researching aborted. Requested on abortResearching() [".$rdata['name']."]");
     }
 		

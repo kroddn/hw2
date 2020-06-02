@@ -36,7 +36,7 @@ function barracks_disarm_table($from)
   
   echo "\n<!-- $sql -->\n";
   
-  $cityunit_res = do_mysqli_query($sql);
+  $cityunit_res = do_mysql_query($sql);
 ?>                       
 <table cellspacing="1" cellpadding="0" border="0" style="width: 660px">
   <tr><td colspan="4" class="tblhead"><strong>Einheiten entlassen</strong></td></tr>

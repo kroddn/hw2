@@ -82,7 +82,7 @@ function checkClanOwner($forum_id) {
                           " WHERE cat_order = ".$_SESSION['player']->clan.
                           "  AND clanf_forums.forum_id = ".mysqli_escape_string($GLOBALS['con'], $forum_id);
     
-    $res = do_mysqli_query($sql);
+    $res = do_mysql_query($sql);
     if(mysqli_num_rows($res) == 0) {
       // Nicht erlaubt
       header_redirect("cf_index.php?error=notallowed");

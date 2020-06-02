@@ -66,7 +66,7 @@ if (!function_exists("show_log_fatal_error")) {
       $showstr = $logstr;
     }
 
-    do_mysqli_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysqli_escape_string($GLOBALS['con'], $logstr)."',UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $HTTP_SERVER_VARS['HTTP_REFERER'])."')");
+    do_mysql_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysqli_escape_string($GLOBALS['con'], $logstr)."',UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $HTTP_SERVER_VARS['HTTP_REFERER'])."')");
     $errid = mysqli_insert_id($GLOBALS['con']);
     $showstr .= ":".$errid;
     show_fatal_error($showstr);    
@@ -76,7 +76,7 @@ if (!function_exists("show_log_fatal_error")) {
 if (!function_exists("log_fatal_error")) {
   function log_fatal_error($logstr) {
     global $HTTP_SERVER_VARS;
-    do_mysqli_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysqli_escape_string($GLOBALS['con'], $logstr)."',UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $HTTP_SERVER_VARS['HTTP_REFERER'])."')");
+    do_mysql_query("INSERT INTO log_err(errstr,time,referer) VALUES ('".mysqli_escape_string($GLOBALS['con'], $logstr)."',UNIX_TIMESTAMP(),'".mysqli_escape_string($GLOBALS['con'], $HTTP_SERVER_VARS['HTTP_REFERER'])."')");
   }
  }
 

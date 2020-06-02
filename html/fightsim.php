@@ -143,7 +143,7 @@ else {
 </tr>
 <?
 
-$resUnits = do_mysqli_query("SELECT id,name,religion,level,type FROM unit ORDER BY religion,id ASC");
+$resUnits = do_mysql_query("SELECT id,name,religion,level,type FROM unit ORDER BY religion,id ASC");
 while ($Unit = mysqli_fetch_assoc($resUnits)) {
   echo "<tr>";
   $img = $Unit['religion'] == 1 || $Unit['religion'] == 2 ? '<img src="'.$GLOBALS['imagepath']."/".getUnitImage($Unit).'"> ' : "";

@@ -37,12 +37,12 @@ $imagepath = "images/ingame";
 $csspath = "images/ingame/css";
 
 if($activate) {
-  $sql_login = do_mysqli_query("SELECT id, status, activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
+  $sql_login = do_mysql_query("SELECT id, status, activationkey FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
   if(mysqli_num_rows($sql_login)>0) {
     $db_login = mysqli_fetch_assoc($sql_login);
     if ($db_login['status']==1) {
       if ($activationcode == $db_login['activationkey']) {
-        do_mysqli_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']);
+        do_mysql_query("UPDATE player SET status=NULL, statusdescription=NULL, activationkey=NULL WHERE id=".$db_login['id']);
         echo "<tr><td colspan='3' valign='top' align='center'><div class='error'><h1>Ihr Account wurde erfolgreich aktiviert!</h2></div><br>\n";
         echo "<a href='login.php?name=".urlencode($loginname)."'>Zum Login</a>";
         die("</td></tr></table> <!-- Start-Header-Table -->");

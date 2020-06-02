@@ -90,7 +90,7 @@ if (isset($recruiter)) {
   $serverhost = $_SERVER['HTTP_HOST'];
   if (strcasecmp($serverhost, "www.holy-wars2.de") == 0) $serverhost = "holy-wars2.de";
 
-  $recruiter_res = do_mysqli_query("SELECT name FROM player WHERE id = ".mysqli_escape_string($GLOBALS['con'], $recruiter) );
+  $recruiter_res = do_mysql_query("SELECT name FROM player WHERE id = ".mysqli_escape_string($GLOBALS['con'], $recruiter) );
   if (mysqli_num_rows($recruiter_res)) {
     $recruiter_name = mysqli_fetch_assoc($recruiter_res);
     $recruiter_name = $recruiter_name['name'];
@@ -125,7 +125,7 @@ if ($loginprocess) {
 
 
 // status = 3 bedeutet verdächtige Spieler, die aber nicht gesperrt sind.
-$res = do_mysqli_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
+$res = do_mysql_query("SELECT count(*),religion FROM player WHERE religion IS NOT NULL AND activationkey IS NULL AND (status IS NULL OR status=3) GROUP BY religion ORDER BY religion");
 
 if(mysqli_num_rows($res) < 2) {
   $nr[0] = $nr[1] = -1;
@@ -136,7 +136,7 @@ else {
 }
 
 if (defined("BOOKING_ALLOWED") && BOOKING_ALLOWED) {
-  $book_res = do_mysqli_query("SELECT count(*) FROM booking WHERE status = 0");
+  $book_res = do_mysql_query("SELECT count(*) FROM booking WHERE status = 0");
   $book = mysqli_fetch_array($book_res);
 }
 
@@ -288,12 +288,12 @@ if(isset($selectPlayerName)) {
 
 function print_news_table() {
   if($_GET['news'])
-    $resnews=do_mysqli_query("SELECT topic,text FROM news WHERE id=".intval($_GET['news']));
+    $resnews=do_mysql_query("SELECT topic,text FROM news WHERE id=".intval($_GET['news']));
   else
-    $resnews=do_mysqli_query("SELECT topic,text FROM news ORDER BY time DESC");
+    $resnews=do_mysql_query("SELECT topic,text FROM news ORDER BY time DESC");
   $dataNews=mysqli_fetch_assoc($resnews);
 
-  $resN=do_mysqli_query("SELECT id, time, topic FROM news ORDER BY id DESC");
+  $resN=do_mysql_query("SELECT id, time, topic FROM news ORDER BY id DESC");
   
   echo "<table width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">\n";
 
@@ -321,7 +321,7 @@ function print_news_table() {
 }
 
 function playeronline_table() {
-  $res1=do_mysqli_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
+  $res1=do_mysql_query("SELECT player.clanstatus as clstatus, player_online.uid AS id, player.clan AS clan, player.name AS name, player_online.lastclick AS click FROM player_online LEFT JOIN player ON player_online.uid=player.id WHERE player_online.lastclick >= ".(time()-300));
   echo "<table width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\"><b>Spieler online</b></td></tr>\n";
   echo "<tr class=\"tblbody\"><td height=\"20\" valign=\"middle\" colspan=\"3\">";
@@ -337,7 +337,7 @@ function playeronline_table() {
 
 
 function bestplayer_table() {
-  $res2=do_mysqli_query("SELECT name, religion FROM player WHERE toplist > 0 ORDER BY toplist ASC LIMIT 0,5");
+  $res2=do_mysql_query("SELECT name, religion FROM player WHERE toplist > 0 ORDER BY toplist ASC LIMIT 0,5");
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"22\" valign=\"middle\" colspan=\"3\"><b>Top-5 Spieler</b>&nbsp;&nbsp;<a style=\"font-size:10px;\" href=\"toplist.php\">&gt;(Top 100 hier)&lt;</a></td></tr>\n";
   while($data2=mysqli_fetch_assoc($res2)) {
@@ -351,7 +351,7 @@ function bestplayer_table() {
 }
 
 function bestclan_table() {
-  $res2=do_mysqli_query("SELECT clan.name, player.religion AS religion FROM clan LEFT JOIN player ON player.clan = clan.id WHERE clan.toplist > 0 GROUP BY player.clan ORDER BY clan.toplist ASC LIMIT 0,5");
+  $res2=do_mysql_query("SELECT clan.name, player.religion AS religion FROM clan LEFT JOIN player ON player.clan = clan.id WHERE clan.toplist > 0 GROUP BY player.clan ORDER BY clan.toplist ASC LIMIT 0,5");
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
   echo "<tr class=\"tblhead\"><td height=\"25\" valign=\"middle\" colspan=\"3\"><b>Top-5 Orden</b>&nbsp;&nbsp;<a href=\"toplist.php?show=clan\" style=\"font-size:10px;\">&gt;(Top 100 hier)&lt;</a></td></tr>\n";
   while($data2=mysqli_fetch_assoc($res2)) {
@@ -367,7 +367,7 @@ function bestclan_table() {
 
 function zitat_table() {
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
-  $zitat=do_mysqli_query("SELECT player.name as player, text FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active='1' ORDER BY RAND() LIMIT 1");
+  $zitat=do_mysql_query("SELECT player.name as player, text FROM zitate LEFT JOIN player ON zitate.player=player.id WHERE active='1' ORDER BY RAND() LIMIT 1");
 
   if(mysqli_num_rows($zitat) > 0) {
     $zitat=mysqli_fetch_assoc($zitat);
@@ -396,7 +396,7 @@ function zitat_table() {
 
 function print_you_know_table() {
   echo "<table style=\"td {padding:3px;} margin-bottom:5px;\" width=\"100%\" cellpadding=\"1\" cellspacing=\"1\">";
-  $present=do_mysqli_query("SELECT player.name as name, (player.points) AS points, sum(city.population) AS population, count(city.id) as citycount, clan.name as clan, player.clanstatus as clanstatus, player.toplist AS toplistplayer, player.religion AS religion FROM player LEFT JOIN clan ON player.clan=clan.id LEFT JOIN city ON city.owner=player.id WHERE player.toplist<='50' GROUP BY player.name ORDER BY RAND() LIMIT 1");
+  $present=do_mysql_query("SELECT player.name as name, (player.points) AS points, sum(city.population) AS population, count(city.id) as citycount, clan.name as clan, player.clanstatus as clanstatus, player.toplist AS toplistplayer, player.religion AS religion FROM player LEFT JOIN clan ON player.clan=clan.id LEFT JOIN city ON city.owner=player.id WHERE player.toplist<='50' GROUP BY player.name ORDER BY RAND() LIMIT 1");
   $present=mysqli_fetch_assoc($present);
   
   echo "<tr class=\"tblhead\"><td height=\"25\" valign=\"middle\" colspan=\"3\">";

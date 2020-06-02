@@ -75,21 +75,21 @@ class Library {
     }
 
     $count=0;
-    $res1=do_mysqli_query("SELECT id,topic,category FROM library ORDER BY category,topic");
+    $res1=do_mysql_query("SELECT id,topic,category FROM library ORDER BY category,topic");
     while($data1=mysqli_fetch_assoc($res1)) {
 			$elementData = $this->element[0][$data1['category']];
       $temp=is_array($elementData) ? sizeof($elementData) : 0;
       $this->element[0][$data1['category']][$temp][0]=$data1['topic'];
       $this->element[0][$data1['category']][$temp][1]=$data1['id'];
     }
-    $res2=do_mysqli_query("SELECT id,name,category FROM building ORDER BY category,id");
+    $res2=do_mysql_query("SELECT id,name,category FROM building ORDER BY category,id");
     while($data2=mysqli_fetch_assoc($res2)) {
 			$elementData = $this->element[1][$data2['category']];
       $temp=is_array($elementData) ? sizeof($elementData) : 0;
       $this->element[1][$data2['category']][$temp][0]=$data2['name'];
       $this->element[1][$data2['category']][$temp][1]=$data2['id'];
     }
-    $res3=do_mysqli_query("SELECT id,name,religion AS religion,level,type FROM unit ORDER BY religion,id");
+    $res3=do_mysql_query("SELECT id,name,religion AS religion,level,type FROM unit ORDER BY religion,id");
     while($data3=mysqli_fetch_assoc($res3)) {
 			$elementData = $this->element[2][$data3['religion']-1];
       $temp=is_array($elementData) ? sizeof($elementData) : 0;
@@ -98,7 +98,7 @@ class Library {
       $img = $GLOBALS['imagepath']."/".getUnitImage($data3);
       $this->element[2][$data3['religion']-1][$temp][2]=$img;
     }
-    $res4=do_mysqli_query("SELECT id,name,category FROM research ORDER BY category,typ,typlevel");
+    $res4=do_mysql_query("SELECT id,name,category FROM research ORDER BY category,typ,typlevel");
     while($data4=mysqli_fetch_assoc($res4)) {
 			$elementData = $this->element[3][$data4['category']];
 			$temp=is_array($elementData) ? sizeof($elementData) : 0;
@@ -235,12 +235,12 @@ class Library {
     case 0: {
       if(isset($GLOBALS['topic']) && strlen($GLOBALS['topic']) > 0) {
         $topic = strtolower($GLOBALS['topic']);
-        $res1=do_mysqli_query("SELECT topic,description,category FROM library ".
+        $res1=do_mysql_query("SELECT topic,description,category FROM library ".
         					 " WHERE topic LIKE '%".mysqli_escape_string($GLOBALS['con'], $topic)."%'");
         $this->active[2] = null;
       }
       else {
-        $res1=do_mysqli_query("SELECT topic,description FROM library ".
+        $res1=do_mysql_query("SELECT topic,description FROM library ".
         					 " WHERE id=".$this->element[$this->active[0]][$this->active[1]][$this->active[2]][1]);
       }
       while($data1=mysqli_fetch_assoc($res1)) {
@@ -259,7 +259,7 @@ class Library {
       getMapSize($fx, $fy);
       $bid = isset($building_id) ? $building_id : $this->element[$this->active[0]][$this->active[1]][$this->active[2]][1];
 
-      $res1=do_mysqli_query("SELECT * FROM building ".
+      $res1=do_mysql_query("SELECT * FROM building ".
                            "WHERE id=".intval($bid) );
       while($data1=mysqli_fetch_assoc($res1)) {
 	$info['topic']=$data1['name'];
@@ -300,14 +300,14 @@ class Library {
 	}
 
 	//Forschungen
-	$res_res=do_mysqli_query("SELECT id,name,category FROM research WHERE id = ".$data1['req_research']);
+	$res_res=do_mysql_query("SELECT id,name,category FROM research WHERE id = ".$data1['req_research']);
 	if(mysqli_num_rows($res_res)>0) {
 	  $research=mysqli_fetch_assoc($res_res);
 	  if ($this->player==-1) {
 	    $have = true;
 	  }
 	  else {
-	    $check_have=do_mysqli_query("SELECT research FROM playerresearch WHERE research = ".$research['id']." AND player=".$this->player);
+	    $check_have=do_mysql_query("SELECT research FROM playerresearch WHERE research = ".$research['id']." AND player=".$this->player);
 	    $have = mysqli_num_rows($check_have) > 0;
 	  }
       
@@ -335,15 +335,15 @@ class Library {
     
 	if ($data1['req_type']!=NULL) {
 	  $info['description'].="Vorraussetzung (eines der Gebäude):<br>";
-	  $res2=do_mysqli_query("SELECT id,name,category FROM building WHERE type=".$data1['req_type']);
+	  $res2=do_mysql_query("SELECT id,name,category FROM building WHERE type=".$data1['req_type']);
 	}
 	elseif ($data1['req_special']!=NULL) {
 	  $info['description'].="Vorraussetzung:<br>";
-	  $res2=do_mysqli_query("SELECT id,name,category FROM building WHERE id=".$data1['req_special']);
+	  $res2=do_mysql_query("SELECT id,name,category FROM building WHERE id=".$data1['req_special']);
 	}
 	elseif ($data1['typelevel']>1) {
 	  $info['description'].="Vorraussetzung (eines der Gebäude):<br>";
-	  $res2=do_mysqli_query("SELECT id,name,category FROM building WHERE type=".$data1['type']." AND typelevel=".($data1['typelevel']-1));;
+	  $res2=do_mysql_query("SELECT id,name,category FROM building WHERE type=".$data1['type']." AND typelevel=".($data1['typelevel']-1));;
 	}
     
 	while($res2 && $build=mysqli_fetch_assoc($res2)) {
@@ -391,7 +391,7 @@ class Library {
 	case 2: {
 	  $uid = isset($unit_id) ? $unit_id : $this->element[$this->active[0]][$this->active[1]][$this->active[2]][1];
 
-	  $res1=do_mysqli_query("SELECT research.id as rid,research.name AS rname,unit.name AS name,unit.description AS description,unit.religion AS religion,type,level,damage,bonus1,bonus2,bonus3,life,speed,unit.time AS time,cost,unit.points AS points,gold,shortrange,longrange,armor,horse FROM unit LEFT JOIN research ON research.id=unit.req_research WHERE unit.id=".intval($uid) );
+	  $res1=do_mysql_query("SELECT research.id as rid,research.name AS rname,unit.name AS name,unit.description AS description,unit.religion AS religion,type,level,damage,bonus1,bonus2,bonus3,life,speed,unit.time AS time,cost,unit.points AS points,gold,shortrange,longrange,armor,horse FROM unit LEFT JOIN research ON research.id=unit.req_research WHERE unit.id=".intval($uid) );
 
 	  while($data1=mysqli_fetch_assoc($res1)) {
 	    // Die Grafik für ne Einheit ergibt sich nach folgendem Muster
@@ -436,13 +436,13 @@ class Library {
 	//Forschungen
     case 3: {
       $rid = isset($research_id) ? $research_id : $this->element[$this->active[0]][$this->active[1]][$this->active[2]][1];
-      $res1=do_mysqli_query("SELECT id,name,description,rp,time,religion,points,management,category FROM research ".
+      $res1=do_mysql_query("SELECT id,name,description,rp,time,religion,points,management,category FROM research ".
                            " WHERE id = ".intval($rid) );
       while($data1=mysqli_fetch_assoc($res1)) {
 
 
 	// die Fähigkeiten Anzeigen, die dadurch forschbar werden
-	$res = do_mysqli_query("SELECT name,id,category FROM req_research LEFT JOIN research ON research.id=research_id ".
+	$res = do_mysql_query("SELECT name,id,category FROM req_research LEFT JOIN research ON research.id=research_id ".
 			      " WHERE req_research = ".intval($rid) );
 
 	$rows = mysqli_num_rows($res);
@@ -462,7 +462,7 @@ class Library {
 	
 	// Bei Militärforschungen Gebäude anzeigen
 	// die Fähigkeiten Anzeigen, die dadurch forschbar werden
-	$res = do_mysqli_query("SELECT name,id,religion FROM unit ".
+	$res = do_mysql_query("SELECT name,id,religion FROM unit ".
 			      " WHERE req_research = ".intval($rid) );
 	$rows = mysqli_num_rows($res);
 	if ($rows) {
@@ -480,7 +480,7 @@ class Library {
 
 
 	// Bei manchen die Gebäude anzeigen
-	$res = do_mysqli_query("SELECT name,id,category FROM building ".
+	$res = do_mysql_query("SELECT name,id,category FROM building ".
 			      " WHERE req_research = ".intval($rid) );
 	$rows = mysqli_num_rows($res);
 	if ($rows > 0) {
@@ -511,15 +511,15 @@ class Library {
 	if($data1['management']==NULL) $info['description'].="keine Besonderheiten<br>"; 
 	else $info['description'].="Bis zu <b>".$GLOBALS['fpcost'][$data1['management']][0]." Städte können zu 100%</b> genutzt werden";
 
-	$res2=do_mysqli_query("SELECT research.name AS name, research.id AS id, lib_link FROM research, req_research  WHERE research.id = req_research.req_research AND req_research.research_id = ".$data1['id']);
+	$res2=do_mysql_query("SELECT research.name AS name, research.id AS id, lib_link FROM research, req_research  WHERE research.id = req_research.req_research AND req_research.research_id = ".$data1['id']);
 	if(mysqli_num_rows($res2)>0) {
 	  $info['description'].="<p><b>Benötigte Forschungen:</b><br>";
 	  while($data2=mysqli_fetch_assoc($res2)) {
 	    if ($this->player==-1) {
-	      $check_have=do_mysqli_query("SELECT id as research FROM research WHERE id = ".$data2['id']);
+	      $check_have=do_mysql_query("SELECT id as research FROM research WHERE id = ".$data2['id']);
 	    }
 	    else {
-	      $check_have=do_mysqli_query("SELECT research FROM playerresearch WHERE research = ".$data2['id']." AND player=".$this->player);
+	      $check_have=do_mysql_query("SELECT research FROM playerresearch WHERE research = ".$data2['id']." AND player=".$this->player);
 	    }
             
             // Wenn ein Spieler die Forschung nicht hat, dann rot markieren

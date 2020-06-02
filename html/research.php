@@ -87,7 +87,7 @@ if( defined("RESEARCH_BIGSCHOOL") && defined("RESEARCH_LIBRARY") ) {
     " WHERE research IN (".RESEARCH_BIGSCHOOL.",".RESEARCH_LIBRARY.") ".
     " AND player = ".$_SESSION['player']->id;
 
-  $schools = do_mysqli_query_fetch_assoc($sql);
+  $schools = do_mysql_query_fetch_assoc($sql);
 }
 else {
   $schools['cnt'] = 2;
@@ -100,7 +100,7 @@ Durch Erforschung von <? if($schools['cnt'] == 0) echo "Klassensystem und "?> Bi
 echo "<p>";
 
 
-$res0 = do_mysqli_query("SELECT rid FROM researching WHERE player = ".$_SESSION['player']->getID());
+$res0 = do_mysql_query("SELECT rid FROM researching WHERE player = ".$_SESSION['player']->getID());
 $countResearching = mysqli_num_rows($res0);
 
 if($countResearching >= $schools['cnt']+1) {
@@ -175,7 +175,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
   echo "<td width=\"15%\" style=\"text-align:right; padding-right:10px;\">".formatTime(max(MIN_RESEARCH_TIME, $rs[$i]['content']['time']/RESEARCHSPEED))." <img src=\"".$imagepath."/time.gif\"></td>";
   
   
-  $res1 = do_mysqli_query("SELECT rid,starttime,endtime FROM researching WHERE player = '".$_SESSION['player']->id."' AND rid = '".$rs[$i]['content']['id']."'");
+  $res1 = do_mysql_query("SELECT rid,starttime,endtime FROM researching WHERE player = '".$_SESSION['player']->id."' AND rid = '".$rs[$i]['content']['id']."'");
   $count1 = mysqli_num_rows($res1);
   $data1 = mysqli_fetch_assoc($res1);
   
@@ -184,7 +184,7 @@ for ($i=0;$i<sizeof($rs);$i++) {
     echo "<td width=\"15%\" class=\"tblhead\"><span class=\"noerror\" id=\"".$rs[$i]['content']['id']."\"><script type=\"text/javascript\">addTimer('".$remaining."',".$rs[$i]['content']['id'].");</script></span></td>";
   }
   else {		
-    $res2 = do_mysqli_query("SELECT research FROM playerresearch WHERE player = '".$_SESSION['player']->id."' AND research = '".$rs[$i]['content']['id']."'");
+    $res2 = do_mysql_query("SELECT research FROM playerresearch WHERE player = '".$_SESSION['player']->id."' AND research = '".$rs[$i]['content']['id']."'");
     $data2 = mysqli_fetch_assoc($res2);
     
     if($data2['research'] == $rs[$i]['content']['id']) {

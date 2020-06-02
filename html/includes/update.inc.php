@@ -45,7 +45,7 @@ include_once("includes/session.inc.php");
  * irgendwelchen Gründen nicht verwendet wird.
  */
 
-$res1=do_mysqli_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coalesce(holiday, 0) > UNIX_TIMESTAMP() AS holidaymode, status ".
+$res1=do_mysql_query("SELECT cc_messages, cc_resources, cc_towns, holiday, coalesce(holiday, 0) > UNIX_TIMESTAMP() AS holidaymode, status ".
                      " FROM player WHERE id=".$_SESSION['player']->getID());
 
 
@@ -85,7 +85,7 @@ if ($cc=mysqli_fetch_assoc($res1)) {
     goto_login();
   }
   
-  do_mysqli_query("UPDATE player SET cc_resources=".$cc['cc_resources'].", cc_messages=".$cc['cc_messages'].", cc_towns=".$cc['cc_towns'].
+  do_mysql_query("UPDATE player SET cc_resources=".$cc['cc_resources'].", cc_messages=".$cc['cc_messages'].", cc_towns=".$cc['cc_towns'].
                  " WHERE id=".$_SESSION['player']->getID());
 }
 

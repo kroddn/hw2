@@ -82,7 +82,7 @@ if( $_GET['activity']==true) {
     echo "  <td class=\"tblhead\">&nbsp;</td>\n";
     echo "</tr>\n";
 
-    $res1=do_mysqli_query("SELECT id,name,clanstatus, regtime,lastseen,points,".
+    $res1=do_mysql_query("SELECT id,name,clanstatus, regtime,lastseen,points,".
                          "       round(pointsavg/pointsupd) as avgpoints ".
                          " FROM player ".
                          " WHERE clan=".$_SESSION['player']->clan." ORDER BY name ASC");
@@ -94,7 +94,7 @@ if( $_GET['activity']==true) {
       echo "  <td class=\"tblbody\">".get_info_link($p->name,"player",1)."</td>\n";
       
       // echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$p->regtime)."</td>\n";      
-      $online = do_mysqli_query_fetch_assoc("SELECT lastclick FROM player_online WHERE uid = ".$p->id);
+      $online = do_mysql_query_fetch_assoc("SELECT lastclick FROM player_online WHERE uid = ".$p->id);
       
       if ( time() - $online['lastclick'] < 3*60 ) {
         echo "  <td class=\"tblbody\">".date("d.m.Y H:i",$online['lastclick'])."</td>\n";
@@ -159,7 +159,7 @@ else {
   echo "</tr>\n";
 
   $deleted_players = 0;
-$playerids = do_mysqli_query("SELECT player.name, player.id, player.clan, clanlog.tax, clanlog.amount, clanlog.tax+clanlog.amount AS sums".
+$playerids = do_mysql_query("SELECT player.name, player.id, player.clan, clanlog.tax, clanlog.amount, clanlog.tax+clanlog.amount AS sums".
                             " FROM clanlog LEFT JOIN player ON playerid=player.id where clanlog.clan=".$clan->getID().
                             " ORDER BY ".$order);
 

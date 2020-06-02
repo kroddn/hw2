@@ -31,11 +31,11 @@ if( isset($_REQUEST['accept_inform']) )
                    " WHERE inform_player.player IS NULL AND inform.infid = %d",
                    $_SESSION['player']->getID(), $_REQUEST['infid']);
     
-    $res = do_mysqli_query($sql);
+    $res = do_mysql_query($sql);
     if(mysqli_num_rows($res) > 0) {
       $sql = sprintf("INSERT INTO inform_player (infid, player, time) VALUES(%d, %d, UNIX_TIMESTAMP())",
                      $_REQUEST['infid'], $_SESSION['player']->getID() );
-      do_mysqli_query($sql);
+      do_mysql_query($sql);
     }
     unset($error);
   }
@@ -50,7 +50,7 @@ $sql = sprintf("SELECT inform.* FROM inform LEFT JOIN inform_player ".
                       "  AND (expire IS NULL OR NOT expire < UNIX_TIMESTAMP())".
                       " ORDER BY inform.time",
                $_SESSION['player']->getID() );
-$res = do_mysqli_query($sql);
+$res = do_mysql_query($sql);
 if(mysqli_num_rows($res) > 0 ) {
   $inform = mysqli_fetch_assoc($res);
  

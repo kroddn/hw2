@@ -73,7 +73,7 @@ if(isset($name) && (!isset($id))) {
           if($_SESSION['player']->isMaintainer() && strpos($name, "@") !== FALSE)
           {
             $name = mysqli_escape_string($GLOBALS['con'], $name);
-            $res = do_mysqli_query("SELECT id FROM player WHERE email LIKE '%".$name."%' ".
+            $res = do_mysql_query("SELECT id FROM player WHERE email LIKE '%".$name."%' ".
                                     " ORDER BY name != '".$name."' LIMIT 20 ");
 
           }
@@ -81,7 +81,7 @@ if(isset($name) && (!isset($id))) {
           else if($_SESSION['player']->isMaintainer() && preg_match('/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+/i', $name))
           {
             $name = mysqli_escape_string($GLOBALS['con'], $name);
-            $res = do_mysqli_query("SELECT DISTINCT p.id FROM log_login l LEFT JOIN player p ON p.login=l.name".
+            $res = do_mysql_query("SELECT DISTINCT p.id FROM log_login l LEFT JOIN player p ON p.login=l.name".
                                     " WHERE l.ip LIKE '%".$name."%' ".
                                     " LIMIT 20 ");
 
@@ -90,7 +90,7 @@ if(isset($name) && (!isset($id))) {
             $name = mysqli_escape_string($GLOBALS['con'], $name);
             $mask = isset($_REQUEST['exactmatch']) ? $name : "%".$name."%";
             
-            $res = do_mysqli_query("SELECT id FROM player WHERE name LIKE '$mask' ".
+            $res = do_mysql_query("SELECT id FROM player WHERE name LIKE '$mask' ".
             ($_SESSION['player']->isMaintainer() ? " OR login LIKE '$mask'" : "").
                                   " ORDER BY name != '".$name."' LIMIT 10 ");
           }
@@ -108,7 +108,7 @@ if(isset($name) && (!isset($id))) {
         break; // player
       case "clan" :
         $name = mysqli_escape_string($GLOBALS['con'], $name);
-        $res = do_mysqli_query("SELECT id FROM clan WHERE name like '%".$name."%' LIMIT 10");
+        $res = do_mysql_query("SELECT id FROM clan WHERE name like '%".$name."%' LIMIT 10");
 
         while ($data = mysqli_fetch_assoc($res)) {
           if ($count>1) {
@@ -120,7 +120,7 @@ if(isset($name) && (!isset($id))) {
         }
         break;
       case "town":
-        $res = do_mysqli_query("SELECT id FROM city WHERE name like '%".$name."%' ORDER BY name != '".$name."' LIMIT 10");
+        $res = do_mysql_query("SELECT id FROM city WHERE name like '%".$name."%' ORDER BY name != '".$name."' LIMIT 10");
         while ($data = mysqli_fetch_assoc($res)) {
           if ($count>1) {
             echo "\n<hr>";
@@ -176,7 +176,7 @@ function print_playerinfo ($id) {
   global $popup, $imagepath;
   $id = intval($id);
   
-  $res1 = do_mysqli_query("SELECT avatar, status, p.id AS id, p.name, p.login, p.description AS descr, religion, sms, p.clan AS clanid, clan.name AS clanname, clan.id AS clanid FROM player AS p LEFT JOIN clan ON p.clan=clan.id WHERE p.id=".$id);
+  $res1 = do_mysql_query("SELECT avatar, status, p.id AS id, p.name, p.login, p.description AS descr, religion, sms, p.clan AS clanid, clan.name AS clanname, clan.id AS clanid FROM player AS p LEFT JOIN clan ON p.clan=clan.id WHERE p.id=".$id);
   if ($data1 = mysqli_fetch_assoc($res1)) {
     if ($data1['religion'] == 1)
       $relstr = "Christentums";
@@ -263,7 +263,7 @@ function print_playerinfo ($id) {
     echo "<tr class=\"tblhead\" style=\"font-weight:bold;\">";
     echo "<td>Name</td><td>Koord</td><td>Stadtgröße</td><td>Religion</td><td>Aktion</td></tr>";
 
-    $res2 = do_mysqli_query("SELECT city.id,x,y,name,population,prosperity,religion,capital ".
+    $res2 = do_mysql_query("SELECT city.id,x,y,name,population,prosperity,religion,capital ".
                            " FROM city LEFT JOIN map ON city.id=map.id ".
                            " WHERE city.owner=".$id." ORDER BY capital DESC, y ASC");
     while ($data2 = mysqli_fetch_assoc($res2)) {
@@ -292,10 +292,10 @@ function print_claninfo ($id) {
   global $popup;
   $id = intval($id);
 
-  $res1 = do_mysqli_query("SELECT name,description FROM clan WHERE id=".$id);
+  $res1 = do_mysql_query("SELECT name,description FROM clan WHERE id=".$id);
   $data1 = mysqli_fetch_assoc($res1);
 
-  $res2 = do_mysqli_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC");
+  $res2 = do_mysql_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC");
 
 
   echo "<table width=\"400\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\"><tr>\n";
@@ -317,8 +317,8 @@ function print_claninfo ($id) {
   echo "<tr><td class=\"tblhead\">Feinde</td></tr>";
   echo "<tr><td class=\"tblbody\">";
 
-  $resA = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$id);
-  $resB = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$id);
+  $resA = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=0 AND clanrel.id2=".$id);
+  $resB = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=0 AND clanrel.id1=".$id);
   if(mysqli_num_rows($resA) < 1 && mysqli_num_rows($resB) < 1)
   echo "-";
   while ($dataA = mysqli_fetch_assoc($resA))
@@ -332,8 +332,8 @@ function print_claninfo ($id) {
   echo "<tr><td class=\"tblhead\">Nichtangriffspakte</td></tr>";
   echo "<tr><td class=\"tblbody\">";
 
-  $resA = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$id);
-  $resB = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$id);
+  $resA = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=2 AND clanrel.id2=".$id);
+  $resB = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=2 AND clanrel.id1=".$id);
   if(mysqli_num_rows($resA) < 1 && mysqli_num_rows($resB) < 1)
   echo "-";
   while ($dataA = mysqli_fetch_assoc($resA))
@@ -347,8 +347,8 @@ function print_claninfo ($id) {
   echo "<tr><td class=\"tblhead\">Bündnisse</td></tr>";
   echo "<tr><td class=\"tblbody\">";
 
-  $resA = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$id);
-  $resB = do_mysqli_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$id);
+  $resA = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id1=clan.id WHERE clanrel.type=3 AND clanrel.id2=".$id);
+  $resB = do_mysql_query("SELECT clan.name AS name FROM clanrel LEFT JOIN clan ON clanrel.id2=clan.id WHERE clanrel.type=3 AND clanrel.id1=".$id);
   if(mysqli_num_rows($resA) < 1 && mysqli_num_rows($resB) < 1)
   echo "-";
   while ($dataA = mysqli_fetch_assoc($resA))
@@ -358,7 +358,7 @@ function print_claninfo ($id) {
   echo "</td></tr></table><br />\n";
 
   // Status
-  $res2 = do_mysqli_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC, name");
+  $res2 = do_mysql_query("SELECT name,points,religion,clanstatus FROM player WHERE clan = ".$id." ORDER BY clanstatus DESC, name");
   echo "<table width=\"400\" border=\"0\" cellpadding=\"1\" cellspacing=\"1\">\n";
   $cat = -1;
   while ($data2 = mysqli_fetch_assoc($res2)) {
@@ -399,7 +399,7 @@ function print_towninfo ($id) {
   global $popup;
   $id = intval($id);
   
-  $res1 = do_mysqli_query("SELECT clan.name as clan, city.name AS cityname,player.name AS playername,player.id as playerid,population,capital,x,y,prosperity,city.religion as creligion ".
+  $res1 = do_mysql_query("SELECT clan.name as clan, city.name AS cityname,player.name AS playername,player.id as playerid,population,capital,x,y,prosperity,city.religion as creligion ".
                          " FROM city LEFT JOIN player ON (player.id=city.owner) LEFT JOIN clan ON player.clan=clan.id LEFT JOIN map ON city.id=map.id ".
                          " WHERE city.id=".$id);
 
@@ -439,13 +439,13 @@ function print_towninfo ($id) {
 
     // Die näheste eigene Stadt bestimmen
     echo "<tr class='tblbody'><td>Nahe Städte</td><td>";
-    $cit = do_mysqli_query ("SELECT city.id,name,round(sqrt( (".$data1['x']."-x)*(".$data1['x']."-x)+(".$data1['y']."-y)*(".$data1['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." AND city.id != ".$id." ORDER BY dist LIMIT 3");
+    $cit = do_mysql_query ("SELECT city.id,name,round(sqrt( (".$data1['x']."-x)*(".$data1['x']."-x)+(".$data1['y']."-y)*(".$data1['y']."-y))) AS dist FROM city LEFT JOIN map USING(id) WHERE owner = ".$_SESSION['player']->GetID()." AND city.id != ".$id." ORDER BY dist LIMIT 3");
     
     while ($city=mysqli_fetch_assoc($cit)) {
       echo $city['name']." (".$city['dist'].")<br>";
     }
 
-    $num_atts = do_mysqli_query_fetch_assoc("SELECT count(*) AS cnt FROM army WHERE army.end = ".$id.
+    $num_atts = do_mysql_query_fetch_assoc("SELECT count(*) AS cnt FROM army WHERE army.end = ".$id.
                                            " AND owner = ".$_SESSION['player']->GetID());
     if($num_atts['cnt'] > 0) {
       echo '<tr class="tblbody"><td colspan="2">'.$num_atts['cnt'].

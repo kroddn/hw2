@@ -159,11 +159,11 @@ function sms_send($nr, $text) {
   }
   
   // INSERT
-  $res = do_mysqli_query($sql);
+  $res = do_mysql_query($sql);
   $sms_id = mysqli_insert_id($GLOBALS['con']);
   
   // An dieser Stelle nun wirklich die SMS versenden
-  do_mysqli_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
+  do_mysql_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
                  " contingent=contingent-1, contingent_used=contingent_used+1, ".
                  " contingent_freesms = contingent_freesms - 1 ".
                  "WHERE contingent > 0 AND player = ".$_SESSION['player']->getID());
@@ -174,7 +174,7 @@ function sms_send($nr, $text) {
     $result = real_send_text_sms($nr, $text, $sender);
 
     if (strlen($result) > 0) {
-      do_mysqli_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
+      do_mysql_query("UPDATE sms_settings SET updated=UNIX_TIMESTAMP(), ".
                      " contingent=contingent+1, contingent_used=contingent_used-1, ".
                      " contingent_freesms = contingent_freesms + 1 ".
                      "WHERE contingent >= 0 AND player = ".$_SESSION['player']->getID());
@@ -182,7 +182,7 @@ function sms_send($nr, $text) {
       return $result;
     }
     
-    do_mysqli_query("UPDATE sms_send SET sent_time = UNIX_TIMESTAMP() WHERE sms_id = ".$sms_id);
+    do_mysql_query("UPDATE sms_send SET sent_time = UNIX_TIMESTAMP() WHERE sms_id = ".$sms_id);
     check_sms_settings();
     return null;
   }
@@ -304,7 +304,7 @@ function real_send_text_sms($empfaenger, $text, $absender_nr = null) {
 
 
 function check_sms_settings() {
-  $sms_res = do_mysqli_query("SELECT * FROM sms_settings WHERE player = ".$_SESSION['player']->getID());
+  $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$_SESSION['player']->getID());
   if (mysqli_num_rows($sms_res) == 1) {
     $sms_settings = mysqli_fetch_assoc($sms_res);
     $_SESSION['sms_may_send']   = true;
@@ -345,6 +345,6 @@ function accept_sms_rules() {
                  $_SESSION['player']->getID(),
                  $default_contingent);
   
-  do_mysqli_query($sql);
+  do_mysql_query($sql);
 }
 ?>

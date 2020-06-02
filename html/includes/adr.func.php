@@ -51,10 +51,10 @@ function adr_real_add($name, $nicename = null, $sms = null) {
 
   
   if ($sms == null) {
-    $p = do_mysqli_query_fetch_assoc("SELECT * FROM player WHERE name LIKE '".mysqli_escape_string($GLOBALS['con'], $name)."'");
+    $p = do_mysql_query_fetch_assoc("SELECT * FROM player WHERE name LIKE '".mysqli_escape_string($GLOBALS['con'], $name)."'");
   }
   else {
-    $p_res = do_mysqli_query("SELECT nicename FROM addressbook WHERE owner = ".$me.
+    $p_res = do_mysql_query("SELECT nicename FROM addressbook WHERE owner = ".$me.
                             " AND sms LIKE '".mysqli_escape_string($GLOBALS['con'], $sms)."'");
     if (mysqli_num_rows($p_res)){
       $aname = mysqli_fetch_assoc($p_res);
@@ -64,7 +64,7 @@ function adr_real_add($name, $nicename = null, $sms = null) {
   }
 
   if($sms == null && $p['id']) {
-    $p_res = do_mysqli_query("SELECT * FROM addressbook WHERE owner = ".$me.
+    $p_res = do_mysql_query("SELECT * FROM addressbook WHERE owner = ".$me.
                             " AND player = ".$p['id']);
     if (mysqli_num_rows($p_res) > 0) {
       return "Dieser Spieler befindet sich bereits in Eurem Adressbuch.";
@@ -80,7 +80,7 @@ function adr_real_add($name, $nicename = null, $sms = null) {
                  $nicename == null ? "NULL" : "'".mysqli_escape_string($GLOBALS['con'], $nicename)."'",
                  $sms == null ? "NULL" : "'".mysqli_escape_string($GLOBALS['con'], $sms)."'"
                  );
-  do_mysqli_query($sql);
+  do_mysql_query($sql);
   
   return null;
 }
@@ -91,7 +91,7 @@ function adr_edit_entry($id) {
   $id = intval($id);
   if ($id) {
     $me = $_SESSION['player']->GetID();
-    $res = do_mysqli_query("SELECT * FROM addressbook WHERE id = $id AND owner = ".$me);
+    $res = do_mysql_query("SELECT * FROM addressbook WHERE id = $id AND owner = ".$me);
     if (mysqli_num_rows($res) == 1) {
       echo "<h2>Eintrag bearbeiten</h2>";
 
@@ -113,7 +113,7 @@ function adr_del_entry($id) {
   $id = intval($id);
   if ($id) {
     $me = $_SESSION['player']->GetID();
-    do_mysqli_query("DELETE FROM addressbook WHERE id = $id AND owner = ".$me);
+    do_mysql_query("DELETE FROM addressbook WHERE id = $id AND owner = ".$me);
     if (mysqli_affected_rows($GLOBALS['con']) == 0)
       return "Dieser Eintrag existiert nicht.";
   }
@@ -181,7 +181,7 @@ Hinweis: einen <b>Spieler</b> können Sie ganz einfach über die <a href="townha
 function print_address_book() {
   $me = $_SESSION['player']->GetID();
 
-  $res = do_mysqli_query("SELECT p.name AS nick, coalesce(a.nicename, p.name) AS nicename, ".
+  $res = do_mysql_query("SELECT p.name AS nick, coalesce(a.nicename, p.name) AS nicename, ".
                         "   a.id AS id, a.player AS pid, a.sms AS sms, ".
                         " p.sms IS NOT NULL AS ownsms ".
                         " FROM addressbook a ".

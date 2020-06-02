@@ -54,7 +54,7 @@ if(isset($_POST['selectname'])) {
     include_once ("includes/db.inc.php");
     
     // Prüfen, ob der Name bereits vergeben ist
-    $check = do_mysqli_query("SELECT * FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'], $playername)."'");
+    $check = do_mysql_query("SELECT * FROM player WHERE name = '".mysqli_escape_string($GLOBALS['con'], $playername)."'");
     if(mysqli_num_rows($check) > 0) {
       $error = "Der Spielername '$playername' ist bereits vergeben.";
       unset($playername);
@@ -70,11 +70,11 @@ if(isset($_POST['selectname'])) {
       
       $sql = sprintf("UPDATE player SET pos = %d, religion = %d, name = '%s', activationtime=UNIX_TIMESTAMP(), lastres=0 WHERE id = %d" , 
                      $pos, $religion, mysqli_escape_string($GLOBALS['con'], $playername), $_SESSION['db_login']['id']);
-      do_mysqli_query($sql);
+      do_mysql_query($sql);
      
       // Noobschutz bei 
       if(defined("HISPEED")) {
-        do_mysqli_query("UPDATE player SET nooblevel = 0 WHERE id = ".$_SESSION['db_login']['id']);
+        do_mysql_query("UPDATE player SET nooblevel = 0 WHERE id = ".$_SESSION['db_login']['id']);
       }
       
       $_SESSION['sec_key'] = "magic1234";
@@ -115,7 +115,7 @@ if(defined("START_POS_NEW") && START_POS_NEW) {
         echo $where."<br>";
       }
 
-      $count = do_mysqli_query_fetch_assoc("SELECT count(*) AS c FROM startpositions WHERE ".$where);
+      $count = do_mysql_query_fetch_assoc("SELECT count(*) AS c FROM startpositions WHERE ".$where);
       $locsum = $count['c'];
       if($reli == 1) $loc[$p]   = intval($count['c']);
       else           $loc[5-$p] = intval($count['c']);
@@ -124,11 +124,11 @@ if(defined("START_POS_NEW") && START_POS_NEW) {
   // Jetzt muss noch korrigiert werden für das alte Skript.
 }
 else {
-  $mapsize = do_mysqli_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
+  $mapsize = do_mysql_query_fetch_assoc("SELECT max(x)+1 AS x, max(y)+1 AS y FROM map");
   $fx = $mapsize['x'];
   $fy = $mapsize['y'];
 
-  $qry_startlocations = do_mysqli_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
+  $qry_startlocations = do_mysql_query("SELECT count(*) as c, floor(y/".$fy."*6) as pos FROM startpositions GROUP BY pos");
 
   $locsum = 0;
   while ($res_sl=mysqli_fetch_assoc($qry_startlocations)) {

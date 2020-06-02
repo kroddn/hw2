@@ -61,7 +61,7 @@ function insert_new_player(&$p) {
   }
   
   $religion = "NULL";
-  $mainres = do_mysqli_query("INSERT INTO player (login,password,email,register_email,sms,lastseen,religion,status,statusdescription,activationkey,regtime,recruiter,pos,bonuspoints,cc_messages) VALUES ('".trim($p['login'])."','".$md5pw."','".trim($p['email'])."', '".trim($p['email'])."', ".$sms.", UNIX_TIMESTAMP(), ".$religion.", 1,'Noch nicht aktiviert','".$key."', UNIX_TIMESTAMP(), ".( !isset($p['ref']) || $p['ref'] == 0 ? "NULL" : $p['ref']).", NULL, $bonuspoints, 1)");
+  $mainres = do_mysql_query("INSERT INTO player (login,password,email,register_email,sms,lastseen,religion,status,statusdescription,activationkey,regtime,recruiter,pos,bonuspoints,cc_messages) VALUES ('".trim($p['login'])."','".$md5pw."','".trim($p['email'])."', '".trim($p['email'])."', ".$sms.", UNIX_TIMESTAMP(), ".$religion.", 1,'Noch nicht aktiviert','".$key."', UNIX_TIMESTAMP(), ".( !isset($p['ref']) || $p['ref'] == 0 ? "NULL" : $p['ref']).", NULL, $bonuspoints, 1)");
 
   if (!$mainres) {
     return "Fehler. Konnte Spieler nicht anlegen";
@@ -125,10 +125,10 @@ Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de")
   
 
   if ($p['ref'] != null) {
-    $res7=do_mysqli_query("SELECT id FROM player WHERE id = ".$p['ref']);
+    $res7=do_mysql_query("SELECT id FROM player WHERE id = ".$p['ref']);
     if(mysqli_num_rows($res7)>0 && $p['ref'] != $playerid) {
       $bonus = RECRUIT_BONUSPOINTS;
-      do_mysqli_query("UPDATE player SET bonuspoints = bonuspoints+".$bonus  ." WHERE id = ".$p['ref']);
+      do_mysql_query("UPDATE player SET bonuspoints = bonuspoints+".$bonus  ." WHERE id = ".$p['ref']);
     }
   }
 
@@ -150,7 +150,7 @@ Viel Spaß wünscht Ihnen das Team von Holy-Wars 2", "FROM: mail@holy-wars2.de")
                  );
 
 
-  do_mysqli_query($sql);
+  do_mysql_query($sql);
   
   return null;
 }

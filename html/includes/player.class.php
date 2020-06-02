@@ -97,9 +97,9 @@ class Player {
   
   // Konstruktor
   function Player($id, $sid) {
-    $res1=do_mysqli_query("SELECT name, login, settings, signature, description, email, sms, religion, gold, wood, iron, stone, rp, bonuspoints, lastclickbonuspoints, round(pointsavg/pointsupd) as avgpoints, points, clan, clanstatus, clanapplication, mapsize, mapversion, gfx_path, hwstatus, regtime, activationtime, nooblevel, recruiter, tutorial FROM player WHERE id=".intval($id) );        
-    $res2=do_mysqli_query("SELECT count(*) FROM message WHERE recipient=".intval($id)." AND !(status & ".(MSG_RECIPIENT_READ|MSG_RECIPIENT_DELETED).")");
-    $res3=do_mysqli_query("SELECT lastclick FROM player_online WHERE uid=".intval($id) );
+    $res1=do_mysql_query("SELECT name, login, settings, signature, description, email, sms, religion, gold, wood, iron, stone, rp, bonuspoints, lastclickbonuspoints, round(pointsavg/pointsupd) as avgpoints, points, clan, clanstatus, clanapplication, mapsize, mapversion, gfx_path, hwstatus, regtime, activationtime, nooblevel, recruiter, tutorial FROM player WHERE id=".intval($id) );        
+    $res2=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".intval($id)." AND !(status & ".(MSG_RECIPIENT_READ|MSG_RECIPIENT_DELETED).")");
+    $res3=do_mysql_query("SELECT lastclick FROM player_online WHERE uid=".intval($id) );
     $data3=mysqli_fetch_assoc($res3);
     
     $db_player = mysqli_fetch_assoc($res1);
@@ -174,19 +174,19 @@ class Player {
   function logout() {
     // FIXME: Wenn man von mehreren PCs aus einloggt, wird hier
     // vermutlich der falsche Datensatz aktualisiert
-    do_mysqli_query("UPDATE log_login SET logouttime = UNIX_TIMESTAMP() ".
+    do_mysql_query("UPDATE log_login SET logouttime = UNIX_TIMESTAMP() ".
                    " WHERE id = ".$this->getID()." AND sid = '".mysqli_escape_string($GLOBALS['con'],  session_id() )."'"
                    );
     
     // Lastclick setzen
-    do_mysqli_query("UPDATE player SET lastseen = UNIX_TIMESTAMP() ".
+    do_mysql_query("UPDATE player SET lastseen = UNIX_TIMESTAMP() ".
                    " WHERE id = ".$this->getID() );
   
   }
   
   
   function tutorialInc($to) {
-    do_mysqli_query("UPDATE player SET tutorial = ".intval($to)." WHERE id = ".$this->id);
+    do_mysql_query("UPDATE player SET tutorial = ".intval($to)." WHERE id = ".$this->id);
     $this->tutorialLvl = $to;
   }
 
@@ -212,16 +212,16 @@ class Player {
 	}
     function changeSMS($sms) {
       if ($sms == null) {
-        do_mysqli_query("UPDATE player SET sms = NULL WHERE id=".$this->id);
+        do_mysql_query("UPDATE player SET sms = NULL WHERE id=".$this->id);
       }
       else {
-        do_mysqli_query("UPDATE player SET sms = '".mysqli_escape_string($GLOBALS['con'], $sms)."' WHERE id=".$this->id );
+        do_mysql_query("UPDATE player SET sms = '".mysqli_escape_string($GLOBALS['con'], $sms)."' WHERE id=".$this->id );
       }          
       $this->sms = $sms;
     }
 
     function showSMSSenderNumber() {
-      $sms_res = do_mysqli_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
+      $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
       if (mysqli_num_rows($sms_res) == 1) {
         // Include für Konstanten
         include_once("includes/sms.func.php");
@@ -245,7 +245,7 @@ class Player {
     function isValidSMSSenderNumber() {
       if($this->isAdmin()) return true;
 
-      $sms_res = do_mysqli_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
+      $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
       if (mysqli_num_rows($sms_res) == 1) {
         $sms_settings = mysqli_fetch_assoc($sms_res);
         
@@ -259,7 +259,7 @@ class Player {
 
     /* Gibt die SMS-Absenderkennung zurück*/
 	function getSMSSenderNumber() {
-      $sms_res = do_mysqli_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
+      $sms_res = do_mysql_query("SELECT * FROM sms_settings WHERE player = ".$this->id );
       if (mysqli_num_rows($sms_res) == 1) {
         // Include für Konstanten
         include_once("includes/sms.func.php");
@@ -284,12 +284,12 @@ class Player {
     function changeSMSSenderNumber($sms, $show = null) {
       if ($sms == null) {
         include_once("includes/sms.func.php");
-        do_mysqli_query("UPDATE sms_settings SET sms_nr = NULL, sms_nr_verified = NULL, sms_nr_show = ".
+        do_mysql_query("UPDATE sms_settings SET sms_nr = NULL, sms_nr_verified = NULL, sms_nr_show = ".
                        ($show == null || !$show ? "0" : 1).
                        " WHERE player=".$this->id);
       }
       else {
-        do_mysqli_query("UPDATE sms_settings SET sms_nr = '".mysqli_escape_string($GLOBALS['con'], $sms)."', sms_nr_verified = NULL, sms_nr_show = ".
+        do_mysql_query("UPDATE sms_settings SET sms_nr = '".mysqli_escape_string($GLOBALS['con'], $sms)."', sms_nr_verified = NULL, sms_nr_show = ".
                        ($show == null || !$show ? "0" : 1).
                        " WHERE player=".$this->id);
       }          
@@ -370,13 +370,13 @@ class Player {
 	function setBonuspoints($val) {
 	  $val = intval($val);
 	  $this->bonuspoints = $val;
-	  do_mysqli_query("UPDATE player SET bonuspoints = ".intval($val)." WHERE id = ".$this->id);
+	  do_mysql_query("UPDATE player SET bonuspoints = ".intval($val)." WHERE id = ".$this->id);
 	}
 	
   function addClickBonuspoints() {
     if (!defined("CLICK_BONUSPOINTS")) return 0;
 	
-    do_mysqli_query("UPDATE player SET ".
+    do_mysql_query("UPDATE player SET ".
 		   " bonuspoints = bonuspoints + ".CLICK_BONUSPOINTS.",".
 		   " lastclickbonuspoints = UNIX_TIMESTAMP() ".
 		   " WHERE UNIX_TIMESTAMP() > lastclickbonuspoints + ".CLICK_BONUSPOINTS_TIME.
@@ -428,7 +428,7 @@ class Player {
 	// Anzahl neuer Nachrichten
 	function getSentMessages() {
           if ($this->messages_sent == -1) {
-            $msgsent = do_mysqli_query_fetch_array("SELECT count(*) AS c FROM message WHERE !(status & ".MSG_SENDER_DELETED.") AND sender = '".mysqli_escape_string($GLOBALS['con'], $this->name)."' AND date>=".intval($this->regtime) );
+            $msgsent = do_mysql_query_fetch_array("SELECT count(*) AS c FROM message WHERE !(status & ".MSG_SENDER_DELETED.") AND sender = '".mysqli_escape_string($GLOBALS['con'], $this->name)."' AND date>=".intval($this->regtime) );
             $this->messages_sent = $msgsent['c'];
           }
           return $this->messages_sent;
@@ -510,7 +510,7 @@ class Player {
 
 
 	function canTrade() {
-	  $res = do_mysqli_query ("SELECT research FROM playerresearch WHERE player=".$this->getID()." AND research=".MARKETRESEARCH );
+	  $res = do_mysql_query ("SELECT research FROM playerresearch WHERE player=".$this->getID()." AND research=".MARKETRESEARCH );
 	  if (mysqli_num_rows($res) > 0)
 	    return null;
 	  else
@@ -524,14 +524,14 @@ class Player {
 	
 	// Anzahl neuer Nachrichten aktualisieren
 	function updateNewMessages() {
-          $res1=do_mysqli_query("SELECT count(*) FROM message WHERE recipient=".$this->id." AND status LIKE '0'");
+          $res1=do_mysql_query("SELECT count(*) FROM message WHERE recipient=".$this->id." AND status LIKE '0'");
           $num = mysqli_fetch_array($res1);	
 	  $this->newmessages = $num[0];
 	}
 
 	// Ressourcen aktualisieren
 	function updateResources() {
-		$res1=do_mysqli_query("SELECT gold, wood, stone, iron, rp, nooblevel, bonuspoints FROM player WHERE id=".$this->id);
+		$res1=do_mysql_query("SELECT gold, wood, stone, iron, rp, nooblevel, bonuspoints FROM player WHERE id=".$this->id);
 		$data=mysqli_fetch_assoc($res1);
 		$this->gold = $data['gold'];
 		$this->wood = $data['wood'];
@@ -545,7 +545,7 @@ class Player {
 	// ändern der Nutzerdaten
 	function changeSettings($newmapsize) {
 		$sql = sprintf("UPDATE player SET mapsize=%u WHERE id=%u", $newmapsize, $this->id);
-		do_mysqli_query($sql);
+		do_mysql_query($sql);
 		do_log(sprintf("Mapsize changed: mapsize %u", $newmapsize));
 		$this->mapsize=$newmapsize;
 	}
@@ -567,7 +567,7 @@ class Player {
         }
       }
       
-      do_mysqli_query("UPDATE player SET settings = ".$newsettings." WHERE id = ".$this->id);
+      do_mysql_query("UPDATE player SET settings = ".$newsettings." WHERE id = ".$this->id);
       return null;
     }
     
@@ -580,7 +580,7 @@ class Player {
       $_SESSION['settings'] = array();      
       
       if ($tmpsettings == null) {
-        $tmpsettings = do_mysqli_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$this->id);      
+        $tmpsettings = do_mysql_query_fetch_assoc("SELECT settings FROM player WHERE id = ".$this->id);      
         $tmpsettings = intval($settings['settings']);
       }      
 
@@ -598,7 +598,7 @@ class Player {
 		}
         
         $sql=sprintf("UPDATE player SET email='%s' WHERE id = %u", $value, $this->id);
-        do_mysqli_query($sql);
+        do_mysql_query($sql);
         $this->email=$value;
 	}
 
@@ -620,7 +620,7 @@ class Player {
     
 	function saveIp() {
 		$sql = sprintf("UPDATE player SET ip='%s' WHERE id=%u", $this->ip, $this->id);
-		do_mysqli_query($sql);
+		do_mysql_query($sql);
 	}
 	// aktuelle Seite zurückgeben
 	function getActivePage() {
@@ -658,7 +658,7 @@ class Player {
 	  }
 	   
 	  // $path ist hier bereits escaped
-	  do_mysqli_query("UPDATE player SET gfx_path = ".$escaped_path." WHERE id = ".$this->id);
+	  do_mysql_query("UPDATE player SET gfx_path = ".$escaped_path." WHERE id = ".$this->id);
 	}
 	
 	function normalizeGFX_PATH() {
@@ -712,7 +712,7 @@ class Player {
 	
 	function updateDescription($desc) {
 	  $desc=save_html($desc);
-	  do_mysqli_query("UPDATE player set description = '".mysqli_escape_string($GLOBALS['con'], $desc)."' WHERE id = ".$this->getID());
+	  do_mysql_query("UPDATE player set description = '".mysqli_escape_string($GLOBALS['con'], $desc)."' WHERE id = ".$this->getID());
 	  $this->description=$desc;
 	}
 	
@@ -727,7 +727,7 @@ class Player {
             return "Die Signatur ist zu lang. Maximal ".$maxlines." Zeilen sind erlaubt!";
           }
 
-	  do_mysqli_query("UPDATE player set signature = '".mysqli_escape_string($GLOBALS['con'], $sig)."' WHERE id = ".$this->getID());
+	  do_mysql_query("UPDATE player set signature = '".mysqli_escape_string($GLOBALS['con'], $sig)."' WHERE id = ".$this->getID());
 	  $this->msgsignature=$sig;
           return null;
 	}
@@ -749,7 +749,7 @@ class Player {
         " FROM addressbook a LEFT JOIN player p ON p.id = a.player ".
         " WHERE a.owner = ".$this->getID()." AND a.player IS NOT NULL".
         " ORDER BY nicename";
-      $adr_res = do_mysqli_query($sql);
+      $adr_res = do_mysql_query($sql);
       $num = $adr_res ? mysqli_num_rows($adr_res) : 0;
       for($i = 0; $i < $num; $i++) {
         $adr[$i] = mysqli_fetch_assoc($adr_res);
@@ -769,7 +769,7 @@ class Player {
         "   OR p.name IS NOT NULL AND p.sms IS NOT NULL ".
         " )".
         " ORDER BY nicename";
-      $adr_res = do_mysqli_query($sql);
+      $adr_res = do_mysql_query($sql);
       $num = $adr_res ? mysqli_num_rows($adr_res) : 0;
       for($i = 0; $i < $num; $i++) {
         $adr[$i] = mysqli_fetch_assoc($adr_res);
@@ -792,7 +792,7 @@ class Player {
             "SELECT id2 as id,name,'0' as clan FROM relation LEFT JOIN player ON player.id=id2 WHERE id1=".$my_id." AND type=2".
             ($this->clan ? " UNION SELECT id,name,'1' AS clan FROM player WHERE clan = ".$this->clan :"").
             " ORDER BY name";
-	  $allies = do_mysqli_query ($sql);
+	  $allies = do_mysql_query ($sql);
 	  while ($ally = mysqli_fetch_assoc($allies)) {
 	    $allied_players[$i][0] = $ally['id'];
 	    $allied_players[$i][1] = $ally['name'];
@@ -822,7 +822,7 @@ class Player {
 
       // War der Spieler schon im Urlaub?
       $MIN_BACK = 14*24*3600; // 14 Tage 
-      $last = do_mysqli_query_fetch_array("SELECT unix_timestamp()-holiday AS t, ".
+      $last = do_mysql_query_fetch_array("SELECT unix_timestamp()-holiday AS t, ".
                                          " from_unixtime(holiday+".$MIN_BACK.") AS ts ".
                                          " FROM player WHERE id = ".$this->id);
       if ($last['t'] < $MIN_BACK) {
@@ -833,13 +833,13 @@ class Player {
       
       // Alle Bedingungen abchecken
       // Hat der Spieler noch Truppen unterwegs?
-      if (mysqli_num_rows(do_mysqli_query("SELECT * FROM army ".
+      if (mysqli_num_rows(do_mysql_query("SELECT * FROM army ".
                                         "WHERE mission != 'return' AND owner = ".$this->id)
                          ) > 0) {
         $error .= "<li>Ihr habt noch Armeen in Bewegung. Zieht diese zurück.";
       }
       // Hat der Spieler noch Truppen unterwegs?
-      if (mysqli_num_rows(do_mysqli_query("SELECT * FROM cityunit LEFT JOIN city ON city.id = cityunit.city ".
+      if (mysqli_num_rows(do_mysql_query("SELECT * FROM cityunit LEFT JOIN city ON city.id = cityunit.city ".
                                         "WHERE city.owner != ".$this->id." AND cityunit.owner =".$this->id)
                          ) > 0) {
         $error .= "<li>Ihr habt noch Truppen bei Verbündeten. Zieht diese zurück (Siehe Verwaltung-&gt;Truppenübersicht)";
@@ -853,11 +853,11 @@ class Player {
 
       // Sekunden und Stunden Multiplizieren
       $duration *= 24*3600;
-      do_mysqli_query("UPDATE player SET holiday=UNIX_TIMESTAMP()+$duration WHERE id = ".$this->id);      
+      do_mysql_query("UPDATE player SET holiday=UNIX_TIMESTAMP()+$duration WHERE id = ".$this->id);      
       
       $sql = sprintf("INSERT INTO log_holiday (player,time,duration,ip) VALUES (%d, UNIX_TIMESTAMP(), %d, '%s')",
                        $this->id, $duration, $_SERVER['REMOTE_ADDR']);
-      do_mysqli_query($sql);
+      do_mysql_query($sql);
 
       session_destroy();
       $_SESSION['session_duration'] = 0;
@@ -888,7 +888,7 @@ class Player {
       
       $markdelete_time = time() + 24*3600;
       $sql = sprintf("UPDATE player SET markdelete = %d WHERE id=%s", $markdelete_time, $id);
-      do_mysqli_query($sql); 
+      do_mysql_query($sql); 
               
       session_destroy();
       $message = sprintf("Ihr Account wird am %s nach %s Uhr endgültig gelöscht. Wenn Sie sich vorher einloggen, wird die Vormerkung der Löschung annuliert.",
@@ -910,7 +910,7 @@ class Player {
     
     function setNoobLevel($level) {
       $this->nooblevel = $level;
-      do_mysqli_query("UPDATE player SET nooblevel = $level WHERE id = ".$this->id);
+      do_mysql_query("UPDATE player SET nooblevel = $level WHERE id = ".$this->id);
     }
     
     function getNumberOfAttacks() {      

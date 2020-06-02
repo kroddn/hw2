@@ -52,24 +52,24 @@ function inform_players() {
  */
 function reset_players($delete = false) {
   // Premium-Accs sichern
-  do_mysqli_query("TRUNCATE premiumacc_old");
-  do_mysqli_query("INSERT INTO premiumacc_old ".
+  do_mysql_query("TRUNCATE premiumacc_old");
+  do_mysql_query("INSERT INTO premiumacc_old ".
                  " SELECT * FROM premiumacc WHERE player >= 10");
   
   
   if($delete)
   {
-    do_mysqli_query("DELETE FROM player WHERE id >= 10");
-    do_mysqli_query("DELETE FROM premiumacc WHERE player >= 10");
-    do_mysqli_query("DELETE FROM sms_send WHERE sender >= 10");
-    do_mysqli_query("DELETE FROM sms_settings WHERE player >= 10");
-    do_mysqli_query("ALTER TABLE player auto_increment = 10");
+    do_mysql_query("DELETE FROM player WHERE id >= 10");
+    do_mysql_query("DELETE FROM premiumacc WHERE player >= 10");
+    do_mysql_query("DELETE FROM sms_send WHERE sender >= 10");
+    do_mysql_query("DELETE FROM sms_settings WHERE player >= 10");
+    do_mysql_query("ALTER TABLE player auto_increment = 10");
   }
 
 
 
   // Ressourcen der "Admins" zurücksetzen
-  do_mysqli_query("UPDATE player SET ".
+  do_mysql_query("UPDATE player SET ".
 		 " lastres=unix_timestamp(),gold=40000,wood=4000,stone=4000,iron=0,rp=30,".
 		 " pos=NULL, religion=NULL, name=NULL, activationtime=NULL, signature=NULL, ".
 		 " points=0, pointsavg=0, pointsupd=0,".
@@ -78,32 +78,32 @@ function reset_players($delete = false) {
 		 " lastclickbonuspoints=0,".
 		 " signature = NULL, holiday = 0, toplist = NULL");
 
-  do_mysqli_query("TRUNCATE researching");
-  do_mysqli_query("TRUNCATE req_relation");
-  do_mysqli_query("TRUNCATE relation");
-  do_mysqli_query("TRUNCATE playerresearch");
-  do_mysqli_query("TRUNCATE market");
-  do_mysqli_query("TRUNCATE player_monument");
-  do_mysqli_query("TRUNCATE player_online");
-  do_mysqli_query("DELETE FROM addressbook WHERE player IS NOT NULL");
-  do_mysqli_query("TRUNCATE message");
-  do_mysqli_query("TRUNCATE multi_exceptions");
-  do_mysqli_query("TRUNCATE multi_exceptions_players");
-  do_mysqli_query("TRUNCATE namechange");
-  do_mysqli_query("TRUNCATE player_monument");
-  do_mysqli_query("TRUNCATE player_online");
+  do_mysql_query("TRUNCATE researching");
+  do_mysql_query("TRUNCATE req_relation");
+  do_mysql_query("TRUNCATE relation");
+  do_mysql_query("TRUNCATE playerresearch");
+  do_mysql_query("TRUNCATE market");
+  do_mysql_query("TRUNCATE player_monument");
+  do_mysql_query("TRUNCATE player_online");
+  do_mysql_query("DELETE FROM addressbook WHERE player IS NOT NULL");
+  do_mysql_query("TRUNCATE message");
+  do_mysql_query("TRUNCATE multi_exceptions");
+  do_mysql_query("TRUNCATE multi_exceptions_players");
+  do_mysql_query("TRUNCATE namechange");
+  do_mysql_query("TRUNCATE player_monument");
+  do_mysql_query("TRUNCATE player_online");
 
   // Multi-Cookies expired setzen, damit beim nächsten Login neue 
   // generiert werden.
-  do_mysqli_query("UPDATE multi_trap SET expired = UNIX_TIMESTAMP()");
+  do_mysql_query("UPDATE multi_trap SET expired = UNIX_TIMESTAMP()");
 
-  do_mysqli_query("TRUNCATE zitate");
+  do_mysql_query("TRUNCATE zitate");
   
   // Avatare löschen
   reset_avatar_dir();
   
   // Gesperrte Spieler löschen
-  $res = do_mysqli_query("SELECT id,login FROM player WHERE status = 2");
+  $res = do_mysql_query("SELECT id,login FROM player WHERE status = 2");
   while($p = mysqli_fetch_assoc($res)) {
     echo "Lösche Spieler '".$p['login']."' <br>\n";
     RemovePlayer_old($p['id']);
@@ -117,13 +117,13 @@ function reset_players($delete = false) {
  * Städte resetten.
  */
 function reset_cities() {
-  do_mysqli_query("TRUNCATE cityunit");
-  do_mysqli_query("TRUNCATE cityunit_ordered");
-  do_mysqli_query("TRUNCATE citybuilding");
-  do_mysqli_query("TRUNCATE citybuilding_ordered");
-  do_mysqli_query("TRUNCATE city");
-  do_mysqli_query("TRUNCATE armyunit");
-  do_mysqli_query("TRUNCATE army");
+  do_mysql_query("TRUNCATE cityunit");
+  do_mysql_query("TRUNCATE cityunit_ordered");
+  do_mysql_query("TRUNCATE citybuilding");
+  do_mysql_query("TRUNCATE citybuilding_ordered");
+  do_mysql_query("TRUNCATE city");
+  do_mysql_query("TRUNCATE armyunit");
+  do_mysql_query("TRUNCATE army");
 
 }
 
@@ -131,18 +131,18 @@ function reset_cities() {
  * Clans löschen
  */ 
 function reset_clans() {
-  do_mysqli_query("TRUNCATE clan");
-  do_mysqli_query("TRUNCATE clanrel");
-  do_mysqli_query("TRUNCATE req_clanrel"); 
-  do_mysqli_query("TRUNCATE clanlog");
-  do_mysqli_query("TRUNCATE clanlog_admin");
+  do_mysql_query("TRUNCATE clan");
+  do_mysql_query("TRUNCATE clanrel");
+  do_mysql_query("TRUNCATE req_clanrel"); 
+  do_mysql_query("TRUNCATE clanlog");
+  do_mysql_query("TRUNCATE clanlog_admin");
 }
 
 
 function reset_rpg() {
-  do_mysqli_query("TRUNCATE tournament");
-  do_mysqli_query("TRUNCATE tournament_players");
-  do_mysqli_query("TRUNCATE rpg");
+  do_mysql_query("TRUNCATE tournament");
+  do_mysql_query("TRUNCATE tournament_players");
+  do_mysql_query("TRUNCATE rpg");
   
   // Neue Turniere einfügen
   for($i = 0; $i < 4; $i++) {
@@ -150,7 +150,7 @@ function reset_rpg() {
     $sql = gen_tournament_sql_code($current_day);
     $arr = explode(";", $sql);
     foreach($arr AS $s) {
-      do_mysqli_query($s);
+      do_mysql_query($s);
     }
   }
 }
@@ -158,7 +158,7 @@ function reset_rpg() {
 
 function reset_config()
 {
-  do_mysqli_query("DELETE FROM config WHERE name IN ('settleradius')");
+  do_mysql_query("DELETE FROM config WHERE name IN ('settleradius')");
 
   // Set settleradius
   if(defined("HISPEED") && HISPEED)  
@@ -169,15 +169,15 @@ function reset_config()
     $reset_radius = 3;
   
   
-  do_mysqli_query("INSERT INTO config (name,value,creationtime,updatetime)".
+  do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
                  " VALUES ('settleradius', '".$reset_radius."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
 
 
   // starttime nur löschen, wenns kleiner wie aktuell ist
   $start_time = getConfig("starttime");
   if($start_time < time()) {
-    do_mysqli_query("DELETE FROM config WHERE name = 'starttime'");
-    do_mysqli_query("INSERT INTO config (name,value,creationtime,updatetime)".
+    do_mysql_query("DELETE FROM config WHERE name = 'starttime'");
+    do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
                    " VALUES ('starttime', (UNIX_TIMESTAMP()+120), UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
   }
   
@@ -186,12 +186,12 @@ function reset_config()
 
   // Endzeitpunkt löschen, falls einer gesetzt war
   if(0) {
-    do_mysqli_query("DELETE FROM config WHERE name = 'endtime'");
+    do_mysql_query("DELETE FROM config WHERE name = 'endtime'");
 
     // Bei der HiSpeed automatisch das Ende der Runde auf start + 18 Std. setzen
     if( defined("HISPEED") && HISPEED) {
       $end_time =  $start_time + 18*3600;
-      do_mysqli_query("INSERT INTO config (name,value,creationtime,updatetime)".
+      do_mysql_query("INSERT INTO config (name,value,creationtime,updatetime)".
                    " VALUES ('starttime', '".$end_time."', UNIX_TIMESTAMP(), UNIX_TIMESTAMP() )");
     }
   }
@@ -220,25 +220,25 @@ function reset_map() {
 }
 
 function reset_logs() {
-  do_mysqli_query("TRUNCATE log_army");
-  do_mysqli_query("TRUNCATE log_armyunit");
-  do_mysqli_query("TRUNCATE log_bofh_player");
-  do_mysqli_query("TRUNCATE log_browser");
-  do_mysqli_query("TRUNCATE log_cputime");
-  do_mysqli_query("TRUNCATE log_delete");
-  do_mysqli_query("TRUNCATE log_err");
-  do_mysqli_query("TRUNCATE log_lock");
-  do_mysqli_query("TRUNCATE log_login");
-  do_mysqli_query("TRUNCATE log_market_accept");
-  do_mysqli_query("TRUNCATE log_market_send");
-  do_mysqli_query("TRUNCATE log_marketmod");
-  do_mysqli_query("TRUNCATE log_mysqlerr");
-  do_mysqli_query("TRUNCATE log_player_deleted");
-  do_mysqli_query("TRUNCATE log_reactivate");
-  do_mysqli_query("TRUNCATE log_password_send");
-  do_mysqli_query("TRUNCATE log_mysqlerr");
-  do_mysqli_query("TRUNCATE log_err");
-  do_mysqli_query("TRUNCATE log_convert");
+  do_mysql_query("TRUNCATE log_army");
+  do_mysql_query("TRUNCATE log_armyunit");
+  do_mysql_query("TRUNCATE log_bofh_player");
+  do_mysql_query("TRUNCATE log_browser");
+  do_mysql_query("TRUNCATE log_cputime");
+  do_mysql_query("TRUNCATE log_delete");
+  do_mysql_query("TRUNCATE log_err");
+  do_mysql_query("TRUNCATE log_lock");
+  do_mysql_query("TRUNCATE log_login");
+  do_mysql_query("TRUNCATE log_market_accept");
+  do_mysql_query("TRUNCATE log_market_send");
+  do_mysql_query("TRUNCATE log_marketmod");
+  do_mysql_query("TRUNCATE log_mysqlerr");
+  do_mysql_query("TRUNCATE log_player_deleted");
+  do_mysql_query("TRUNCATE log_reactivate");
+  do_mysql_query("TRUNCATE log_password_send");
+  do_mysql_query("TRUNCATE log_mysqlerr");
+  do_mysql_query("TRUNCATE log_err");
+  do_mysql_query("TRUNCATE log_convert");
 
 
   $dir = opendir("../log");

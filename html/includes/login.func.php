@@ -62,11 +62,11 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
   $loginerror = null;
   
   if (checkBez($loginname, 2, 40)) {
-    $sql_login = do_mysqli_query("SELECT id, login, name, password, status, hwstatus, statusdescription, activationkey, holiday FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
+    $sql_login = do_mysql_query("SELECT id, login, name, password, status, hwstatus, statusdescription, activationkey, holiday FROM player WHERE login = '".mysqli_escape_string($GLOBALS['con'], $loginname)."'");
     if ($db_login = mysqli_fetch_assoc($sql_login)) {
       if ($db_login['status'] == "") { $db_login['status'] = 0; }
       $agent  = getenv('HTTP_USER_AGENT');
-      do_mysqli_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".
+      do_mysql_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".
                      "VALUES (".$db_login['id'].",'".mysqli_escape_string($GLOBALS['con'], $loginname)."','".md5($loginpassword)."','".$db_login['password']."','".$db_login['status']."','".mysqli_escape_string($GLOBALS['con'], $sec_code)."','".$_SESSION['sec_key']."', UNIX_TIMESTAMP(),'".getenv('REMOTE_ADDR')."', '".mysqli_escape_string($GLOBALS['con'], $agent)."', '".session_id()."')");
 
       $_SESSION['premium_flags']  = get_premium_flags ($db_login['id']);
@@ -88,10 +88,10 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 return "Die Runde hat noch nicht begonnen!";
                 
               // Löschmarkierung zurücksetzen
-              do_mysqli_query("UPDATE player SET markdelete=0 where id=".$db_login['id']);
+              do_mysql_query("UPDATE player SET markdelete=0 where id=".$db_login['id']);
               
               if ( $db_login['password'] != NULL && $db_login['status'] != 1) {
-                do_mysqli_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
+                do_mysql_query("UPDATE player SET activationkey=NULL where id=".$db_login['id']);
               }
               
               // Prüfen, ob der Account schon 'name' gesetzt hat.
@@ -152,7 +152,7 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 if($GLOBALS['hwathome']==1) {
                   $_SESSION['hwathome'] = 1;                
                 }
-                do_mysqli_query("UPDATE player SET cc_messages=0, lastseen=UNIX_TIMESTAMP() where id=".$db_login['id']);
+                do_mysql_query("UPDATE player SET cc_messages=0, lastseen=UNIX_TIMESTAMP() where id=".$db_login['id']);
                 $_SESSION['player']->updatelastclick();
 
                 

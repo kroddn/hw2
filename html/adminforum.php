@@ -17,12 +17,12 @@ if( !$_SESSION['player']->isAdmin() )
 
 if($_GET['setsame']) {
   if($_GET['setsame']=="pwd") {
-    $res=do_mysqli_query("UPDATE clanf_users SET user_password='".$_GET['pass']."' WHERE user_id='".$_GET['id']."'");
+    $res=do_mysql_query("UPDATE clanf_users SET user_password='".$_GET['pass']."' WHERE user_id='".$_GET['id']."'");
     if(!$res)
       $error="<b class=\"error\">Aktion fehlgeschlagen!</b><br />";
   }
   if($_GET['setsame']=="name") {
-    $res=do_mysqli_query("UPDATE clanf_users SET username='".$_GET['name']."' WHERE user_id='".$_GET['id']."'");
+    $res=do_mysql_query("UPDATE clanf_users SET username='".$_GET['name']."' WHERE user_id='".$_GET['id']."'");
     if(!$res)
       $error="<b class=\"error\">Aktion fehlgeschlagen!</b><br />";
   }
@@ -39,12 +39,12 @@ elseif($_GET['reset']=="doIt") {
 
 if($_GET['delete']) {
   if($_GET['delete']=="topic") {
-    $res=do_mysqli_query("DELETE FROM clanf_topics WHERE topic_id='".$_GET['id']."'");
-    $res=do_mysqli_query("DELETE FROM clanf_posts WHERE topic_id='".$_GET['id']."'");
+    $res=do_mysql_query("DELETE FROM clanf_topics WHERE topic_id='".$_GET['id']."'");
+    $res=do_mysql_query("DELETE FROM clanf_posts WHERE topic_id='".$_GET['id']."'");
     if(!$res)
       echo $error;
   } elseif($_GET['delete']=="post") {
-    $res=do_mysqli_query("DELETE FROM clanf_posts WHERE post_id='".$_GET['id']."'");
+    $res=do_mysql_query("DELETE FROM clanf_posts WHERE post_id='".$_GET['id']."'");
     if(!$res)
       echo $error;
   }

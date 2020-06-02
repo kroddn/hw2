@@ -78,7 +78,7 @@ body\r
 if(!isset($_SESSION) || !isset($_SESSION['player']) || !$_SESSION['player']->isAdmin() || isset($_REQUEST['showall'])) {
   // Zeige Newsletter an
   echo $pre_body;
-  $res = do_mysqli_query("SELECT * FROM global.newsletter WHERE published IS NOT NULL ORDER BY id DESC");
+  $res = do_mysql_query("SELECT * FROM global.newsletter WHERE published IS NOT NULL ORDER BY id DESC");
   
   echo "<table align=\"center\">";
   while($n = mysqli_fetch_object($res)) {
@@ -137,7 +137,7 @@ tr { vertical-align: top; }
       mysqli_escape_string($GLOBALS['con'], stripslashes($_REQUEST['body'])),
       $_SESSION['player']->getID()
       );
-      do_mysqli_query($sql);
+      do_mysql_query($sql);
     }
     else if(isset($_REQUEST['btnpreview'])) {
       print_preview( stripslashes($topic), stripslashes($body) );
@@ -168,7 +168,7 @@ function getMailAdresses() {
   flush();
   
   $emails = array();
-  $res = do_mysqli_query("SELECT email.email FROM global.email LEFT JOIN global.mailfail USING(email) WHERE active = 1 AND mailfail.type IS NULL");
+  $res = do_mysql_query("SELECT email.email FROM global.email LEFT JOIN global.mailfail USING(email) WHERE active = 1 AND mailfail.type IS NULL");
   while($next = mysqli_fetch_array($res)) {
     array_push($emails, $next[0]);
   }
@@ -316,7 +316,7 @@ function syncEmailAddresses() {
   foreach($dbtables AS $db => $tables) {
     foreach($tables AS $table) {
       echo "DB: $db  Table: $table<br>\n";
-      $resE = do_mysqli_query("SELECT * FROM ".$db.".".$table);
+      $resE = do_mysql_query("SELECT * FROM ".$db.".".$table);
 
       while($row = mysqli_fetch_array($resE)) {
         foreach($row AS $field) {
@@ -325,7 +325,7 @@ function syncEmailAddresses() {
             if(sizeof($regs) > 0) {
               for($i=0;$i<sizeof($regs[0]);$i++) {
                 $mail = trim($regs[0][$i]);
-                $res = do_mysqli_query("SELECT * FROM global.email WHERE email = '".mysqli_escape_string($GLOBALS['con'], $mail)."'");
+                $res = do_mysql_query("SELECT * FROM global.email WHERE email = '".mysqli_escape_string($GLOBALS['con'], $mail)."'");
                 if($res && mysqli_num_rows($res) == 0) {
                   $code = uniqid("");
                   $from = $db.".".$table;
@@ -335,7 +335,7 @@ function syncEmailAddresses() {
                                  mysqli_escape_string($GLOBALS['con'], $mail),
                                  mysqli_escape_string($GLOBALS['con'], $code)
                                  );
-                  do_mysqli_query($sql);
+                  do_mysql_query($sql);
                 }
               } // for
             } // if(sizeof($regs) > 0)
@@ -351,7 +351,7 @@ function print_mail_info() {
   $sql = "SELECT count(*) AS cnt, TRIM( REPLACE(SUBSTRING(email, INSTR(email, '@') + 1), '\n', '') ) AS domain FROM global.email GROUP BY domain HAVING cnt > 40 ORDER BY cnt DESC";
 
   printf("<table><tr><td>Domain</td><td>Vorkommnis</td></tr>\n");
-  $res = do_mysqli_query($sql);
+  $res = do_mysql_query($sql);
   while($d = mysqli_fetch_assoc($res)) {
     printf("<tr><td>%s</td><td>%s</td></tr>\n", $d['domain'], $d['cnt']);
   }
@@ -363,7 +363,7 @@ function print_input_form() {
   $lastid = 0;
 
   if(!isset($_REQUEST['topic']) && !isset($_REQUEST['body'])) {
-    $last = do_mysqli_query_fetch_assoc("SELECT * FROM global.newsletter WHERE author = ".$_SESSION['player']->getID()." ORDER BY time DESC LIMIT 1");
+    $last = do_mysql_query_fetch_assoc("SELECT * FROM global.newsletter WHERE author = ".$_SESSION['player']->getID()." ORDER BY time DESC LIMIT 1");
     if($last != null && $last['topic'] && $last['body']) {
       $body  = $last['body'];
       $topic = $last['topic'];

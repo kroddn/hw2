@@ -226,7 +226,7 @@ if (isset($msgsend)) {
     			$msgnoerror="Die Adminnachricht wurde erfolgreich an alle Spieler aus Holy-Wars 2 versandt.";
     		}
     		else {
-    			//Nur an Ordensgr�nder(Clanfounder) 
+    			//Nur an Ordensgründer(Clanfounder) 
     			$playerids = do_mysql_query("SELECT id FROM player WHERE clanstatus=63");
     			$header = "(AN) ".htmlentities($msgheader,ENT_QUOTES);
     			while ($get_playerids = do_mysql_fetch_assoc($playerids)) {
@@ -234,7 +234,7 @@ if (isset($msgsend)) {
     				do_mysql_query("UPDATE player SET cc_messages=1 WHERE id=".$player->getID()." OR id=".$get_playerids['id']);
     			}
     			$player->incSentMessages();
-    			$msgnoerror="Die Adminnachricht wurde erfolgreich an alle Ordensgr�nder in Holy-Wars 2 versandt.";
+    			$msgnoerror="Die Adminnachricht wurde erfolgreich an alle Ordensgründer in Holy-Wars 2 versandt.";
     		}
     	}
     	else {
@@ -492,13 +492,13 @@ if($msgnoerror) {
 <tr>
 	<td class="tblbody" width="200">
 		<b>Empf&auml;nger</b><br></br>
-		<span style="font-size: 10px;">Mehrere Emp�nger k�nnen durch Komma getrennt werden</span>
+		<span style="font-size: 10px;">Mehrere Empänger können durch Komma getrennt werden</span>
 	</td>
 	<td class="tblbody">
 		<input type="text" name="msgrecipient" value="<? echo $msgrecipient; ?>" style="width:100%;">
   		<br>
   		<select onChange="addRecipient(this.value)" name="addressbook" size="1" stlye="width:100%;">
- 		<option value="">bitte w�hlen</option>
+ 		<option value="">bitte wählen</option>
 <?
 if (is_premium_adressbook()) {
   echo "<option value=\"\">  <- Eigenes Adressbuch -></option>\n";
@@ -515,7 +515,7 @@ if (is_premium_adressbook()) {
 }
 else {	
   echo "<option value=\"\">Adressbuch nur</option>\n";  
-  echo "<option value=\"\">f�r Besitzer eines</option>\n";  
+  echo "<option value=\"\">für Besitzer eines</option>\n";  
   echo "<option value=\"\">Premium-Accounts.</option>\n";  
 }
 ?>
@@ -558,7 +558,7 @@ if ($player->isAdmin()) {
   </tr>
   <tr>
       <td class="tblbody" width="150" colspan="2">
-     <input type="checkbox" name="onlycf" value="1"> <b>nur Ordensgr�nder</b>&nbsp;
+     <input type="checkbox" name="onlycf" value="1"> <b>nur Ordensgründer</b>&nbsp;
       </td>
   </tr>
   <tr>
@@ -572,10 +572,10 @@ if ($player->isAdmin()) {
   <? } ?>
 <tr><td colspan="2" class="tblbody"><textarea id="theText" name="msgbody" cols="50" rows="14" style="width:100%;"><? echo $msgbody; ?></textarea></td></tr>
 <?php insertBBForm(2) ?>
-<tr><td class="tblhead" align="center" colspan="2"><input onClick="openPreview()" type="submit" name="msgpreview" value=" Vorschau "> <input type="submit" name="msgsend" value=" Nachricht versenden (ALT+S)" accesskey="s" onClick="document.form.target ='main'; if(pvw) pvw.close();"> <input onClick="document.form.target ='main'; return confirm('Nachricht wirklich zur�cksetzen?')" type="reset" value=" Zur�cksetzen "></td></tr>
+<tr><td class="tblhead" align="center" colspan="2"><input onClick="openPreview()" type="submit" name="msgpreview" value=" Vorschau "> <input type="submit" name="msgsend" value=" Nachricht versenden (ALT+S)" accesskey="s" onClick="document.form.target ='main'; if(pvw) pvw.close();"> <input onClick="document.form.target ='main'; return confirm('Nachricht wirklich zurücksetzen?')" type="reset" value=" Zurücksetzen "></td></tr>
 </table>
 <br>
-<a target="main" href="messages.php"><b>zur�ck</b></a>
+<a target="main" href="messages.php"><b>zurück</b></a>
 </td>
 <td>
 <? skyscraper(); ?>
@@ -683,12 +683,12 @@ function showMessage($preview=false) {
       echo "<input type='hidden' name='msgrecipient' value='".$db_msg['sender']."'>"; 
 
     echo "<input type='hidden' name='sender' value='".$db_msg['sender']."'>";
-    echo "<input type='hidden' name='msgheader' value=\"".ereg_replace("\"","&quot",$db_msg['header'])."\">";
-    echo "<input type='hidden' name='msgbody' value=\"[quote]".ereg_replace("\"","&quot",$db_msg['body'])."[/quote]\">";
+    echo "<input type='hidden' name='msgheader' value=\"".preg_replace("/\"/","&quot",$db_msg['header'])."\">";
+    echo "<input type='hidden' name='msgbody' value=\"[quote]".preg_replace("/\"/","&quot",$db_msg['body'])."[/quote]\">";
     if($db_msg['sender'] != TEAM_SENDER) {  
         echo "<input type='submit' name='msgre' value=' antworten '> ";              
     }
-    echo "<input type='submit' name='msgfw' value=' weiterleiten '> <input type='submit' name='msgdel' value=' l�schen '>\n";
+    echo "<input type='submit' name='msgfw' value=' weiterleiten '> <input type='submit' name='msgdel' value=' löschen '>\n";
   }
   echo "</td></tr>";
   echo "</form>\n";

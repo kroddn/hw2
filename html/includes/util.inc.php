@@ -1342,9 +1342,9 @@ if(!function_exists("getExtDate")) {
 if(!function_exists("quote")) {
   function quote($string) {
     $string = preg_replace("/\[quote\]/","<div class=\"tblhead\" style=\"margin:5px; padding:3px; border: 1px dashed #BABA69;background-color:#FFFFE5;\"><b><i>Zitat:</i></b><br/>",$string);
-    $string = preg_replace("/\[/quote\]/","</div>",$string);
+    $string = preg_replace("~\[/quote\]~","</div>",$string);
     $string = preg_replace("/\[doped\]/","<br /><br /><div style=\"font-size:10px; color:#BABA69;\">",$string);
-    $string = preg_replace("/\[/doped\]/","</div>",$string);
+    $string = preg_replace("~\[/doped\]~","</div>",$string);
     $string = str_replace(":)","<img src=\"./images/smiles/icon_smile.gif\" border=\"0\" />",$string);
     $string = str_replace(":D","<img src=\"./images/smiles/icon_biggrin.gif\" border=\"0\" />",$string);
     $string = str_replace(":(","<img src=\"./images/smiles/icon_sad.gif\" border=\"0\" />",$string);
@@ -1576,10 +1576,10 @@ if(!function_exists("bbCode")) {
       }
     }
     $text = quote($text);
-    $text = preg_replace("/&lt;/b&gt;/","</b>",$text);
+    $text = preg_replace("~&lt;/b&gt;~","</b>",$text);
     $text = preg_replace("/&lt;b&gt;/","<b>",$text);
-    $text = preg_replace("/&lt;br /&gt;/","<br />",$text);
-    $text = preg_replace("/&lt;br/&gt;/","<br/>",$text);
+    $text = preg_replace("~&lt;br /&gt;~","<br />",$text);
+    $text = preg_replace("~&lt;br/&gt;~","<br/>",$text);
     $text = preg_replace("/&lt;br&gt;/","<br>",$text);
     return $text;
   }

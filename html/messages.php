@@ -25,7 +25,7 @@ if(isset($category)) {
 
 $sizecategory = 10000;
 $sizepostfach = get_message_archive_size();
-//Falls Kategory = Gesendete Nachrichten, dann nachpr�fen wieviele Nachrichten man max haben darf
+//Falls Kategory = Gesendete Nachrichten, dann nachprüfen wieviele Nachrichten man max haben darf
 if($player->getActiveMsgcategory() == MESSAGECAT_SENT)
 $sizecategory = $sizepostfach;
 
@@ -48,7 +48,7 @@ if(isset($delmarked) && sizeof($mark)>0){
     }
     $sql.=")";
     do_mysql_query($sql);
-    // Wurden welche gel�scht, dann Postausgang neu berechnen
+    // Wurden welche gelöscht, dann Postausgang neu berechnen
     if (mysql_affected_rows() > 0) {
       $player->messages_sent = -1;
     }
@@ -246,7 +246,7 @@ if(isset($mailmarked)){
           $mailtext .= "<tr><td colspan=2>&nbsp;</td></tr></table>";
 	}
 
-	// Milit�rrichten auslesen
+	// Militärrichten auslesen
 	$warmes = 0;
     $sql5="SELECT sender, date, header, body FROM message WHERE recipient = ".$_SESSION['player']->getID()." AND date>=".$player->getRegTime()." AND id IN (";
     for ($i=0;$i<sizeof($marked);++$i) {
@@ -260,7 +260,7 @@ if(isset($mailmarked)){
 	if ($warmes>0) {
         $getwarmessages = do_mysql_query($sql5);
           $mailtext .= "<table bgcolor=".$messagecolors[4].">";
-          $mailtext .= "<tr><td colspan=2><b>Kategorie: Milit�r</b></td></tr>";
+          $mailtext .= "<tr><td colspan=2><b>Kategorie: Militär</b></td></tr>";
           $mailtext .= "<tr><td colspan=2><hr></td></tr>";
           while ($warmessages = do_mysql_fetch_assoc($getwarmessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
@@ -297,7 +297,7 @@ if(isset($mailmarked)){
           while ($sendedmessages = do_mysql_fetch_assoc($getsendedmessages)) {
             $mailtext .= "<tr><td valign=\"top\"><b>Absender</b></td>";
             $mailtext .= "<td>".$sendedmessages['sender']."</td></tr>";
-            $mailtext .= "<tr><td valign=\"top\"><b>Empf�nger</b></td>";
+            $mailtext .= "<tr><td valign=\"top\"><b>Empfänger</b></td>";
             $mailtext .= "<td>".resolvePlayerName($sendedmessages['recipient'])."</td></tr>";
             $mailtext .= "<tr><td valign=\"top\"><b>Datum</b></td>";
             $mailtext .= "<td>".date("d.m.Y H:i:s",$sendedmessages['date'])."</td></tr>";
@@ -323,14 +323,14 @@ if(isset($mailmarked)){
 	}
 	if(isset($_SESSION['msg_backup_count']) && $_SESSION['msg_backup_count'] <= 6) {
 	  mail($player->getEMail(), $subject, $mailtext, $headers);
-      $msgnoerror = "Ausgew�hlte Nachrichten erfolgreich per E-Mail versendet";
+      $msgnoerror = "Ausgewählte Nachrichten erfolgreich per E-Mail versendet";
     }
     else {
-      $msgerror = "Max. Anzahl von Backups der Nachrichten pro Session �berschritten";
+      $msgerror = "Max. Anzahl von Backups der Nachrichten pro Session überschritten";
     }
   }
   else {
-    $msgerror = "Keine Nachrichten ausgew�hlt";
+    $msgerror = "Keine Nachrichten ausgewählt";
   }
  }
 
@@ -513,22 +513,22 @@ if($sizecategory == 0) {
   echo "<tr><td height='40'colspan='4' class='tblbody'>Diese Feature ist <a href=\"premium.php\">Premium-Accounts</a> vorbehalten.</td></tr>";
 }
 else if(defined("OLD_GAME") && $_SESSION['player']->getActiveMsgcategory() == 5) {
-  echo "<tr><td height='40'colspan='4' class='tblbody'>RPG-Featurities sind nur in den neuen Runden verf�gbar.</td></tr>";  
+  echo "<tr><td height='40'colspan='4' class='tblbody'>RPG-Featurities sind nur in den neuen Runden verfügbar.</td></tr>";  
 }
 else {
   if($_SESSION['player']->getActiveMsgcategory() == 9 && !$_SESSION['player']->isTeamMember()) {
     ?>
     <tr><td height='40'colspan='4' class='tblbody'>
     Hier kommuniziert das Holy-Wars 2 Team. Ihr seid aber leider kein Team-Mitglied.<p>
-    Falls Ihr Interesse habt, Holy-Wars 2 zu unterst�tzen oder mitzuwirken, dann
-    gibt es mehrere M�glichkeiten:
+    Falls Ihr Interesse habt, Holy-Wars 2 zu unterstützen oder mitzuwirken, dann
+    gibt es mehrere Möglichkeiten:
     <list>
-    <li>Zun�chst ist es wichtig, aktiv im Forum und im IRC zu sein.</li>
-    <li>Regelm�ssiges Voten bringt Holy-Wars 2 voran und sorgt f�r neue Spieler.</li>
-    <li>Da sich Holy-Wars 2 �berwiegend aus Werbung finanziert, sollten <b>Popup-Blocker ausgeschalten</b> werden.
-    <li>Bei regelm�ssigem und positivem Wirken besteht die M�glichkeit, als HW2-Betatester
+    <li>Zunächst ist es wichtig, aktiv im Forum und im IRC zu sein.</li>
+    <li>Regelmässiges Voten bringt Holy-Wars 2 voran und sorgt für neue Spieler.</li>
+    <li>Da sich Holy-Wars 2 berwiegend aus Werbung finanziert, sollten <b>Popup-Blocker ausgeschalten</b> werden.
+    <li>Bei regelmässigem und positivem Wirken besteht die Möglichkeit, als HW2-Betatester
         in das HW2-Team einzusteigen. Von dort aus stehen dann mit der Zeit weitere Posten
-        zur Verf�gung.
+        zur Verfügung.
     </list>
     </td></tr>
     <?
@@ -597,21 +597,21 @@ if($num_mess > 0) {
 <tr height="20"><td colspan="4">&nbsp;</td></tr>
 <?php if(!defined("HISPEED") || !HISPEED) { ?>
     <tr><td align="center" colspan="4" style="padding: 10px; background-color: B0B0B0;">
-    <h1>SMS �ber Holy-Wars 2!</h1>
+    <h1>SMS über Holy-Wars 2!</h1>
     <?
     check_sms_settings(); 
     if ($_SESSION['sms_contingent'] > 0) 
-      echo 'Ihr habt noch <b style="color: red; font-size: 12px;">'.$_SESSION['sms_contingent']." SMS</b> zum Versand zur Verf�gung.\n<p>\n<a class=\"green\" href=\"sms.php\">SMS verfassen (hier oder auf das SMS-Symbol klicken)</a>";
+      echo 'Ihr habt noch <b style="color: red; font-size: 12px;">'.$_SESSION['sms_contingent']." SMS</b> zum Versand zur Verfügung.\n<p>\n<a class=\"green\" href=\"sms.php\">SMS verfassen (hier oder auf das SMS-Symbol klicken)</a>";
     else 
-      echo 'Leider habt ihr derzeit <b style="color: red; font-size: 12px;">kein SMS</b> zum Versand zur Verf�gung.';
+      echo 'Leider habt ihr derzeit <b style="color: red; font-size: 12px;">kein SMS</b> zum Versand zur Verfügung.';
 ?>
 <p>
-<a href="settings.php?show=sms">Hier f�r SMS-Anmeldung/Verwaltung klicken</a>.
+<a href="settings.php?show=sms">Hier für SMS-Anmeldung/Verwaltung klicken</a>.
 </td></tr>
 <?php } // if(!defined("HISPEED") || !HISPEED) ?>
 
 <tr height="20"><td colspan="4">&nbsp;</td></tr>
-<tr><td align="center" colspan="4" style="padding:0px;"><? include("include/vote.inc.php"); ?>
+<tr><td align="center" colspan="4" style="padding:0px;"><? //not https safe content include("includes/vote.inc.php"); ?>
 </td></tr>
 </table>
 </td>
@@ -638,7 +638,7 @@ else {
 }
 ?>
 type="submit" value="per Email sichern" name="mailmarked">
-&nbsp;<input type="submit" value="l�schen" name="delmarked">
+&nbsp;<input type="submit" value="löschen" name="delmarked">
 </td>
 </tr>
 <? } ?>

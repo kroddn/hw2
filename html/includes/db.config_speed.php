@@ -1,6 +1,6 @@
 <?php
 // ACHTUNG! Diese Datei nur auf dem Server editieren!
-// NICHT überschreiben mit lokaler Kopier!!!
+// NICHT ï¿½berschreiben mit lokaler Kopier!!!
 // umzubenennen in db.config.php
 
 // Voranmeldung gibts nicht mehr
@@ -80,7 +80,7 @@ define("CONVERT_COST", 100);
 define("PROSPERITY_MAX_FACTOR", 200);
 
 
-define("BLOCKSETTLEARMY", 36000);  // Angriffssperre für Begleitschutz
+define("BLOCKSETTLEARMY", 36000);  // Angriffssperre fï¿½r Begleitschutz
 
 //Ressourcenproduktion
 define("RAWWOOD_PRODFACTOR", 1);
@@ -158,4 +158,7 @@ define("DISABLE_SETTLEAREA_ATTACK", 1);
 define("REGISTER_RATIO_LIMIT_HARD", 2.8);
 define("REGISTER_RATIO_LIMIT_MEDIUM", 1.6);
 define("REGISTER_RATIO_LIMIT_LIGHT", 1.3);
+
+define("CLAN_PAYOUT_MIN_MEMBER", 5);
+
 ?>

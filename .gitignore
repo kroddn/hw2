@@ -10,3 +10,4 @@ cron/points_hw_dev
 cron/hwha.h
 cron/hwroot.sh
 html/conf/db.conf.php
+html/includes/db.config.php

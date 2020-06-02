@@ -104,7 +104,7 @@ if(isset($edit_orderedpremiumacc))
 function get_max_expire($player) {
   $res = do_mysql_query("SELECT max(expire) AS maxexp FROM premiumacc ".
 						 "WHERE player = ".$player);
-  $maxres = mysql_fetch_assoc($res);
+  $maxres = do_mysql_fetch_assoc($res);
   if($maxres && $maxres['maxexp'] > 0)
     $maxexp = $maxres['maxexp'];
   else
@@ -235,7 +235,7 @@ function show_useraddpremiumacc() {
 
 function show_premiuminfo() {
   $get_premaccs = do_mysql_query("SELECT id,player,type,start,expire,payd,paydtime,paytext FROM premiumacc WHERE expire>0 ORDER BY id");
-  if (mysql_num_rows($get_premaccs)) {
+  if (do_mysql_num_rows($get_premaccs)) {
     echo "&nbsp;&nbsp;Aktuelle(s) Zeit/Datum: ".date("d.m.Y H:i:s", time())."<br>";
     echo "<br>\n<table>";
     echo '<tr><td colspan="7" class="tblhead"><b>Premium-Accounts</b></td></tr>';
@@ -250,9 +250,9 @@ function show_premiuminfo() {
     echo '<th>Beschreibung</th>';
     echo '</tr>';
       
-    while ($premaccs = mysql_fetch_assoc($get_premaccs)) {
+    while ($premaccs = do_mysql_fetch_assoc($get_premaccs)) {
       $get_playername = do_mysql_query("SELECT name FROM player WHERE id=".$premaccs['player']);
-      $playername = mysql_fetch_assoc($get_playername);
+      $playername = do_mysql_fetch_assoc($get_playername);
       echo "<tr class='tblbody'>";
       echo "  <td>".$premaccs['id']."</td>\n";
       echo "  <td>[".$premaccs['player']."] ".$playername['name']."</td>\n";
@@ -281,7 +281,7 @@ function show_premiuminfo() {
 
 function show_orderedpremiumaccs() {
   $get_premaccs = do_mysql_query("SELECT id,player,type,expire,payd,paydtime,paytext FROM premiumacc where expire=0");
-  if (mysql_num_rows($get_premaccs)) {
+  if (do_mysql_num_rows($get_premaccs)) {
     echo "&nbsp;&nbsp;Aktuelle(s) Zeit/Datum: ".date("d.m.Y H:i:s", time())."<br>";
     echo "<br>\n<table>";
     echo '<tr><td colspan="9" class="tblhead"><b>Premium-Accounts</b></td></tr>';
@@ -294,9 +294,9 @@ function show_orderedpremiumaccs() {
     echo '<td class="tblhead"><b>Zeitpunkt der Auftragstellung</b></td>';
     echo '<td class="tblhead"><b>Beschreibung</b></td>';
     echo '</tr>';
-    while ($premaccs = mysql_fetch_assoc($get_premaccs)) {
+    while ($premaccs = do_mysql_fetch_assoc($get_premaccs)) {
       $get_playername = do_mysql_query("SELECT name FROM player WHERE id=".$premaccs['player']);
-      $playername = mysql_fetch_assoc($get_playername);
+      $playername = do_mysql_fetch_assoc($get_playername);
       echo "<tr>";
       echo "<td class='tblbody' width=\"16\"><a href=\"".$PHP_SELF."?delete_orderedpremiumacc=".$premaccs['id']."\"><img src=\"".GFX_PATH_LOCAL."/ps_del.png\" border=\"0\" alt=\"L&ouml;schen\"></a></td>\n";
       echo "<td class='tblbody' width=\"16\"><a href=\"".$PHP_SELF."?edit_orderedpremiumacc=".$premaccs['id']."&prem_duration=".$premaccs['payd']."&prem_type=".$premaccs['type']."\"><img src=\"".GFX_PATH_LOCAL."/ps_fixed.png\" border=\"0\" alt=\"Aktivieren\"></a></td>\n";
@@ -343,7 +343,7 @@ if ($sh_useraddpremiumacc==1) show_useraddpremiumacc();
 
 if ($useraddpremiumacc==1) {
   $get_playername = do_mysql_query("SELECT name FROM player WHERE id=".$prem_playerid);
-  $playername = mysql_fetch_assoc($get_playername);
+  $playername = do_mysql_fetch_assoc($get_playername);
   $prem_paydtime = time();
   echo "<table>";
   echo "<tr><td colspan=2><b><u>Bestätigung der Eingabe</u></b></td></tr>";

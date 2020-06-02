@@ -40,7 +40,7 @@ include_once("includes/db.inc.php");
 
 $hit = $miss = $corrected = $sum = 0;
 $map = do_mysql_query($GLOBALS['con']"SELECT id,type,pic FROM map ORDER BY pic");
-while($pic = mysqli_fetch_assoc($map)) {
+while($pic = do_mysql_fetch_assoc($map)) {
   if(!file_exists("images/ingame/".$pic['pic'].".gif")) {
     //printf("%s.gif ", $pic['pic']);
     if($pic['type']==1) {

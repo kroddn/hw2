@@ -463,10 +463,6 @@ foreach($messagetypes AS $i => $mtype) {
 <p>
 <hr>
 <p>
-<? 
-if(!is_premium_noads()) 
-     include("ads/hausarbeiten.php"); 
-?>
 </center>
 </td>
 

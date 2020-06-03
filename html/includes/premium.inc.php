@@ -226,28 +226,27 @@ function get_message_archive_size () {
 function get_premium_session_time() {
   global $premium_flags, $premium_expire;
   
-  if(defined("OLD_GAME") && OLD_GAME)     $default = 1200; // OLD
-  else if( defined("HISPEED") && HISPEED) $default = 600;  // HiSpeedrunde
-  else if( defined("SPEED") && SPEED)     $default = 1800; // Speedrunde
-  else                                    $default = 3600; // Normale Session-Länge
+  if(defined("OLD_GAME") && OLD_GAME)     $default = SESSION_DEFAULT_TIME / 3; // OLD
+  else if( defined("HISPEED") && HISPEED) $default = SESSION_DEFAULT_TIME / 6;  // HiSpeedrunde
+  else if( defined("SPEED") && SPEED)     $default = SESSION_DEFAULT_TIME / 2; // Speedrunde
+  else                                    $default = SESSION_DEFAULT_TIME; // Normale Session-Länge
   
   // Den Ablauf des PA einberechnen.
   $max = max($premium_expire-time(), $default);
   
   // Falls Premium-Account in Besitz, entsprechende Sessionzeiten returnieren
-  if ($premium_flags & PREMIUM_ULTRA)  return min($max, 480*3600);
-  if ($premium_flags & PREMIUM_PRO)    return min($max, 480*3600);
-  if ($premium_flags & PREMIUM_MEDIUM) return min($max,  24*3600);
-  if ($premium_flags & PREMIUM_LITE)   return min($max,  12*3600);
+  if ($premium_flags & PREMIUM_ULTRA)  return min($max, 480 * SESSION_DEFAULT_TIME);
+  if ($premium_flags & PREMIUM_PRO)    return min($max, 480 * SESSION_DEFAULT_TIME);
+  if ($premium_flags & PREMIUM_MEDIUM) return min($max,  24 * SESSION_DEFAULT_TIME);
+  if ($premium_flags & PREMIUM_LITE)   return min($max,  12 * SESSION_DEFAULT_TIME);
 
   // Weihnachtsgeschenk :-)
   if (time() < XMAS_END) {
     return 12*3600;
   }
 
-  if ($premium_flags & PREMIUM_NOADS)  return   4*3600;
+  if ($premium_flags & PREMIUM_NOADS)  return   4 * SESSION_DEFAULT_TIME;
 
-  
   return $default;
 }
 

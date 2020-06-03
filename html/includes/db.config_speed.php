@@ -18,6 +18,8 @@ define("SPECIAL_DEFAULT", "special_shinta_europa_400x400.png");
 define("REGISTER_MAP",    "registermap_shinta_europa_400x400.jpg");
 define("WORLD_MAP",       "clanmap_shinta_europa_400x400.jpg");
 
+// Default Session Time
+define("SESSION_DEFAULT_TIME", 3600);
 
 // Test aktivieren
 define("TEST_MODE", 0);

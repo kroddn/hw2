@@ -44,6 +44,8 @@ include_once("includes/banner.inc.php");
 
 define("TEAM_SENDER", "HW2-Team");
 
+$clan = $_SESSION['clan'];
+
 if(isset($show)) {
   $res1=do_mysql_query("SELECT id,sender,recipient,date,header,body FROM message
       WHERE id=".$show." AND ((recipient=".$player->getID()." AND !(status&".MSG_RECIPIENT_DELETED."))

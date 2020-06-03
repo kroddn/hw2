@@ -54,6 +54,6 @@ include_once("includes/banner.inc.php");
   </frameset>
 </frameset>
 <noframes>
-Ihr Browser unterstützt keine Frames...
+Ihr Browser unterstï¿½tzt keine Frames...
 </noframes>
 </html>

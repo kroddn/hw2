@@ -69,11 +69,11 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
       do_mysql_query("INSERT INTO log_login(id,name,inputpw,dbpw,status,inputseccode,dbseccode,time,ip,user_agent,sid) ".
                      "VALUES (".$db_login['id'].",'".mysqli_escape_string($GLOBALS['con'], $loginname)."','".md5($loginpassword)."','".$db_login['password']."','".$db_login['status']."','".mysqli_escape_string($GLOBALS['con'], $sec_code)."','".$_SESSION['sec_key']."', UNIX_TIMESTAMP(),'".getenv('REMOTE_ADDR')."', '".mysqli_escape_string($GLOBALS['con'], $agent)."', '".session_id()."')");
 
-      $_SESSION['premium_flags']  = get_premium_flags ($db_login['id']);
+      $GLOBALS['premium_flags']  = get_premium_flags ($db_login['id']);
       $GLOBALS['premium_expire'] = get_premium_expire($db_login['id']);
       $GLOBALS['premium_payd']   = get_premium_payd($db_login['id']);
       
-      $secure = defined('NO_SECURITY') && NO_SECURITY || isset($_SESSION['sec_key']) && !strcmp($sec_code, $_SESSION['sec_key']) || $_SESSION['premium_flags'] & PREMIUM_PRO;
+      $secure = defined('NO_SECURITY') && NO_SECURITY || isset($_SESSION['sec_key']) && !strcmp($sec_code, $_SESSION['sec_key']) || $GLOBALS['premium_flags'] & PREMIUM_PRO;
       if ($secure) {
         unset($_SESSION['sec_key']);
         if ( $nopw || md5($loginpassword) == $db_login['password']) {
@@ -108,7 +108,8 @@ function hw2_login($loginname, $loginpassword, $sec_code, $nopw = false) {
                 // ****************** Login ist Durch! **************************
                 
                 // Premium Account Speichern
-                $_SESSION['premium_flags']  = $_SESSION['premium_flags'];
+                $_SESSION['premium_flags']  = $GLOBALS['premium_flags'];
+                $_SESSION['premium_payd']  = $GLOBALS['premium_payd'];
                 $_SESSION['premium_expire'] = $GLOBALS['premium_expire'];
 
                 // Player anlegen

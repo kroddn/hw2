@@ -22,7 +22,7 @@
     Former copyrights see below.
  **************************************************************************/
 
-// Diese Seite nicht zu den Klicks hinzuzählen
+// Diese Seite nicht zu den Klicks hinzuzï¿½hlen
 $GLOBALS['noclickcount'] = 1;
 
 include_once("includes/db.inc.php");
@@ -63,11 +63,5 @@ h1 {
 <body class="nopadding" marginwidth="0" marginheight="0" topmargin="0" leftmargin="0">
 <img class="toplogo" src="<? echo $logo; ?>" alt="Kein Logo?">
 <br>
-<h1>Fehlen Ihnen Grafiken?</h1>
-<div class="nologo">
-Dann haben Sie sich mit Grafikpack eingeloggt, obwohl dieser nicht oder unvollständig installiert ist. In diesem Fall überprüfen Sie unter <span class="click" onClick="parent.main.location='settings.php'">Einstellungen (clicken)</span>, ob Sie den richtigen Pfad gewählt haben. Funktioniert dies auch nicht, dann loggen Sie sich neu ein und wählen Sie auf der Loginseite im entsprechenden Feld aus, dass Sie keinen Grafikpack installiert haben (<span class="click" onClick="parent.location='navigation.php?logout=1'">Jetzt hier klicken für Logout</span>).<br>
-Falls Ihnen nur einzelne Grafiken fehlen, können Sie diese 
-<span class="click" onClick="parent.location='<? echo $imagepath; ?>'">hier herunter laden</span>.
-</div>
 </body>
 </html>

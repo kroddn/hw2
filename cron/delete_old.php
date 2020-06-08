@@ -83,7 +83,7 @@ $players = do_mysql_query(
  ORDER BY lastseen");
 
 $deleted=0;
-while($p = mysqli_fetch_assoc($players)) {
+while($p = do_mysql_fetch_assoc($players)) {
   if(deleteResult($p)) {
     $deleted++;
   }
@@ -97,7 +97,7 @@ echo "\nInsgesamt gelöscht: $deleted\n";
 /**
  * Lösche Spieler wirklich jetzt.
  * 
- * @param $p  Assoziativer Array, wie er von mysqli_fetch_assoc kommt
+ * @param $p  Assoziativer Array, wie er von do_mysql_fetch_assoc kommt
  * @return unknown_type
  */
 function deleteResult($p) {
@@ -115,7 +115,7 @@ function deleteResult($p) {
                           " WHERE id = ".$p['id']." AND inputpw = dbpw AND inputseccode = dbseccode".
                           " ORDER BY time DESC LIMIT 1");
     if(mysqli_num_rows($login) > 0) {
-      $l = mysqli_fetch_assoc($login);
+      $l = do_mysql_fetch_assoc($login);
       echo " LastLogin Versuch: ".$l['zeit']." (".round($l['inactive'] / (3600*24), 2)." Tage)\n";
       if ($l['inactive'] > $max_inactive) {
         echo " lösche ".$p['id']." - ".$p['name']." jetzt\n";

@@ -202,8 +202,8 @@ function is_premium_avatar () {
 
 // Wieviel Postausgang hat der Spieler
 function get_message_archive_size () {
-
-  global $premium_flags;
+  $premium_flags = $_SESSION['premium_flags'];
+  
   if ($premium_flags & PREMIUM_ULTRA)  return 10000;
   if ($premium_flags & PREMIUM_PRO)    return   200;
   if ($premium_flags & PREMIUM_MEDIUM) return   100;
@@ -224,7 +224,8 @@ function get_message_archive_size () {
  * (unabhängig von der Session-Livetime des Apache) (normalerweise 60 Minuten)
  */
 function get_premium_session_time() {
-  global $premium_flags, $premium_expire;
+  $premium_flags  = $_SESSION['premium_flags'];
+  $premium_expire = $_SESSION['premium_expire'];
   
   if(defined("OLD_GAME") && OLD_GAME)     $default = SESSION_DEFAULT_TIME / 3; // OLD
   else if( defined("HISPEED") && HISPEED) $default = SESSION_DEFAULT_TIME / 6;  // HiSpeedrunde
@@ -253,7 +254,8 @@ function get_premium_session_time() {
 
 // Wieviel Angebote bekommt der Spieler pro Seite
 function get_market_size () {
-  global $premium_flags;
+  $premium_flags  = $_SESSION['premium_flags'];
+  
   if ($premium_flags & PREMIUM_ULTRA)  return 20;
   if ($premium_flags & PREMIUM_PRO)    return 20;
   if ($premium_flags & PREMIUM_MEDIUM) return 20;

@@ -14,7 +14,7 @@ Still on work
 ## Documentation
 
 First wiki pages are created.
-[[Link to Wiki|Home]]
+[Link to Wiki](https://github.com/kroddn/hw2/wiki)
 
 ## Deployment
 

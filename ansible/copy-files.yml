@@ -1,0 +1,62 @@
+- hosts: dockerhost
+  
+  tasks:
+    - name: Check files to copy
+      set_fact: 
+        htmlfiles: "{{ lookup('fileglob','{{ project_root }}/html/*.php',wantlist=true) | reject('search','config') | list }}"
+        includes: "{{ lookup('fileglob','{{ project_root }}/html/includes/*.php',wantlist=true) | reject('search','config') | list }}"
+        admintools: "{{ lookup('fileglob','{{ project_root }}/html/admintools/*',wantlist=true) | list }}"
+        ads: "{{ lookup('fileglob','{{ project_root }}/html/ads/*',wantlist=true) | list }}"
+
+    - name: Copy all maps
+      synchronize:
+        src: "{{ project_root }}/html/maps"
+        dest: "{{ docker_data_root }}/public_html/maps" 
+
+    - name: Copy all js
+      synchronize:
+        src: "{{ project_root }}/html/js"
+        dest: "{{ docker_data_root }}/public_html/js" 
+
+    - name: Copy all images
+      synchronize:
+        src: "{{ project_root }}/html/images"
+        dest: "{{ docker_data_root }}/public_html/images" 
+
+    - name: Copy all php files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ docker_data_root }}/public_html"
+        owner: "1000"
+        mode: 0775
+      with_items: "{{ htmlfiles }}"
+
+    - name: Copy all includes files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ docker_data_root }}/public_html/includes"
+        owner: "1000"
+        mode: 0775
+      with_items: "{{ includes }}"
+
+    - name: Copy all includes files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ docker_data_root }}/public_html/admintools"
+        owner: "1000"
+        mode: 0775
+      with_items: "{{ admintools }}"
+
+    - name: Check that db config file exists
+      stat:
+        path: "{{ project_root }}/html/conf/db.conf.php"
+      register: conffile
+      delegate_to: localhost
+
+    - name: Create the file, if it doesnt exist already
+      copy:
+        src: "{{ project_root }}/html/conf/db.conf.php"
+        dest: "{{ docker_data_root }}/public_html/conf/"
+        owner: "1000"
+        mode: 0775
+      when: conffile.stat.exists

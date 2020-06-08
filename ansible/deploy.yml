@@ -1,0 +1,6 @@
+- hosts: dockerhost
+  
+  tasks:
+    - name: Import Prepareation for HW2
+      import_tasks: tasks/prepare-hw2.yml
+  

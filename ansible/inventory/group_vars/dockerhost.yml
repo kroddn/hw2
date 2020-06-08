@@ -1,0 +1,24 @@
+project_root: "{{ playbook_dir }}/.."
+docker_data_root: /srv/hw2
+
+ansible_python_interpreter: /usr/bin/python3
+
+folders:
+  - public_html
+  - mysql
+  - php
+  - hw2_files
+  - hw2_files/cron
+  - hw2_files/log
+  - hw2_files/maps
+  - hw2_files/skripte
+
+# Here you can configure the variables for HW2:
+booking_allowed: 0
+session_default_time: 7200
+mode_speed: 1
+premium_test_duration: 90
+clan_payout_min_member: 2
+fightsim_need_points: 1
+click_bonuspoints: 2
+click_bonuspoints_time: 1800

@@ -14,7 +14,7 @@ Still on work
 ## Documentation
 
 First wiki pages are created.
-[[Link to Wiki|Wiki]]
+[[Link to Wiki|Home]]
 
 ## Deployment
 

@@ -222,6 +222,8 @@ class MapVersion3 {
       // Stadteinrahmung anzeigen
       if ( $this->grid && $field['type'] == 2) {
         echo '<span><a onclick="showCityBorder('.$i.','.$j.','.$field['x'].','.$field['y'].'); return false; "'.
+		  '  onmouseover="showCityBorderEmpty('.$i.','.$j.','.$field['x'].','.$field['y'].');"'.
+		  '  onmouseout="hideCityBorderEmpty(); "'.
           '  href="townhall.php?newsettle=true&x='.$field['x'].'&y='.$field['y'].'" class="'.$kclass.'">'.
           $field['x'].':'.$field['y'].
           '</a></span>';
@@ -567,6 +569,8 @@ class MapVersion3 {
     echo $map2str;
 
     echo( "\n\n".
+	  '<div id="cityBorderEmpty"></div>'.
+	  "\n\n".
 	  '<div id="cityBorder"></div>'.
 	  "\n\n".
 	  '<div id="citySettle"></div>'.

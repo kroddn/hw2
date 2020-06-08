@@ -163,6 +163,17 @@ function showCityBorder(leftP,topP,x,y) {
 	writeThis="<table width=\"200\" height=\"100%\" border=\"0\"><tr><td valign=\"middle\" align=\"center\" style=\"font-size:12px; font-weight:bold;\">MyLord! Sollen eure Siedler in diese entfernten Gefielde aufbrechen?<br><br>Koordinaten: "+x+":"+y+"<br><br><input type=\"button\" onclick=\"document.location.href='townhall.php?newsettle=true&x="+x+"&y="+y+"';\" value=\"So sei es!\" />&nbsp;&nbsp;<input type=\"button\" onclick=\"document.getElementById('cityBorder').style.display='none'; document.getElementById('citySettle').style.display='none';\" style=\"margin-top:5px;\" value=\"Nein, lasst es\" /></td></tr></table>";
 	document.getElementById("citySettle").innerHTML=writeThis;
 }
+function showCityBorderEmpty(leftP,topP,x,y) {
+//	document.getElementById("cityBorderEmpty").style.display="inline";
+//	document.getElementById("cityBorderEmpty").style.left=((parseInt(leftP)*40)-120)+"px";
+//	document.getElementById("cityBorderEmpty").style.top=((parseInt(topP)*40)-120)+"px";
+//	document.getElementById("cityBorder").style.display="inline";
+//	document.getElementById("cityBorder").style.left=((parseInt(leftP)*40)-120)+"px";
+//	document.getElementById("cityBorder").style.top=((parseInt(topP)*40)-120)+"px";
+}
+function hideCityBorderEmpty() {
+	//document.getElementById("cityBorderEmpty").style.display="none";
+}
 // -->
 </script>
 <style>
@@ -173,19 +184,24 @@ function showCityBorder(leftP,topP,x,y) {
 	border-bottom:1px dashed white;
 	border-right: 1px dashed white;
 }
-#cityBorder {    
-    opacity: 0.5; /* ab FireFox 3.1 */ 
-    -moz-opacity:0.5; 
-    filter:Alpha(opacity=50, finishopacity=50, style=2); 
-    background-color: white;
-	
-	position:absolute;
-	z-index:310;
-	display:none;
-	width:200px;
-	height:200px;	
+
+.koord {
+	z-index: 312;
 }
 
+#cityBorder {    
+		opacity: 0.5; /* ab FireFox 3.1 */ 
+		-moz-opacity:0.5; 
+		filter:Alpha(opacity=50, finishopacity=50, style=2); 
+		background-color: white;
+		
+		position:absolute;
+		z-index:310;
+		display:none;
+		width:200px;
+		height:200px;	
+}
+		
 #citySettle {
 	border:1px solid black;
 	position:absolute;
@@ -195,7 +211,24 @@ function showCityBorder(leftP,topP,x,y) {
 	height:200px;
 	padding:0px;
 	text-align:center;
+
 }
+		
+	
+#cityBorderEmpty {    
+	opacity: 0.5; /* ab FireFox 3.1 */ 
+	-moz-opacity:0.5;  
+    z-index:311;	
+	position:absolute;
+	display:none;
+	width:200px;
+	height:200px;
+	border: 2px;
+	border-style: solid;
+}
+
+
+
 
 </style>
 <?php

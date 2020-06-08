@@ -1128,7 +1128,7 @@ function stat_troop_ordered($id,$sort) {
   }
 
   if($count > 0) {
-    usort($troop, troop_sortier_funktion);
+    usort($troop, "troop_sortier_funktion");
     $i=0;
     foreach ($troop as $t){
 

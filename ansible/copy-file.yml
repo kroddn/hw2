@@ -1,0 +1,26 @@
+- hosts: dockerhost
+  
+  vars_prompt:
+    - name: filename
+      prompt: What file you want to copy?
+      private: no
+
+    - name: destination
+      prompt: What destination to copy to? /srv/hw2/...
+      private: no
+
+  tasks:
+
+    - name: Check that file to copy exists
+      stat:
+        path: "{{ project_root }}/{{ filename }}"
+      register: file
+      delegate_to: localhost
+
+    - name: Copy file given 
+      copy:
+        src: "{{ project_root }}/{{ filename }}"
+        dest: "/srv/hw2/{{ destination }}"
+        owner: "1000"
+        mode: 0775
+      when: file.stat.exists

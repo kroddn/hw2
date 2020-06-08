@@ -1,0 +1,58 @@
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ docker_data_root }}"
+    state: directory
+    mode: '0755'
+
+- name: Create a directory if it does not exist
+  file:
+    path: "{{ docker_data_root }}/{{ item }}"
+    state: directory
+    mode: '0775'
+  with_items: "{{ folders }}"
+
+# TODO: have to use folder html as persistant file folder for docker instead of public_html
+- name: create symlink to html folder for the moment
+  file: 
+    src: "{{ docker_data_root }}/public_html"
+    dest: "{{ docker_data_root }}/html"
+    state: link
+
+- name: Copy PHP DockerFile
+  copy:
+    src: "{{ playbook_dir }}/files/docker/php/{{ item }}"
+    dest: "{{ docker_data_root }}/php/{{ item }}"
+  register: dockerfile
+  with_items:
+  - Dockerfile
+  - points-cron
+    
+- name: copy files
+  copy:
+    src: "{{ playbook_dir }}/files/docker/hw2.yml"
+    dest: "{{ docker_data_root }}/docker-compose.yml"
+    mode: u+x
+
+- name: copy php ini
+  copy:
+    src: "{{ playbook_dir }}/files/docker/custom.ini"
+    dest: "{{ docker_data_root }}"
+    mode: u+x
+
+- name: copy my.cnf
+  copy:
+    src: "{{ playbook_dir }}/files/docker/my.cnf"
+    dest: "{{ docker_data_root }}"
+    mode: u+x
+
+- name: Rebuild Docker Container
+  shell: 
+    cmd: docker-compose build
+    chdir: "{{ docker_data_root }}"
+  when: dockerfile.changed
+
+- name: Start Docker container with compose
+  shell:
+    cmd: docker-compose stop && docker-compose up --no-start && docker-compose start
+    chdir: "{{ docker_data_root }}"
+

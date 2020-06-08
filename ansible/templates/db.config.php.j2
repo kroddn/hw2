@@ -1,0 +1,157 @@
+<?php
+// ACHTUNG! Diese Datei nur auf dem Server editieren!
+// NICHT überschreiben mit lokaler Kopier!!!
+// umzubenennen in db.config.php
+
+define("BOOKING_ALLOWED", {% if booking_allowed is defined %}{{booking_allowed}}{% else %}0{% endif %});
+
+//define("MAP_DEFAULT", "kanada.png");
+
+// Karte vor dem 14. Maerz 2009
+//define("MAP_DEFAULT", "map_marmarameer_400x400.png");
+//define("SPECIAL_DEFAULT", "speed_special_default.png");
+
+define("MAP_DEFAULT", {% if map_default is defined %}"{{map_default}}"{% else %}"map_shinta_europa_400x400.png"{% endif %});
+define("SPECIAL_DEFAULT", {% if special_default is defined %}"{{special_default}}"{% else %}"special_shinta_europa_400x400.png"{% endif %});
+define("REGISTER_MAP", {% if register_map is defined %}"{{register_map}}"{% else %}"registermap_shinta_europa_400x400.jpg"{% endif %});
+define("WORLD_MAP", {% if world_map is defined %}"{{world_map}}"{% else %}"clanmap_shinta_europa_400x400"{% endif %});
+
+// Default Session Time
+define("SESSION_DEFAULT_TIME", {% if session_default_time is defined %}{{session_default_time}}{% else %}3600{% endif %});
+
+// Test aktivieren
+define("TEST_MODE", {% if test_mode is defined %}{{test_mode}}{% else %}0{% endif %});
+// DEV setzen
+{% if hw2dev is defined %}define("HW2DEV", {{hw2dev}});{% endif %}
+// Tuning fuer Tests
+define("NO_SECURITY", {% if no_security is defined %}{{no_security}}{% else %}1{% endif %});
+
+// Set Game Mode here (Apocalypse, speed, hispeed or None)
+define("APOCALYPSE", {% if mode_apocalypse is defined %}{{mode_apocalypse}}{% else %}0{% endif %});
+define("SPEED", {% if mode_speed is defined %}{{mode_speed}}{% else %}1{% endif %});
+define("HISPEED", {% if mode_hispeed is defined %}{{mode_mode_hispeedapocalypse}}{% else %}0{% endif %});
+
+// SMS Settings
+define("SMS_SERVICE", {% if sms_service is defined %}{{sms_service}}{% else %}0{% endif %});
+define("SMS_PREMIUM_KEYWORD", {% if sms_premium_keyword is defined %}{{sms_premium_keyword}}{% else %}"HOLY-WARS"{% endif %});
+
+// Duration Settings
+define("PREMIUM_TEST_DURATION", {% if premium_test_duration is defined %}{{premium_test_duration}}{% else %}7{% endif %});
+define("MAX_INACTIVE", {% if max_inactive is defined %}{{max_inactive}}{% else %}21*24*3600{% endif %});
+define("NOOB_TIME", {% if noob_time is defined %}{{noob_time}}{% else %}7 * 24 * 60 * 60{% endif %});
+
+### bis hier bin ich gekommen
+
+define("TICK", {% if tick is defined %}{{tick}}{% else %}600{% endif %});
+define("SERVICE_SLEEP_MAX", 40);
+define("RESEARCHSPEED", 6);
+define("BUILDINGSPEED", 2);
+define("RECRUITSPEED",  2);
+define("MIN_RESEARCH_TIME", 600);
+
+define("RESEARCHEW", 200);
+
+// Minimale Belagerungszeit vor einem Ausfall
+define("SALLY_MIN_SIEGE_TIME", 1600);
+
+// Im Gegensatz zur letzten Runde folgende Aenderung:
+// Truppenvorbereitung 2/3. Unter 3000 Einheiten macht
+// es keinen Unterschied - immer 2 Stunden Vorberitung
+define("ARMY_TIME_TO_PREPARE", 2200); // mind. 30 Mins Vorbereitung
+define("ARMY_TIME_PER_1000", 1400);   // Zeit pro 1000 Einheiten in Sekunden
+define("ARMY_MAX_TIME", 3600*12);    // Maximale Vorbereitungszeit 12h
+define("ARMY_SPEED_FACTOR", 6);       // Armeen x mal schnell
+
+define("LOYALITY_GROWTH", 25);
+
+
+// Kosten pro Einwohner
+define("CONVERT_COST", 100);
+
+// Maximaler Wohlstand = FAKTOR*ATTR
+define("PROSPERITY_MAX_FACTOR", 200);
+
+
+define("BLOCKSETTLEARMY", 36000);  // Angriffssperre f�r Begleitschutz
+
+//Ressourcenproduktion
+define("RAWWOOD_PRODFACTOR", 1);
+define("WOOD_PRODFACTOR", 1);
+define("RAWIRON_PRODFACTOR", 1);
+define("IRON_PRODFACTOR", 1);
+define("RAWSTONE_PRODFACTOR", 1);
+define("STONE_PRODFACTOR", 1);
+define("GOLD_PRODFACTOR", 1);
+define("SHORTRANGE_PRODFACTOR", 1);
+define("LONGRANGE_PRODFACTOR", 1);
+define("ARMOR_PRODFACTOR", 1);
+define("HORSE_PRODFACTOR", 1);
+
+// Produktionskosten
+define("SHORTRANGE_COST", 2);
+define("LONGRANGE_COST", 2);
+define("ARMOR_COST", 5);
+define("HORSE_COST", 20);
+
+// Maximale Marktangebote
+define("MARKET_LIMIT", 4);
+
+// ID des ersten Hauptstadt-Gebaeudes
+define("BUILDING_HS_LVL1", 1000);
+define("BUILDING_SCHOOL", 57);
+define("BUILDING_BIGSCHOOL", 58);
+
+define("RESEARCH_SCHOOL", 6);
+define("RESEARCH_BIGSCHOOL", 33);
+define("RESEARCH_LIBRARY", 79);
+
+define("DORFBEWOHNER_ID", 100);
+define("MARKETRESEARCH", 10);
+define("CLANLEADRESEARCH", 117);
+
+define("RECRUIT_BONUSPOINTS", 1);
+define("FIGHTSIM_NEED_POINTS", {% if fightsim_need_points is defined %}{{fightsim_need_points}}{% else %}10{% endif %});
+
+define("AVATAR_TOP_POINTS", 2000000);
+
+// Bonuspunkte fuer Click alle X Sekunden
+define("CLICK_BONUSPOINTS", {% if click_bonuspoints is defined %}{{click_bonuspoints}}{% else %}1{% endif %});
+define("CLICK_BONUSPOINTS_TIME", {% if click_bonuspoints_time is defined %}{{click_bonuspoints_time}}{% else %}3600{% endif %});
+
+// Belagerung aktivieren
+define("ENABLE_SIEGE", 1);
+
+// Belagerungen kosten nichts, wenn angekommen
+define("SIEGE_ARMIES_NO_COST", 0);
+
+// Loyalitaet aktiv?
+define("ENABLE_LOYALITY", 1);
+// Loyalitaet bei Uebernahme der Stadt
+define("MIN_LOYALITY", 0);
+// Loy zum Abreissen von Gebaeuden. In Prozent!!!
+define("DESTRUCT_LOYALITY", 25);
+
+
+// Tourniere aktivieren
+define("ENABLE_TOURNAMENT", 1);
+
+// Neues Pluernderscript aktiv
+define("NEW_DESPOIL", 1);
+
+// Neues Positionierungsskript?
+define("START_POS_NEW", 1);
+
+// Verbiete angreife aus dem Siedlungsbereich heraus
+define("DISABLE_SETTLEAREA_ATTACK", 1);
+
+// Dies sind die Registrierungslimits, um zu steuern,
+// ob ein Spieler im Hinterland starten muss oder ins
+// Kriegsgebiet darf.
+define("REGISTER_RATIO_LIMIT_HARD", 2.8);
+define("REGISTER_RATIO_LIMIT_MEDIUM", 1.6);
+define("REGISTER_RATIO_LIMIT_LIGHT", 1.3);
+
+// How much player needs to be in guild to payout to members
+define("CLAN_PAYOUT_MIN_MEMBER", {% if clan_payout_min_member is defined %}{{clan_payout_min_member}}{% else %}5{% endif %});
+
+?>

@@ -41,6 +41,7 @@ include_once("includes/session.inc.php");
 include_once("includes/player.class.php");
 include_once("includes/cities.class.php");
 include_once("includes/banner.inc.php");
+include_once("includes/premium.inc.php");
 
 if(defined("HISPEED") && HISPEED) {
   start_page();

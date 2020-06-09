@@ -1576,11 +1576,11 @@ if(!function_exists("bbCode")) {
       }
     }
     $text = quote($text);
-    $text = preg_replace("~&lt;/b&gt;~","</b>",$text);
-    $text = preg_replace("/&lt;b&gt;/","<b>",$text);
-    $text = preg_replace("~&lt;br /&gt;~","<br />",$text);
-    $text = preg_replace("~&lt;br/&gt;~","<br/>",$text);
-    $text = preg_replace("/&lt;br&gt;/","<br>",$text);
+    $text = str_replace("&lt;/b&gt;","</b>",$text);
+    $text = str_replace("&lt;b&gt;","<b>",$text);
+    $text = str_replace("&lt;br /&gt;","<br />",$text);
+    $text = str_replace("&lt;br/&gt;","<br/>",$text);
+    $text = str_replace("&lt;br&gt;","<br>",$text);
     return $text;
   }
 }

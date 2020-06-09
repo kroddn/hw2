@@ -62,15 +62,15 @@ if(isset($show)) {
 elseif (isset($msgre)) {
   $msgheader="Re: ".$msgheader;
   $msgbody="\n\n--------------- ".$sender." schrieb ---------------\n".$msgbody;
-  $msgbody = ereg_replace("&quot","\"",stripslashes($msgbody));
-  $msgheader = ereg_replace("&quot","\"",stripslashes($msgheader));
+  $msgbody = str_replace("&quot","\"",stripslashes($msgbody));
+  $msgheader = str_replace("&quot","\"",stripslashes($msgheader));
 }
 elseif (isset($msgfw)) {
   $msgheader="FW: ".$msgheader;
   $msgbody="\n\n--------------- ".$sender." schrieb ---------------\n".$msgbody;
   unset($msgrecipient);
-  $msgbody = ereg_replace("&quot","\"",stripslashes($msgbody));
-  $msgheader = ereg_replace("&quot","\"",stripslashes($msgheader));
+  $msgbody = str_replace("&quot","\"",stripslashes($msgbody));
+  $msgheader = str_replace("&quot","\"",stripslashes($msgheader));
 }
 elseif (isset($msgdel)) {
   $res1=do_mysql_query("SELECT id FROM message WHERE id=".$msgid." AND recipient=".$player->getID());
@@ -482,9 +482,9 @@ if($showmsg!=1) {
 <? if($msgerror) echo "<br><div class='error'><b>".$msgerror."</b></div>"; 
 if($msgnoerror) {
   echo "<br><div class='noerror'><b>".$msgnoerror."</b></div>";
-  if (!is_premium_noads()) {
-    include("includes/ebay.flash.html");
-  }
+  //if (!is_premium_noads()) {
+  //  include("includes/ebay.flash.html");
+  //}
 }
 ?>
 &nbsp;</td></tr>
@@ -715,7 +715,8 @@ if (!is_premium_noads()) {
 <?
 }
 function skyscraper() {
-  if (!is_premium_noads()) {
+  // deactivate for now
+  if (!is_premium_noads() and False) {
     $timemod = time() % 3600;
     if($timemod < 600)
       include("includes/friendscout_120x600.html"); 

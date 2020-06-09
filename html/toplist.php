@@ -93,7 +93,7 @@ start_body();
 	<td><a <? printActive("player_avg"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=player_avg">Durchschnitt</a></td>
 	<td><a <? printActive("town"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=town">St&auml;dte</a></td>
 	<td><a <? printActive("population"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=population">Einwohner</a></td>
-  <?php if(!defined("HISPEED") ) { ?>
+  <?php if(!defined("HISPEED") || HISPEED == 0) { ?>
 	<td><a <? printActive("clan"); ?> href="<? echo $_SERVER['PHP_SELF'];  ?>?show=clan">Orden</a></td>
   <?php } 
         if(!defined("SPEED") && !defined("HISPEED")) {

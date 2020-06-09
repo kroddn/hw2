@@ -420,7 +420,7 @@ class Library {
 	    $info['description'].="<br><b>Benötigte Forschung:</b><br>";
 	    $info['description'].=$data1['rname']."<br><br>";
 	    $info['description'].="<b>Typ:</b> ".$unittypes[$data1['type']-1]."<br>";
-	    $info['description'].="<b>Level ".$data1['level']."</b><br><br>";
+	    $info['description'].="<b>Level ".$data1['level']."</b> (benötigt entsprechendes Kasernen-Level<br><br>";
 	    $info['description'].="<br><br>--- <b>Kampfwerte:</b> ---<br><br>";
 	    $info['description'].="<b>".$data1['damage']."</b> <img src='".$imagepath."/damage.gif'> (Schaden) <br>";
 	    if ($data1['bonus1']>0) $info['description'].="<b>".$data1['bonus1']."</b> <img src='".$imagepath."/damage2.gif'> gegen ".$unittypes[0]." (Bonusschaden)<br>";

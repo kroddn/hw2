@@ -142,7 +142,7 @@ class FightClass {
     }
     //Verteidiger gewonnen
     elseif ($erg[0]['player'] != $attackerid) {
-      if (DEBUG)
+      if (defined("DEBUG") && DEBUG)
         echo " DEFENDER wins ";
       $this->result = Fight_DefWin;
       foreach($erg as $key => $value)

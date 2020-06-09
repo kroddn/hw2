@@ -90,7 +90,7 @@ function fight($at, $df, $defensebonus, $tactic) {
     // Vorbereitungen
     $combat = true;
 	
-	if(Testing ==1)
+  if(defined("Testing") && Testing == 1)
 	{
 		echo "<table>";
 			echo "<tr class='tblhead'>";
@@ -113,13 +113,13 @@ function fight($at, $df, $defensebonus, $tactic) {
     // Kampfrunden
     while ($combat) {
         // Die Fülle abdecken dass eine oder beide der Armeen besiegt wurde
-        if (sizeof($df) == 0 && sizeof($at) != 0) {            
+        if (!is_array($df) && is_array($at) || (sizeof($df) == 0 && sizeof($at) != 0)) {            
             return $at;
         }
-        elseif (sizeof($at) == 0 && sizeof($df) != 0) {           
+        elseif ((is_array($df) && !is_array($at)) || (sizeof($at) == 0 && sizeof($df) != 0)) {           
             return $df;
         }
-        elseif (sizeof($at) == 0 && sizeof($df) == 0) {            
+        elseif ((!is_array($df) && !is_array($at)) || (sizeof($at) == 0 && sizeof($df) == 0)) {            
             return false;
         }
         
@@ -199,7 +199,7 @@ function fight($at, $df, $defensebonus, $tactic) {
         $df = $dftemp;
         unset ($dftemp);
 		
-		if(Testing == 1)
+		if(defined("Testing") && Testing == 1)
 		{
 				echo "<tr class='tblbody'>";
 				echo "<td class='tblbody'>".$wurst."</td>";

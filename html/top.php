@@ -43,6 +43,38 @@ include_once("includes/cities.class.php");
   /* body { -moz-binding: url("js/IEemu.xml#IEemu"); } */
   a.premiumstatusline { color: #FF4020; }
   a.haspremiumstatusline { color: #20DD20; }  
+
+  div.statusline {
+    width: calc(100vw - 155px); 
+    background-image: url(images/ingame/top.gif);
+  }
+
+  .statusline_left > span {
+    float: left;
+    margin: 5px 0 0 5px;
+    vertical-align: middle;
+  }
+
+  .statusline_right {
+    float: right;
+    margin: 4px 5px 0 0;
+    position: absolute;
+    right: 0px;
+  }
+
+  .statusline_right > span {
+    margin-right: 5px;
+  }
+
+  .statusline_right > span > b {
+    vertical-align: top;
+    margin-top: 1px;
+  }
+
+  .status_troops {
+    margin-top: 2px;
+  }
+
 </style>
 
 <script language="javascript">
@@ -55,9 +87,8 @@ function updateframe(newpage) {
 </head>
 <link rel="stylesheet" href="<? echo $csspath; ?>/hw.css" type="text/css">
 <body class="nopadding" marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" background="<? echo $imagepath; ?>/top.gif">
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="100%" class="nopadding" marginwidth="0" marginheight="0" topmargin="0" leftmargin="0" background="<? echo $imagepath; ?>/top.gif">
-<tr valign="middle">
-<td width="25">&nbsp</td>
+<div class="statusline">
+<div class="statusline_left">
 <?
 
 $cit = $_SESSION['cities']->getCities();
@@ -68,13 +99,13 @@ if(ADVANCED_TOP)
 {
   $statusarmys = $_SESSION['cities']->getArmyTopView();
   if ($statusarmys[0] > 0) {
-    echo '<td nowrap title="Achtung: Feind im Anmarsch!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></td><td><font color="orange">'.$statusarmys[0].'</font></td>';
+    echo '<span class="statusline status_troops" title="Achtung: Feind im Anmarsch!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></span><span><font color="orange">'.$statusarmys[0].'</font></span>';
   }
   if ($statusarmys[1] > 0) {
-    echo '<td nowrap title="Achtung: Es sind neutrale Truppen auf dem Weg zu uns!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/neutral.gif"></a></td><td><font color="green">'.$statusarmys[1].'</font></td>';
+    echo '<span class="statusline status_troops" title="Achtung: Es sind neutrale Truppen auf dem Weg zu uns!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/neutral.gif"></a></span><span><font color="green">'.$statusarmys[1].'</font></span>';
   }
   if ($statusarmys[2] > 0) {
-    echo '<td nowrap title="Hinweis: Verbündete Truppen erreichen uns bald."><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/help.gif"></a></td><td><font color="grey">'.$statusarmys[2].'</font></td>';
+    echo '<span class="statusline status_troops" title="Hinweis: Verbündete Truppen erreichen uns bald."><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/help.gif"></a></span><span><font color="grey">'.$statusarmys[2].'</font></span>';
   }
   else {
     $session_underattack = false;
@@ -89,7 +120,7 @@ else
   }
   // Falls ein Angriff stattfindet dann dies anzeigen. Ansonsten ein marker für später setzen
   if ($attnum > 0) {
-    echo '<td nowrap title="Achtung: Angriff!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></td><td><font color="orange">'.$attnum.'</font></td>';
+    echo '<span class="statusline status_troops" title="Achtung: Angriff!"><a target="main" href="general.php?enemy=1"><img border="0" src="'.$imagepath.'/attack.gif"></a></span><span><font color="orange">'.$attnum.'</font></span>';
   }
   else {
     // Diese Variable wird von update.inc.php verarbeitet und ist gesetzt
@@ -101,6 +132,8 @@ else
 
 
 function getNewClanfTopics($pid) {
+  // Deactivate for the moment
+  return "";
 	$string="<a href=\"cf_index.php\" target=\"main\" onclick=\"updateframe();\" class=\"statusline\">Keine neuen Forenbeitr&auml;ge</a>";
 	//get players last forum visit
 	$res2=mysqli_query($GLOBALS['con'], "SELECT user_lastvisit FROM clanf_users WHERE username='".$pid."'");
@@ -130,43 +163,43 @@ function getNewClanfTopics($pid) {
 
 $player = $_SESSION['player'];
 if($player->isPremSeller())
-     echo '<td nowrap title="PremiumSeller"><a target="main" href="premiumadmin.php"><img alt="PS" border="0" src="'.$imagepath.'/ps.gif"></a></td>';
+     echo '<span class="statusline" title="PremiumSeller"><a target="main" href="premiumadmin.php"><img alt="PS" border="0" src="'.$imagepath.'/ps.gif"></a></span>';
 if($player->isAdmin() || $player->isMaintainer())
-     echo '<td nowrap title="Admin"><a target="main" href="adminindex.php"><img alt="AD" border="0" src="'.$imagepath.'/ad2.gif"></a></td>';
+     echo '<span class="statusline" title="Admin"><a target="main" href="adminindex.php"><img alt="AD" border="0" src="'.$imagepath.'/ad2.gif"></a></span>';
 if($player->isMultihunter())
-     echo '<td nowrap title="Multihunter"><a target="main" href="multihunter.php?sh_playerinfo=1"><img alt="MH" border="0" src="'.$imagepath.'/mh.gif"></a></td>';
+     echo '<span class="statusline" title="Multihunter"><a target="main" href="multihunter.php?sh_playerinfo=1"><img alt="MH" border="0" src="'.$imagepath.'/mh.gif"></a></span>';
 
 if($player->isNamehunter())
-     echo '<td nowrap title="Namehunter"><a target="main" href="namehunter.php"><img alt="NH" border="0" src="'.$imagepath.'/nh.gif"></a></td>';
+     echo '<span class="statusline" title="Namehunter"><a target="main" href="namehunter.php"><img alt="NH" border="0" src="'.$imagepath.'/nh.gif"></a></span>';
 
 if( defined("SMS_SERVICE") && SMS_SERVICE && (!defined("HISPEED") || !HISPEED) ) {
-  echo '<td nowrap title="SMS Senden"><a target="main" href="sms.php"><img border="0" alt="SMS Versand" src="'.GFX_PATH_LOCAL.'/sms_mini.gif"></a></td>';
+  echo '<span class="statusline" title="SMS Senden"><a target="main" href="sms.php"><img border="0" alt="SMS Versand" src="'.GFX_PATH_LOCAL.'/sms_mini.gif"></a></span>';
 } 
 ?>
-<td nowrap title="Punktestand_Bezeichnung" class="statusline"><b>Punkte:&nbsp</b></td>
-<td nowrap title="Punktestand" class="statusline"><? echo $player->getPoints();?></td>
-<td nowrap title="Forum" class="statusline"> - <? echo getNewClanfTopics($_SESSION['player']->name); ?></td>
-<td nowrap> - 
-<? if( is_premium() ) {
-  echo '<a title="Premium-Account Einstellungen" class="haspremiumstatusline" target="main" href="settings.php?show=premium">Premium!</a>';
-}
-else {
-  $sql = "SELECT count(*) AS cnt FROM premiumacc WHERE player = ".$_SESSION['player']->getID();
-  $cnt = do_mysql_query_fetch_assoc($sql);
-  
-  $cantest = $cnt['cnt'] == 0 ? " Kostenlos testen!" : "";
-  
-  echo '<a title="Vorteile eines Premiumaccounts ansehen" class="premiumstatusline" target="main" href="premium.php">Premium?'.$cantest.'</a>';
-}
-?>
-</td>
-<td width="100%"></td>
-<td nowrap title="Gold" class="statusline"><b><? echo prettyNumber($player->getGold());?></b> <img alt="Gold" id="gold" name="Gold" src="<? echo $imagepath; ?>/gold.gif"></td>
-<td nowrap title="Holz" class="statusline"><b><? echo prettyNumber($player->getWood());?></b> <img alt="Holz" name="Holz" src="<? echo $imagepath; ?>/wood.gif"></td>
-<td nowrap title="Eisen" class="statusline"><b><? echo prettyNumber($player->getIron());?></b> <img alt="Eisen" name="Eisen" src="<? echo $imagepath; ?>/iron.gif"></td>
-<td nowrap title="Stein" class="statusline"><b><? echo prettyNumber($player->getStone());?></b> <img alt="Stein" name="Stein" src="<? echo $imagepath; ?>/stone.gif"></td>
-<td width="20" nowrap>&nbsp;</td>
-</tr>
-</table>
+    <span title="Punktestand_Bezeichnung" class="statusline"><b>Punkte:&nbsp</b></span>
+    <span title="Punktestand" class="statusline"><? echo $player->getPoints();?></span>
+    <span title="Forum" class="statusline"> - <? echo getNewClanfTopics($_SESSION['player']->name); ?></span>
+    <span> - 
+      <? if( is_premium() ) {
+        echo '<a title="Premium-Account Einstellungen" class="haspremiumstatusline" target="main" href="settings.php?show=premium">Premium!</a>';
+      }
+      else {
+        $sql = "SELECT count(*) AS cnt FROM premiumacc WHERE player = ".$_SESSION['player']->getID();
+        $cnt = do_mysql_query_fetch_assoc($sql);
+        
+        $cantest = $cnt['cnt'] == 0 ? " Kostenlos testen!" : "";
+        
+        echo '<a title="Vorteile eines Premiumaccounts ansehen" class="premiumstatusline" target="main" href="premium.php">Premium?'.$cantest.'</a>';
+      }
+      ?>
+    </span>
+  </div>
+  <div class="statusline_right"></td>
+    <span title="Gold" class="statusline"><b><? echo prettyNumber($player->getGold());?></b> <img alt="Gold" id="gold" name="Gold" src="<? echo $imagepath; ?>/gold.gif"></span>
+    <span title="Holz" class="statusline"><b><? echo prettyNumber($player->getWood());?></b> <img alt="Holz" name="Holz" src="<? echo $imagepath; ?>/wood.gif"></span>
+    <span title="Eisen" class="statusline"><b><? echo prettyNumber($player->getIron());?></b> <img alt="Eisen" name="Eisen" src="<? echo $imagepath; ?>/iron.gif"></span>
+    <span title="Stein" class="statusline"><b><? echo prettyNumber($player->getStone());?></b> <img alt="Stein" name="Stein" src="<? echo $imagepath; ?>/stone.gif"></span>
+  </div>
+</div>
 </body>
 </html>

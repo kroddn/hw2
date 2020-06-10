@@ -49,7 +49,7 @@ if(isset($delmarked) && sizeof($mark)>0){
     $sql.=")";
     do_mysql_query($sql);
     // Wurden welche gelöscht, dann Postausgang neu berechnen
-    if (mysqli_affected_rows() > 0) {
+    if (do_mysql_affected_rows() > 0) {
       $player->messages_sent = -1;
     }
   }

@@ -73,6 +73,10 @@ function do_mysql_num_rows($result) {
   return mysqli_num_rows($result);
 }
 
+function do_mysql_affected_rows() {
+	return mysqli_affected_rows($GLOBALS['con']);
+}
+
 
 /**
  * Eigene MYSQL Query Funktion

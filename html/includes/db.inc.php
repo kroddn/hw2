@@ -77,6 +77,10 @@ function do_mysql_affected_rows() {
 	return mysqli_affected_rows($GLOBALS['con']);
 }
 
+function do_mysql_escape_string($string) {
+	return mysqli_escape_string($GLOBALS['con'], $string);
+}
+
 
 /**
  * Eigene MYSQL Query Funktion

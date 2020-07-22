@@ -197,6 +197,15 @@ function reset_config()
   }
 }
 
+function create_map($map_name, $map_size) {
+  set_time_limit(60);
+  echo "<p>Erstelle neue Map</p>";
+  require_once("includes/image.func.php");
+  makeMapImg("maps/".$map_name, $map_size, $map_size);
+  //define("NEW_MAP", $map_name);
+  flush();
+}
+
 
 
 function reset_map() {
@@ -331,6 +340,12 @@ function do_reset($magic, $reset_map = true) {
 
 
   if($reset_map) {
+
+    if ($_GET["map_size"] != "" && $_GET["map_name"] != "") {
+      echo "Map erstellen<br>\n";
+      create_map($_GET["map_name"], $_GET["map_size"]);
+    }
+
     echo "Map generieren<br>\n";
 
     $error = reset_map();
@@ -364,9 +379,11 @@ function reset_game_form() {
 ?>
 <hr>
   <h2>Runde <? echo $GLOBALS['pagetitle']; ?> resetten?</h2>
-  <form action="" method="get" onSubmit="return confirm('Wirklich <? echo $GLOBALS['pagetitle']; ?> Resetten???');">
+  <form action="" method="GET" onSubmit="return confirm('Wirklich <? echo $GLOBALS['pagetitle']; ?> Resetten???');">
    Bitte Bestägtigungskey eingeben:<br>
    <? echo $_SESSION['reset_magic']; ?> <input name="reset_magic">
+    <p>Dateiname von Map: <input name="map_name"></p>
+    <p>Mapgröße: <input name="map_size"></p>
     <p>
         <input type="submit" name="do_reset" value=" RESET ">&nbsp;
         <input type="checkbox" name="reset_map" value="1" checked="1"> Karte resetten

@@ -22,56 +22,83 @@
     Former copyrights see below.
  **************************************************************************/
 
+function makeMapImg($filename, $resize_height, $resize_width) {
+  if (strpos($filename, 'png')) {
+    $orig_img = imagecreatefrompng($filename);
+  } else {
+    $orig_img = imagecreatefromjpeg($filename);
+  }
+  $size = getimagesize($filename);
+  $orig_width = $size[0];
+  $orig_height = $size[1];
 
-// Made by Bernhard Knasmüller
-function makeMapImg($filename)
+  $orig_img_scaled = imagescale($orig_img, $resize_width, $resize_height);
+  imagedestroy($orig_img);
+
+  if(!$orig_img_scaled) 
+  {
+    echo "Es gab einen Fehler beim laden des Original Bildes";
+  }
+
+  // Root Image for map creation (pure blue and green)
+  $root_img = imagecreatetruecolor($resize_width, $resize_height);
+  imagecopyresampled($root_img, $orig_img_scaled, 0, 0, 0, 0, $resize_width, $resize_height, $resize_width, $resize_height);
+  modifyMapImage($root_img, "root", $resize_height, $resize_width);
+  imagepng($root_img, 'maps/map_root.png'); 
+  imagedestroy($root_img);
+
+  // Create Clanmap with Weichzeichner
+  $clan_img = imagecreatetruecolor($resize_width, $resize_height);
+  imagecopyresampled($clan_img, $orig_img_scaled, 0, 0, 0, 0, $resize_width, $resize_height, $resize_width, $resize_height);
+  modifyMapImage($clan_img, "smooth", $resize_height, $resize_width);
+  imagefilter($clan_img, IMG_FILTER_GAUSSIAN_BLUR);
+  imagejpeg($clan_img, 'maps/clanmap.jpg'); 
+
+  // Create RegisterMap with Weichzeichner
+  imagescale($clan_img, 160, 160);
+  imagejpeg($clan_img, 'maps/registermap.jpg'); 
+  imagedestroy($clan_img);
+
+  imagedestroy($orig_img_scaled);
+  echo "Bild erfolgreich konvertiert.";
+}
+
+// Made by Bernhard Knasmï¿½ller
+// Type: 
+//   - root: Creates basic image with just pure blue and green
+//   - smooth: Creates smooth image for clan/register map 
+function modifyMapImage($img, $type, $height, $width)
 {
-  $img = imagecreatefrompng($filename);
-  if($img) 
+  for($i=0;$i<$height;$i++)
+  {	for($e=0;$e<$width;$e++)
     {
-      $height = 400;
-      $width = 400;
-      for($i=0;$i<$height;$i++)
-        {	for($e=0;$e<$width;$e++)
-            {
-              $rgb = imagecolorat($img, $e, $i);
-              $r = ($rgb >> 16) & 0xFF;
-              $g = ($rgb >> 8) & 0xFF;
-              $b = $rgb & 0xFF;
-          
-              if($b>= 200)
-                {
-                  $col = imagecolorallocate($img, 102, 102, 153);
-                }
-              else
-                {
-                  $col = imagecolorallocate($img, 102, 153, 102);
-                }
-              imagesetpixel($img, $e, $i, $col);
-            }
-        }
-      
-      imagefilter($img, IMG_FILTER_GAUSSIAN_BLUR);
+      $rgb = imagecolorat($img, $e, $i);
+      $r = ($rgb >> 16) & 0xFF;
+      $g = ($rgb >> 8) & 0xFF;
+      $b = $rgb & 0xFF;
 
-      //optionaler Weichzeichner
-      $new_width = 160;
-      $new_height = 160;
-      $img2 = imagecreatetruecolor($new_width, $new_height);
-      imagecopyresampled($img2, $img, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-  
-      imagejpeg($img2, '/tmp/map_small.jpg');
-      imagepng($img2, '/tmp/map_small.png');
-      imagedestroy($img2);
-  
-      imagejpeg($img, '/tmp/map.jpg');
-      imagepng($img, '/tmp/map.png');
-      imagedestroy($img);
-      echo "Bild erfolgreich konvertiert.";
+      // Make everything what is blue - Full Blue, else Full green
+      if($b>= 200 && $g < 200)
+        {
+          // imagecolorallocate(imagepath, red, green, blue)
+          if ($type == "root") {
+            $col = imagecolorallocate($img, 0, 0, 254);
+          } else {
+            $col = imagecolorallocate($img, 102, 102, 153);
+          }
+        }
+      else
+        {
+          if ($type == "root") {
+            $col = imagecolorallocate($img, 0, 254, 0);
+          } else {
+            $col = imagecolorallocate($img, 102, 153, 102);
+          }
+        }
+      imagesetpixel($img, $e, $i, $col);
     }
-  else 
-    {
-      echo "Image erzeugen fehlgeschlagen.";
-    }
+  }
+  return $img;
 }
 
 ?>

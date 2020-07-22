@@ -33,7 +33,12 @@ else {
 
   // Zunächst die Map neu generieren
   //$map     = "kanada.png";
-  $map     = defined("MAP_DEFAULT")     ? MAP_DEFAULT     : "map_default.png";
+  $map = "map_root.png";
+  //if (defined("NEW_MAP")) {
+  //  $map = NEW_MAP;
+  //} elseif (defined("MAP_DEFAULT")) {
+  //  $map = MAP_DEFAULT;
+  //}
   
   echo "<P>Kopiere Vorlagen von Karte und Spezial-Ressourcen\n";
   $to_copy = "maps/$map";

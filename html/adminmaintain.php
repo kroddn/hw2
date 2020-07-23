@@ -162,16 +162,6 @@ list_player_not_activated();
 
 list_player_locked();
 
-if($_SESSION['player']->IsAdmin()) {
-  include_once("includes/reset.inc.php");
-
-  if(isset($_GET['do_reset']) && isset($_GET['reset_magic'])) {
-    do_reset($_GET['reset_magic'], $_GET['reset_map'] ? true : false  );
-  }
-  
-  reset_game_form();
-}
-
 ?>
 
 </body></html>

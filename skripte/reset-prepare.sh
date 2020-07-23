@@ -8,6 +8,8 @@ DB=hw2_speed
 # sms_settings
 # sms_send
 
+echo "this is not needed anymore - USe reset command over admin"
+exit 0
 
 # Alle unbenoetigten Tabellen leeren
 TABLES="

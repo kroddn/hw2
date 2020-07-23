@@ -59,9 +59,18 @@ function insert_new_player(&$p) {
   else {
     $md5pw = md5(trim($p['pw']));
   }
+  $start_gold = defined('START_GOLD') ? START_GOLD : 40000;
+  $start_wood = defined('START_WOOD') ? START_WOOD : 4000;
+  $start_stone = defined('START_STONE') ? START_STONE : 4000;
+  $start_rp = defined('START_RP') ? START_RP : 30;
+  
   
   $religion = "NULL";
-  $mainres = do_mysql_query("INSERT INTO player (login,password,email,register_email,sms,lastseen,religion,status,statusdescription,activationkey,regtime,recruiter,pos,bonuspoints,cc_messages) VALUES ('".trim($p['login'])."','".$md5pw."','".trim($p['email'])."', '".trim($p['email'])."', ".$sms.", UNIX_TIMESTAMP(), ".$religion.", 1,'Noch nicht aktiviert','".$key."', UNIX_TIMESTAMP(), ".( !isset($p['ref']) || $p['ref'] == 0 ? "NULL" : $p['ref']).", NULL, $bonuspoints, 1)");
+  $mainres = do_mysql_query("INSERT INTO player".
+    "(login,password,email,register_email,sms,lastseen,religion,status,statusdescription,activationkey,regtime,recruiter,pos,bonuspoints,cc_messages,gold,wood,stone,rp)". 
+    "VALUES ('".trim($p['login'])."','".$md5pw."','".trim($p['email'])."', '".trim($p['email'])."', ".$sms.", UNIX_TIMESTAMP(), ".$religion.
+    ", 1,'Noch nicht aktiviert','".$key."', UNIX_TIMESTAMP(), ".( !isset($p['ref']) || $p['ref'] == 0 ? "NULL" : $p['ref']).", NULL, $bonuspoints, 1, ".
+    $start_gold.",".$start_wood.",".$start_stone.",".$start_rp.")");
 
   if (!$mainres) {
     return "Fehler. Konnte Spieler nicht anlegen";

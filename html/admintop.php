@@ -27,6 +27,7 @@ if($player->isAdmin() || $player->isMaintainer()) {
   <td width="60" class="tblhead" align="center"><a target="adminmain" href="adminstart.php">Zitate</a></td>
   <td width="60" class="tblhead" align="center"><a target="adminmain" href="adminavatar.php">Avatare</a></td>
   <td width="60" class="tblhead" align="center"><a target="adminmain" href="adminmaintain.php">Wartung</a></td>
+  <td width="60" class="tblhead" align="center"><a target="adminmain" href="adminreset.php">Reset</a></td>
   <td width="60" class="tblhead" align="center"><a target="adminmain" href="managebooking.php">Booking</a></td>
   <td width="60" class="tblhead" align="center"><a target="adminmain" href="newsletter.php">Newsletter</a></td>
   <td width="60" class="tblhead" align="center"><a target="adminmain" href="adminstats.php">Browser</a></td>

@@ -78,7 +78,7 @@ function modifyMapImage($img, $type, $height, $width)
       $b = $rgb & 0xFF;
 
       // Make everything what is blue - Full Blue, else Full green
-      if($b>= 200 && $g < 200)
+      if($b>= 200)
         {
           // imagecolorallocate(imagepath, red, green, blue)
           if ($type == "root") {

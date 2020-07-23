@@ -11,10 +11,10 @@ define("BOOKING_ALLOWED", {% if booking_allowed is defined %}{{booking_allowed}}
 //define("MAP_DEFAULT", "map_marmarameer_400x400.png");
 //define("SPECIAL_DEFAULT", "speed_special_default.png");
 
-define("MAP_DEFAULT", {% if map_default is defined %}"{{map_default}}"{% else %}"map_shinta_europa_400x400.png"{% endif %});
-define("SPECIAL_DEFAULT", {% if special_default is defined %}"{{special_default}}"{% else %}"special_shinta_europa_400x400.png"{% endif %});
-define("REGISTER_MAP", {% if register_map is defined %}"{{register_map}}"{% else %}"registermap_shinta_europa_400x400.jpg"{% endif %});
-define("WORLD_MAP", {% if world_map is defined %}"{{world_map}}"{% else %}"clanmap_shinta_europa_400x400"{% endif %});
+define("MAP_DEFAULT", {% if map_default is defined %}"{{map_default}}"{% else %}"map.png"{% endif %});
+define("SPECIAL_DEFAULT", {% if special_default is defined %}"{{special_default}}"{% else %}"special.png"{% endif %});
+define("REGISTER_MAP", {% if register_map is defined %}"{{register_map}}"{% else %}"registermap.jpg"{% endif %});
+define("WORLD_MAP", {% if world_map is defined %}"{{world_map}}"{% else %}"clanmap.jpg"{% endif %});
 
 // Default Session Time
 define("SESSION_DEFAULT_TIME", {% if session_default_time is defined %}{{session_default_time}}{% else %}3600{% endif %});
@@ -47,7 +47,7 @@ define("SERVICE_SLEEP_MAX", 40);
 define("RESEARCHSPEED", 6);
 define("BUILDINGSPEED", 2);
 define("RECRUITSPEED",  2);
-define("MIN_RESEARCH_TIME", 600);
+define("MIN_RESEARCH_TIME", 300);
 
 define("RESEARCHEW", 200);
 
@@ -88,9 +88,9 @@ define("ARMOR_PRODFACTOR", 1);
 define("HORSE_PRODFACTOR", 1);
 
 // Produktionskosten
-define("SHORTRANGE_COST", 2);
-define("LONGRANGE_COST", 2);
-define("ARMOR_COST", 5);
+define("SHORTRANGE_COST", 3);
+define("LONGRANGE_COST", 3);
+define("ARMOR_COST", 4);
 define("HORSE_COST", 20);
 
 // Maximale Marktangebote
@@ -140,6 +140,11 @@ define("NEW_DESPOIL", 1);
 
 // Neues Positionierungsskript?
 define("START_POS_NEW", 1);
+define("START_GOLD", 60000);
+define("START_WOOD", 4000);
+define("START_STONE", 4000);
+define("START_RP", 50);
+
 
 // Verbiete angreife aus dem Siedlungsbereich heraus
 define("DISABLE_SETTLEAREA_ATTACK", 1);

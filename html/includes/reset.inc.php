@@ -32,6 +32,7 @@
 ***************************************************/
 include_once("includes/util.inc.php");
 include_once("includes/admin.inc.php");
+include_once("admintools/import.config.php");
 
 if(!isset($_SESSION['player']) || !$_SESSION['player']->isAdmin()) {
   echo "<h1 class=\"error\">Unbefugt</h1>";
@@ -70,7 +71,7 @@ function reset_players($delete = false) {
 
   // Ressourcen der "Admins" zurücksetzen
   do_mysql_query("UPDATE player SET ".
-		 " lastres=unix_timestamp(),gold=40000,wood=4000,stone=4000,iron=0,rp=30,".
+		 " lastres=unix_timestamp(),gold=" . START_GOLD . ",wood=" . START_WOOD . ",stone=" . START_STONE . ",iron=0,rp=" . START_RP . "30,".
 		 " pos=NULL, religion=NULL, name=NULL, activationtime=NULL, signature=NULL, ".
 		 " points=0, pointsavg=0, pointsupd=0,".
 		 " cc_towns=1, cc_resources=1, cc_messages=1, nooblevel=5,".
@@ -379,16 +380,68 @@ function reset_game_form() {
 ?>
 <hr>
   <h2>Runde <? echo $GLOBALS['pagetitle']; ?> resetten?</h2>
+  <div style="width: 500px;">
+  <style> .container input { width: 100%; }</style>
   <form action="" method="GET" onSubmit="return confirm('Wirklich <? echo $GLOBALS['pagetitle']; ?> Resetten???');">
-   Bitte Bestägtigungskey eingeben:<br>
-   <? echo $_SESSION['reset_magic']; ?> <input name="reset_magic">
-    <p>Dateiname von Map: <input name="map_name"></p>
-    <p>Mapgröße: <input name="map_size"></p>
+    <p>Bitte Bestägtigungskey eingeben</p>
     <p>
-        <input type="submit" name="do_reset" value=" RESET ">&nbsp;
-        <input type="checkbox" name="reset_map" value="1" checked="1"> Karte resetten
-    </p>       
+      <label for="reset_magic"><? echo $_SESSION['reset_magic']; ?></label>
+      <input name="reset_magic"> 
+    </p>
+    <p>
+      <label for="map_name">Dateiname von Map</label>
+      <input name="map_name">
+    </p>
+    <p>
+      <label for="map_size">Mapgröße</label>
+      <input name="map_size">
+    </p>
+    <p>
+      <label for="res_wood">Wood in Percent</label>
+      <input name="res_wood" value="<?php echo defined('PERCENT_WOOD') ? PERCENT_WOOD : "";?>" required>
+    </p>
+    <p>
+      <label for="res_stone">Stone in Percent</label>
+      <input name="res_stone" value="<?php echo defined('PERCENT_STONE') ? PERCENT_STONE : "";?>" required>
+    </p>
+    <p>
+      <label for="res_fish">Fisch</label>
+      <input name="res_fish" value="<?php echo defined('AMOUNT_SPECIAL_FISH') ? AMOUNT_SPECIAL_FISH : "";?>" required>
+    </p>
+    <p>
+      <label for="res_pearls">Pearls</label>
+      <input name="res_pearls" value="<?php echo defined('AMOUNT_SPECIAL_PEARLS') ? AMOUNT_SPECIAL_PEARLS : "";?>" required>
+    </p>
+    <p>
+      <label for="res_wine">Wine</label>
+      <input name="res_wine" value="<?php echo defined('AMOUNT_SPECIAL_WINE') ? AMOUNT_SPECIAL_WINE : "";?>" required>
+    </p>
+    <p>
+      <label for="res_wheat">Wheat</label>
+      <input name="res_wheat" value="<?php echo defined('AMOUNT_SPECIAL_WHEAT') ? AMOUNT_SPECIAL_WHEAT : "";?>" required>
+    </p>
+    <p>
+      <label for="res_furbs">Furbs</label>
+      <input name="res_furbs" value="<?php echo defined('AMOUNT_SPECIAL_FURBS') ? AMOUNT_SPECIAL_FURBS : "";?>" required>
+    </p>
+    <p>
+      <label for="res_herbs">Herbs</label>
+      <input name="res_herbs" value="<?php echo defined('AMOUNT_SPECIAL_HERBS') ? AMOUNT_SPECIAL_HERBS : "";?>" required>
+    </p>
+    <p>
+      <label for="res_metal">Metal</label>
+      <input name="res_metal" value="<?php echo defined('AMOUNT_SPECIAL_METAL') ? AMOUNT_SPECIAL_METAL : "";?>" required>
+    </p>    
+    <p>
+      <label for="res_gems">Gems</label>
+      <input name="res_gems" value="<?php echo defined('AMOUNT_SPECIAL_GEMS') ? AMOUNT_SPECIAL_GEMS : "";?>" required>
+    </p>
+    <p>
+      <input type="submit" name="do_reset" value=" RESET ">
+      <input type="checkbox" name="reset_map" value="1" checked="1" type="hidden">
+    </p>
   </form>
+
 <?
 }
 ?> 

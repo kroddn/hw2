@@ -1,7 +1,5 @@
 - hosts: dockerhost
   
   tasks:
-    - name: Deploy configuration
-      template: 
-        src: "templates/db.config.php.j2" 
-        dest: "{{ docker_data_root }}/public_html/includes/db.config.php"
+    - name: deploy configfile
+      import_tasks: tasks/copy-config.yml

@@ -3,4 +3,9 @@
   tasks:
     - name: Import Prepareation for HW2
       import_tasks: tasks/prepare-hw2.yml
-  
+
+    - name: Import copy-files for HW2
+      import_tasks: tasks/copy-files.yml 
+      
+    - name: deploy configfile
+      import_tasks: tasks/copy-config.yml

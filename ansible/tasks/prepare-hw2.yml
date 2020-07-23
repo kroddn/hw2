@@ -29,7 +29,7 @@
     
 - name: copy files
   copy:
-    src: "{{ playbook_dir }}/files/docker/hw2.yml"
+    src: "{{ playbook_dir }}/files/docker/{{ hw2_dockerfile }}"
     dest: "{{ docker_data_root }}/docker-compose.yml"
     mode: u+x
 
@@ -44,7 +44,7 @@
     src: "{{ playbook_dir }}/files/docker/my.cnf"
     dest: "{{ docker_data_root }}"
     mode: u+x
-
+    
 - name: Rebuild Docker Container
   shell: 
     cmd: docker-compose build

@@ -11,3 +11,7 @@ cron/hwha.h
 cron/hwroot.sh
 html/conf/db.conf.php
 html/includes/db.config.php
+
+# Ignore maps which will be created
+maps/clanmap*
+maps/registermap*

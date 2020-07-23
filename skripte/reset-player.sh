@@ -1,4 +1,6 @@
 #!/bin/sh
+echo "this is not needed anymore - USe reset command over admin"
+exit 0
 
 PLAYER=1000
 

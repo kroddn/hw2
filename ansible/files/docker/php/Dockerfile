@@ -31,5 +31,5 @@ RUN touch /var/log/cron.log
 # Run the command on container startup
 RUN cron
 
-RUN ./var/www/cron/service.sh
-RUN ./var/www/cron/hwha_dev
+#RUN ./var/www/cron/service.sh
+#RUN ./var/www/cron/hwha_dev

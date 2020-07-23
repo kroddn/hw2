@@ -64,10 +64,21 @@ else {
 
   // Hauptprogramm
   $starttime = time();
-  
 
-  $amount = round((MAP_SIZE_X * MAP_SIZE_Y) * PERCENT_STONE / 100);
-  echo $amount." Steine...<br>";
+  $percent_stone = isset($_GET['res_stone']) ? $_GET['res_stone'] : PERCENT_STONE;
+  $percent_wood = isset($_GET['res_wood']) ? $_GET['res_wood'] : PERCENT_WOOD;
+  $res_fish = isset($_GET['res_fish']) ? $_GET['res_fish'] : AMOUNT_SPECIAL_FISH;
+  $res_pearls = isset($_GET['res_pearls']) ? $_GET['res_pearls'] : AMOUNT_SPECIAL_PEARLS;
+  $res_wine = isset($_GET['res_wine']) ? $_GET['res_wine'] : AMOUNT_SPECIAL_WINE;
+  $res_wheat = isset($_GET['res_wheat']) ? $_GET['res_wheat'] : AMOUNT_SPECIAL_WHEAT;
+  $res_furbs = isset($_GET['res_furbs']) ? $_GET['res_furbs'] : AMOUNT_SPECIAL_FURBS;
+  $res_herbs = isset($_GET['res_herbs']) ? $_GET['res_herbs'] : AMOUNT_SPECIAL_HERBS;
+  $res_metal = isset($_GET['res_metal']) ? $_GET['res_metal'] : AMOUNT_SPECIAL_METAL;
+  $res_gems = isset($_GET['res_gems']) ? $_GET['res_gems'] : AMOUNT_SPECIAL_GEMS;
+
+  $amount = round((MAP_SIZE_X * MAP_SIZE_Y) * $percent_stone / 100);
+  echo $percent_stone . "% Steine: " . $amount . "<br>";
+
   fillmapwithres(getcol("grassland"),getcol("mountain"),getcol("forest"),$amount/10 );
   fillmapwithres(getcol("grassland"),getcol("mountain"),getcol("forest"),$amount/10);
   fillmapwithres(getcol("grassland"),getcol("mountain"),getcol("forest"),$amount/10);
@@ -80,8 +91,8 @@ else {
   fillmapwithres(getcol("grassland"),getcol("mountain"),getcol("forest"),$amount/10);
   echo $amount." Steine erstellt!<br>\n";
  
-  $amount = round((MAP_SIZE_X * MAP_SIZE_Y) * PERCENT_WOOD / 100);
-  echo $amount." Bäume... <br>";
+  $amount = round((MAP_SIZE_X * MAP_SIZE_Y) * $percent_wood / 100);
+  echo $percent_wood . "% Bäume: " . $amount . "<br>";
 
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
   fillmapwithres(getcol("grassland"),getcol("forest"),getcol("mountain"),$amount/10);
@@ -96,23 +107,23 @@ else {
   echo $amount." Bäume erstellt!<br>\n";
 
   // Specialres eintragen
-  fillmapwithspecialwaterres(getcol("water"),getcol("pearls"), AMOUNT_SPECIAL_PEARLS);
-  echo AMOUNT_SPECIAL_PEARLS."pearls<br>\n"; 
-  fillmapwithspecialwaterres(getcol("water"),getcol("fish"),AMOUNT_SPECIAL_FISH);
-  echo AMOUNT_SPECIAL_FISH."fish<br>\n"; 
+  fillmapwithspecialwaterres(getcol("water"),getcol("pearls"), $res_pearls);
+  echo "Add ". $res_pearls . " Pearls<br>\n"; 
+  fillmapwithspecialwaterres(getcol("water"),getcol("fish"), $res_fish);
+  echo "Add ". $res_fish . " Fish<br>\n"; 
 
-  fillmapwithspecialres(getcol("grassland"),getcol("wine"), AMOUNT_SPECIAL_WINE);
-  echo AMOUNT_SPECIAL_WINE."wine<br>\n"; 
-  fillmapwithspecialres(getcol("grassland"),getcol("wheat"), AMOUNT_SPECIAL_WHEAT);
-  echo AMOUNT_SPECIAL_WHEAT."wheat<br>\n"; 
-  fillmapwithspecialres(getcol("forest"),getcol("furs"), AMOUNT_SPECIAL_FURBS);
-  echo AMOUNT_SPECIAL_FURBS."furs<br>\n"; 
-  fillmapwithspecialres(getcol("forest"),getcol("herbs"), AMOUNT_SPECIAL_HERBS);
-  echo AMOUNT_SPECIAL_HERBS."herbs<br>\n"; 
-  fillmapwithspecialres(getcol("mountain"),getcol("metal"), AMOUNT_SPECIAL_METAL);
-  echo AMOUNT_SPECIAL_METAL."metal<br>\n"; 
-  fillmapwithspecialres(getcol("mountain"),getcol("gems"), AMOUNT_SPECIAL_GEMS);
-  echo AMOUNT_SPECIAL_GEMS."gems\n"; 
+  fillmapwithspecialres(getcol("grassland"),getcol("wine"), $res_wine);
+  echo "Add ". $res_wine . " Wine<br>\n"; 
+  fillmapwithspecialres(getcol("grassland"),getcol("wheat"), $res_wheat);
+  echo "Add ". $res_wheat . " Wheat<br>\n"; 
+  fillmapwithspecialres(getcol("forest"),getcol("furs"), $res_furbs);
+  echo "Add ". $res_furbs . " Furb<br>\n"; 
+  fillmapwithspecialres(getcol("forest"),getcol("herbs"), $res_herbs);
+  echo "Add ". $res_herbs . " Herbs<br>\n"; 
+  fillmapwithspecialres(getcol("mountain"),getcol("metal"), $res_metal);
+  echo "Add ". $res_metal . " Metal<br>\n"; 
+  fillmapwithspecialres(getcol("mountain"),getcol("gems"), $res_gems);
+  echo "Add ". $res_gems . " Gems<br>\n"; 
 
   $time = time() - $starttime;
   echo "\nAlle Eintragungen erfolgreich vorgenommen!\n<br>Dauer: $time sekunden<br>\n";

@@ -2,9 +2,15 @@ project_root: "{{ playbook_dir }}/.."
 docker_data_root: /srv/hw2
 
 ansible_python_interpreter: /usr/bin/python3
+hw2_dockerfile: hw2_local.yml
 
 folders:
   - public_html
+  - public_html/includes
+  - public_html/admintools
+  - public_html/maps
+  - public_html/js
+  - public_html/images
   - mysql
   - php
   - hw2_files
@@ -19,6 +25,6 @@ session_default_time: 7200
 mode_speed: 1
 premium_test_duration: 90
 clan_payout_min_member: 2
-fightsim_need_points: 1
-click_bonuspoints: 2
+fightsim_need_points: 2
+click_bonuspoints: 1
 click_bonuspoints_time: 1800

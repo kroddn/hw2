@@ -1,0 +1,66 @@
+version: "3.2"
+services:
+  mysql:
+    image: mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_USER: hw2-user
+      MYSQL_PASSWORD: yoh,k4Oogh6k
+      MYSQL_ROOT_PASSWORD: okeiK8Shee[r
+      MYSQL_DATABASE: hw2
+      TZ: "UTC"
+    ports:
+      - "127.0.0.1:3306:3306"
+    networks:
+      - webproxy
+    volumes:
+      - ./mysql:/var/lib/mysql
+      - ./sql:/tmp/sqlfiles
+      - type: bind
+        source: ./my.cnf
+        target: /etc/mysql/my.cnf
+
+  apache:
+    #image: 'php:7.2-apache'
+    build: './php'
+    depends_on:
+      - mysql
+    ports:
+      - '80:80'
+    volumes:
+      - ./public_html/:/var/www/html
+      - ./hw2_files/maps:/var/www/maps
+      - ./hw2_files/skripte:/var/www/skripte
+      - ./hw2_files/cron:/var/www/cron
+      - ./hw2_files/log:/var/www/log
+      - type: bind
+        source: ./custom.ini
+        target: /usr/local/etc/php/conf.d/custom.ini
+    environment:
+      VIRTUAL_HOST: hw2.localhost
+      LETSENCRYPT_HOST: hw2.localhost
+      LETSENCRYPT_EMAIL: christophwaninger@gmail.com
+      TZ: "Europe/Berlin"
+    networks:
+      - webproxy
+  
+  myadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment: 
+      PMA_HOST: mysql
+      PMA_ARBITRARY: 1
+      VIRTUAL_HOST: myadmin.localhost
+      LETSENCRYPT_HOST: myadmin.localhost
+      LETSENCRYPT_EMAIL: christophwaninger@gmail.com
+      TZ: "Europe/Berlin"
+    depends_on: 
+      - mysql
+    ports:
+      - '81:81'
+    networks:
+      - webproxy
+
+networks:
+  default:
+    external:
+      name: webproxy

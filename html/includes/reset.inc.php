@@ -71,7 +71,7 @@ function reset_players($delete = false) {
 
   // Ressourcen der "Admins" zurücksetzen
   do_mysql_query("UPDATE player SET ".
-		 " lastres=unix_timestamp(),gold=" . START_GOLD . ",wood=" . START_WOOD . ",stone=" . START_STONE . ",iron=0,rp=" . START_RP . "30,".
+		 " lastres=unix_timestamp(),gold=" . START_GOLD . ",wood=" . START_WOOD . ",stone=" . START_STONE . ",iron=0,rp=" . START_RP . ",".
 		 " pos=NULL, religion=NULL, name=NULL, activationtime=NULL, signature=NULL, ".
 		 " points=0, pointsavg=0, pointsupd=0,".
 		 " cc_towns=1, cc_resources=1, cc_messages=1, nooblevel=5,".

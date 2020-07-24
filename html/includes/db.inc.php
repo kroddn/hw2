@@ -50,6 +50,7 @@ if (!isset($csspath )) {
 }
 
 $GLOBALS['con'] = mysqli_connect( DBHOST, DBUSER, DBPASSWD, DBSELECT);
+mysqli_set_charset($GLOBALS['con'], "utf8");
 
 if (!$GLOBALS['con']) {
 	    die('Connect Error (' . mysqli_connect_errno() . ') '

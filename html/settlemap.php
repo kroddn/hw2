@@ -41,7 +41,7 @@ if(isset($_REQUEST['map'])) {
   $img = getPNG($_REQUEST['map']);
 }
 else {
-  $img = getPNG("maps/map.png");
+  $img = getPNG("admintools/map.png");
 }
 
 $sx = ImageSX($img);
